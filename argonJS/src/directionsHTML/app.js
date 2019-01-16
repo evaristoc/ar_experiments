@@ -55,10 +55,10 @@ divYneg.innerText = "Y- = Down";
 //for Z
 divZpos.className = "cssContent";
 divZpos.style.backgroundColor = "green";
-divZpos.innerText = "Z+ = Nord";
+divZpos.innerText = "Z+ = South";
 divZneg.className = "cssContent";
 divZneg.style.backgroundColor = "green";
-divZneg.innerText = "Z- = South";
+divZneg.innerText = "Z- = North";
 // create 6 CSS3DObjects in the scene graph.  The CSS3DObject object 
 // is used by the CSS3DArgonRenderer. Because an HTML element can only
 // appear once in the DOM, we need two elements to create a stereo view.

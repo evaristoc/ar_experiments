@@ -41,10 +41,10 @@ sheet.insertRule("\n    .cssContent {\n        opacity: 0.5;\n        width: 100
 // for X
 divXpos.className = "cssContent";
 divXpos.style.backgroundColor = "red";
-divXpos.innerText = "Pos X = East";
+divXpos.innerText = "Pos X = South";
 divXneg.className = "cssContent";
 divXneg.style.backgroundColor = "red";
-divXneg.innerText = "Neg X = West";
+divXneg.innerText = "Neg X = Noord";
 // for Y
 divYpos.className = "cssContent";
 divYpos.style.backgroundColor = "blue";
@@ -55,10 +55,10 @@ divYneg.innerText = "Neg Y = Down";
 //for Z
 divZpos.className = "cssContent";
 divZpos.style.backgroundColor = "green";
-divZpos.innerText = "Pos Z = South";
+divZpos.innerText = "Pos Z = East";
 divZneg.className = "cssContent";
 divZneg.style.backgroundColor = "green";
-divZneg.innerText = "Neg Z = North";
+divZneg.innerText = "Neg Z = West";
 // create 6 CSS3DObjects in the scene graph.  The CSS3DObject object 
 // is used by the CSS3DArgonRenderer. Because an HTML element can only
 // appear once in the DOM, we need two elements to create a stereo view.

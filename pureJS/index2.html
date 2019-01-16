@@ -1,0 +1,59 @@
+<body>
+<div id="cssfilters">
+<video class="videostream" autoplay></video>
+<p><button class="capture-button">Capture video</button>
+<p><button id="cssfilters-apply">Apply CSS filter</button></p>
+</div>
+<style>
+.grayscale {
+  -webkit-filter: grayscale(1);
+  -moz-filter: grayscale(1);
+  -o-filter: grayscale(1);
+  -ms-filter: grayscale(1);
+  filter: grayscale(1);
+}
+</style>
+<script>
+var captureVideoButton = document.querySelector('#cssfilters .capture-button');
+const cssFiltersButton = document.querySelector('#cssfilters-apply');
+const video = document.querySelector('#cssfilters video');
+
+let filterIndex = 0;
+const filters = [
+  'grayscale',
+  'sepia',
+  'blur',
+  'brightness',
+  'contrast',
+  'hue-rotate',
+  'hue-rotate2',
+  'hue-rotate3',
+  'saturate',
+  'invert',
+  ''
+];
+
+const constraints = {
+  video: true
+};
+
+captureVideoButton.onclick = function() {
+  navigator.mediaDevices.getUserMedia(constraints).
+    then(handleSuccess).catch(handleError);
+};
+
+cssFiltersButton.onclick = video.onclick = function() {
+    console.log(this);
+  video.className = filters[filterIndex++ % filters.length];
+  console.log(video.className, filters[filterIndex]);
+};
+
+function handleSuccess(stream) {
+  video.srcObject = stream;
+}
+
+function handleError(error) {
+  console.error('Error: ', error);
+}
+</script>
+</body>

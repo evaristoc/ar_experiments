@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="GVUBrochure" size="0.215900 0.279400" />
+    <ImageTarget name="TechSquare" size="0.254000 0.165447" />
+  </Tracking>
+</QCARConfig>

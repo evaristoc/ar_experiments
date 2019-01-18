@@ -1,0 +1,60 @@
+body {
+	font-family: Arial;
+}
+
+a {
+	color: #ffffff;
+}
+
+.menu {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+    pointer-events: none;
+}
+
+button {
+	color: white;
+	background: rgba(27,55,55,0.75);;
+	outline: 1px solid rgba(127,255,255,0.75);
+	border: 0px;
+	margin-bottom: 20px;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: rgba(0,255,255,0.5);
+}
+
+button:active {
+	color: #000000;
+	background-color: rgba(0,255,255,0.75);
+}
+
+#description {
+  pointer-events: auto;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  padding: 10px;
+  background-color:rgba(255,255,255,0.7);
+  -webkit-backdrop-filter: blur(5px);
+  position:absolute;
+  bottom: 0px;
+}
+
+.argon-focus #menu {
+  transition: opacity 0.8s;
+  visibility: visible;
+  opacity: 1; 
+}
+
+.argon-no-focus #menu {
+  transition: visibility 0s linear 0.8s, opacity 0.8s;
+  visibility: visible;
+  opacity: 0;
+}
+
+#hud {
+  pointer-events: auto;
+}

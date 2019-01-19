@@ -253,7 +253,7 @@ app.updateEvent.on(function (frame) {
         }
     }
     else {
-        infoText += "Waiting for geolocation..."+typeof Cesium.Ellipsoid+" "+Cesium.Ellipsoid+"<br>";
+        infoText += "Waiting for geolocation..."+typeof userPoseFIXED.position+" "+userPoseFIXED.position+"<br>";
         //+Cesium+"<br>";
     }
     var geoBoxFixedPose = app.getEntityPose(geoBoxEntity, ReferenceFrame.FIXED);

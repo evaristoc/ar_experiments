@@ -253,7 +253,7 @@ app.updateEvent.on(function (frame) {
     }
     else {
         //infoText += "Waiting for geolocation..."+userPoseFIXED.position+"<br>";
-        infoText += "Waiting for geolocation... navigator?"+navigator.geolocation.getCurrentPosition(function(p){return infoText += p.coords})+"<br>";
+        navigator.geolocation.getCurrentPosition(function(p){return infoText += p.coords})+"<br>";
     }
     var geoBoxFixedPose = app.getEntityPose(geoBoxEntity, ReferenceFrame.FIXED);
     if (geoBoxFixedPose.poseStatus & Argon.PoseStatus.KNOWN) {
@@ -266,10 +266,10 @@ app.updateEvent.on(function (frame) {
             ];
         }
     }
-    infoText += " distance to Buzz box @ GT (" + toFixed(distanceToBuzz, 2) + ")<br>";
-    infoText += "box is " + toFixed(distanceToBox, 2) + " meters away";
-    if (app.userTracking === '6DOF')
-        infoText += "<br>floor-box is " + toFixed(distanceToBox2, 2) + " meters away";
+    //infoText += " distance to Buzz box @ GT (" + toFixed(distanceToBuzz, 2) + ")<br>";
+    //infoText += "box is " + toFixed(distanceToBox, 2) + " meters away";
+    //if (app.userTracking === '6DOF')
+    //    infoText += "<br>floor-box is " + toFixed(distanceToBox2, 2) + " meters away";
     var boxLabelText;
     if (geoBoxFixedPose.poseStatus & Argon.PoseStatus.KNOWN) {
         boxLabelText = "a wooden box!<br>lla = " + toFixed(boxCartographicDeg[0], 6) + ", ";

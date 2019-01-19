@@ -252,7 +252,8 @@ app.updateEvent.on(function (frame) {
         }
     }
     else {
-        infoText += "Waiting for geolocation..."+userPoseFIXED.position+"<br>";
+        //infoText += "Waiting for geolocation..."+userPoseFIXED.position+"<br>";
+        infoText += "Waiting for geolocation..."+app.user+"<br>";
     }
     var geoBoxFixedPose = app.getEntityPose(geoBoxEntity, ReferenceFrame.FIXED);
     if (geoBoxFixedPose.poseStatus & Argon.PoseStatus.KNOWN) {

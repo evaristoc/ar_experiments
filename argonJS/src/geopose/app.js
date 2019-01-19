@@ -237,6 +237,7 @@ app.updateEvent.on(function (frame) {
     var gpsCartographicDeg = [0, 0, 0];
     // create some feedback text
     var infoText = "Geospatial Argon example:<br>";
+    var infoTextfailed;
     // Why does user not move? check local movement & movement relative to fixed
     // get user position in global coordinates
     if (userPoseFIXED.poseStatus & Argon.PoseStatus.KNOWN) {
@@ -253,7 +254,7 @@ app.updateEvent.on(function (frame) {
     }
     else {
         //infoText += "Waiting for geolocation..."+userPoseFIXED.position+"<br>";
-        navigator.geolocation.getCurrentPosition(function(p){return infoText += p.coords})+"<br>";
+        navigator.geolocation.getCurrentPosition(function(p){locationElements[1].innerHTML = p.coords});
     }
     var geoBoxFixedPose = app.getEntityPose(geoBoxEntity, ReferenceFrame.FIXED);
     if (geoBoxFixedPose.poseStatus & Argon.PoseStatus.KNOWN) {

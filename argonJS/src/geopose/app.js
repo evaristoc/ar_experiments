@@ -237,7 +237,7 @@ app.updateEvent.on(function (frame) {
     var gpsCartographicDeg = [0, 0, 0];
     // create some feedback text
     var infoText = "Geospatial Argon example:<br>";
-    var infoTextfailed;
+    //var infoTextfailed;
     // Why does user not move? check local movement & movement relative to fixed
     // get user position in global coordinates
     if (userPoseFIXED.poseStatus & Argon.PoseStatus.KNOWN) {

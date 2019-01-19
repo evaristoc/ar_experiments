@@ -164,7 +164,7 @@ app.updateEvent.on(function (frame) {
     var userPoseFIXED = app.getEntityPose(app.user, ReferenceFrame.FIXED);
     // If user has a FIXED pose and our geoBoxEntity is not positioned relative to FIXED, 
     // try to convert its reference frame to FIXED
-    if (userPoseFIXED.status & Argon.PoseStatus.KNOWN &&
+    if (userPoseFIXED.status && Argon.PoseStatus.KNOWN &&
         geoBoxEntity.position.referenceFrame !== ReferenceFrame.FIXED) {
         // now, we want to move the box's coordinates to the FIXED frame, so
         // the box doesn't move if the local coordinate system origin changes.
@@ -173,7 +173,7 @@ app.updateEvent.on(function (frame) {
     // if the geoBoxEntity still does not have a known pose, 
     // place it 2 meters in front of the user, on the stage
     var geoBoxPose = app.getEntityPose(geoBoxEntity);
-    if ((geoBoxPose.status & Argon.PoseStatus.KNOWN) === 0) {
+    if ((geoBoxPose.status && Argon.PoseStatus.KNOWN) === 0) {
         geoBoxEntity.position.setValue(new Cartesian3(0, 0, -2), app.user);
         geoBoxEntity.orientation.setValue(Cesium.Quaternion.IDENTITY);
         if (!Argon.convertEntityReferenceFrame(geoBoxEntity, frame.time, app.stage)) {
@@ -182,7 +182,7 @@ app.updateEvent.on(function (frame) {
     }
     // get the local coordinates of the local box, and set the THREE object
     var boxPose = app.getEntityPose(geoBoxEntity);
-    if (geoBoxPose.poseStatus & Argon.PoseStatus.KNOWN) {
+    if (geoBoxPose.poseStatus && Argon.PoseStatus.KNOWN) {
         boxGeoObject.position.copy(geoBoxPose.position);
         boxGeoObject.quaternion.copy(geoBoxPose.orientation);
         // update one end of the line to be at the local box
@@ -190,7 +190,7 @@ app.updateEvent.on(function (frame) {
     }
     // get the local coordinates of the GT box, and set the THREE object
     var geoPose = app.getEntityPose(gatechGeoEntity);
-    if (geoPose.poseStatus & Argon.PoseStatus.KNOWN) {
+    if (geoPose.poseStatus && Argon.PoseStatus.KNOWN) {
         gatechGeoTarget.position.copy(geoPose.position);
     }
     else {
@@ -240,7 +240,8 @@ app.updateEvent.on(function (frame) {
     //var infoTextfailed;
     // Why does user not move? check local movement & movement relative to fixed
     // get user position in global coordinates
-    if (userPoseFIXED.poseStatus & Argon.PoseStatus.KNOWN) {
+    var temp = Cesium.Ellipsoid.WGS84.cartesianToCartographic(userPoseFIXED.position)
+    if (userPoseFIXED.poseStatus && Argon.PoseStatus.KNOWN) {
         var userLLA = Cesium.Ellipsoid.WGS84.cartesianToCartographic(userPoseFIXED.position);
         if (userLLA) {
             gpsCartographicDeg = [
@@ -255,10 +256,10 @@ app.updateEvent.on(function (frame) {
     else {
         //infoText += "Waiting for geolocation..."+userPoseFIXED.position+"<br>";
         //navigator.geolocation.getCurrentPosition(function(p){locationElements[1].innerHTML = p.coords});
-        infoText += "Waiting for geolocation...userPose<br>pos "+userPose.position+" user: "+userPoseFIXED.poseStatus+"<br>KN"+Argon.PoseStatus.KNOWN+"<br>";
+        infoText += "Waiting for geolocation...userPose<br> user: "+userPoseFIXED.poseStatus+"<br>KN: "+temp.longitude+"<br>";
     }
     var geoBoxFixedPose = app.getEntityPose(geoBoxEntity, ReferenceFrame.FIXED);
-    if (geoBoxFixedPose.poseStatus & Argon.PoseStatus.KNOWN) {
+    if (geoBoxFixedPose.poseStatus && Argon.PoseStatus.KNOWN) {
         var boxLLA = Cesium.Ellipsoid.WGS84.cartesianToCartographic(geoBoxFixedPose.position);
         if (boxLLA) {
             boxCartographicDeg = [
@@ -273,7 +274,7 @@ app.updateEvent.on(function (frame) {
     //if (app.userTracking === '6DOF')
     //    infoText += "<br>floor-box is " + toFixed(distanceToBox2, 2) + " meters away";
     var boxLabelText;
-    if (geoBoxFixedPose.poseStatus & Argon.PoseStatus.KNOWN) {
+    if (geoBoxFixedPose.poseStatus && Argon.PoseStatus.KNOWN) {
         boxLabelText = "a wooden box!<br>lla = " + toFixed(boxCartographicDeg[0], 6) + ", ";
         boxLabelText += toFixed(boxCartographicDeg[1], 6) + ", " + toFixed(boxCartographicDeg[2], 2) + "";
     }

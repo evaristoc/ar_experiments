@@ -240,7 +240,7 @@ app.updateEvent.on(function (frame) {
     //var infoTextfailed;
     // Why does user not move? check local movement & movement relative to fixed
     // get user position in global coordinates
-    var temp = Cesium.Ellipsoid.WGS84.cartesianToCartographic(userPoseFIXED.position)
+    //var temp = Cesium.Ellipsoid.WGS84.cartesianToCartographic(userPoseFIXED.position)
     if (userPoseFIXED.poseStatus && Argon.PoseStatus.KNOWN) {
         var userLLA = Cesium.Ellipsoid.WGS84.cartesianToCartographic(userPoseFIXED.position);
         if (userLLA) {

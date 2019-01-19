@@ -253,10 +253,7 @@ app.updateEvent.on(function (frame) {
     }
     else {
         //infoText += "Waiting for geolocation..."+userPoseFIXED.position+"<br>";
-        function showPosition(position) {
-            return "Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude; 
-        };
-        infoText += "Waiting for geolocation..."+navigator.geolocation.getCurrentPosition(showPosition)+"<br>";
+        infoText += "Waiting for geolocation..."+navigator.geolocation.getCurrentPosition(function(p){return p.coords})+"<br>";
     }
     var geoBoxFixedPose = app.getEntityPose(geoBoxEntity, ReferenceFrame.FIXED);
     if (geoBoxFixedPose.poseStatus & Argon.PoseStatus.KNOWN) {

@@ -254,7 +254,8 @@ app.updateEvent.on(function (frame) {
     }
     else {
         //infoText += "Waiting for geolocation..."+userPoseFIXED.position+"<br>";
-        navigator.geolocation.getCurrentPosition(function(p){locationElements[1].innerHTML = p.coords});
+        //navigator.geolocation.getCurrentPosition(function(p){locationElements[1].innerHTML = p.coords});
+        infoText += "Waiting for geolocation...userPose"+userPose.position+userPoseFIXED.poseStatus+Argon.PoseStatus.KNOWN+"<br>";
     }
     var geoBoxFixedPose = app.getEntityPose(geoBoxEntity, ReferenceFrame.FIXED);
     if (geoBoxFixedPose.poseStatus & Argon.PoseStatus.KNOWN) {

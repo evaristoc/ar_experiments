@@ -6,6 +6,7 @@ var Cartesian3 = Argon.Cesium.Cartesian3;
 var ReferenceFrame = Argon.Cesium.ReferenceFrame;
 var JulianDate = Argon.Cesium.JulianDate;
 var CesiumMath = Argon.Cesium.CesiumMath;
+console.log(Cesium);
 // set up Argon
 var app = Argon.init();
 //app.view.element.style.zIndex = 0;
@@ -252,7 +253,8 @@ app.updateEvent.on(function (frame) {
         }
     }
     else {
-        infoText += "Waiting for geolocation..."+userPoseFixed.poseStatus+"<br>"+Cesium+"<br>";
+        infoText += "Waiting for geolocation..."+Cesium+"<br>";
+        //+Cesium+"<br>";
     }
     var geoBoxFixedPose = app.getEntityPose(geoBoxEntity, ReferenceFrame.FIXED);
     if (geoBoxFixedPose.poseStatus & Argon.PoseStatus.KNOWN) {

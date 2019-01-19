@@ -257,7 +257,7 @@ app.updateEvent.on(function (frame) {
         //infoText += "Waiting for geolocation..."+userPoseFIXED.position+"<br>";
         //navigator.geolocation.getCurrentPosition(function(p){locationElements[1].innerHTML = p.coords});
         infoText += "Waiting for geolocation...userPose<br> user: "+userPoseFIXED.poseStatus+"<br>";
-        infoText += "KN: "+String(Cesium)+"<br>";
+        //infoText += "KN: "+String(Cesium)+"<br>";
     }
     var geoBoxFixedPose = app.getEntityPose(geoBoxEntity, ReferenceFrame.FIXED);
     if (geoBoxFixedPose.poseStatus && Argon.PoseStatus.KNOWN) {

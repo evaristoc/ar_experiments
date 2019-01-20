@@ -158,7 +158,7 @@ function toFixed(value, precision) {
 var counter = 0;
 app.updateEvent.on(function (frame) {
     // get the user pose in the local coordinate frame.
-    var userPose = app.getEntityPose(app.user); //height of user: (boolean?, approx height?, time (change))
+    var userPose = app.getEntityPose(app.user);
     //console.log(app.user);
     user.position.copy(userPose.position);
     user.quaternion.copy(userPose.orientation);
@@ -249,12 +249,12 @@ app.updateEvent.on(function (frame) {
                 CesiumMath.toDegrees(userLLA.latitude),
                 userLLA.height
             ];
-            infoText += "Your location is lla ("+(userPoseFIXED.poseStatus)+", " + toFixed(gpsCartographicDeg[0], 6) + ", ";
+            infoText += "Your location is lla ("+(counter++)+"," + toFixed(gpsCartographicDeg[0], 6) + ", ";
             infoText += toFixed(gpsCartographicDeg[1], 6) + ", " + toFixed(gpsCartographicDeg[2], 2) + ")<br>";
         }
     }
     else {
-        infoText += "Waiting for geolocation..."+(userPoseFIXED.poseStatus)+"<br>";
+        infoText += "Waiting for geolocation..."+(counter++)+"<br>";
     }
     var geoBoxFixedPose = app.getEntityPose(geoBoxEntity, ReferenceFrame.FIXED);
     if (geoBoxFixedPose.poseStatus & Argon.PoseStatus.KNOWN) {

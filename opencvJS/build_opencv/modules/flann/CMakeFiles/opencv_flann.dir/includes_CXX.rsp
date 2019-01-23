@@ -1,0 +1,1 @@
+-isystem /home/ec/Documents/MainComp_Programming/FreeCodeCamp/basejumps/ar_experiments/opencvJS/build_opencv -I/home/ec/opencv/modules/flann/include -I/home/ec/Documents/MainComp_Programming/FreeCodeCamp/basejumps/ar_experiments/opencvJS/build_opencv/modules/flann -I/home/ec/opencv/modules/core/include 

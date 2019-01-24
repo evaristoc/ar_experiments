@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <p id="status">OpenCV.js is loading...</p>
+      <div class="inputoutput">
+    <img id="imageSrctrain" alt="No Image" src='img/thumb_39616_default_header.jpeg'/>
+  </div>
+    <script>
+    function onOpenCvReady() {
+      document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+        var colors = new tracking.ColorTracker(['magenta', 'cyan', 'yellow']);
+
+        colors.on('track', function(event) {
+          if (event.data.length === 0) {
+            console.log("No colors were detected in this frame.");
+          } else {
+            event.data.forEach(function(rect) {
+              console.log(rect.x, rect.y, rect.height, rect.width, rect.color);
+            });
+          }
+        });
+      
+        tracking.track('#imageSrctrain', colors);
+        var corners = tracking.Fast.findCorners(document.getElementById('imageSrctrain'), document.getElementById('imageSrctrain').width, document.getElementById('imageSrctrain').height);
+        console.log(corners);
+        
+        //references:
+          ////https://hub.packtpub.com/object-detection-using-image-features-javascript/
+          ////https://stackoverflow.com/questions/26212792/convert-an-image-to-canvas-that-is-already-loaded
+                
+    }
+    </script>
+    <script async src="tracking.js-master/build/tracking-min.js" onload="onOpenCvReady();" type="text/javascript"></script>
+  </body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hello OpenCV.js</title>
+</head>
+<body>
+<h2>Hello OpenCV.js</h2>
+<p id="status">OpenCV.js is loading...</p>
+<div>
+  <div class="inputoutput">
+    <img id="imageSrctrain" alt="No Image" src='img/thumb_39616_default_header.jpeg'/>
+  </div>
+  <div class="inputoutput">
+    <canvas id="canvasOutput1" ></canvas>
+    <div class="caption">canvasOutput</div>
+  </div>
+  <div class="inputoutput">
+    <img id="imageSrcquery" alt="No Image" src='img/131690-004-70FA5BD0.jpg'/>
+  </div>
+    <div class="inputoutput">
+    <canvas id="canvasOutput2" ></canvas>
+    <div class="caption">canvasOutput</div>
+  </div>
+</div>
+<style>
+img {
+  width: 30%;
+  height: auto;
+}
+</style>
+<script type="text/javascript">
+let imgElementtrain = document.getElementById('imageSrctrain');
+let imgElementquery = document.getElementById('imageSrcquery');
+//imgElement.onload = function() {
+  //let mat = cv.imread(imgElement);
+  ////console.log(mat);
+  //cv.imshow('canvasOutput', mat);
+  //mat.delete();
+//};
+function onOpenCvReady() {
+  //document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+  //  let mat = cv.imread(document.getElementById('imageSrc'));
+  ////console.log(mat);
+  //cv.imshow('canvasOutput', mat);
+  //mat.delete();
+  cv['onRuntimeInitialized']=()=>{
+        document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+          //let mat = new cv.Mat();
+          let mattrain = cv.imread(document.getElementById('imageSrctrain')); 
+          let matquery = cv.imread(document.getElementById('imageSrcquery'));
+          console.log(mattrain.size(), matquery.size());
+          cv.cvtColor(mattrain, mattrain, cv.COLOR_BGR2GRAY);
+          cv.cvtColor(matquery, matquery, cv.COLOR_BGR2GRAY);
+          // Initiate FAST object with default values
+          let fast = new cv.FastFeatureDetector(cv.FastFeatureDetector_THRESHOLD = 50);
+          console.log(cv);
+          //console.log(fast);
+          // find and draw the keypoints
+          //console.log(fast.detect);
+          let kps1, kps2;
+          function abc (cb){
+            let kpsa = new cv.KeyPointVector();
+            //let m1 = new cv.Mat(mattrain.size(), -1);
+            fast.detect(mattrain, kpsa);
+            ////https://github.com/ucisysarch/opencvjs/blob/master/test/features_2d.html
+            //fast.compute(mattrain, kpsa, m1);
+            //console.log(m1.size(), fast.compute(mattrain, kpsa, m1));
+            let kpsb = new cv.KeyPointVector();
+            fast.detect(matquery, kpsb);
+            kps1 = kpsa;
+            kps2 = kpsb;
+            
+            //if (kpsb) {
+            //    cb(kpsa, kpsb);
+                
+            //}
+            //kpsa.delete(); kpsb.delete();
+          }
+         //function def(kpsa, kpsb){
+         //  //console.log(m1,m2)
+         // let dm = new Array();
+         // dm = new cv.BFMatcher(cv.DescriptorMatcher_BRUTEFORCE_HAMMING)
+         // let a = new Array();
+         // //dm.match(kpsa, kpsb, a);
+         // //let m = dm.match()
+         // //console.log(dm.match(mattrain,matquery), a)           
+         //}
+         //
+         abc();
+
+          
+          console.log(kps1.get(0));
+          console.log(kps1.get(1));
+          console.log(kps2.get(0));
+          console.log(kps2.get(1));
+          //console.log(kps1)
+          let circles1 = [];
+          let circles2 = [];         
+           for (let i = 0; i < kps1.size(); ++i) {
+                let kp = kps1.get(i);
+                //let point = new cv.Point(kp.x, kp.y);
+                circles1.push({'x':kp.pt.x, 'y':kp.pt.y});
+                //cv.circle(dist, kp.pt, 20,new cv.Scalar(255,0,0, 255),3)
+                //let point2 = new cv.Point(kp.x + kp.width, kp.y + kp.height);
+                //cv.rectangle(mattrain, point1, point2, [255, 0, 0, 255]);
+                //point1.delete();point2.delete();
+            }
+            for (let i = 0; i < kps2.size(); ++i) {
+                let kp = kps2.get(i);
+                //let point = new cv.Point(kp.x, kp.y);
+                circles2.push({'x':kp.pt.x, 'y':kp.pt.y});
+                //cv.circle(dist, kp.pt, 20,new cv.Scalar(255,0,0, 255),3)
+                //let point2 = new cv.Point(kp.x + kp.width, kp.y + kp.height);
+                //cv.rectangle(mattrain, point1, point2, [255, 0, 0, 255]);
+                //point1.delete();point2.delete();
+            }
+            
+          ////let imgexample = cv.drawKeypoints(mattrain, kp, color=(255,0,0))
+          ////let track = new cv.Mat();
+          //
+          //let dtype = -1;
+          //for(let i = 0; i < circles.length; i++) {
+          //  console.log(circles[i]);
+          //      //cv.circle(dist, circles[i], 20, (255,0,0), 3);
+          //  }
+          //  //cv.add(mattrain, matquery, track, dist, dtype);
+          //  cv.imshow('canvasOutput', dist);
+          ////cv.imshow('canvasOutput', mattrain);
+          let canvas1 = document.getElementById('canvasOutput1');
+          let canvas2 = document.getElementById('canvasOutput2');
+          var ctx1 = canvas1.getContext("2d");
+          var ctx2 = canvas2.getContext("2d");
+          canvas1.width  = mattrain.size().width;
+          canvas1.height  = mattrain.size().height;
+          canvas2.width  = matquery.size().width;
+          canvas2.height  = matquery.size().height;
+          cv.imshow('canvasOutput1', mattrain);
+          //cv.imshow('canvasOutput2', matquery);
+          ctx1.strokeStyle = ctx2.strokeStyle = "blue";
+          for(let i = 0; i < circles1.length; i++){
+            ctx1.moveTo(circles1[i].x, circles1[i].y);
+            ctx1.beginPath();
+            ctx1.arc(circles1[i].x, circles1[i].y, .5, 0, 2 * Math.PI);
+            ctx1.stroke();
+            ctx2.moveTo(circles1[i].x - 10, circles1[i].y + 270);
+            ctx2.beginPath();
+            ctx2.arc(circles1[i].x - 10, circles1[i].y + 270, .5, 0, 2 * Math.PI);
+            ctx2.stroke();
+          }
+          ctx1.closePath();
+          ctx2.strokeStyle = "red";
+          for(let i = 0; i < circles2.length; i++){
+            ctx2.moveTo(circles2[i].x, circles2[i].y);
+            ctx2.beginPath();
+            ctx2.arc(circles2[i].x, circles2[i].y, .5, 0, 2 * Math.PI);
+            ctx2.stroke();
+          }          
+          ctx2.closePath();
+          
+          //let matcher = new cv.DescriptorMatcher(1);
+          
+          
+          
+          mattrain.delete();
+          //dist.delete();
+          matquery.delete();
+          kps1.delete();
+          kps2.delete();
+          delete circles1, circles2;
+};
+}
+//references:
+  ////https://codepen.io/huningxin/pen/wqBvRo
+  ////https://github.com/ucisysarch/opencvjs/tree/master/test
+  ////http://answers.opencv.org/question/184208/opencvjs-with-features2d/
+  ////https://www.codepool.biz/web-document-management-opencv-javascript.html
+  ////https://www.pyimagesearch.com/2014/09/01/build-kick-ass-mobile-document-scanner-just-5-minutes/
+  ////https://github.com/ucisysarch/opencvjs/blob/master/test/face_detect.html
+  ////https://scotch.io/tutorials/introduction-to-computer-vision-in-javascript-using-opencvjs
+  ////https://www.kaggle.com/wesamelshamy/tutorial-image-feature-extraction-and-matching
+  ////https://docs.opencv.org/3.4/db/d27/tutorial_py_table_of_contents_feature2d.html
+  ////https://stackoverflow.com/questions/51528462/opencv-js-perspective-transform
+  ////https://gist.github.com/ajaymdesai/6684875c681e4f6b177c43276c9e3c63
+  ////https://dev.to/kjunichi/requireopencvjs-is-not-enough-for-using-opencvjs-8ff
+  ////https://courses.cs.washington.edu/courses/cse455/09wi/Lects/lect6.pdf
+</script>
+<script async src="../build_opencv/bin/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <p id="status">OpenCV.js is loading...</p>
+      <div class="inputoutput">
+    <img id="image" alt="No Image" style="width:500px; height:auto;" src='img/thumb_39616_default_header.jpeg'/>
+    <canvas id="canvas"></canvas>
+  </div>
+    <script>
+    function onOpenCvReady() {
+      
+      document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+      
+      var width = 400;
+      var height = 400;
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+      var image = document.getElementById('image');
+      window.fastThreshold = 60;
+      var doFindFeatures = function() {
+        tracking.Fast.THRESHOLD = window.fastThreshold;
+        context.drawImage(image, 0, 0, width, height);
+        var imageData = context.getImageData(0, 0, width, height);
+        var gray = tracking.Image.grayscale(imageData.data, width, height);
+        var corners = tracking.Fast.findCorners(gray, width, height);
+        for (var i = 0; i < corners.length; i += 2) {
+          context.fillStyle = '#f00';
+          context.fillRect(corners[i], corners[i + 1], 3, 3);
+        }
+      };
+      doFindFeatures();
+      
+      //document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+      //  var colors = new tracking.ColorTracker(['magenta', 'cyan', 'yellow']);
+      //
+      //  colors.on('track', function(event) {
+      //    if (event.data.length === 0) {
+      //      console.log("No colors were detected in this frame.");
+      //    } else {
+      //      event.data.forEach(function(rect) {
+      //        console.log(rect.x, rect.y, rect.height, rect.width, rect.color);
+      //      });
+      //    }
+      //  });
+      //
+      //  tracking.track('#imageSrctrain', colors);
+      //  var corners = tracking.Fast.findCorners(document.getElementById('imageSrctrain'), document.getElementById('imageSrctrain').width, document.getElementById('imageSrctrain').height);
+      //  console.log(corners);
+        
+        //references:
+          ////https://hub.packtpub.com/object-detection-using-image-features-javascript/
+          ////https://stackoverflow.com/questions/26212792/convert-an-image-to-canvas-that-is-already-loaded
+                
+    }
+    </script>
+    <script async src="tracking.js-master/build/tracking-min.js" onload="onOpenCvReady();" type="text/javascript"></script>
+  </body>
+</html>

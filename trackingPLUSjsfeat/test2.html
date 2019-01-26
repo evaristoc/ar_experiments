@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.5/dat.gui.min.js"></script>
+  </head>
+  <body>
+<style>
+  .demo-container {
+    background-color: black;
+  }
+
+  #image1, #image2 {
+    position: absolute;
+    left: -1000px;
+    top: -1000px;
+    width: 30%;
+    height: auto;
+  }
+  #canvas {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -393px;
+    margin-top: -147px;
+  }
+  .cvs {
+    float:left;
+    position:relative;
+  }
+  </style>
+</head>
+<body>
+  <p id="status">OpenCV.js is loading...</p>
+  <div class="demo-frame">
+    <div class="demo-container">
+      <!--<img id="image1" src="img/hadis-safari-777176-unsplash_A.jpg" />
+      <img id="image2" src="img/hadis-safari-777176-unsplash_B.jpg" />-->
+      <img id="image1" src="img/thumb_39616_default_header.jpeg" />
+      <img id="image2" src="img/131690-004-70FA5BD0.jpg" />
+      <div style="margin-top:900px;">
+      <!--<canvas id="canvas" width="786" height="295"></canvas>-->
+      <canvas id="canvas"></canvas>
+      <div class="cvs">
+      <canvas id="canvasOutput1" ></canvas>
+      <canvas id="canvasOutput2" ></canvas>
+      </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function onOpenCvReady() {
+      document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+    //var width = 393;
+    //var height = 295;
+    var width = 0;
+    var height = 0;
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var image1 = document.getElementById('image1');
+    var image2 = document.getElementById('image2');
+    canvas.width = image1.width + image2.width;
+    canvas.height = Math.max(image1.height,image2.height);
+    let canvas1 = document.getElementById('canvasOutput1');
+    let canvas2 = document.getElementById('canvasOutput2');
+    var ctx1 = canvas1.getContext("2d");
+    var ctx2 = canvas2.getContext("2d");
+    canvas1.width  = image1.width;
+    canvas1.height  = image2.height;
+    canvas2.width  = image2.width;
+    canvas2.height  = image2.height;
+    window.fastThreshold = 60;
+    window.descriptorLength = 256;
+    window.matchesShown = 60;
+    window.blurRadius = 3;
+    var doMatch = function() {
+      
+      //context.drawImage(image1, 0, 0, width, height);
+      //context.drawImage(image2, width, 0, width, height);
+      context.drawImage(image1, 0, 0, image1.width, image1.height);
+      context.drawImage(image2, image1.width, 0, image2.width, image2.height);
+      context.fillStyle = "black";
+      if (image1.height < image2.height) {
+        //alert("they are different");
+        //context.fillRect(0, image1.heigth, image1.width, image2.height - image1.height) //(x, y, along x axe, along y axe)
+        context.fillRect(0, image1.height, image1.width, image2.height - image1.height)
+      }
+      ctx1.drawImage(image1, 0, 0, image1.width, image1.height);
+      ctx2.drawImage(image2, 0, 0, image2.width, image2.height);
+        
+      //var imageData1 = context.getImageData(0, 0, width, height);
+      //var imageData2 = context.getImageData(width, 0, width, height);
+      var imageData1 = context.getImageData(0, 0, image1.width, image1.height);
+      var imageData2 = context.getImageData(image1.width, 0, image2.width, image2.height);
+      
+      var imageData12 = ctx1.getImageData(0, 0, image1.width, image1.height);
+      var imageData22 = ctx2.getImageData(0, 0, image2.width, image2.height);
+      console.log(imageData22);
+      
+      
+      tracking.Fast.THRESHOLD = window.fastThreshold;
+      //var gray1 = tracking.Image.grayscale(tracking.Image.blur(imageData1.data, width, height, blurRadius), width, height);
+      //var gray2 = tracking.Image.grayscale(tracking.Image.blur(imageData2.data, width, height, blurRadius), width, height);
+      var gray1 = tracking.Image.grayscale(tracking.Image.blur(imageData1.data, image1.width, image1.height, blurRadius), image1.width, image2.height);
+      var gray2 = tracking.Image.grayscale(tracking.Image.blur(imageData2.data, image2.width, image2.height, blurRadius), image2.width, image2.height);
+      
+      var gray12 = tracking.Image.grayscale(tracking.Image.blur(imageData12.data, image1.width, image1.height, blurRadius), image1.width, image1.height);
+      var gray22 = tracking.Image.grayscale(tracking.Image.blur(imageData22.data, image2.width, image2.height, blurRadius), image2.width, image2.height);
+      
+      //var corners1 = tracking.Fast.findCorners(gray1, width, height);
+      //var corners2 = tracking.Fast.findCorners(gray2, width, height);
+      var corners1 = tracking.Fast.findCorners(gray1, image1.width, image1.height);
+      var corners2 = tracking.Fast.findCorners(gray2, image2.width, image2.height);
+      
+      var corners12 = tracking.Fast.findCorners(gray12, image1.width, image1.height);
+      var corners22 = tracking.Fast.findCorners(gray22, image2.width, image2.height);
+      
+      console.log(corners12.length, corners22.length);
+      
+      tracking.Brief.N = window.descriptorLength;
+      //var descriptors1 = tracking.Brief.getDescriptors(gray1, width, corners1);
+      //var descriptors2 = tracking.Brief.getDescriptors(gray2, width, corners2);
+      var descriptors1 = tracking.Brief.getDescriptors(gray1, image1.width, corners1);
+      var descriptors2 = tracking.Brief.getDescriptors(gray2, image2.width, corners2);
+      
+      var descriptors12 = tracking.Brief.getDescriptors(gray12, image1.width, corners12);
+      var descriptors22 = tracking.Brief.getDescriptors(gray22, image2.width, corners22);
+      
+      var matches = tracking.Brief.reciprocalMatch(corners1, descriptors1, corners2, descriptors2);
+      matches.sort(function(a, b) {
+        return b.confidence - a.confidence;
+      });
+      
+      //
+      //for (var i = 0; i < Math.min(window.matchesShown, matches.length); i++) {
+      //  var color = '#' + Math.floor(Math.random()*16777215).toString(16);
+      //  context.fillStyle = color;
+      //  context.strokeStyle = color;
+      //  context.fillRect(matches[i].keypoint1[0], matches[i].keypoint1[1], 4, 4);
+      //  context.fillRect(matches[i].keypoint2[0] + width, matches[i].keypoint2[1], 4, 4);
+      //  context.beginPath();
+      //  context.moveTo(matches[i].keypoint1[0], matches[i].keypoint1[1]);
+      //  context.lineTo(matches[i].keypoint2[0] + width, matches[i].keypoint2[1]);
+      //  context.stroke();
+      //}
+      
+      for (var i = 0; i < Math.min(window.matchesShown, matches.length); i++) {
+        var color = '#' + Math.floor(Math.random()*16777215).toString(16);
+        context.fillStyle = color;
+        context.strokeStyle = color;
+        context.fillRect(matches[i].keypoint1[0], matches[i].keypoint1[1], 4, 4);
+        context.fillRect(matches[i].keypoint2[0] + image1.width, matches[i].keypoint2[1], 4, 4);
+        context.beginPath();
+        context.moveTo(matches[i].keypoint1[0], matches[i].keypoint1[1]);
+        context.lineTo(matches[i].keypoint2[0] + image1.width, matches[i].keypoint2[1]);
+        context.stroke();
+      }
+      context.closePath();
+      
+      var matches2 = tracking.Brief.reciprocalMatch(corners12, descriptors12, corners22, descriptors22);
+      matches2.sort(function(a, b) {
+        return b.confidence - a.confidence;
+      });
+      
+      ctx1.font = ctx2.font = "7px Arial";
+      //ctx1.textAlign = ctx2.textAlign = "center";
+      
+      for (var i = 0; i < Math.min(window.matchesShown, matches2.length); i++) {
+        var color = '#' + Math.floor(Math.random()*16777215).toString(16);
+        ctx1.fillStyle = ctx2.fillStyle = color;
+        ctx1.beginPath();
+        ctx1.moveTo(matches2[i].keypoint1[0], matches2[i].keypoint1[1])
+        ctx1.fillText(i, matches2[i].keypoint1[0], matches2[i].keypoint1[1]);
+        ctx2.beginPath();
+        ctx2.moveTo(matches2[i].keypoint2[0], matches2[i].keypoint2[1])
+        ctx2.fillText(i, matches2[i].keypoint2[0], matches2[i].keypoint2[1]);
+        
+      }
+      
+
+    };
+    doMatch();
+    var gui = new dat.GUI();
+    gui.add(window, 'descriptorLength', 128, 512).step(32).onChange(doMatch);
+    gui.add(window, 'matchesShown', 1, 100).onChange(doMatch);
+    gui.add(window, 'blurRadius', 1.1, 5).onChange(doMatch);
+    gui.add(window, 'fastThreshold', 10, 90).step(5).onChange(doMatch);
+  }
+  </script>
+    <script async src="tracking.js-master/build/tracking-min.js" onload="onOpenCvReady();" type="text/javascript"></script>
+  </body>
+</html>

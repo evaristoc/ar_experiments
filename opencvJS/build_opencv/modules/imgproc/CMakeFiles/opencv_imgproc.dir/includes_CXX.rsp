@@ -1,1 +1,0 @@
--isystem /home/ec/Documents/MainComp_Programming/FreeCodeCamp/basejumps/ar_experiments/opencvJS/build_opencv -I/home/ec/opencv/modules/imgproc/include -I/home/ec/Documents/MainComp_Programming/FreeCodeCamp/basejumps/ar_experiments/opencvJS/build_opencv/modules/imgproc -I/home/ec/opencv/modules/core/include 

@@ -1,1 +1,0 @@
-/home/ec/emsdk/emscripten/1.38.24/emar rc ../lib/libquirc.a  @CMakeFiles/quirc.dir/objects1.rsp

@@ -5,9 +5,16 @@ html, body{
   width: 100%;
 }
 
-#camera, #camera--view, #camera--sensor, #camera--output{
+#camera{
     position: fixed;
     height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+#camera--view, #camera--output, #camera--sensor{
+    position: fixed;
+    height: 20%;
     width: 100%;
     object-fit: cover;
 }
@@ -33,12 +40,15 @@ html, body{
 }
 
 .taken{
-    height: 100px!important;
-    width: 100px!important;
+    /*height: 100px!important;
+    width: 100px!important;*/
+    height:50% !important;
+    width: 100% !important;
     transition: all 0.5s ease-in;
     border: solid 3px white;
     box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
-    top: 20px;
-    right: 20px;
-    z-index: 2;
+    top: 35%;
+    /*right: 20px;*/
+    z-index: -1;
+    float: left;
 }

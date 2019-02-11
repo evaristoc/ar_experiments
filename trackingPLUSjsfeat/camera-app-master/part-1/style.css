@@ -14,7 +14,7 @@ html, body{
 
 #camera--view, #camera--output, #camera--sensor{
     position: fixed;
-    height: 20%;
+    height: 15%;
     width: 100%;
     object-fit: cover;
 }

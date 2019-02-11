@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.5/dat.gui.min.js"></script>
+  </head>
+  <body>
+    <style>
+      .demo-container {
+        background-color: black;
+      }
+      
+      #camera--view{
+        height : 640px;
+        width : 480px;        
+      }
+      
+      #image--view {
+        margin-top : 50px;
+        margin-bottom : 50px;
+        height : 430px;
+        width : 480px;
+      }
+    </style>
+    <p id='status'>Go away! We are not ready yet!</p>
+    <div class="demo-frame">
+      <div class="demo-container">
+        <!--<img id="image1" src="images/2019-02-01-213331.jpg" />-->
+        <!-- Target Image -->
+        <canvas id="train--pattern"></canvas>
+        <!-- Camera view -->
+        <video id="camera--view" autoplay></video>
+      </div>
+    </div>
+    
+    <script>
+    
+    function onReady() {
+    var cnv;
+    const cameraView = document.querySelector("#camera--view");
+    const canvas = document.querySelector('#train--pattern');
+    const ctx = canvas.getContext("2d");
+    image = new Image();
+    image.src = 'images/2019-02-01-213331.jpg';
+    //const imgElementtrain = document.getElementById('image1');
+
+
+    var curpyr, prevpyr, pointCount, pointStatus, prevxy, curxy;
+    var maxPoints = 1000;
+    
+    // Set constraints for the video stream
+    var constraints = { video: { facingMode: "user" }, audio: false };
+    var track = null;
+    
+    // Access the device camera and stream to cameraView
+    function cameraStart() {
+      navigator.mediaDevices
+          .getUserMedia(constraints)
+          .then(function(stream) {
+              track = stream.getTracks()[0];
+              cameraView.srcObject = stream;
+          })
+          .catch(function(error) {
+              console.error("Oops. Something is broken.", error);
+          });
+    }
+    
+    function jsfeatSection(imageData){
+      //data preparation
+      let dataBuffer = new jsfeat.data_t(canvas.width*canvas.height, imageData.data.
+      buffer);
+      //grey scaled; see number of channels
+      let matGrey = new jsfeat.matrix_t(canvas.width, canvas.height, jsfeat.U8_t | jsfeat.C1_t,
+      dataBuffer);
+      //console.log(matGrey);
+      jsfeatFAST(matGrey);
+    };
+    
+    function jsfeatFAST(matGrey){
+      let matBlurred = new jsfeat.matrix_t(canvas.width, canvas.height, jsfeat.U8_t | jsfeat.C1_t);
+      jsfeat.fast_corners.set_threshold(27);
+      jsfeat.imgproc.gaussian_blur(matGrey, matBlurred, 3);
+      let corners = [];
+      let i = canvas.width*canvas.height;
+      while (--i >= 0) {
+        corners[i] = new jsfeat.keypoint_t(0, 0, 0, 0, -1);
+      };
+      let num_corners = jsfeat.fast_corners.detect(matBlurred, corners, 3);
+      console.log("[INFO] number of corners detected: ", num_corners);
+      for (let i = 0; i < count; i++) {
+        ctx.fillStyle = '#0f0';
+        ctx.fillRect(corners[i].x, corners[i].y, 3, 3);
+        }
+    };
+    
+    function jsfeatORB(matBlurred, corners, num_corners){
+      let descriptors = new jsfeat.matrix_t(32, 128, jsfeat.U8C1_t);
+      jsfeat.orb.describe(matBlurred, corners, num_corners, descriptors);
+    };
+    
+    var match_t = (function () {
+    function match_t(screen_idx, pattern_lev, pattern_idx, distance) {
+        if (typeof screen_idx === "undefined") { screen_idx=0; }
+        if (typeof pattern_lev === "undefined") { pattern_lev=0; }
+        if (typeof pattern_idx === "undefined") { pattern_idx=0; }
+        if (typeof distance === "undefined") { distance=0; }
+        this.screen_idx = screen_idx;
+        this.pattern_lev = pattern_lev;
+        this.pattern_idx = pattern_idx;
+        this.distance = distance;
+    }
+    return match_t;
+    })();
+    
+    function match_pattern(){
+      
+    };
+    
+    function imageStart(){
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      jsfeatSection(imageData);
+    };
+
+    // threshold on difference between intensity of the central pixel
+    // and pixels of a circle around this pixel
+    var threshold = 20;
+    jsfeat.fast_corners.set_threshold(threshold);
+    var corners = [], border = 3;
+    // you should use preallocated keypoint_t array
+    //for(var i = 0; i < img.cols*img.rows, ++i) {
+    //    corners[i] = new jsfeat.keypoint_t(0,0,0,0);
+    //}
+    
+    // Start image
+    window.addEventListener("load", imageStart, false); 
+    // Start the video stream when the window loads
+    window.addEventListener("load", cameraStart, false);      
+    
+    document.getElementById('status').innerHTML = 'We Are Ready.';
+    
+    var gui = new dat.GUI();
+    }
+    </script>
+    <script async src="jsfeat-master/build/jsfeat-min.js" onload="onReady();" type="text/javascript"></script>
+    
+  </body>
+</html>

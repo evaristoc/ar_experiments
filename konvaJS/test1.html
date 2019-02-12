@@ -1,0 +1,72 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>konvaJS - experiments </title>
+        <script src="https://unpkg.com/konva@2.4.2/konva.min.js"></script>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script>
+            //E: starting with OVERVIEW:
+            //  https://konvajs.github.io/docs/overview.html
+            //  https://konvajs.github.io/docs/support.html
+            
+            
+            // first we need to create a stage
+            var stage = new Konva.Stage({
+              container: 'container',   // id of container <div>
+              width: 500,
+              height: 500
+            });
+            
+            // then create layer
+            var layer = new Konva.Layer();
+            
+            // create our shape
+            var circle = new Konva.Circle({
+              x: stage.getWidth() / 2,
+              y: stage.getHeight() / 2,
+              radius: 70,
+              fill: 'red',
+              stroke: 'black',
+              strokeWidth: 4
+            });
+            
+            var triangle = new Konva.Shape({ //E: applicable to custom shapes; you require to use the sceneFunc; for primitives not
+            sceneFunc: function(context) {
+              context.beginPath();
+              context.moveTo(20, 50);
+              context.lineTo(220, 80);
+              context.quadraticCurveTo(150, 100, 260, 170);
+              context.closePath();
+      
+              // special Konva.js method
+              // E: it will call all the attributes set later that are passed from outside the sceneFunc
+              context.fillStrokeShape(this);
+            },
+            fill: '#00D2FF',
+            stroke: 'black',
+            strokeWidth: 4
+            });
+            
+            // add the shape to the layer
+            layer.add(circle);
+            layer.add(triangle);
+            
+            //E: references about events:
+            //  https://konvajs.github.io/docs/events/Binding_Events.html
+            //E: IMPORTANT: drop event MUST be implemented manually
+            //  https://konvajs.github.io/docs/drag_and_drop/Drop_Events.html
+            
+            // add the layer to the stage
+            stage.add(layer);
+            
+            // draw the image
+            layer.draw();
+            
+            //E: the concept of LAYERS seems to be VERY important and USEFUL
+            //  https://konvajs.github.io/docs/performance/Layer_Management.html
+        </script>
+    </body>
+</html>

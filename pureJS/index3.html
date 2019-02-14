@@ -39,17 +39,18 @@ function getLocation() {
 }
 
 function showPosition(position) {
-      x.innerHTML = "Latitude: " + position.coords.latitude + 
-     "<br>Longitude: " + position.coords.longitude;
-    fetch(url + position.coords.longitude + ',' + position.coords.latitude).then(function(response) { 
+      x.innerHTML = "Latitude: " + position.coords.latitude.toFixed(4) + 
+     "<br>Longitude: " + position.coords.longitude.toFixed(4);
+    fetch(url + position.coords.longitude + ',' + position.coords.latitude+'?number=1').then(function(response) { 
         return response.json();
       }).then(function(json) {
         if (json.code === 'Ok') {
           console.info(json);
           document.getElementById('result').innerHTML =
-              json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
+              'Is this your current location? ' + json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
         }else{
         console.log(json);
+        document.getElementById('result').innerHTML = "We couldn't get any result back from the API";
         }
       });
 }

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/konva@2.4.2/konva.min.js"></script>
+  <script src="https://unpkg.com/gifler@0.1.0/gifler.min.js"></script>
+  <meta charset="utf-8">
+  <title>Konva Image Resize Demo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #F0F0F0;
+    }
+  </style>
+</head>
+<body>
+  <button id="play">Play</button><button id="pause">Pause</button>
+  <div id="container"></div>
+  <script>
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    console.log(window.location.href);
+    //var url = new URL('window.location.href');
+    console.log(window.location.href.split('?q=')[1]);
+    var Img = window.location.href.split('?q=')[1]
+
+    
+    //E: ANCHORS are the CORNERS used to modify the size of the figure
+    //- this will change/resize the CANVASES (layers) where the picture is inserted
+    function update(activeAnchor) {
+        var group = activeAnchor.getParent(); //E: why? In principle, it looks like activeAnchor is a selection...
+
+        //E: all the following "gets" extract a HTML/CSS PROPERTY VALUE...
+        //--- they are from the PARENT of activeAnchor, now called here "group"
+        var topLeft = group.get('.topLeft')[0];
+        var topRight = group.get('.topRight')[0];
+        var bottomRight = group.get('.bottomRight')[0];
+        var bottomLeft = group.get('.bottomLeft')[0];
+        var image = group.get('Image')[0];
+
+        
+        var anchorX = activeAnchor.getX();
+        var anchorY = activeAnchor.getY();
+
+        // update anchor positions
+        switch (activeAnchor.getName()) {
+            case 'topLeft':
+                topRight.setY(anchorY);
+                bottomLeft.setX(anchorX);
+                break;
+            case 'topRight':
+                topLeft.setY(anchorY);
+                bottomRight.setX(anchorX);
+                break;
+            case 'bottomRight':
+                bottomLeft.setY(anchorY);
+                topRight.setX(anchorX);
+                break;
+            case 'bottomLeft':
+                bottomRight.setY(anchorY);
+                topLeft.setX(anchorX);
+                break;
+        }
+
+        image.position(topLeft.position()); //E: as in canvas...
+
+        var width = topRight.getX() - topLeft.getX();
+        var height = bottomLeft.getY() - topLeft.getY();
+        if(width && height) {
+            image.width(width);
+            image.height(height);
+        }
+    }
+    
+    
+    //E: this should be first than update, just to make it easy to read
+    function addAnchor(group, x, y, name) {
+        var stage = group.getStage();
+        var layer = group.getLayer();
+
+        var anchor = new Konva.Circle({
+            x: x,
+            y: y,
+            stroke: '#666',
+            fill: '#ddd',
+            strokeWidth: 2,
+            radius: 8,
+            name: name,
+            draggable: true,
+            dragOnTop: false
+        });
+
+        anchor.on('dragmove', function() {
+            update(this);
+            layer.draw();
+        });
+        anchor.on('mousedown touchstart', function() {
+            group.setDraggable(false);
+            this.moveToTop();
+        });
+        anchor.on('dragend', function() {
+            group.setDraggable(true);
+            layer.draw();
+        });
+        // add hover styling
+        anchor.on('mouseover', function() {
+            var layer = this.getLayer();
+            document.body.style.cursor = 'pointer';
+            this.setStrokeWidth(4);
+            layer.draw();
+        });
+        anchor.on('mouseout', function() {
+            var layer = this.getLayer();
+            document.body.style.cursor = 'default';
+            this.setStrokeWidth(2);
+            layer.draw();
+        });
+
+        group.add(anchor);
+    }
+
+    
+    ///////////////////////////////////////////////
+    //E: this is the code; the other part was made to setup the anchors
+    
+    var stage = new Konva.Stage({
+        container: 'container',
+        width: width,
+        height: height
+    });
+    
+     var vlayer = new Konva.Layer();
+    stage.add(vlayer);
+    
+    function handleError(error) {
+        console.error('Error: ', error);
+      }
+    
+    //E: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+    function getVideo(){
+        //navigator.mediaDevices.getUserMedia({video:{ facingMode: { exact: "environment" } }, audio:false})
+        navigator.mediaDevices.getUserMedia({video:true, audio:false})
+        .then((stream)=>{video.srcObject = stream}).catch(handleError);
+    };
+    
+    var video = document.createElement('video');
+    getVideo();
+
+    var vimage = new Konva.Image({
+        image: video,
+        draggable: true,
+        x: 50,
+        y: 50,
+    });    
+
+    //vlayer.add(vimage);
+    
+   
+    vlayer.add(vimage);
+    
+    //console.log(vimage);
+
+    var anim = new Konva.Animation(function () {
+            // do nothing, animation just need to update the layer
+    }, vlayer);
+    
+    // update Konva.Image size when meta is loaded
+    // E: it could be also setTimeout framing https://stackoverflow.com/questions/33834724/draw-video-on-canvas-html5
+    // E: animationFrame, when no listener is required https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+    video.addEventListener("loadedmetadata", function (e) {
+        vimage.width(video.videoWidth);
+        vimage.height(video.videoHeight);
+        video.play();
+        function step() {
+          vlayer.draw();
+          window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+    });
+
+   
+    var layer = new Konva.Layer();
+    stage.add(layer);
+
+    // E: vanost
+    var vanostImg = new Konva.Image({
+        width: 200,
+        height: 137,
+        opacity: 0.7
+    });
+
+    //console.log(vanostImg.absoluteOpacity);
+
+    var vanostGroup = new Konva.Group({
+        x: 180,
+        y: 50,
+        draggable: true
+    });
+    
+    layer.add(vanostGroup);
+    
+    vanostGroup.add(vanostImg);
+    
+    addAnchor(vanostGroup, 0, 0, 'topLeft');
+    addAnchor(vanostGroup, 200, 0, 'topRight');
+    addAnchor(vanostGroup, 200, 138, 'bottomRight');
+    addAnchor(vanostGroup, 0, 138, 'bottomLeft');
+
+
+    var imageObj1 = new Image();
+    
+    imageObj1.onload = function() {
+        vanostImg.image(imageObj1);
+        layer.draw();
+    };
+    
+    //imageObj1.src = 'assets/OSIM00004000454.jpg';
+    imageObj1.src = Img;
+
+
+    
+  </script>
+
+</body>
+</html>

@@ -139,9 +139,15 @@
     
     //E: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
     function getVideo(){
-        //navigator.mediaDevices.getUserMedia({video:{ facingMode: { exact: "environment" } }, audio:false})
-        navigator.mediaDevices.getUserMedia({video:true, audio:false})
-        .then((stream)=>{video.srcObject = stream}).catch(handleError);
+        //E: is a mobile with a rear camera?
+        navigator.mediaDevices.getUserMedia({video:{ facingMode: { exact: "environment" } }, audio:false})
+        .then((stream)=>{video.srcObject = stream})
+        //E: it is not mobile; is there a camera? OBS: the error of rear camera is SPECIFICIED! (overstated variable), so it should be used instead
+        .catch(navigator.mediaDevices.getUserMedia({video:true, audio:false})
+               .then((stream)=>{video.srcObject = stream})
+        //E: none? Send an error
+               .catch(handleError)
+        );
     };
     
     var video = document.createElement('video');

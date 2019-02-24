@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Get Current Position</title>
+        <script type="text/javascript">
+    
+            var watchId = false;
+            var counter = 0;
+            
+            function watchPosition(){
+                if (navigator.geolocation){
+                        //setInterval(navigator.geolocation.getCurrentPosition(successPosition, failurePosition, {
+                        //                        enableHighAccuracy: false,
+                        //                        timeout:1000,
+                        //                        maximumAge: 4000
+                        //    }),500);
+                            navigator.geolocation.getCurrentPosition(successPosition, failurePosition, {
+                                                enableHighAccuracy: false,
+                                                timeout:1000,
+                                                maximumAge: 4000
+                            });
+                    //watchPosition();
+                    watchId = setTimeout(watchPosition, 1000);
+                }else{
+                    document.getElementById("result").innerHTML = "Your browser does not support Geolocation API!!!";    
+                }
+            }
+        
+            function failurePosition(error){
+                alert("Error Code: " + error.code + " Error Message: " + error.message);
+            }
+        
+            function stopWatching(){
+                //navigator.geolocation.clearWatch(watchId);
+                clearTimeout(watchId);
+                counter = 0;
+            }
+        
+            function successPosition(position){
+                var lat = position.coords.latitude;
+                var long = position.coords.longitude;
+                counter++;
+                document.getElementById("result").innerHTML = "Latitude: " + lat + "<br/>Longitude: " + long +"<br/>Counter: "+counter;
+            }
+        </script>
+    </head>
+    <body>
+        <div id="result"></div>
+        <button id="btnStartTracking" onclick="watchPosition();">Start Tracking Location</button>
+        <button id="btnStopTracking" onclick="stopWatching();">Stop Tracking Location</button>
+    </body>
+</html>

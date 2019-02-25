@@ -36,6 +36,7 @@ function getLocation() {
   } else { 
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
+  setInterval(getLocation,4000)
 }
 
 function showPosition(position) {

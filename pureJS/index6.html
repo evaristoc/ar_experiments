@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<p id="demo"></p>
+<p id='result'></p>
+
+<script>
+var x = document.getElementById("demo");
+
+const url = '//router.project-osrm.org/nearest/v1/driving/';
+//const coord = {
+//	lon: 4.9004,
+//  lat: 52.3531
+//};
+
+//fetch(url + coord.lon + ',' + coord.lat).then(function(response) { 
+//  return response.json();
+//}).then(function(json) {
+//  if (json.code === 'Ok') {
+//  	console.info(json);
+//    document.getElementById('result').innerHTML =
+//    	json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
+//  }else{
+//  console.log(json);
+//  }
+//});
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+      x.innerHTML = "Latitude: " + position.coords.latitude.toFixed(4) + 
+     "<br>Longitude: " + position.coords.longitude.toFixed(4);
+    fetch(url + position.coords.longitude + ',' + position.coords.latitude+'?number=1').then(function(response) { 
+        return response.json();
+      }).then(function(json) {
+        if (json.code === 'Ok') {
+          console.info(json);
+          document.getElementById('result').innerHTML =
+              'Is this your current location? ' + json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
+        }else{
+        console.log(json);
+        document.getElementById('result').innerHTML = "We couldn't get any result back from the API";
+        }
+      });
+}
+</script>
+
+</body>
+</html>

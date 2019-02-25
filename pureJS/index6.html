@@ -32,7 +32,13 @@ const url = '//router.project-osrm.org/nearest/v1/driving/';
 
 function getLocation() {
   if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(showPosition);
+    navigator.geolocation.watchPosition(
+                                        showPosition,
+                                        (err)=>{document.getElementById('result').innerHTML = err},
+                                        {enableHighAccuracy: true,
+                                        timeout: 1000,
+                                        maximumAge:4000}
+                                      );
   } else { 
     x.innerHTML = "Geolocation is not supported by this browser.";
   }

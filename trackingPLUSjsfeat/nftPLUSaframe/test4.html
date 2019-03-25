@@ -547,27 +547,12 @@
             function tCorners(M, w, h) {
                 var pt = [ {'x':0,'y':0}, {'x':w,'y':0}, {'x':w,'y':h}, {'x':0,'y':h} ];
                 var z=0.0, i=0, px=0.0, py=0.0;
-                //var i = 0;
-                //  if (z.length > 8) {
-                //    z.shift()
-                //  }
-                //  if (px.length > 8) {
-                //    px.shift()
-                //  }
-                //  if (py.length > 8) {
-                //    py.shift()
-                //  }
                 for (; i < 4; ++i) {
                     px = M[0]*pt[i].x + M[1]*pt[i].y + M[2];
                     py = M[3]*pt[i].x + M[4]*pt[i].y + M[5];
                     z = M[6]*pt[i].x + M[7]*pt[i].y + M[8];
                     pt[i].x = px/z;
                     pt[i].y = py/z;
-                    //px.push(M[0]*pt[i].x + M[1]*pt[i].y + M[2]);
-                    //py.push(M[3]*pt[i].x + M[4]*pt[i].y + M[5]);
-                    //z.push(M[6]*pt[i].x + M[7]*pt[i].y + M[8]);
-                    //pt[i].x = average(px)/average(z);
-                    //pt[i].y = average(py)/average(z);
                 }
                 return pt;
             }
@@ -591,45 +576,7 @@
                 }
             }
             
-            function render_hull(ctx, matches, count){
-              var screen_innerpoints = []
-              var x_average = [];
-              var y_average = [];
-              for(var i = 0; i < count; ++i) {
-                var m = matches[i];
-                var s_kp = screen_corners[m.screen_idx];
-                screen_innerpoints.push([s_kp.x,s_kp.y]);
-                x_average.push(s_kp.x);
-                y_average.push(s_kp.y);
-                ctx.beginPath();
-                ctx.moveTo(s_kp.x, s_kp.y);
-                ctx.fillText(m.screen_idx, s_kp.x, s_kp.y); //E: based on observations, indexing varies per frame :(
-              };
-              
-              ctx.closePath();
-              
-              var hull_points, selected_hull_points;
-              hull_points = hull(screen_innerpoints,50);
-              selected_hull_points = hull_points.filter((pt)=>{
-                return (pt[0] > .66*average(x_average) && pt[0] < 1.33*average(x_average)) || (pt[1] > .66*average(x_average) && pt[1] < 1.33*average(y_average))           
-            },[])
-              selected_hull_points.push(selected_hull_points[0]);
-              ctx.strokeStyle = "rgb(0,0,255)";
-              for (var i = 1; i < count; ++i) {
-                    ctx.beginPath();
-                    ctx.moveTo(selected_hull_points[i-1][0],selected_hull_points[i-1][1]);
-                    ctx.lineTo(selected_hull_points[i][0],selected_hull_points[i][1]);
-                    ctx.lineWidth=1;
-                    ctx.stroke();
-              }
-            }
-            
-            
-            //var point_start = [[],[]];
-            //var point_01 = [[],[]];
-            //var point_12 = [[],[]];
-            //var point_23 = [[],[]];
-            //var point_30 = [[],[]];
+
             var startbox = {x:[],y:[]};
             var linesbox = [{x:[],y:[]}, {x:[],y:[]},{x:[],y:[]}, {x:[],y:[]}]
             //E: one of the functions from:
@@ -748,14 +695,7 @@
   
                   };
                 }
-                
-                //ctx.moveTo(shape_pts[0].x,shape_pts[0].y);
-                //ctx.lineTo(shape_pts[1].x,shape_pts[1].y);
-                //ctx.lineTo(shape_pts[2].x,shape_pts[2].y);
-                //ctx.lineTo(shape_pts[3].x,shape_pts[3].y);
-                //ctx.lineTo(shape_pts[0].x,shape_pts[0].y);
-                //console.log(startbox, linesbox);
-                
+ 
                
                 ctx.moveTo(average(startbox.x),average(startbox.y));
                 for(let i = 1; i < 4; ++i){
@@ -764,14 +704,7 @@
                 ctx.lineTo(average(linesbox[0].x),average(linesbox[0].y));
                 ctx.lineWidth=4;
                 ctx.stroke();
-                
-                //E: OJO!! This is how I added the image!!
-                ctx.drawImage(foto,
-                              Math.min.apply(Math, linesbox.map((v) => {return average(v.x)})),
-                              Math.min.apply(Math, linesbox.map((v) => {return average(v.y)})),
-                              100,
-                              50
-                              )
+
             }
           
             
@@ -800,10 +733,6 @@
                     }
                 }
             }
-            $(window).unload(function() {
-                video.pause();
-                video.src=null;
-            });
         });
         
          

@@ -246,7 +246,8 @@
     var imageObj1;
     var layer;
     imageObj1 = new Image();
-    imageObj1.src = 'assets/trevi1.jpg';
+    //imageObj1.src = 'assets/trevi1.jpg';
+    imageObj1.src = window.location.href.split('?q=')[1]
     function loadFunction(){ //instead of imageNode.onload = function(){xxxx draw()}
         console.log('here');
         layer = new Konva.Layer();

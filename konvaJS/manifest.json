@@ -2,5 +2,6 @@
   "short_name": "Old Photographs",
   "name": "Evaristo's Amazing Old Photographs App",
   "start_url": "/test9.html",
-  "display": "browser"
+  "display": "fullscreen"
+  /*"display": "browser"*/
 }

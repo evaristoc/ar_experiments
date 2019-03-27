@@ -85,6 +85,12 @@
   <script>
     ////available in some, check: https://developers.google.com/web/fundamentals/native-hardware/fullscreen/
     //document.body.requestFullscreen(); //<-- doesnt exist :(
+    /* Get the documentElement (<html>) to display the page in fullscreen */
+    var elem = document.documentElement;
+    if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+      elem.webkitRequestFullscreen();
+    }
+    
     var stagewidth = window.innerWidth;
     var stageheight = window.innerHeight;
     

@@ -199,10 +199,23 @@
         console.error('Error: ', error);
       }
     
+    function detectmob() {
+      if(window.innerWidth <= 800 && window.innerHeight <= 600) {
+        return true;
+      } else {
+        return false;
+      }
+   }
+    
     function getVideo(){
-        //navigator.mediaDevices.getUserMedia({video:true, audio:false})
+        let mob = detectmob();
+        if (mob) {
         navigator.mediaDevices.getUserMedia( { video: { facingMode: { exact: "environment" } }, audio:false } )
         .then((stream)=>{video.srcObject = stream}).catch(handleError);
+        }else{
+          navigator.mediaDevices.getUserMedia({video:true, audio:false})
+          .then((stream)=>{video.srcObject = stream}).catch(handleError);
+        }
     };
     
     var video = document.createElement('video');

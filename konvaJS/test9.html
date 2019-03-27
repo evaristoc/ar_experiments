@@ -197,7 +197,8 @@
       }
     
     function getVideo(){
-        navigator.mediaDevices.getUserMedia({video:true, audio:false})
+        //navigator.mediaDevices.getUserMedia({video:true, audio:false})
+        navigator.mediaDevices.getUserMedia( { video: { facingMode: { exact: "environment" } }, audio:false } )
         .then((stream)=>{video.srcObject = stream}).catch(handleError);
     };
     

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/konva@2.4.2/konva.min.js"></script>
+  <script src="https://unpkg.com/gifler@0.1.0/gifler.min.js"></script>
+  <meta charset="utf-8">
+  <title>Konva Image Resize Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #F0F0F0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.navbar a:hover {
+  background: #f1f1f1;
+  color: black;
+}
+
+.navbar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+</style>
+</head>
+<body>
+  <!--<div class="img-comp-container">
+  <div class="img-comp-img">
+    <img src="img_snow.jpg" width="300" height="200">
+    <video></video>
+  </div>
+  <div class="img-comp-img img-comp-overlay">
+    <img src="img_forest.jpg" width="300" height="200">
+  </div>
+</div>-->
+  <div id="stage-parent">
+    <div id="container"></div>
+</div>
+
+
+<div class="navbar">
+  <a href="#home" class="active">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+</div>
+
+
+  <script>
+    var stagewidth = window.innerWidth;
+    var stageheight = window.innerHeight;
+
+    
+    //E: ANCHORS are the CORNERS used to modify the size of the figure
+    //- this will change/resize the CANVASES (layers) where the picture is inserted
+    function update(activeAnchor) {
+        var group = activeAnchor.getParent(); //E: why? In principle, it looks like activeAnchor is a selection...
+
+        //E: all the following "gets" extract a HTML/CSS PROPERTY VALUE...
+        //--- they are from the PARENT of activeAnchor, now called here "group"
+        var topLeft = group.get('.topLeft')[0];
+        var topRight = group.get('.topRight')[0];
+        var bottomRight = group.get('.bottomRight')[0];
+        var bottomLeft = group.get('.bottomLeft')[0];
+        var image = group.get('Image')[0];
+
+        
+        var anchorX = activeAnchor.getX();
+        var anchorY = activeAnchor.getY();
+
+        // update anchor positions
+        switch (activeAnchor.getName()) {
+            case 'topLeft':
+                topRight.setY(anchorY);
+                bottomLeft.setX(anchorX);
+                break;
+            case 'topRight':
+                topLeft.setY(anchorY);
+                bottomRight.setX(anchorX);
+                break;
+            case 'bottomRight':
+                bottomLeft.setY(anchorY);
+                topRight.setX(anchorX);
+                break;
+            case 'bottomLeft':
+                bottomRight.setY(anchorY);
+                topLeft.setX(anchorX);
+                break;
+        }
+
+        image.position(topLeft.position()); //E: as in canvas...
+
+        let newwidth = topRight.getX() - topLeft.getX();
+        let newheight = bottomLeft.getY() - topLeft.getY();
+        if(newwidth && newheight) {
+            image.width(newwidth);
+            image.height(newheight);
+        }
+    }//end update()
+    
+    
+    //E: this should be first than update, just to make it easy to read
+    function addAnchor(group, x, y, name) {
+        var stage = group.getStage();
+        var layer = group.getLayer();
+
+        var anchor = new Konva.Circle({
+            x: x,
+            y: y,
+            stroke: '#666',
+            fill: '#ddd',
+            strokeWidth: 2,
+            radius: 8,
+            name: name,
+            draggable: true,
+            dragOnTop: false
+        });
+
+        anchor.on('dragmove', function() {
+            update(this);
+            layer.draw();
+        });
+        anchor.on('mousedown touchstart', function() {
+            group.setDraggable(false);
+            this.moveToTop();
+        });
+        anchor.on('dragend', function() {
+            group.setDraggable(true);
+            layer.draw();
+        });
+        // add hover styling
+        anchor.on('mouseover', function() {
+            var layer = this.getLayer();
+            document.body.style.cursor = 'pointer';
+            this.setStrokeWidth(4);
+            layer.draw();
+        });
+        anchor.on('mouseout', function() {
+            var layer = this.getLayer();
+            document.body.style.cursor = 'default';
+            this.setStrokeWidth(2);
+            layer.draw();
+        });
+
+        group.add(anchor);
+    }//end addAnchor()
+
+    
+    ///////////////////////////////////////////////
+    //E: this is the code; the other part was made to setup the anchors
+    
+    var stage = new Konva.Stage({
+        container: 'container',
+        width: stagewidth,
+        height: stageheight
+    });
+    
+    var vlayer = new Konva.Layer();
+    stage.add(vlayer);
+    
+    function handleError(error) {
+        console.error('Error: ', error);
+      }
+    
+    function getVideo(){
+        navigator.mediaDevices.getUserMedia({video:true, audio:false})
+        .then((stream)=>{video.srcObject = stream}).catch(handleError);
+    };
+    
+    var video = document.createElement('video');
+    //var video = document.getElementByName('video');
+    getVideo();
+
+    
+    //E: video must be inserted into a konva's canvas
+    var vimage = new Konva.Image({
+        image: video,
+        draggable: false,
+        x: 0,
+        y: 0,
+        threshold: 20,
+        blurRadius: 90,
+        contrast: 0
+    });    
+
+    
+    //vimage.threshold(0)
+    //vimage.filters([Konva.Filters.Mask]);
+    //vimage.cache();
+    vimage.filters([Konva.Filters.Blur]);
+    vimage.blurRadius(10);
+    
+    //vlayer.add(vimage);
+    vlayer.add(vimage);
+    
+   
+    var layer = new Konva.Layer();
+    stage.add(layer);
+
+    // E: trevi1
+    var trevi1Img = new Konva.Image({
+        width: 100,
+        height: 100
+    });
+
+    // E: trevi2
+    var trevi2Img = new Konva.Image({
+        width: 100,
+        height: 100
+    });   
+
+    var trevi1Group = new Konva.Group({
+        x: 10,
+        y: stageheight - 100,
+        draggable: true
+    });
+    
+    layer.add(trevi1Group);
+    
+    trevi1Group.add(trevi1Img);
+    
+    addAnchor(trevi1Group, 0, 0, 'topLeft');
+    addAnchor(trevi1Group, 100, 0, 'topRight');
+    addAnchor(trevi1Group, 100, 100, 'bottomRight');
+    addAnchor(trevi1Group, 0, 100, 'bottomLeft');
+
+    var trevi2Group = new Konva.Group({
+        x: 30+100,
+        y: stageheight - 100,
+        draggable: true
+    });
+    
+    layer.add(trevi2Group);
+    
+    trevi2Group.add(trevi2Img);
+    
+    addAnchor(trevi2Group, 0, 0, 'topLeft');
+    addAnchor(trevi2Group, 100, 0, 'topRight');
+    addAnchor(trevi2Group, 100, 100, 'bottomRight');
+    addAnchor(trevi2Group, 0, 100, 'bottomLeft');
+
+    var imageObj1 = new Image();
+    
+    imageObj1.onload = function() {
+        trevi1Img.image(imageObj1);
+        layer.draw();
+    };
+    
+    imageObj1.src = 'assets/trevi1.jpg';
+
+    var imageObj2 = new Image();
+    
+    imageObj2.onload = function() {
+        trevi2Img.image(imageObj2);
+        layer.draw();
+    };
+    
+    imageObj2.src = 'assets/trevi2.jpeg';
+
+    
+    var anim = new Konva.Animation(function () {
+            // do nothing, animation just need to update the layer
+    }, vlayer);
+    
+    // update Konva.Image size when meta is loaded
+    // E: it could be also setTimeout framing https://stackoverflow.com/questions/33834724/draw-video-on-canvas-html5
+    // E: animationFrame, when no listener is required https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+    video.addEventListener("loadedmetadata", function (e) {
+        //vimage.width(video.videoWidth);
+        //vimage.height(video.videoHeight);
+        vimage.width(stagewidth);
+        vimage.height(stageheight);
+        vimage.cache();
+        //console.log(vimage.filters([Konva.Filters.Mask]));
+        //vimage.filters([Konva.Filters.Mask])
+        //vimage.filters([Konva.Filters.Blur]);
+        vimage.filters([Konva.Filters.Contrast]);
+        //vimage.blurRadius(0);
+        video.play();
+        //anim.start();
+        function step() {
+          vimage.cache(); 
+          //vimage.threshold(210);
+          //vimage.blurRadius(100);
+          //vimage.contrast(-50);
+          trevi1Group.on('dragend', function(){console.log('dragend'); vimage.contrast(0)})
+                     .on('dragstart', function(){console.log('dragstart'); vimage.contrast(-50)})
+                     .on('dragmove', function(){console.log('dragmove'); vimage.contrast(-50)})
+          vlayer.batchDraw();
+          //console.log("HERE");
+          window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+    });
+    
+
+
+    //video.addEventListener('play', function() {
+    //  var $this = this; //cache
+    //  (function loop() {
+    //    if (!$this.paused && !$this.ended) {
+    //      //ctx.drawImage($this, 0, 0);
+    //      vlayer.draw();
+    //      setTimeout(loop, 1000 / 30); // drawing at 30fps
+    //    }
+    //  })();
+    //}, 0);
+
+    
+    //document.getElementById('play').addEventListener('click', function () {
+    //    video.play();
+    //    anim.start();
+    //});
+    //document.getElementById('pause').addEventListener('click', function () {
+    //    video.pause();
+    //    anim.stop();
+    //});
+    
+
+   
+   
+    //var canvas = document.createElement('canvas');
+    //
+    //function onDrawFrame(ctx, frame) {
+    //  // update canvas size
+    //  canvas.width = frame.width;
+    //  canvas.height = frame.height;
+    //  // update canvas that we are using for Konva.Image
+    //  ctx.drawImage(frame.buffer, 0, 0);
+    //  // redraw the layer
+    //  layer.draw();
+    //}
+    //
+    //gifler('/assets/yoda.gif').frames(canvas, onDrawFrame);
+    //
+    //var imageYoda = new Konva.Image({
+    //  image: canvas
+    //});
+    //
+    //vlayer.add(imageYoda);
+
+    function fitStageIntoParentContainer(){
+      // now we need to fit stage into parent
+            var containerWidth = container.offsetWidth;
+            var containerHeight = container.offsetHeight;
+            // to do this we need to scale the stage
+            var scaleW = containerWidth / stagewidth;
+            var scaleH = containerHeight / stageheight;
+    
+    
+            stage.width(stagewidth * scaleW);
+            stage.height(stageheight * scaleH);
+            stage.scale({ x: scaleW, y: scaleH });
+            stage.draw();
+        }
+    
+    fitStageIntoParentContainer();
+    // adapt the stage on any window resize
+    window.addEventListener('resize', fitStageIntoParentContainer);
+  </script>
+
+</body>
+</html>

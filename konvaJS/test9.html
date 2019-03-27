@@ -87,7 +87,7 @@
     //document.body.requestFullscreen(); //<-- doesnt exist :(
     var stagewidth = window.innerWidth;
     var stageheight = window.innerHeight;
-
+    
     
     //E: ANCHORS are the CORNERS used to modify the size of the figure
     //- this will change/resize the CANVASES (layers) where the picture is inserted
@@ -350,6 +350,14 @@
     fitStageIntoParentContainer();
     // adapt the stage on any window resize
     window.addEventListener('resize', fitStageIntoParentContainer);
+    
+    window.addEventListener("load",function() {
+        setTimeout(function(){
+            // This hides the address bar:
+            window.scrollTo(0, 1);
+        }, 0);
+    });
+    
   </script>
 
 </body>

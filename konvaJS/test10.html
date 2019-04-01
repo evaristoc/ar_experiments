@@ -11,8 +11,11 @@
 
 <!-- Stream video via webcam -->
 <div class="video-wrap">
+    <script src="https://unpkg.com/konva@2.4.2/konva.min.js"></script>
+    <script src="https://unpkg.com/gifler@0.1.0/gifler.min.js"></script>
     <video id="video" playsinline autoplay onplay="resize_canvas(this)"></video>
-    <canvas class="canvas" id="cv1"></canvas>
+    <div id="konvastage"></div>
+    <!--<canvas class="canvas" id="cv1"></canvas>-->
 </div>
 
 <!--<div class="container">
@@ -23,16 +26,49 @@
 
 function resize_canvas(element)
 {
-  var w = element.offsetWidth;
-  var h = element.offsetHeight;
-  var cv = document.getElementById("cv1");
-  cv.width = w;
-  cv.height =h;
+  //var w = element.offsetWidth;
+  //var h = element.offsetHeight;
+  //var cv = document.getElementById("konvastage");
+  //cv.width = w;
+  //cv.height =h;
+  
+  var stage = new Konva.Stage({
+        container: 'konvastage',
+        width: element.offsetWidth,
+        height: element.offsetHeight
+    });
+  
+    stage.container().style.position = 'absolute';
+    stage.container().style.top = '0';
+    stage.container().style.left = '0';
+  
+    var layer = new Konva.Layer();
+    stage.add(layer);
+
+    // E: trevi1
+    var trevi1Img = new Konva.Image({
+        width: 200,
+        height: 137,
+        x: 180,
+        y: 50,
+        draggable: true
+    });
+    
+    layer.add(trevi1Img);
+
+    var imageObj1 = new Image();
+    
+    imageObj1.onload = function() {
+        trevi1Img.image(imageObj1);
+        layer.draw();
+    };
+    
+    imageObj1.src = 'images/trevi1.jpg';
 }
 
 const video = document.getElementById('video');
 const constraints = {
-  audio: true,
+  audio: false,
   video: {
     width: 1280, height: 720
   }

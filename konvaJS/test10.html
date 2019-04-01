@@ -49,8 +49,8 @@ function resize_canvas(element)
     var trevi1Img = new Konva.Image({
         width: 200,
         height: 137,
-        x: 180,
-        y: 50,
+        x: element.offsetWidth/2,
+        y: element.offsetHeight/2,
         draggable: true
     });
     
@@ -70,7 +70,10 @@ const video = document.getElementById('video');
 const constraints = {
   audio: false,
   video: {
-    width: 1280, height: 720
+    //width: 1280,
+    //height: 720
+    width: window.innerWidth,
+    height: window.innerHeight
   }
 };
 

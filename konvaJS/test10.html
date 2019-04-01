@@ -1,0 +1,59 @@
+<style>
+  .canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color:rgba(255,0,0,0.5);
+}
+
+</style>
+
+<!-- Stream video via webcam -->
+<div class="video-wrap">
+    <video id="video" playsinline autoplay onplay="resize_canvas(this)"></video>
+    <canvas class="canvas" id="cv1"></canvas>
+</div>
+
+<!--<div class="container">
+  <video class="video" id="vd1" controls autoPlay  src="http://upload.wikimedia.org/wikipedia/commons/7/79/Big_Buck_Bunny_sma    ll.ogv" onplay="resize_canvas(this)"></video>
+  <canvas class="canvas" id="cv1"></canvas>
+</div>-->
+<script>
+
+function resize_canvas(element)
+{
+  var w = element.offsetWidth;
+  var h = element.offsetHeight;
+  var cv = document.getElementById("cv1");
+  cv.width = w;
+  cv.height =h;
+}
+
+const video = document.getElementById('video');
+const constraints = {
+  audio: true,
+  video: {
+    width: 1280, height: 720
+  }
+};
+
+// Access webcam
+async function init() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    handleSuccess(stream);
+  } catch (e) {
+    errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+  }
+}
+
+// Success
+function handleSuccess(stream) {
+  window.stream = stream;
+  video.srcObject = stream;
+}
+
+// Load init
+init();
+</script>

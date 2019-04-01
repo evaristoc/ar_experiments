@@ -155,7 +155,7 @@
             //fill: '#ddd',
             fill: '#ffd25c',
             strokeWidth: 2,
-            radius: 11,
+            radius: 15,
             name: name,
             draggable: true,
             dragOnTop: false
@@ -248,7 +248,7 @@
         y: 0,
         //threshold: 20,
         //blurRadius: 90,
-        contrast: 0
+        contrast: -50
     });    
 
     
@@ -290,7 +290,7 @@
         var trevi1Img = new Konva.Image({
             width: wI,
             height: hI,
-            opacity: .5
+            opacity: .8
         });
         trevi1Img.image(imageObj1);
         trevi1Group.add(trevi1Img);
@@ -329,9 +329,9 @@
         video.play();
         function step() {
           vimage.cache(); 
-          trevi1Group.on('dragend', function(){console.log('dragend'); vimage.contrast(0); trevi1Img.opacity(0.5)})
-                     .on('dragstart', function(){console.log('dragstart'); vimage.contrast(-50); trevi1Img.opacity(1.0)})
-                     .on('dragmove', function(){console.log('dragmove'); vimage.contrast(-50); trevi1Img.opacity(1.0)})
+          trevi1Group.on('dragend', function(){console.log('dragend'); vimage.contrast(-50); trevi1Img.opacity(0.8)})
+                     .on('dragstart', function(){console.log('dragstart'); vimage.contrast(-10); trevi1Img.opacity(.7)})
+                     .on('dragmove', function(){console.log('dragmove'); vimage.contrast(-10); trevi1Img.opacity(.7)})
           vlayer.batchDraw();
           window.requestAnimationFrame(step);
         };

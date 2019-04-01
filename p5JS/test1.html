@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>p5JS</title>
+
+	</head>
+  <body>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.min.js"></script>
+		<script>
+			//function setup(){
+			//	createCanvas(500,500);
+			//	background("darkblue");
+			//}
+			//
+			//function draw(){
+			//	ellipse(50, 50, 80, 80);
+			//}
+			
+			function setup() {
+				createCanvas(640, 480);
+			}
+			
+			function draw() {
+				if (mouseIsPressed) {
+					fill(0);
+				} else {
+					fill(255);
+				}
+				ellipse(mouseX, mouseY, 80, 80);
+			}
+		</script>
+  <style></style>
+  </body>
+</html>

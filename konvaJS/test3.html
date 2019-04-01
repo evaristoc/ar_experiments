@@ -157,15 +157,17 @@
     video.addEventListener("loadedmetadata", function (e) {
         vimage.width(video.videoWidth * 2);
         vimage.height(video.videoHeight * 3);
-        video.play();
-        //anim.start();
-        function step() {
-          vlayer.draw();
-          //console.log("HERE");
-          window.requestAnimationFrame(step);
-        };
-        window.requestAnimationFrame(step);
+        //video.play();
+        ////anim.start();
+        //function step() {
+        //  vlayer.draw();
+        //  //console.log("HERE");
+        //  window.requestAnimationFrame(step);
+        //};
+        //window.requestAnimationFrame(step);
     });
+    
+    
 
     //video.addEventListener('play', function() {
     //  var $this = this; //cache
@@ -179,14 +181,14 @@
     //}, 0);
 
     
-    //document.getElementById('play').addEventListener('click', function () {
-    //    video.play();
-    //    anim.start();
-    //});
-    //document.getElementById('pause').addEventListener('click', function () {
-    //    video.pause();
-    //    anim.stop();
-    //});
+    document.getElementById('play').addEventListener('click', function () {
+        video.play();
+        anim.start();
+    });
+    document.getElementById('pause').addEventListener('click', function () {
+        video.pause();
+        anim.stop();
+    });
     
     var layer = new Konva.Layer();
     stage.add(layer);

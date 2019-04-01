@@ -248,15 +248,15 @@
         y: 0,
         //threshold: 20,
         //blurRadius: 90,
-        contrast: -50
+        //contrast: -50
     });    
 
     
     //vimage.threshold(0)
     //vimage.filters([Konva.Filters.Mask]);
     //vimage.cache();
-    vimage.filters([Konva.Filters.Blur]);
-    vimage.blurRadius(10);
+    //vimage.filters([Konva.Filters.Blur]);
+    //vimage.blurRadius(10);
     
     //vlayer.add(vimage);
     vlayer.add(vimage);
@@ -274,6 +274,11 @@
         draggable: true
     });
     
+    
+    var rectlayer = new Konva.Layer();
+    stage.add(rectlayer);
+    
+    
     var rect = new Konva.Rect({
       width: stagewidth,
       height: stageheight,
@@ -281,10 +286,13 @@
       y: 0,
       fill: 'red',
       strokeWidth: .01,
-      opacity: .3,
+      opacity: .2,
       draggable: false
     });
-
+    
+    
+    
+    
     var imageObj1;
     var layer;
     imageObj1 = new Image();
@@ -294,7 +302,6 @@
         console.log('here');
         layer = new Konva.Layer();
         stage.add(layer);
-        layer.add(rect); // adding a screen covering the video
         layer.add(trevi1Group);
 
         var trevi1Img = new Konva.Image({
@@ -334,9 +341,11 @@
     video.addEventListener("loadedmetadata", function (e) {
         vimage.width(stagewidth);
         vimage.height(stageheight);
-        vimage.cache();
-        vimage.filters([Konva.Filters.Contrast]);
+        //vimage.cache();
+        //vimage.filters([Konva.Filters.Contrast]);
         video.play();
+        rectlayer.add(rect);
+        rectlayer.draw();
         function step() {
           //vimage.cache(); 
           trevi1Group.on('dragend', function(){

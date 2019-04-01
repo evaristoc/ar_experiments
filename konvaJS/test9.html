@@ -298,17 +298,21 @@
     imageObj1 = new Image();
     //imageObj1.src = 'assets/trevi1.jpg';
     imageObj1.src = window.location.href.split('?q=')[1]
+    
+
+    var trevi1Img = new Konva.Image({
+        width: wI,
+        height: hI,
+        opacity: .8
+    });
+    
     function loadFunction(){ //instead of imageNode.onload = function(){xxxx draw()}
         console.log('here');
         layer = new Konva.Layer();
         stage.add(layer);
         layer.add(trevi1Group);
 
-        var trevi1Img = new Konva.Image({
-            width: wI,
-            height: hI,
-            opacity: .8
-        });
+
         trevi1Img.image(imageObj1);
         trevi1Group.add(trevi1Img);
 
@@ -356,12 +360,12 @@
                      .on('dragstart', function(){
                               //console.log('dragstart');
                               //vimage.contrast(-10);
-                              trevi1Img.opacity(.7)
+                              trevi1Img.opacity(.5)
                               })
                      .on('dragmove', function(){
                               //console.log('dragmove');
                               //vimage.contrast(-10);
-                              trevi1Img.opacity(.7)
+                              trevi1Img.opacity(.5)
                               })
           //vlayer.batchDraw();
           vlayer.draw();
@@ -396,7 +400,7 @@
             window.scrollTo(0, 1);
         }, 0);
     });
-    
+   //?q=https://scontent-amt2-1.xx.fbcdn.net/v/t1.0-9/40031586_2140291726005821_3675791994426228736_n.jpg?_nc_cat=104&_nc_ht=scontent-amt2-1.xx&oh=1da8ed609da98f12c43cb7fe4751a7b6&oe=5CF9E983 
   </script>
 
 </body>

@@ -300,6 +300,15 @@
     });
     
     
+   var text = new Konva.Text({
+      x: 10,
+      y: 15,
+      text: 'Simple Text',
+      fontSize: 30,
+      fontFamily: 'Calibri',
+      fill: 'green'
+    });
+    
     //var loadimg = function(url){
     //  //console.log('before promise');
     //  return new Promise(function(thenfunc,catchfunc){
@@ -425,6 +434,7 @@
         //vimage.filters([Konva.Filters.Contrast]);
         video.play();
         rectlayer.add(rect);
+        rectlayer.add(text);
         rectlayer.draw();
         function step() {
           //vimage.cache(); 

@@ -278,8 +278,8 @@
 
 
     var trevi1Group = new Konva.Group({
-        x: stagewidth/1.8 - wI,
-        y: stageheight/1.5 - hI,
+        x: 30,
+        y: 15,
         draggable: true
     });
     
@@ -337,7 +337,7 @@
                     layer = new Konva.Layer();
                     stage.add(layer);
                     layer.add(trevi1Group);
-                    kImg.id("oldimg")
+                    kImg.id("oldimg");
                     kImg.width(wI);
                     kImg.height(hI);
                     kImg.opacity(.8);

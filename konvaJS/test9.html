@@ -87,7 +87,15 @@
     //document.body.requestFullscreen(); //<-- doesnt exist :(
     /* Get the documentElement (<html>) to display the page in fullscreen */
     var elem = document.documentElement;
-    if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    //https://www.webdesignerdepot.com/2013/03/how-to-use-the-fullscreen-api/
+    //https://parrot-tutorial.com/jsref/elem_requestfullscreen.html
+    if (elem.RequestFullscreen) { /* not listed */
+      elem.RequestFullscreen();
+    }else if (elem.mozRequestFullScreen) { /* Mozilla */
+      elem.mozRequestFullScreen();
+    }else if (elem.msRequestFullscreen) { /* MicroSoft */
+      elem.msRequestFullscreen();
+    }else if(elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
       elem.webkitRequestFullscreen();
     }
     

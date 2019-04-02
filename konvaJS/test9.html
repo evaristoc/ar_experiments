@@ -68,6 +68,7 @@
   </div>
 </div>-->
   <div id="stage-parent">
+    <div id="loadimgerror"></div>
     <div id="container"></div>
 </div>
 
@@ -299,39 +300,106 @@
     });
     
     
+    //var loadimg = function(url){
+    //  //console.log('before promise');
+    //  return new Promise(function(thenfunc,catchfunc){
+    //              //console.log('promise');
+    //              thenfunc(url);
+    //            })
+    //    }
     
     
-    var imageObj1;
     var layer;
-    imageObj1 = new Image();
-    //imageObj1.src = 'assets/trevi1.jpg';
-    imageObj1.src = window.location.href.split('?q=')[1]
+    //https://blog.teamtreehouse.com/learn-asynchronous-image-loading-javascript
+    //var trevi1Img = new Konva.Image({
+    //    width: wI,
+    //    height: hI,
+    //    opacity: .8
+    //});
+
+   //var loadimg = new Image();
+   
+   let i;
     
-
-    var trevi1Img = new Konva.Image({
-        width: wI,
-        height: hI,
-        opacity: .8
-    });
-    
-    function loadFunction(){ //instead of imageNode.onload = function(){xxxx draw()}
-        console.log('here');
-        layer = new Konva.Layer();
-        stage.add(layer);
-        layer.add(trevi1Group);
-
-
-        trevi1Img.image(imageObj1);
-        trevi1Group.add(trevi1Img);
-
-        addAnchor(trevi1Group, 0, 0, 'topLeft');
-        addAnchor(trevi1Group, wI, 0, 'topRight');
-        addAnchor(trevi1Group, wI, hI, 'bottomRight');
-        addAnchor(trevi1Group, 0, hI, 'bottomLeft');
-
-        layer.draw();
-        
+    function loadFunction(){
+        Konva.Image.fromURL(window.location.href.split('?q=')[1],
+                  function(kImg){
+                    //console.log('here');
+                    layer = new Konva.Layer();
+                    stage.add(layer);
+                    layer.add(trevi1Group);
+                    kImg.id("oldimg")
+                    kImg.width(wI);
+                    kImg.height(hI);
+                    kImg.opacity(.8);
+                    i = kImg;
+                    trevi1Group.add(kImg);
+                    
+                    addAnchor(trevi1Group, 0, 0, 'topLeft');
+                    addAnchor(trevi1Group, wI, 0, 'topRight');
+                    addAnchor(trevi1Group, wI, hI, 'bottomRight');
+                    addAnchor(trevi1Group, 0, hI, 'bottomLeft');
+                    
+                    layer.draw();
+                    
+                  }
+        )
     }
+    //imageObj1.src = 'assets/trevi1.jpg';
+    
+    
+
+
+    
+   
+    //function loadFunction(){ //instead of imageNode.onload = function(){xxxx draw()}
+    //    console.log('here');
+    //    layer = new Konva.Layer();
+    //    stage.add(layer);
+    //    layer.add(trevi1Group);
+    //    
+    //    //function imgsucess(img){
+    //    //          console.log(img);
+    //    //          if (img) {
+    //    //            document.getElementById('loadimgerror').innerHTML = '';
+    //    //            imageObj1.src = img;
+    //    //            trevi1Img.image(imageObj1);
+    //    //            trevi1Group.add(trevi1Img);
+    //    //    
+    //    //            addAnchor(trevi1Group, 0, 0, 'topLeft');
+    //    //            addAnchor(trevi1Group, wI, 0, 'topRight');
+    //    //            addAnchor(trevi1Group, wI, hI, 'bottomRight');
+    //    //            addAnchor(trevi1Group, 0, hI, 'bottomLeft');
+    //    //    
+    //    //            layer.draw();
+    //    //          }else{
+    //    //            console.log("error")
+    //    //          }
+    //    //        
+    //    //        }
+    //    //function imgerror(err){ document.getElementById('loadimgerror').innerHTML = 'got an error loading image' }
+    //    
+    //    //loadimg(window.location.href.split('?q=')[1])
+    //    //.then((d)=>{imgsucess(d)})
+    //    ////.catch(()=>{console.log('error', this)})
+    //    
+    //    
+    //    
+    //    //imageObj1.src = window.location.href.split('?q=')[1];
+    //    trevi1Img.image(imageObj1);
+    //    //trevi1Img.width = wI;
+    //    //trevi1Img.height = hI;
+    //    //trevi1Img.opacity = .8;        
+    //    trevi1Group.add(trevi1Img);
+    //    
+    //    addAnchor(trevi1Group, 0, 0, 'topLeft');
+    //    addAnchor(trevi1Group, wI, 0, 'topRight');
+    //    addAnchor(trevi1Group, wI, hI, 'bottomRight');
+    //    addAnchor(trevi1Group, 0, hI, 'bottomLeft');
+    //    
+    //    layer.draw();
+    //    
+    //}
     
     function removeFunction(){ //instead of imageNode.onload = function(){xxxx draw()}
         console.log('there');
@@ -363,17 +431,21 @@
           trevi1Group.on('dragend', function(){
                               //console.log('dragend');
                               //vimage.contrast(-50);
-                              trevi1Img.opacity(0.8)
+                              //trevi1Img.opacity(0.8)
+                              i.opacity(.8)
                               })
                      .on('dragstart', function(){
                               //console.log('dragstart');
                               //vimage.contrast(-10);
-                              trevi1Img.opacity(.5)
+                              //trevi1Img.opacity(.5)
+                              //console.log(i)
+                              i.opacity(.5)
                               })
                      .on('dragmove', function(){
                               //console.log('dragmove');
                               //vimage.contrast(-10);
-                              trevi1Img.opacity(.5)
+                              //trevi1Img.opacity(.5)
+                              i.opacity(.5)
                               })
           //vlayer.batchDraw();
           vlayer.draw();

@@ -53,6 +53,22 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //$(window).load(function() {
     
+    function detectmob() { 
+        if( navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPad/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)
+        ){
+           return true;
+         }
+        else {
+           return false;
+         }
+    }
+    
     
     const WIDTH = 480;
     const HEIGHT = 360;
@@ -162,7 +178,14 @@ AFRAME.registerComponent('all-saints-ar', { //E: all-saints-ar will be called as
             compatibility.requestAnimationFrame(tick);
         };
         video.addEventListener('loadeddata', readyListener); //E: this already exists implemented in HTML?
-        compatibility.getUserMedia({video: {width: WIDTH, height: HEIGHT}}, function(stream) {
+        let mob = detectmob();
+        let voptions = {}
+        if (mob) {
+          voptions = { video: { facingMode: { exact: "environment" }, width: WIDTH, height: HEIGHT }, audio:false }
+        }else{
+          voptions = {video: {width: WIDTH, height: HEIGHT}, audio: false}
+        }
+        compatibility.getUserMedia(voptions, function(stream) {
             const videoS = document.querySelector('video');
             try {
                 videoS.src = compatibility.URL.createObjectURL(stream);

@@ -17,18 +17,63 @@
 			//	ellipse(50, 50, 80, 80);
 			//}
 			
+			//function setup() {
+			//	createCanvas(640, 480);
+			//}
+			//
+			//function draw() {
+			//	if (mouseIsPressed) {
+			//		fill(0);
+			//	} else {
+			//		fill(255);
+			//	}
+			//	ellipse(mouseX, mouseY, 80, 80);
+			//}
+			
+			//function setup() {
+			//	drawingContext.shadowOffsetX = 5;
+			//	drawingContext.shadowOffsetY = -5;
+			//	drawingContext.shadowBlur = 10;
+			//	drawingContext.shadowColor = "black";
+			//	background(200);
+			//	ellipse(width/2, height/2, 50, 50);
+			//}
+
+			//function setup() {
+			//	createCanvas(720, 400);
+			//	background(127);
+			//	noStroke();
+			//	for (let i = 0; i < height; i += 20) {
+			//		fill(129, 206, 15);
+			//		rect(0, i, width, 10);
+			//		fill(255);
+			//		rect(i, 0, 10, height);
+			//	}
+			//}
+			//
+			//function draw() {
+			//
+			//}
+			
+			var cnv;
+			var d;
 			function setup() {
-				createCanvas(640, 480);
+				cnv = createCanvas(100, 100);
+				cnv.mouseOver(changeGray);
+				d = 10;
 			}
 			
 			function draw() {
-				if (mouseIsPressed) {
-					fill(0);
-				} else {
-					fill(255);
-				}
-				ellipse(mouseX, mouseY, 80, 80);
+				ellipse(width / 2, height / 2, d, d);
 			}
+			
+			function changeGray() {
+				d = d + 10;
+				if (d > 100) {
+					d = 0;
+				}
+			}
+			
 		</script>
   <style></style>
   </body>

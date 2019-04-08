@@ -38,6 +38,7 @@ var compatibility = (function() {
 
         getUserMedia = function(options, success, error) {
             var getUserMedia =
+                window.navigator.mediaDevices.getUserMedia || //E: based on https://stackoverflow.com/questions/46021469/webrtc-not-available
                 window.navigator.getUserMedia ||
                 window.navigator.mozGetUserMedia ||
                 window.navigator.webkitGetUserMedia ||

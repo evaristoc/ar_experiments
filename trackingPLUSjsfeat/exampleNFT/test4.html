@@ -2,12 +2,12 @@
 
 <html lang="en">
     <head>
-        <title>Example NFT, based on JSFeat</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="author" content="EC">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no,minimal-ui">
         <meta name="mobile-web-app-capable" content="yes">
+        <title>Example NFT, based on JSFeat</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans:regular,bold|Inconsolata|PT+Sans:400,700">
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/jsfeat.css">
@@ -28,24 +28,24 @@
         <script type="text/javascript" src="js/profiler.js"></script>
         <script type="text/javascript" src="js/dat.gui.min.js"></script>
         <script type="text/javascript">
+        function detectmob() { 
+            if( navigator.userAgent.match(/Android/i)
+            || navigator.userAgent.match(/webOS/i)
+            || navigator.userAgent.match(/iPhone/i)
+            || navigator.userAgent.match(/iPad/i)
+            || navigator.userAgent.match(/iPod/i)
+            || navigator.userAgent.match(/BlackBerry/i)
+            || navigator.userAgent.match(/Windows Phone/i)
+            ){
+               return true;
+             }
+            else {
+               return false;
+             }
+        }
         $(window).load(function() {
             "use strict";
             // lets do some fun
-            function detectmob() { 
-                if( navigator.userAgent.match(/Android/i)
-                || navigator.userAgent.match(/webOS/i)
-                || navigator.userAgent.match(/iPhone/i)
-                || navigator.userAgent.match(/iPad/i)
-                || navigator.userAgent.match(/iPod/i)
-                || navigator.userAgent.match(/BlackBerry/i)
-                || navigator.userAgent.match(/Windows Phone/i)
-                ){
-                   return true;
-                 }
-                else {
-                   return false;
-                 }
-            }
             var video = document.getElementById('webcam');
             var canvas = document.getElementById('canvas');
             var foto = new Image();
@@ -88,13 +88,15 @@
                     compatibility.requestAnimationFrame(tick);
                 };
                 video.addEventListener('loadeddata', readyListener);
-                        let mob = detectmob();
-                let voptions = {}
+                let mob = detectmob();
+                let voptions = {};
                 if (mob) {
-                  voptions = { video: { facingMode: { exact: "environment" }, width: WIDTH, height: HEIGHT }, audio:false }
+                  voptions = { video: { facingMode: { exact: "environment" } }, audio:false }
                 }else{
-                  voptions = {video: {width: WIDTH, height: HEIGHT}, audio: false}
+                  voptions = {video: true, audio: false}
+                  console.log(voptions)
                 }
+                console.log(voptions)
                 compatibility.getUserMedia(voptions, function(stream) {
                     try {
                         video.src = compatibility.URL.createObjectURL(stream);

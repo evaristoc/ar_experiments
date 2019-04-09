@@ -104,7 +104,11 @@ AFRAME.registerComponent('all-saints-ar', { //E: all-saints-ar will be called as
 
     const video = document.createElement('video');
     sceneEl.insertAdjacentElement('beforebegin', video); //E: insert in the sceneEl (=== AFRAME.el) a video ELEMENT (not a video itself) before starting
-
+    
+    //video.setAttribute('autoplay', '');
+    //video.setAttribute('muted', '');
+    //video.setAttribute('playsinline', '');
+    
     //E: this is the tracking library: initialized HERE
     //--- it is meant to work around a box (!), which it is approximated based on WIDTH and HEIGHT
     //const detector = new objectdetect.detector(width, height, 1.1, objectdetect.frontalface_alt);
@@ -191,7 +195,7 @@ AFRAME.registerComponent('all-saints-ar', { //E: all-saints-ar will be called as
                 videoS.src = compatibility.URL.createObjectURL(stream);
             } catch (error) {
                 // E: based on https://github.com/inspirit/jsfeat/issues/84#issuecomment-454933574
-                console.log(videoS);
+                //console.log(videoS);
                 videoS.srcObject = stream;
             }
             setTimeout(function() {

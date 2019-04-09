@@ -31,26 +31,11 @@
         $(window).load(function() {
             "use strict";
             // lets do some fun
-            function detectmob() { 
-                if( navigator.userAgent.match(/Android/i)
-                || navigator.userAgent.match(/webOS/i)
-                || navigator.userAgent.match(/iPhone/i)
-                || navigator.userAgent.match(/iPad/i)
-                || navigator.userAgent.match(/iPod/i)
-                || navigator.userAgent.match(/BlackBerry/i)
-                || navigator.userAgent.match(/Windows Phone/i)
-                ){
-                   return true;
-                 }
-                else {
-                   return false;
-                 }
-            }
             var video = document.getElementById('webcam');
             var canvas = document.getElementById('canvas');
             var foto = new Image();
-            //foto.src = 'images/OSIM00004000454.jpg';
-            foto.src = './images/5c27cac985b82.jpeg'
+            foto.src = 'images/OSIM00004000454.jpg';
+            
             
             //E: the try-catch does the following:
             //--- set a number of trials
@@ -88,14 +73,7 @@
                     compatibility.requestAnimationFrame(tick);
                 };
                 video.addEventListener('loadeddata', readyListener);
-                        let mob = detectmob();
-                let voptions = {}
-                if (mob) {
-                  voptions = { video: { facingMode: { exact: "environment" }, width: WIDTH, height: HEIGHT }, audio:false }
-                }else{
-                  voptions = {video: {width: WIDTH, height: HEIGHT}, audio: false}
-                }
-                compatibility.getUserMedia(voptions, function(stream) {
+                compatibility.getUserMedia({video: true}, function(stream) {
                     try {
                         video.src = compatibility.URL.createObjectURL(stream);
                     } catch (error) {
@@ -791,10 +769,8 @@
                 ctx.drawImage(foto,
                               Math.min.apply(Math, linesbox.map((v) => {return average(v.x)})),
                               Math.min.apply(Math, linesbox.map((v) => {return average(v.y)})),
-                              //100,
-                              //50
-                              2*Math.abs(average(linesbox[0].y)-average(linesbox[3].y)),
-                              Math.abs(average(linesbox[0].y)-average(linesbox[3].y))
+                              100,
+                              50
                               )
             }
           

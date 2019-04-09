@@ -44,7 +44,7 @@ var compatibility = (function() {
                 window.navigator.webkitGetUserMedia ||
                 window.navigator.msGetUserMedia ||
                 function(options, success, error) {
-                    error();
+                        error();
                 };
 
             return getUserMedia.call(window.navigator, options, success, error);

@@ -10,7 +10,7 @@
 
 </script>
 	<a-scene>
-	  <a-camera position="0 0 4"></a-camera>
+	  <a-camera position="0 0 10"></a-camera>
 	  <a-sky></a-sky>
 	  <a-entity id="object-container" position="1 1 1" scale=".4 .4 .4"></a-entity>
     </a-scene>
@@ -21,38 +21,101 @@
   //sky.setAttribute('color', 'red');
   let wingR = document.createElement('a-entity');
   wingR.setAttribute('id', 'wingR');
-  wingR.setAttribute('material', `color:skyblue; transparent: true; src: url(b1w.png)`);
+  wingR.setAttribute('material', `color:skyblue; transparent: true; src: url(b1w.png); side: double; depthTest: true`);
   wingR.setAttribute('geometry', `primitive: plane; height: 10; width: 5`);
-  wingR.setAttribute('position', `-1 0 0`);
+  wingR.setAttribute('position', `-2 0 0`);
   wingR.setAttribute('rotation', `0 0 0`);
-  console.log(wingR);
-  objectContainer.appendChild(wingR);
+  //console.log(wingR);
+  //objectContainer.appendChild(wingR);
   
   let wingL = document.createElement('a-entity');
   wingL.setAttribute('id', 'wingL');
-  wingL.setAttribute('material', `color:red; transparent: true; src: url(b1w.png)`);
+  wingL.setAttribute('material', `color:red; transparent: true; src: url(b1w.png);  side: double; depthTest: true`);
+  //console.log(wingL.object3D);
   wingL.setAttribute('geometry', `primitive: plane; height: 10; width: 5`);
-  wingL.setAttribute('position', `1 0 0`);
-  wingL.setAttribute('rotation', `0 60 0`);
+  wingL.setAttribute('position', `2 0 0`);
+  wingL.setAttribute('rotation', `0 180 0`);
   //wingL.object3D.rotation.set(
   //THREE.Math.degToRad(0),
-  //THREE.Math.degToRad(90),
+  //THREE.Math.degToRad(180),
   //THREE.Math.degToRad(0)
   //);
-  //wingL.object3D.rotation.set(Math.PI/2,0,0);
-  //wingR.object3D.rotation.set(0,Math.PI,0);
-  console.log(wingL);
-  objectContainer.appendChild(wingL);
+  //console.log(wingL);
+  //objectContainer.appendChild(wingL);
+  
+  //E: 5. Initialize a butterfly
+  function butterFf(){
+	this.minWingRotation = -Math.PI / 6;
+	this.maxWingRotation = Math.PI / 2 - 0.1;
+	this.wingRotation = 0;
+	this.init();
+  }
+  
+  //E: 6. Initialization code: create a new object: Butterfly (a group for wings)
+  butterFf.prototype.init = function(){
+	  this.butterF = document.createElement('a-entity');
+	  this.butterF.setAttribute('id', 'btf');
+	  this.butterF.appendChild(wingL);
+	  this.butterF.appendChild(wingR);
+	  //objectContainer.appendChild(wingR);
+	  //this.butterF.rotation.y = Math.PI/4;
+	  //this.setWingRotation(this.wingRotation);
+	  //this.tweening();
+  };
+  
+  //E: 7. Set the flapping functionality: flapping on y of the WINGS (not the group)
+  butterFf.prototype.setWingRotation = function (angy) {
+	let currentrotL = THREE.Math.radToDeg(wingL.object3D.rotation._y);
+	let currentrotR = THREE.Math.radToDeg(wingR.object3D.rotation._y);
+	wingL.setAttribute('rotation', `0 ${currentrotL-angy} 0`);
+	wingR.setAttribute('rotation', `0 ${currentrotR+angy} 0`);
+	//wingL.rotation.y = y;
+	//wingR.rotation.y = y;
+	//console.log(y);
+  };
+  
+  
+  /*********
+   *MAIN
+   *********/
+  
+  let b = new butterFf();
+  console.log(b.butterF);
+  console.log(wingL.components.geometry);
+  objectContainer.appendChild(b.butterF);
+  
+  
+  console.log(wingL.object3D.rotation._y);
+  
+  var changeang = 0;
+  function update(){
+	setInterval(()=>{
+	     if(wingL.object3D.rotation._y >= Math.PI){
+		  changeang = .10*100;
+		}else if(wingL.object3D.rotation._y < Math.PI/2){
+		  changeang = -.05*100;
+		};
+		console.log(wingL.object3D.rotation._y, changeang);
+		b.setWingRotation(changeang);
+	  },
+	  100)
+  };
+  
+  //update();
+  //https://github.com/supermedium/superframe/tree/master/components/animation
+   
+  
 
 
 /*References
  *-- https://aframe.io/docs/0.9.0/introduction/writing-a-component.html
+ *-- https://stackoverflow.com/questions/46503982/double-sided-a-frame-a-panel-from-javascript
  *-- https://www.smashingmagazine.com/2016/02/simple-augmented-reality-with-opencv-a-three-js/
  *-- https://stackoverflow.com/questions/38106567/combining-a-frame-with-three-js
  *-- https://codepen.io/dirkk0/pen/YpNrQR
  *-- https://www.instructables.com/id/Augmented-Reality-Web-Browser/
  *-- https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API
- *
+ *-- https://github.com/mrdoob/three.js/issues/1364
  */
 </script>
 

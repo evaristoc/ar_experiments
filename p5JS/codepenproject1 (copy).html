@@ -154,11 +154,10 @@ var poems = {
 let pg;
 let c;
 let currentc;
-let r1 = 60;
-let r2 = 60;
-let innerw = screen.width/2;
-let innerh = screen.height/2;
-let innerx = screen.width/5;
+let r = 60;
+let innerw = 400;
+let innerh = 250;
+let innerx = 150;
 let innery = 75;
 let rand = 1.0;
 let val = 0;
@@ -169,7 +168,7 @@ let tx = 0;
 let ty = 0;
 
 function setup() {
-  createCanvas(screen.width, screen.height); //before, 750,400
+  createCanvas(750, 400); //before, 750,400
   pg = createGraphics(innerw, innerh);
 	c = color[0];
 	currentc = c;
@@ -182,84 +181,84 @@ function draw() {
   rect(0, 0, width, height);
 	fill(c);
   noStroke();
-  ellipse(mouseX, mouseY, r1, r2);
+  ellipse(mouseX, mouseY, r, 60);
 	// Test if the cursor is over boun1
   
 	if (
-    mouseX > innerx - r1 &&
-    mouseX < innerx + r1 &&		
-		mouseY > innery - r1 &&
-    mouseY < innery + r1
+    mouseX > innerx - r &&
+    mouseX < innerx + r &&		
+		mouseY > innery - r &&
+    mouseY < innery + r
   ) {
 		fill(color[1])
 		c = color[1]
 	} else {
 		noFill()
 		} 
-	 ellipse(innerx, innery, r1, r2);
+	 ellipse(innerx,innery,r,60);
 
 
 	if (
-    mouseX > innerx + innerw - r1 &&
-    mouseX < innerx + innerw + r1 &&
-    mouseY > innery - r1 &&
-    mouseY < innery + r1
+    mouseX > innerx + innerw - r &&
+    mouseX < innerx + innerw + r &&
+    mouseY > innery - r &&
+    mouseY < innery + r
   ) {
 		fill(color[2])
 		c = color[2]
 	} else {
 		noFill()
 		} 
-	ellipse(innerx + innerw,innery, r1, r2);
+	ellipse(innerx + innerw,innery,r,60);
     
 
 
 	
 		if (
-    mouseX > innerx + innerw - r1 &&
-    mouseX < innerx + innerw + r1 &&
-		mouseY > innery + innerh - r1 &&
-    mouseY < innery + innerh + r1
+    mouseX > innerx + innerw - r &&
+    mouseX < innerx + innerw + r &&
+		mouseY > innery + innerh - r &&
+    mouseY < innery + innerh + r
   ) {
 		fill(color[3])
 		c = color[3]
 	} else {
 		noFill()
 		} 
-	ellipse(innerx + innerw,innery + innerh, r1, r2);
+	ellipse(innerx + innerw,innery + innerh,r,60);
 	
 	
 		if (
-    mouseX > innerx - r1 &&
-    mouseX < innerx + r1 &&
-    mouseY > innery + innerh - r1 &&
-    mouseY < innery + innerh + r1
+    mouseX > innerx - r &&
+    mouseX < innerx + r &&
+    mouseY > innery + innerh - r &&
+    mouseY < innery + innerh + r
   ) {
 		fill(color[4])
 		c = color[4]
 	} else {
 		noFill()
 		} 
-	ellipse(innerx,innery + innerh, r1, r2);
+	ellipse(innerx,innery + innerh,r,60);
 
 
 	
 	
 		if (
-    mouseX > innerx + innerw - r1 &&
-    mouseX < innerx + innerw + r1 &&
-    mouseY > innery - r1 &&
-    mouseY < innery + r1
+    mouseX > 150 + 400 - 60 &&
+    mouseX < 150 + 400 + 60 &&
+    mouseY > 75 - 60 &&
+    mouseY < 75 + 60
   ) {
 		c = color[2]
-		ellipse(mouseX, mouseY, r1, r2)
+		ellipse(mouseX, mouseY, 60, 60)
 	}
 	
 	
   pg.background(51);
   pg.noFill();
   pg.stroke(255);
-  pg.ellipse(mouseX - innerx, mouseY - innery, r1, r2);
+  pg.ellipse(mouseX - 150, mouseY - 75, 60, 60);
 	if (currentc != c) {
 		currentc = c
 		rand = Math.random()
@@ -275,27 +274,27 @@ function draw() {
 	}
 	if (c === color[1]) {
 		poem = poems.m2w_quotes[val];
-		tx = mouseX - 2*r1;
-		ty = mouseY + r1;
+		tx = mouseX - 2*r;
+		ty = mouseY + r/2 + 30;
 	} else if (c === color[2]) {
 		poem = poems.m2m_quotes[val];
-		tx = mouseX - 2*r1;
-		ty = mouseY + r1;
+		tx = mouseX - 2*r;
+		ty = mouseY + r/2 + 30;
 	} else if (c === color[3]) {
 		poem = poems.w2m_quotes[val];
-		tx = mouseX - 2*r1;
-		ty = mouseY - poem.length + r1/2;
+		tx = mouseX - 2*r;
+		ty = mouseY - poem.length + 30;
 	} else if (c === color[4]) {
 		poem = poems.w2w_quotes[val];
-		tx = mouseX - 2*r1;
-		ty = mouseY - poem.length + r1/2;
+		tx = mouseX - 2*r;
+		ty = mouseY - poem.length + 30;
 	}
 	
-	pg.text(poem, tx - innerx, ty - innery)
+	pg.text(poem, tx - 150, ty - 75)
 	
 
   //Draw the offscreen buffer to the screen with image()
-  image(pg, innerx, innery);
+  image(pg, 150, 75);
 }
 
 //function windowResized() {

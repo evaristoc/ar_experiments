@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MDN Games: A-Frame demo</title>
+  <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@06314210abb4cf27e35bd3d74e7c56163336ae2a/dist/aframe-master.min.js"></script>
+</head>
+<body>
+<script>
+/* 1.a. adding a component */
+//AFRAME.registerComponent('hello-world', {
+//  init: function () {
+//    console.log('Hello, World!');
+//  }
+//});
+
+/* 1.b. adding a component */
+//  AFRAME.registerComponent('log', {
+//  schema: {
+//    message: {type: 'string', default: 'Hello, World!'}
+//  },
+//
+//  init: function () {
+//    console.log(this.data.message);
+//  }
+//});
+
+AFRAME.registerComponent('butterflies',{
+  init: function(){
+	var AFRAMEWRAPPER = this.el;
+	/* = Screen = */
+	//var SCREEN_WIDTH = 1000;
+	//var SCREEN_HEIGHT = 600;
+	/* = Scene = */
+	//var scene = AFRAMEWRAPPER.sceneEl.object3D;
+	//scene.background = new THREE.Color(0xDDDDDD);
+	var sky = document.querySelector('a-sky');
+	sky.setAttribute("color", "red");
+	console.log(AFRAMEWRAPPER.sceneEl.object3D);
+	/* = Camera = */
+	//AFRAMEWRAPPER.setObject3D('camera', new THREE.PerspectiveCamera( 50, SCREEN_WIDTH/SCREEN_HEIGHT, 1, 1000));
+	//var entityEl = document.querySelector('a-entity').object3D;
+	//AFRAMEWRAPPER.getObject3D('camera').position.set(0, 0, 75);
+	//console.log(scene.background, AFRAMEWRAPPER.getObject3D('camera').position);
+	var geometryW = new THREE.PlaneBufferGeometry(10,15);
+	var materialW = new THREE.MeshBasicMaterial({
+	  color:'skyblue'
+	});
+	
+	
+	AFRAMEWRAPPER.setObject3D('mesh', new THREE.Mesh( geometryW,materialW ));
+	AFRAMEWRAPPER.getObject3D('mesh').position.set(5, 0, -5)
+	AFRAMEWRAPPER.getObject3D('mesh').scale.set(0.3, 0.3, 0.3)
+	//console.log(AFRAMEWRAPPER.getObject3D('mesh'))
+
+  },
+  
+    remove: function() {
+    this.el.removeObject3D('mesh');
+  }
+  
+  })
+
+//AFRAME.registerComponent('butterflies', {
+//  schema: {
+//    color: {
+//      default: '#000'
+//    },
+//  },
+//
+//  update: function() {
+//    var material = new THREE.MeshBasicMaterial({
+//      color: this.data.color,
+//      wireframe: true
+//    });
+//
+//    var geometry = new THREE.BoxGeometry(1, 1, 1);
+//
+//    this.el.setObject3D('mesh', new THREE.Mesh(geometry, material));
+//  },
+//
+//  remove: function() {
+//    this.el.removeObject3D('mesh');
+//  }
+//});
+</script>
+	<a-scene>
+	  <a-sky></a-sky>
+	  <!--<a-box color="#0095DD" position="-1 0.5 -3" rotation="20 40 0"></a-box>-->
+	  
+	  <!-- 1.a.1. adding the component using static html -->
+	  <!--<a-entity hello-world></a-entity>-->
+	  
+	  <!-- 1.b. adding the component using dynamic variables in html -->
+	  <!--<a-entity log="message: Hello, Metaverse!"></a-entity>-->
+	  
+	  <!--<a-box color="#0095DD" position="-1 0.5 -3" rotation="20 40 0"></a-box>
+	  <a-entity camera look-controls position="0 1.6 0"></a-entity>-->
+	  
+	  <a-entity butterflies></a-entity>
+	  
+    </a-scene>
+<script>
+  /* 1.a.2 adding a component using JS */
+  //document.querySelector('a-scene').setAttribute('hello-world', '');
+
+
+/*References
+ *-- https://aframe.io/docs/0.9.0/introduction/writing-a-component.html
+ *-- https://www.smashingmagazine.com/2016/02/simple-augmented-reality-with-opencv-a-three-js/
+ *-- https://stackoverflow.com/questions/38106567/combining-a-frame-with-three-js
+ *-- https://codepen.io/dirkk0/pen/YpNrQR
+ *-- https://www.instructables.com/id/Augmented-Reality-Web-Browser/
+ *-- https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API
+ *
+ */
+</script>
+
+</body>
+</html>

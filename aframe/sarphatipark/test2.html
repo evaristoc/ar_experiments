@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MDN Games: A-Frame demo</title>
+  <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@06314210abb4cf27e35bd3d74e7c56163336ae2a/dist/aframe-master.min.js"></script>
+</head>
+<body>
+<script>
+
+</script>
+	<a-scene>
+	  <a-camera position="0 0 4"></a-camera>
+	  <a-sky></a-sky>
+	  <a-entity id="object-container" position="1 1 1" scale=".4 .4 .4"></a-entity>
+    </a-scene>
+<script>
+  let scene = document.querySelector('a-scene');
+  let sky = document.querySelector('a-sky');
+  let objectContainer = document.querySelector('#object-container');
+  //sky.setAttribute('color', 'red');
+  let wingR = document.createElement('a-entity');
+  wingR.setAttribute('id', 'wingR');
+  wingR.setAttribute('material', `color:skyblue; transparent: true; src: url(b1w.png)`);
+  wingR.setAttribute('geometry', `primitive: plane; height: 10; width: 5`);
+  wingR.setAttribute('position', `-1 0 0`);
+  wingR.setAttribute('rotation', `0 0 0`);
+  console.log(wingR);
+  objectContainer.appendChild(wingR);
+  
+  let wingL = document.createElement('a-entity');
+  wingL.setAttribute('id', 'wingL');
+  wingL.setAttribute('material', `color:red; transparent: true; src: url(b1w.png)`);
+  wingL.setAttribute('geometry', `primitive: plane; height: 10; width: 5`);
+  wingL.setAttribute('position', `1 0 0`);
+  wingL.setAttribute('rotation', `0 60 0`);
+  //wingL.object3D.rotation.set(
+  //THREE.Math.degToRad(0),
+  //THREE.Math.degToRad(90),
+  //THREE.Math.degToRad(0)
+  //);
+  //wingL.object3D.rotation.set(Math.PI/2,0,0);
+  //wingR.object3D.rotation.set(0,Math.PI,0);
+  console.log(wingL);
+  objectContainer.appendChild(wingL);
+
+
+/*References
+ *-- https://aframe.io/docs/0.9.0/introduction/writing-a-component.html
+ *-- https://www.smashingmagazine.com/2016/02/simple-augmented-reality-with-opencv-a-three-js/
+ *-- https://stackoverflow.com/questions/38106567/combining-a-frame-with-three-js
+ *-- https://codepen.io/dirkk0/pen/YpNrQR
+ *-- https://www.instructables.com/id/Augmented-Reality-Web-Browser/
+ *-- https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API
+ *
+ */
+</script>
+
+</body>
+</html>

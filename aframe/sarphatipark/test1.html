@@ -44,10 +44,10 @@ AFRAME.registerComponent('butterflies',{
 	//console.log(scene.background, AFRAMEWRAPPER.getObject3D('camera').position);
 	var geometryW = new THREE.PlaneBufferGeometry(10,15);
 	var materialW = new THREE.MeshBasicMaterial({
-	  color:'skyblue'
+	  color:'skyblue', side: THREE.DoubleSide
 	});
 	
-	
+
 	AFRAMEWRAPPER.setObject3D('mesh', new THREE.Mesh( geometryW,materialW ));
 	AFRAMEWRAPPER.getObject3D('mesh').position.set(5, 0, -5)
 	AFRAMEWRAPPER.getObject3D('mesh').scale.set(0.3, 0.3, 0.3)
@@ -59,7 +59,43 @@ AFRAME.registerComponent('butterflies',{
     this.el.removeObject3D('mesh');
   }
   
-  })
+  });
+
+AFRAME.registerComponent('container',{
+  init: function(){
+	var AFRAMEWRAPPER = this.el;
+	/* = Screen = */
+	//var SCREEN_WIDTH = 1000;
+	//var SCREEN_HEIGHT = 600;
+	/* = Scene = */
+	//var scene = AFRAMEWRAPPER.sceneEl.object3D;
+	//scene.background = new THREE.Color(0xDDDDDD);
+	var sky = document.querySelector('a-sky');
+	sky.setAttribute("color", "red");
+	console.log(AFRAMEWRAPPER.sceneEl.object3D);
+	/* = Camera = */
+	//AFRAMEWRAPPER.setObject3D('camera', new THREE.PerspectiveCamera( 50, SCREEN_WIDTH/SCREEN_HEIGHT, 1, 1000));
+	//var entityEl = document.querySelector('a-entity').object3D;
+	//AFRAMEWRAPPER.getObject3D('camera').position.set(0, 0, 75);
+	//console.log(scene.background, AFRAMEWRAPPER.getObject3D('camera').position);
+	var geometryW = new THREE.PlaneBufferGeometry(10,15);
+	var materialW = new THREE.MeshBasicMaterial({
+	  color:'skyblue'
+	});
+	
+
+	AFRAMEWRAPPER.setObject3D('mesh', new THREE.Mesh( geometryW,materialW ));
+	AFRAMEWRAPPER.getObject3D('mesh').position.set(5, 0, -5)
+	AFRAMEWRAPPER.getObject3D('mesh').scale.set(0.3, 0.3, 0.3)
+	//console.log(AFRAMEWRAPPER.getObject3D('mesh'))
+
+  },
+  
+    remove: function() {
+    this.el.removeObject3D('mesh');
+  }
+  
+  });  
 
 //AFRAME.registerComponent('butterflies', {
 //  schema: {
@@ -97,7 +133,10 @@ AFRAME.registerComponent('butterflies',{
 	  <!--<a-box color="#0095DD" position="-1 0.5 -3" rotation="20 40 0"></a-box>
 	  <a-entity camera look-controls position="0 1.6 0"></a-entity>-->
 	  
-	  <a-entity butterflies></a-entity>
+	  <a-entity container>
+	  <a-entity butterflies position="0 0 -5"></a-entity>
+	  <a-entity butterflies position="0 0 5"></a-entity>
+	  </a-entity>
 	  
     </a-scene>
 <script>
@@ -112,7 +151,7 @@ AFRAME.registerComponent('butterflies',{
  *-- https://codepen.io/dirkk0/pen/YpNrQR
  *-- https://www.instructables.com/id/Augmented-Reality-Web-Browser/
  *-- https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API
- *
+ *-- https://stackoverflow.com/questions/28848863/threejs-how-to-rotate-around-objects-own-center-instead-of-world-center
  */
 </script>
 

@@ -156,6 +156,7 @@ var targets = { table: [], sphere: [], helix: [], grid: [] };
 // especially supporting the user providing multiple divs for the potential multiple viewports
 // in stereo mode.
 renderer = new THREE.CSS3DArgonRenderer();
+
 // The CSS3DArgonHUD has a similar interface to a renderer, and provides a simple abstraction
 // for multiple HTML HUD's that can be used in stereo mode.  We do not
 // use the HUD features here (instead, just removing the buttons below when in Stereo mode)

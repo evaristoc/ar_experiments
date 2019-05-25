@@ -23,23 +23,30 @@
   wingR.setAttribute('id', 'wingR');
   wingR.setAttribute('material', `color:skyblue; transparent: true; src: url(b1w.png); side: double; depthTest: true`);
   wingR.setAttribute('geometry', `primitive: plane; height: 10; width: 5`);
-  wingR.setAttribute('position', `-2 0 0`);
+  wingR.setAttribute('position', `-3 0 0`);
   wingR.setAttribute('rotation', `0 0 0`);
   //console.log(wingR);
   //objectContainer.appendChild(wingR);
   
-  let wingL = document.createElement('a-entity');
-  wingL.setAttribute('id', 'wingL');
-  wingL.setAttribute('material', `color:red; transparent: true; src: url(b1w.png);  side: double; depthTest: true`);
+  let wingL = document.createElement('a-entity'); //this is like creating an object
+  wingL.setAttribute('id', 'wingL');              //attributes might include OTHER components
+  wingL.setAttribute('material', `color:red; transparent: true; src: url(b1w.png);  side: double; depthTest: true`); //this is material in the form of a default component
   //console.log(wingL.object3D);
   wingL.setAttribute('geometry', `primitive: plane; height: 10; width: 5`);
-  wingL.setAttribute('position', `2 0 0`);
+  wingL.setAttribute('position', `3 0 0`);
   wingL.setAttribute('rotation', `0 180 0`);
+  //I can make operations with an entity in its ThreejsObject form
+  console.log('rotation', wingL.object3D.rotation);
+  //wingL.object3D.applyMatrix()
   //wingL.object3D.rotation.set(
   //THREE.Math.degToRad(0),
   //THREE.Math.degToRad(180),
   //THREE.Math.degToRad(0)
   //);
+  //I can get into the Three forms digging into special attributes; in this case I can get geometry from 'components'
+  //console.log('geometry component', wingL.object3D.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0, -2.5 ) ) )
+   console.log(wingL.object3D.applyMatrix(new THREE.Matrix4().makeTranslation( -5, 1, -2.5 )))
+   //.applyMatrix( new THREE.Matrix4().makeTranslation( -5, 1, -2.5 ) )
   //console.log(wingL);
   //objectContainer.appendChild(wingL);
   

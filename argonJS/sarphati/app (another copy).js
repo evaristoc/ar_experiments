@@ -138,27 +138,6 @@ var objects = [];
 var spherePos;
 var targets = { table: [], sphere: [], helix: [], grid: [] };
 
-// In a typical threejs example, the camera doesn't move and is controlled by the 
-// mouse.  We do not need that here.  Furthermore, our domElement for rendering is 
-// coordinated by argon to match the user's prefered rendering setup
-
-//   renderer = new THREE.CSS3DRenderer();
-//   renderer.setSize( window.innerWidth, window.innerHeight );
-//   renderer.domElement.style.position = 'absolute';
-//   renderer.domElement.style.top = 0;
-//   document.getElementById( 'container' ).appendChild( renderer.domElement );
-//
-//   controls = new THREE.TrackballControls( camera, renderer.domElement );
-//   controls.rotateSpeed = 0.5;
-//   controls.addEventListener( 'change', render );
-
-// In argon, we use a custom version of the CSS3DRenderer called CSS3DArgonRenderer.
-// This version of the renderer supports stereo in a way that fits with Argon's renderEvent,
-// especially supporting the user providing multiple divs for the potential multiple viewports
-// in stereo mode.
-renderer = new THREE.CSS3DArgonRenderer();
-
-
 // We use the standard WebGLRenderer when we only need WebGL-based content
 var renderer = new THREE.WebGLRenderer({
     alpha: true,
@@ -512,33 +491,11 @@ function transform( targets, duration ) {
             .start();
         
         var c = pos.chain(rot)
-        //.onComplete(()=>{spherePos()});
         
         tweenfunc = c;
-        //tweenfunc.repeat(2);
-        //c.repeat(Infinity);
-
-        
-        //c.repeat(Infinity);
-        
-        //var crot = new TWEEN.Tween( object.rotation )
-        //  .to( { x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration )
-        //  .easing( TWEEN.Easing.Exponential.In )
-        //  .start();
-          
-        //console.log(this.transform(targets,duration));
 
       }
-      
-      console.log(targets[0].position)
-      
-      //spherePos();
 
-      // An EXTREMELY important difference between creating desktop 3D content and 
-      // AR content using Argon is that we should not render except when argon tells
-      // us to.  In this way, Argon can decide when to render based on the kind of Reality 
-      // being rendered, and the device being used.  So, we do not leverage the Tween.onUpdate
-      // callback. 
       new TWEEN.Tween( this )
         .to( {}, duration * 2 )
 //					.onUpdate( render )
@@ -546,57 +503,6 @@ function transform( targets, duration ) {
   
 }
 
-function move(targets, duration) {
-  //TWEEN.removeAll();
-    
-      for ( var i = 0; i < objects.length; i ++ ) {
-
-        var object = objects[ i ];
-        var target = targets[ i ];
-        new TWEEN.Tween( object.position )
-          .to( { x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration )
-          .easing( TWEEN.Easing.Exponential.Out )
-          //.call(()=>{console.log(1111)})
-          .start();
-        
-      }
-}
-
-// The original demo responded to windowResize events but updating the camera.
-// argon handles this functionality and sends the appropriate information to
-// the render callback each frame.
-
-// 			function onWindowResize() {
-//
-// 				camera.aspect = window.innerWidth / window.innerHeight;
-// 				camera.updateProjectionMatrix();
-//
-// 				renderer.setSize( window.innerWidth, window.innerHeight );
-//
-// 			}
-
-// The original demo used a simple animation loop to trigger regular updates,
-// and manage the mouse virtual trackball controller.  Argon send update
-// messages, which we cache and trigger requestAnimationFrames from (see below)
-
-// 			function animate() {
-//
-// 				requestAnimationFrame( animate );
-//
-// 				TWEEN.update();
-// 				controls.update();
-//
-// 			}
-//
-// 			function render() {
-//
-// 				renderer.render( scene, camera );
-//
-// 			}
-
-// the updateEvent is called each time the 3D world should be
-// rendered, before the renderEvent.  The state of your application
-// should be updated here.  Here, we call TWEEN.update()
 var counter = 0;
 app.updateEvent.on(function () {
     // get the position and orientation (the "pose") of the stage

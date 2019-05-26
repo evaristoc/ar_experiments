@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <title>Sarphati Demo</title>
+  <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/three.js/100/three.min.js'></script>
+  <script src="src/argon-master/dist/argon.min.js"></script>
+</head>
+<body>
+<script>
+/* = Screen = */
+const SCREEN_WIDTH = 1000;
+const SCREEN_HEIGHT = 600;
+const scene = new THREE.Scene();
+var renderer = new THREE.WebGLRenderer();
+//scene.background = new THREE.Color(0xaaffff);
+
+/* = Camera = */
+var camera = new THREE.PerspectiveCamera( 50, SCREEN_WIDTH/SCREEN_HEIGHT, 1, 1000 );
+camera.position.z = 2;
+
+renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+document.body.appendChild( renderer.domElement );
+
+//var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+//var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+//var cube = new THREE.Mesh( geometry, material );
+//scene.add( cube );
+
+/* = Object = */
+//const loader = new THREE.TextureLoader();
+//texture1 = loader.load( '//cdn.rawgit.com/mrdoob/three.js/master/examples/textures/brick_diffuse.jpg' );
+//texture2 = loader.load( '//klevron.github.io/codepen/butterflies/b1w.png' );
+//E: 1. adding a plane, with material
+var geometryW = new THREE.PlaneBufferGeometry(10,15);
+var materialW = new THREE.MeshBasicMaterial({
+  color:'skyblue', 
+  transparent:true,
+  //map:texture2,
+  side: THREE.DoubleSide,
+  depthTest: true
+}); 
+
+var meshWL = new THREE.Mesh( geometryW,materialW );
+
+
+//E: 2. move it away on x coord
+meshWL.position.x = -5;
+//meshWL.rotation.x = Math.PI/4;
+
+//E: 3. it is an object (wing)
+var lwing = new THREE.Object3D();
+lwing.add(meshWL);
+
+//var planeWR = planeWL.clone();
+
+
+//E: 4. repeat the procedure with another wing
+var geometryW = new THREE.PlaneBufferGeometry(10,15);
+var materialW = new THREE.MeshBasicMaterial({
+  //color:0xffffff, 
+  transparent:true,
+  //map:texture2,
+  side: THREE.DoubleSide,
+  depthTest: true
+}); 
+
+//var meshWR = new THREE.Mesh( geometryW,materialW );
+var meshWR = new THREE.Mesh( geometryW,materialW )
+meshWR.material.color.setHex(0xff0000);
+var rwing = new THREE.Object3D();
+//meshWL.rotation.y = Math.PI;
+meshWR.rotation.y = Math.PI;
+//meshWR.rotation.x = Math.PI/4;
+meshWR.position.x = 5;
+rwing.add(meshWR);
+
+scene.add(rwing);
+scene.add(lwing);
+
+renderer.render( scene, camera );
+
+</script>
+</body>
+</html>

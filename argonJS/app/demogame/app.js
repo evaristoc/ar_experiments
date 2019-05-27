@@ -276,12 +276,12 @@ function init() {
     face.style.transform = 'rotateX(-45deg)';
     element.appendChild( face );
 
-    var object = new Butterfly().butterF;
+    //var object = new Butterfly().butterF;
     //var object = new THREE.CSS3DObject( element );
     //console.log( object );
     var geometryW = new THREE.BoxGeometry(10, 10, 10);
     var materialW = new THREE.MeshBasicMaterial({color:'black'});
-    //var object = new THREE.Mesh(geometryW, materialW);
+    var object = new THREE.Mesh(geometryW, materialW);
     //object.scale.set(100, 100, 100);
     
     //var object = new Butterfly().butterF;

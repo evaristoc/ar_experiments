@@ -19566,8 +19566,9 @@
 							function e(e)
 							{
 								var t = this;
+								//E:
 								//if (this.sessionService = e, this._connectEvent = new sn, this._sessions = [], this._changeEvent = new sn, this.default = hr.EMPTY, (Ln || jn) && navigator.getUserMedia && navigator.mediaDevices)
-								if (this.sessionService = e, this._connectEvent = new sn, this._sessions = [], this._changeEvent = new sn, this.default = hr.EMPTY, (Ln || jn) && navigator.mediaDevices)
+								if (this.sessionService = e, this._connectEvent = new sn, this._sessions = [], this._changeEvent = new sn, this.default = hr.EMPTY, (Ln || jn) && navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
 								{
 									var n = null;
 									navigator.getVRDisplays && navigator.getVRDisplays().then(function (e)
@@ -21530,10 +21531,12 @@
 									{
 										console.error("ARController.getUserMedia", e)
 									};
+								//E:
 								//navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-								navigator.getUserMedia = {};
+								navigator.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia;
 								var i = document.createElement("video");
 								if (i.style.width = e.width + "px", i.style.height = e.height + "px", void 0 !== navigator.getUserMedia)
+								//E:
 								{
 									if (void 0 !== navigator.mediaDevices && void 0 !== navigator.mediaDevices.enumerateDevices) return navigator.mediaDevices.enumerateDevices().then(function (r)
 									{

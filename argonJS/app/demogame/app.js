@@ -194,46 +194,6 @@ window.addEventListener( 'load', init );
 // requestAnimationFrame update cycle.  We don't do that with Argon
 //    animate();
 
-function Butterfly(){
-  this.butterF = new THREE.Object3D();
-  this.butinit();
-}
-
-Butterfly.prototype.butinit = function(){
-  var geometryWL = new THREE.PlaneGeometry(10, 15);
-  var materialWL = new THREE.MeshBasicMaterial({
-    transparent:true,
-    map: new THREE.TextureLoader().load('tempassets/b1w.png'),
-    side: THREE.DoubleSide,
-    depthTest: true
-  });
-  
-  var meshWL = new THREE.Mesh( geometryWL, materialWL );
-  meshWL.position.x = -5;
-  var lwing = new THREE.Object3D();
-  lwing.add(meshWL);
-
-  var geometryWR = new THREE.PlaneGeometry(10, 15);
-  var materialWR = new THREE.MeshBasicMaterial({
-    transparent:true,
-    map: new THREE.TextureLoader().load('tempassets/b1w.png'),
-    side: THREE.DoubleSide,
-    depthTest: true
-  });
-  
-  //var meshWR = new THREE.Mesh( geometryW,materialW );
-  var meshWR = new THREE.Mesh( geometryWR, materialWR )
-  meshWR.material.color.setHex(0xff0000);
-  var rwing = new THREE.Object3D();
-  //meshWL.rotation.y = Math.PI;
-  meshWR.rotation.y = Math.PI;
-  meshWR.position.x = 5;
-  rwing.add(meshWR);
-  this.butterF.add(lwing);
-  this.butterF.add(rwing);
-  
-}
-
 var objects = [];
 
 function init() {

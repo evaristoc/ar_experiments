@@ -19566,7 +19566,7 @@
 							function e(e)
 							{
 								var t = this;
-								//E:
+								//E: changed getUserMedia into mediaDevices.getUserMedia
 								//if (this.sessionService = e, this._connectEvent = new sn, this._sessions = [], this._changeEvent = new sn, this.default = hr.EMPTY, (Ln || jn) && navigator.getUserMedia && navigator.mediaDevices)
 								if (this.sessionService = e, this._connectEvent = new sn, this._sessions = [], this._changeEvent = new sn, this.default = hr.EMPTY, (Ln || jn) && navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
 								{
@@ -21531,11 +21531,11 @@
 									{
 										console.error("ARController.getUserMedia", e)
 									};
-								//E:
+								//E: changed navigator.getUserMedia to navigator.mediaDevices.getUserMedia
 								//navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-								navigator.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia;
+								navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia;
 								var i = document.createElement("video");
-								if (i.style.width = e.width + "px", i.style.height = e.height + "px", void 0 !== navigator.getUserMedia)
+								if (i.style.width = e.width + "px", i.style.height = e.height + "px", void 0 !== navigator.mediaDevices.getUserMedia)
 								//E:
 								{
 									if (void 0 !== navigator.mediaDevices && void 0 !== navigator.mediaDevices.enumerateDevices) return navigator.mediaDevices.enumerateDevices().then(function (r)
@@ -21557,9 +21557,12 @@
 											{
 												sourceId: e.deviceId
 											}])
-										}), navigator.getUserMedia(o, function (e)
+										//E: changed navigator.getUserMedia to navigator.mediaDevices.getUserMedia
+										}), navigator.mediaDevices.getUserMedia(o, function (e)
 										{
-											i.src = window.URL.createObjectURL(e), document.body.addEventListener("click", function ()
+											//E: changed src to srcObject
+											//i.src = window.URL.createObjectURL(e), document.body.addEventListener("click", function ()
+											i.srcObject = window.URL.createObjectURL(e), document.body.addEventListener("click", function ()
 											{
 												i.play()
 											});

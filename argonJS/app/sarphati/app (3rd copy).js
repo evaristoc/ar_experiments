@@ -281,10 +281,10 @@ function init() {
     //console.log( object );
     var geometryW = new THREE.BoxGeometry(10, 10, 10);
     var materialW = new THREE.MeshBasicMaterial({color:'black'});
-    var object = new THREE.Mesh(geometryW, materialW);
+    //var object = new THREE.Mesh(geometryW, materialW);
     //object.scale.set(100, 100, 100);
     
-    //var object = new Butterfly().butterF;
+    var object = new Butterfly().butterF;
     
     object.position.x = Math.random() * 4000 - 2000;
     object.position.y = Math.random() * 4000 - 2000;

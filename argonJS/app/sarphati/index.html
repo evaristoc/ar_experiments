@@ -18,6 +18,7 @@
 	</head>
 	<body>
 		<div id="argon">
+			<video id="video" width="1213px" height="900px" autoplay></video>
 			<div id="hud" style="pointer-events:auto">
 				<div id="menu">
 					<button id="table">TABLE</button>
@@ -34,6 +35,36 @@
 		function hideMe(elem) {
 		    elem.style.display = 'none';
 		}	
+	</script>
+	<script>
+	// Grab elements, create settings, etc.
+	var video = document.getElementById('video');
+	
+	// Get access to the camera!
+	if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+		// Not adding `{ audio: true }` since we only want video now
+		navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+			//video.src = window.URL.createObjectURL(stream);
+			video.srcObject = stream;
+			video.play();
+		});
+	}else{
+		alert('getUserMedia() is not supported by your browser');
+	};
+	//references:
+	//-- https://davidwalsh.name/browser-camera
+	//-- https://www.html5rocks.com/en/tutorials/getusermedia/intro/
+	//-- http://html5doctor.com/video-canvas-magic/
+	//-- https://developer.mozilla.org/en-US/docs/Web/Apps/Fundamentals/Audio_and_video_manipulation
+	//-- https://blog.teamtreehouse.com/accessing-the-device-camera-with-getusermedia
+	//-- https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API
+	//-- https://blog.hellojs.org/an-augmented-reality-experiment-in-react-native-fc473f6c1b5c
+	//-- https://medium.com/@srobtweets/exploring-the-cloud-vision-api-1af9bcf080b8
+	//-- https://itnext.io/how-to-write-a-node-js-cli-using-opencv-with-neural-network-models-for-image-classification-57785d6f09fe
+	//-- https://umaar.com/dev-tips/118-cloud-vision-image-detect-javascript/
+	//-- http://techslides.com/html5-video-into-canvas-with-filters
+	//
+	//2560x1440
 	</script>
     <script src="./app (3rd copy).js"></script>
 

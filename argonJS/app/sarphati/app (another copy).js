@@ -178,7 +178,7 @@ scene = new THREE.Scene();
 // change at any time)
 
 periodicTable = new THREE.Object3D;
-//periodicTable.scale.setScalar(0.001);
+periodicTable.scale.setScalar(0.1);
 
 stage = new THREE.Object3D;
 

@@ -203,7 +203,7 @@ Butterfly.prototype.butinit = function(){
   var geometryWL = new THREE.PlaneGeometry(10, 15);
   var materialWL = new THREE.MeshBasicMaterial({
     transparent:true,
-    map: new THREE.TextureLoader().load('./images/b1w.png'),
+    map: new THREE.TextureLoader().load('./tempassets/b1w.png'),
     side: THREE.DoubleSide,
     depthTest: true
   });
@@ -216,7 +216,7 @@ Butterfly.prototype.butinit = function(){
   var geometryWR = new THREE.PlaneGeometry(10, 15);
   var materialWR = new THREE.MeshBasicMaterial({
     transparent:true,
-    map: new THREE.TextureLoader().load('./images/b1w.png'),
+    map: new THREE.TextureLoader().load('./tempassets/b1w.png'),
     side: THREE.DoubleSide,
     depthTest: true
   });

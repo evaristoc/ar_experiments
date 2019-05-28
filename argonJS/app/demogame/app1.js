@@ -113,93 +113,24 @@ var touchID; // which touch caused the selection?
 // need to keep track of if we've located the box scene at all, and if it's locked to the world
 var boxInit = false;
 var geoLocked = false;
-
-var spherePos;
-var targets = {sphere:[]};
-
 // set up 50 cubes, each with its own entity
-
-// need init to run after everything loads
-window.addEventListener( 'load', init );
-
-var objects = [];
-
-function init(){
-    var geometry = new THREE.BoxGeometry(1, 1, 1);
-    for (var i = 0; i < 50; i++) {
-        var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
-        //object.position.x = Math.random() * 50 - 25;
-        //object.position.y = Math.random() * 10 + 1;
-        //object.position.z = Math.random() * 50 - 25;
-        //object.rotation.x = Math.random() * 2 * Math.PI;
-        //object.rotation.y = Math.random() * 2 * Math.PI;
-        //object.rotation.z = Math.random() * 2 * Math.PI;
-        //object.scale.x = Math.random() * 3 + 1;
-        //object.scale.y = Math.random() * 3 + 1;
-        //object.scale.z = Math.random() * 3 + 1;
-        //object.castShadow = true;
-        //object.receiveShadow = true;
-        object.position.x = Math.random() * 4000 - 2000;
-        object.position.y = Math.random() * 4000 - 2000;
-        object.position.z = Math.random() * 4000 - 2000;
-        //object.matrixAutoUpdate = false;
-        boxScene.add(object);
-        objects.push(object);
-    }
-    
-    // sphere
-    
-  spherePos = function(){
-        var vector = stage.position; //World coordinates to be looked at
-        var phi, theta;
-        for ( var i = 0; i < objects.length; i ++ ) {
-          phi = Math.acos(Math.random()*(Math.random() >= .5? 1:-1))
-          theta = Math.sqrt( objects.length * Math.PI ) * phi;
-          var target = new THREE.Object3D();
- 
-           target.position.x = 800 * Math.cos( theta ) * Math.sin( phi );
-           target.position.y = 800 * Math.sin( theta ) * Math.sin( phi );
-           target.position.z = 800 * Math.cos( phi );         
-      
-          target.lookAt( vector );
-      
-          targets.sphere[i] = target;
-
-        }
-        
-  }
-    
+var geometry = new THREE.BoxGeometry(1, 1, 1);
+for (var i = 0; i < 50; i++) {
+    var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
+    object.position.x = Math.random() * 50 - 25;
+    object.position.y = Math.random() * 10 + 1;
+    object.position.z = Math.random() * 50 - 25;
+    object.rotation.x = Math.random() * 2 * Math.PI;
+    object.rotation.y = Math.random() * 2 * Math.PI;
+    object.rotation.z = Math.random() * 2 * Math.PI;
+    object.scale.x = Math.random() * 3 + 1;
+    object.scale.y = Math.random() * 3 + 1;
+    object.scale.z = Math.random() * 3 + 1;
+    object.castShadow = true;
+    object.receiveShadow = true;
+    boxScene.add(object);
+    objects.push(object);
 }
-
-function transform( targets, duration ) {
-
-  TWEEN.removeAll();
-    
-
-      for ( var i = 0; i < objects.length; i ++ ) {
-
-        var object = objects[ i ];
-        var target = targets[ i ];
-        var pos = new TWEEN.Tween( object.position )
-          .to( { x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration )
-          .start();
-        
-       
-        var rot = new TWEEN.Tween(object.rotation)
-            .to({ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration)
-            .start();
-        
-        pos.chain(rot)
-
-      }
-
-      new TWEEN.Tween( this )
-        .to( {}, duration * 2 )
-        .start();
-  
-}
-
-
 document.addEventListener('keydown', onDocumentKeyStart, false);
 document.addEventListener('keyup', onDocumentKeyEnd, false);
 function onDocumentKeyStart(event) {
@@ -506,8 +437,6 @@ app.reality.changeEvent.addEventListener(function (data) {
 // the updateEvent is called each time the 3D world should be
 // rendered, before the renderEvent.  The state of your application
 // should be updated here.
-
-var counter = 0;
 app.updateEvent.addEventListener(function (frame) {
     // get the position and orientation (the "pose") of the user
     // in the local coordinate frame.
@@ -579,19 +508,6 @@ app.updateEvent.addEventListener(function (frame) {
     if (isCrosshair) {
         handlePointerMove(0, 0);
     }
-    
-    counter += 1
-    if (typeof tweenfunc === 'object' && counter > 45) {
-    //    tweenfunc.onComplete(()=>{spherePos(); transform(targets.sphere, 1000)});
-    spherePos();
-    transform(targets.sphere, 1000);
-    counter = 0;
-    }
-    
-    
-    TWEEN.update();
-    
-    
 });
 // renderEvent is fired whenever argon wants the app to update its display
 app.renderEvent.addEventListener(function (frame) {

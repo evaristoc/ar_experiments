@@ -2,7 +2,7 @@
 ---
 <!doctype html>
     <head>	
-		<title>Sarphati</title>
+		<title>Demo Game</title>
 	  	<meta name="keywords" content="{{ site.keywords }}">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	    <!-- Origin Trial Token, feature = WebVR, origin = https://argonjs.io, expires = 2017-06-06 -->
@@ -12,22 +12,30 @@
 		<script src="../0rscs/lib/argon.min_e.js"></script>
 		<script src="../0rscs/lib/CSS3DArgonRenderer.js"></script>
 		<script src="../0rscs/lib/CSS3DArgonHUD.js"></script>
+	    <script src="../0rscs/lib/ArgonSunMoon.js"></script>
+	    <script src="../0rscs/lib/stats.min.js"></script>
 		<!--<script src="../resources/lib/tween.min.js"></script>-->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.3.0/Tween.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
+		<div id="crosshair-wrapper">
+		  <img src="crosshair_small.png" class="crosshair"/>
+		</div>
 		<div id="argon" style="position:relative;">
 			<video id="video" width="100%" height="100%" style="position:absolute; margin:0px;" autoplay></video>
 			<div id="hud" style="pointer-events:auto">
 				<div id="menu">
-					<button id="table">TABLE</button>
-					<button id="sphere">SPHERE</button>
-					<!--<button id="helix">HELIX</button>
-					<button id="grid">GRID</button>-->
+					<button id="controls">Click to disable crosshair</button>
 				</div>
 			</div>
-			<div>
+			<div onclick="hideMe(this)" id="description">
+			  <h2>Draggable Cubes in the World</h2>
+			  <h5>(click to dismiss)</h5>
+			  <p>This example repurposes the THREE.js draggablecubes example. The cubes have been put 
+				around you in the world. When selected, a cube will then move as the 
+				device moves, keeping it's position relative to the device.  You can use touch/mouse interaction,
+				or crosshair interaction.</p>
 			</div>
 		</div>
 	</body>
@@ -43,8 +51,8 @@
 	// Get access to the camera!
 	if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 		// Not adding `{ audio: true }` since we only want video now
-		//navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(function(stream) {
-		navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } }, audio: false }).then(function(stream) {
+		navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(function(stream) {
+		//navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } }, audio: false }).then(function(stream) {
 			//video.src = window.URL.createObjectURL(stream);
 			video.srcObject = stream;
 			video.play();

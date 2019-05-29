@@ -136,8 +136,8 @@ for (var i = 0; i < 50; i++) {
 //E:
 //the events triggered by `keydown` and `keyup` are events that are handled OUTSIDE argon: the setting of the variables
 //
-//document.addEventListener('keydown', onDocumentKeyStart, false);
-//document.addEventListener('keyup', onDocumentKeyEnd, false);
+document.addEventListener('keydown', onDocumentKeyStart, false);
+document.addEventListener('keyup', onDocumentKeyEnd, false);
 
 function onDocumentKeyStart(event) {
 //E:
@@ -193,6 +193,7 @@ function onDocumentKeyEnd(event) {
 }
 
 
+
 //E:
 // this part is a bit complicated...
 /*
@@ -203,6 +204,15 @@ function onDocumentKeyEnd(event) {
 -- if not, we are going to manipulate 3 variables (t1, tx, ty) representing the mouse coordinates with a SWITCH of event cascades
 -- each new response to event will be based on the current event type
 */
+//E:
+//  to interact with app view, we need the app.view.uiEvent
+//  a simple document.addEventListener might not work unless the interaction is NOT with argon directly (eg. buttons and controls that change some external menus)
+//  for the app.view.uiEvent we pass the `evt.event` parameter with list ALL possible HTML events
+//  then we select those we want to work on and create internal variables that will handle some parts
+//  
+//  OBS:
+//     additional handlers should be created if there is an event that should last more than a single frame (eg. move a selected obj from A to B)
+//     this and its related functions will be be then called at app.renderEvent sections
 app.view.uiEvent.addEventListener(function (evt) {
     var event = evt.event;
     if (event.defaultPrevented) {
@@ -270,6 +280,11 @@ app.view.uiEvent.addEventListener(function (evt) {
         ---------------- send this event and leave
          */
 
+            // if crosshair interaction, mousemove passed on
+            if (isCrosshair) {
+                evt.forwardEvent();
+                return;
+            }
             if (event.type == "touchmove") {
                 tx = event.changedTouches[ti].clientX;
                 ty = event.changedTouches[ti].clientY;
@@ -357,25 +372,41 @@ app.view.uiEvent.addEventListener(function (evt) {
                 evt.forwardEvent();
                 return;
             }
-            if (event.type == "touchstart") {
-                tx = event.changedTouches[ti].clientX;
-                ty = event.changedTouches[ti].clientY;
+            if (isCrosshair) {
+                if (event.type == "mousedown") {
+                    // ignore mouse down events for selection in crosshair mode, they must
+                    // use the keyboard
+                    console.log("mousedown ignored");
+                    evt.forwardEvent();
+                    return;
+                }
+                mouse.x = mouse.y = 0;
             }
             else {
-                tx = event.clientX;
-                ty = event.clientY;
+                if (event.type == "touchstart") {
+                    tx = event.changedTouches[ti].clientX;
+                    ty = event.changedTouches[ti].clientY;
+                }
+                else {
+                    tx = event.clientX;
+                    ty = event.clientY;
+                }
+                mouse.x = (tx / window.innerWidth) * 2 - 1;
+                mouse.y = -(ty / window.innerHeight) * 2 + 1;
             }
-            mouse.x = (tx / window.innerWidth) * 2 - 1;
-            mouse.y = -(ty / window.innerHeight) * 2 + 1;
             console.log("mousedown");
             if (handleSelection()) {
                 if (event.type == "touchstart") {
                     touchID = event.changedTouches[ti].identifier;
                 }
                 if (event.type == "touchstart" || event.type == "pointerdown") {
-                    INTERSECTED = SELECTED;
-                    INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-                    INTERSECTED.material.color.setHex(0xffff33);
+                    if (!isCrosshair) {
+                        if (INTERSECTED)
+                            INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+                        INTERSECTED = SELECTED;
+                        INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+                        INTERSECTED.material.color.setHex(0xffff33);
+                    }
                 }
             }
             else {
@@ -429,12 +460,19 @@ app.view.uiEvent.addEventListener(function (evt) {
         -------- if still NOT SELECTED
         ------------ send this event and leave AND leave this case
           */
+            if (isCrosshair && event.type == "mouseup") {
+                // ignore mouse up events for selection in crosshair mode, they must
+                // use the keyboard
+                console.log("release ignored");
+                evt.forwardEvent();
+                return;
+            }
             console.log("release");
             if (SELECTED) {
                 if (handleRelease()) {
-                    if (event.type == "touchend" || event.type == "pointerup") {
-                        INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
-                        console.log(INTERSECTED.material.color);
+                    if ((event.type == "touchend" || event.type == "pointerup") && !isCrosshair) {
+                        if (INTERSECTED)
+                            INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
                         INTERSECTED = null;
                     }
                 }
@@ -463,9 +501,20 @@ function handleRelease() {
     var date = app.context.getTime();
     THREE.SceneUtils.detach(SELECTED, user, scene);
     THREE.SceneUtils.attach(SELECTED, scene, boxScene);
-    console.log('at release', SELECTED.currentHex);
     SELECTED = null;
     touchID = null;
+    // var boxPose = app.context.getEntityPose(SELECTED.entity);
+    // console.log("------");
+    // console.log("touch released, pos=" + boxPose.position);
+    // console.log("touch released, quat=" + boxPose.orientation);
+    // console.log("touch released _value pos=" + SELECTED.entity.position._value)
+    // console.log("touch released _value quat=" + SELECTED.entity.orientation._value)
+    // console.log("------");
+    // var boxPose = app.context.getEntityPose(SELECTED.entity, boxSceneEntity);
+    // SELECTED.position.copy(boxPose.position);
+    // SELECTED.quaternion.copy(boxPose.orientation);
+    // user.remove(SELECTED);
+    // boxScene.add(SELECTED);
     return true;
 }
 function handleSelection() {
@@ -503,11 +552,25 @@ function handleSelection() {
         console.log("touch FIXED quat=" + JSON.stringify(object.quaternion));
         THREE.SceneUtils.detach(object, boxScene, scene);
         THREE.SceneUtils.attach(object, scene, user);
+        // var newpose = app.context.getEntityPose(object.entity);
+        // console.log("touch DEVICE pos=" + newpose.position);
+        // console.log("touch DEVICE quat=" + newpose.orientation)
+        // console.log("touch DEVICE _value pos=" + object.entity.position._value);
+        // console.log("touch DEVICE _value quat=" + object.entity.orientation._value)
+        // console.log("------");
         SELECTED = object;
-        var worldLoc = user.localToWorld(tempPos.copy(SELECTED.position));
-        plane.setFromNormalAndCoplanarPoint(camera.getWorldDirection(plane.normal), worldLoc);
-        if (raycaster.ray.intersectPlane(plane, intersection)) {
-            offset.copy(user.worldToLocal(intersection).sub(SELECTED.position));
+        // console.log("touch DEVICE pos=" + boxPose.position);
+        // console.log("touch DEVICE quat=" + boxPose.orientation)
+        // console.log("touch DEVICE _value pos=" + (object.entity.position as any)._value);
+        // console.log("touch DEVICE _value quat=" + (object.entity.orientation as any)._value)
+        // console.log("------");
+        if (!isCrosshair) {
+            var worldLoc = user.localToWorld(tempPos.copy(SELECTED.position));
+            plane.setFromNormalAndCoplanarPoint(camera.getWorldDirection(plane.normal), worldLoc);
+            if (raycaster.ray.intersectPlane(plane, intersection)) {
+                //offset.copy( user.worldToLocal(( intersection ).sub( worldLoc )));
+                offset.copy(user.worldToLocal(intersection).sub(SELECTED.position));
+            }
         }
         return true;
     }
@@ -552,7 +615,6 @@ function handlePointerMove(x, y) {
                 INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
             INTERSECTED = intersects[0].object;
             INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-            console.log(INTERSECTED.currentHex);
             INTERSECTED.material.color.setHex(0xffff33);
         }
     }
@@ -646,6 +708,9 @@ app.updateEvent.addEventListener(function (frame) {
     var boxPose = app.context.getEntityPose(boxSceneEntity);
     boxScene.position.copy(boxPose.position);
     boxScene.quaternion.copy(boxPose.orientation);
+    if (isCrosshair) {
+        handlePointerMove(0, 0);
+    }
 });
 // renderEvent is fired whenever argon wants the app to update its display
 app.renderEvent.addEventListener(function (frame) {

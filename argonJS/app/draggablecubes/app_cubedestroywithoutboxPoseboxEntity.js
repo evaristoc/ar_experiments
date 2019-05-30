@@ -61,7 +61,7 @@ var boxSceneEntity = new Argon.Cesium.Entity({
     orientation: Cesium.Quaternion.IDENTITY
 });
 
-var ambientlight = new THREE.AmbientLight(0x404040); // soft white ambient light
+var ambientlight = new THREE.AmbientLight(0xf0f0f0); // soft white ambient light
 scene.add(ambientlight);
 /////////////////////////
 // application variables.  This code started out as the three.js draggablecubes example
@@ -81,7 +81,8 @@ var geoLocked = false;
 // set up 50 cubes, each with its own entity
 var geometry = new THREE.BoxGeometry(1, 1, 1);
 for (var i = 0; i < 50; i++) {
-    var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
+    //var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
+    var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: 0x0000aa }));    
     object.position.x = Math.random() * 50 - 25;
     object.position.y = Math.random() * 10 + 1;
     object.position.z = Math.random() * 50 - 25;
@@ -404,20 +405,42 @@ app.reality.changeEvent.addEventListener(function (data) {
 // should be updated here.
 var frameCounter = 0;
 app.updateEvent.addEventListener(function (frame) {
-    // get the position and orientation (the "pose") of the user
+    //// get the position and orientation (the "pose") of the user
+    //// in the local coordinate frame.
+    //var stagePose = app.context.getEntityPose(app.context.stage);
+    
+    // get the position and orientation (the "pose") of the stage
     // in the local coordinate frame.
-    var stagePose = app.context.getEntityPose(app.context.stage);
-    // assuming we know the user's pose, set the pose of our
-    // THREE user object to match it
-    if (stagePose.poseStatus & Argon.PoseStatus.KNOWN) {
-        stage.position.copy(stagePose.position);
-        stage.quaternion.copy(stagePose.orientation);
+    var stagePose = app.getEntityPose(app.stage);
+
+    //// assuming we know the user's pose, set the pose of our
+    //// THREE user object to match it
+    //if (stagePose.poseStatus & Argon.PoseStatus.KNOWN) {
+    //    stage.position.copy(stagePose.position);
+    //    stage.quaternion.copy(stagePose.orientation);
+    //}
+    //else {
+    //    return;
+    //}
+    
+    // set the position of our THREE user object to match it
+    stage.position.copy(stagePose.position);
+    stage.quaternion.copy(stagePose.orientation);
+    
+    //// In 6DOF realities, scale down the boxes
+    //boxScene.scale.setScalar(app.context.userTracking === '6DOF' ? 2 : 4);
+    
+    if (app.userTracking === '6DOF') {
+      if (app.displayMode === 'head') {
+        boxScene.position.set(0, Argon.AVERAGE_EYE_HEIGHT, 0);
+      } else {
+        boxScene.position.set(0, Argon.AVERAGE_EYE_HEIGHT / 2, 0);
+      }
+    } else {
+      const userStagePose = app.getEntityPose(app.user, app.stage);
+      boxScene.position.set(0, userStagePose.position.y, 0);
     }
-    else {
-        return;
-    }
-    // In 6DOF realities, scale down the boxes
-    boxScene.scale.setScalar(app.context.userTracking === '6DOF' ? 2 : 4);
+    
     
     frameCounter += 1
     if (frameCounter > 45) {

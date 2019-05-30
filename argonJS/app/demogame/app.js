@@ -166,6 +166,10 @@ function init() {
 }
 
 
+/******************
+ * HELPERS
+*****************/
+
 function  spherePosHELPER(){
       var vector = stage.position; //World coordinates to be looked at
       var phi, theta;

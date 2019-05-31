@@ -76,12 +76,20 @@ var intersection = new THREE.Vector3();
 var tempPos = new THREE.Vector3();
 var INTERSECTED, SELECTED;
 var touchID; // which touch caused the selection?
-// need to keep track of if we've located the box scene at all, and if it's locked to the world
-var boxInit = false;
-var geoLocked = false;
+//// need to keep track of if we've located the box scene at all, and if it's locked to the world
+//var boxInit = false;
+//var geoLocked = false;
+
+var blks = 20;
+
+var remainingBlocks = document.getElementById('remainingBlocks');
+hud.hudElements[0].appendChild(remainingBlocks);
+remainingBlocks.setAttribute('style', "color:brown; position:fixed; right:10px; top:10px;");
+remainingBlocks.innerHTML = `${blks} blocks remaining`;
+
 // set up 50 cubes, each with its own entity
-var geometry = new THREE.BoxGeometry(1, 1, 1);
-for (var i = 0; i < 50; i++) {
+var geometry = new THREE.BoxGeometry(3, 3, 3);
+for (var i = 0; i < blks; i++) {
     //var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
     var object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: 0x0000aa }));    
     object.position.x = Math.random() * 50 - 25;
@@ -113,7 +121,9 @@ function  spherePosHELPER(){
       var phi, theta;
   
       for ( var i = 0; i < objects.length; i ++ ) {
-        if (move[i] === false) {
+        //E: TEMPORARY HACK!!
+        // target is giving undefined at some point...
+        if (target !== undefined && move[i] === false) {
             target.position.x = target.position.x;
             target.position.y = target.position.y;
             target.position.z = target.position.z;
@@ -123,12 +133,9 @@ function  spherePosHELPER(){
             var target = new THREE.Object3D();
             target.position.x = 80 * Math.cos( theta ) * Math.sin( phi );
             target.position.y = 80 * Math.sin( theta ) * Math.sin( phi );
-            target.position.z = 80 * Math.cos( phi );   
+            target.position.z = 80 * Math.cos( phi );
         }
-   
-    
         target.lookAt( vector );
-    
         targets[i] = target;
 
       }
@@ -261,7 +268,8 @@ app.view.uiEvent.addEventListener(function (evt) {
                     console.log(objects.indexOf(INTERSECTED));
                     move[objects.indexOf(INTERSECTED)] = false;
                     INTERSECTED.material.color.setHex(0xffffff);
-                     
+                    --blks;
+                    remainingBlocks.innerHTML = `${blks} blocks remaining`; 
                  }
             }
             else {
@@ -460,7 +468,7 @@ app.updateEvent.addEventListener(function (frame) {
     frameCounter += 1
     if (frameCounter > 45) {
         spherePosHELPER();
-        transformHELPER(targets, 2000);
+        transformHELPER(targets, 3000);
         frameCounter = 0;
     }
     

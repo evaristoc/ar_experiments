@@ -265,11 +265,13 @@ app.view.uiEvent.addEventListener(function (evt) {
                     //INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
                     //console.log('interseted color in mousestart', INTERSECTED.currentHex);
                     //INTERSECTED.material.color.setHex(0xffff33);
-                    console.log(objects.indexOf(INTERSECTED));
-                    move[objects.indexOf(INTERSECTED)] = false;
-                    INTERSECTED.material.color.setHex(0xffffff);
-                    --blks;
-                    remainingBlocks.innerHTML = `${blks} blocks remaining`; 
+                    //console.log(objects.indexOf(INTERSECTED));
+                    if (move[objects.indexOf(INTERSECTED)]) {
+                        move[objects.indexOf(INTERSECTED)] = false;
+                        INTERSECTED.material.color.setHex(0xffffff);
+                        --blks;
+                        remainingBlocks.innerHTML = `${blks} blocks remaining`; 
+                    }
                  }
             }
             else {

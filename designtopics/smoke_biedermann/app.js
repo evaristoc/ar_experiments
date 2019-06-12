@@ -80,8 +80,9 @@ var Smoke = function () {
   _createClass(Smoke, [
     { 
     //E: init is a mesh in a form of a cube; it is the container of the scene
-    //-- the cube seems to be a trick to generate artifical holes in the smoke screen
+    //-- the cube role is unclear; it seems to be a trick to generate artifical holes in the smoke screen
     //-- later in the rendering function it can be seen that the the cube move cyclically around z (back and forwad)
+    //-- however, commenting the code doesnt seem to change anything
     key: 'init',
     value: function init() {
       var width = this.width,

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<!--- references:
+https://threejsfundamentals.org/threejs/lessons/threejs-rendering-on-demand.html
+https://threejsfundamentals.org/threejs/lessons/threejs-debugging-javascript.html
+https://observablehq.com/@mbostock/hello-three-js-orbit-controls
+https://dustinpfister.github.io/2018/04/13/threejs-orbit-controls/
+https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
+--->
+
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>THREE.js + Poly: Smoking Chimney</title>
+   
+</head>
+
+<body>
+<canvas id="c" tabindex="1"></canvas>
+  
+    <script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://threejs.org/examples/js/loaders/MTLLoader.js"></script>
+    <!--<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>-->
+    <script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/js/controls/OrbitControls.js"></script>
+<!--- source: https://threejsfundamentals.org/threejs/lessons/threejs-rendering-on-demand.html --->
+
+<script>
+'use strict';
+
+/* global THREE */
+
+function main() {
+  const WIDTH = 800;
+  const HEIGHT = 600;
+  const canvas = document.querySelector('#c');
+  const renderer = new THREE.WebGLRenderer({canvas});
+
+  const fov = 75;
+  const aspect = 2;  // the canvas default
+  const near = 0.1;
+  const far = 5;
+  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera.position.z = 2;
+
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.target.set(0, 0, 0);
+  controls.update();
+
+  const scene = new THREE.Scene();
+  //scene.add(new THREE.GridHelper(5000, 1));
+
+  {
+    const color = 0xFFFFFF;
+    const intensity = 1;
+    const light = new THREE.DirectionalLight(color, intensity);
+    //light.position.set(-1, 2, 4);
+    light.position.set(10, 50, 130);
+    scene.add(light);
+  }
+
+  //const boxWidth = 1;
+  //const boxHeight = 1;
+  //const boxDepth = 1;
+  //const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+  //function makeInstance(geometry, color, x) {
+  //  const material = new THREE.MeshPhongMaterial({color});
+  //
+  //  const cube = new THREE.Mesh(geometry, material);
+  //  scene.add(cube);
+  //
+  //  cube.position.x = x;
+  //
+  //  return cube;
+  //}
+  //
+  ////makeInstance(geometry, 0x44aa88,  0);
+  ////makeInstance(geometry, 0x8844aa, -2);
+  ////makeInstance(geometry, 0xaa8844,  2);
+
+const sphereX = 1;
+const sphereY = 1;
+const sphereRadius = 0.1;  
+
+const geometry = new THREE.SphereGeometry(sphereRadius);
+
+function makeInstance(geometry, color, x, y, z) {
+    
+
+    const material = new THREE.MeshPhongMaterial({color});
+
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+
+    sphere.position.x = x;
+    sphere.position.y = y;
+    sphere.position.z = z;
+
+    return sphere;
+  }
+  
+  var s = makeInstance(geometry, 0x44aa88,  -.2, .7, -.75);
+  
+  
+  function resizeRendererToDisplaySize(renderer) {
+    const canvas = renderer.domElement;
+    //const width = canvas.clientWidth*1;
+    //const height = canvas.clientHeight*1;
+    const width = WIDTH;
+    const height = HEIGHT;    
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+      //renderer.setSize(WIDTH, HEIGHT);
+    }
+    return needResize;
+  }
+
+  function render() {
+    if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+
+    renderer.render(scene, camera);
+  }
+  //render();
+  
+  var textureLoader = new THREE.TextureLoader();
+  var texture = textureLoader.load('./archive/PUSHILIN_factory.png');
+  var mtlLoader = new THREE.MTLLoader();
+  mtlLoader.setPath( 'archive/' );
+  //var url = "SM_Chimney_02.mtl";
+  var url = "PUSHILIN_factory.mtl";
+  var object;
+  mtlLoader.load( url, function( materials ) {
+    materials.preload();
+
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials( materials );
+    objLoader.setPath( 'archive/' );
+    //objLoader.load( 'SM_Chimney_02.obj', function ( object ) {
+    objLoader.load( 'PUSHILIN_factory.obj', function ( obj ) {
+        object = obj;
+        object.position.x = 0;
+        object.position.y = -.5;
+        object.position.z = -1;
+        object.rotation.x = Math.PI/4;
+        //object.scale.z = 200;
+        
+        //https://stackoverflow.com/questions/39850083/three-js-objloader-texture
+            object.traverse(function (child) {   // aka setTexture
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture;
+                }
+            });
+        scene.add( object );
+        // Draw!
+        console.log(object);
+       //render();
+       //controls.addEventListener("change", render());
+       //console.log(controls);
+       render();
+
+    });
+
+});
+  
+  function animate() {
+    var ss = s;
+    //s.position.x = x;
+    ss.position.y += .01;
+    ss.position.z += .01;
+    
+    if (ss.position.y > 1.2){
+        scene.remove(ss);
+        s = makeInstance(geometry, 0x44aa88,  -.2, .7, -.75);
+    }
+    
+	requestAnimationFrame( animate );
+
+	// required if controls.enableDamping or controls.autoRotate are set to true
+	//controls.update();
+    //console.log(1111);
+
+	render();
+
+}
+  animate();
+
+  controls.addEventListener('change', render);
+  window.addEventListener('resize', render);
+
+  // note: this is a workaround for an OrbitControls issue
+  // in an iframe. Will remove once the issue is fixed in
+  // three.js
+  window.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    window.focus();
+  });
+  window.addEventListener('keydown', (e) => {
+    e.preventDefault();
+  });
+}
+
+main();
+</script>
+
+
+
+
+</body>
+
+</html>

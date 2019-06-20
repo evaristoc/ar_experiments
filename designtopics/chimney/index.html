@@ -16,6 +16,7 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
 </head>
 
 <body>
+<div></div>
 <canvas id="c" tabindex="1"></canvas>
   
     <script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/three.min.js"></script>
@@ -24,6 +25,8 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
     <!--<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>-->
     <script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/js/controls/OrbitControls.js"></script>
 <!--- source: https://threejsfundamentals.org/threejs/lessons/threejs-rendering-on-demand.html --->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
 
 <script>
 'use strict';
@@ -39,7 +42,7 @@ function main() {
   const fov = 75;
   const aspect = 2;  // the canvas default
   const near = 0.1;
-  const far = 5;
+  const far = 50;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   camera.position.z = 2;
 
@@ -79,28 +82,65 @@ function main() {
   ////makeInstance(geometry, 0x8844aa, -2);
   ////makeInstance(geometry, 0xaa8844,  2);
 
-const sphereX = 1;
-const sphereY = 1;
-const sphereRadius = 0.1;  
-
-const geometry = new THREE.SphereGeometry(sphereRadius);
-
-function makeInstance(geometry, color, x, y, z) {
-    
-
-    const material = new THREE.MeshPhongMaterial({color});
-
-    const sphere = new THREE.Mesh(geometry, material);
-    scene.add(sphere);
-
-    sphere.position.x = x;
-    sphere.position.y = y;
-    sphere.position.z = z;
-
-    return sphere;
+  const sphereX = 1;
+  const sphereY = 1;
+  const sphereRadius = 0.1;
+  var paramsobj ={
+    smokecolor : 0x44aa88,
+    //smokex : -.2,
+    //smokey : .7,
+    //smokez : -.75
+    smokex : -.189, //-.7
+    //smokex : -.65,
+    smokey : .55,
+    smokez : -1.71
   }
   
-  var s = makeInstance(geometry, 0x44aa88,  -.2, .7, -.75);
+  
+  // DAT.GUI Related Stuff
+  
+  var gui = new dat.GUI();
+  gui.remember(paramsobj);
+  
+  //var cam = gui.addFolder('Camera');
+  var smoke = gui.addFolder('Smoke Simulation');
+  smoke.add(paramsobj, "smokex", -2.001, 2.001);
+  smoke.add(paramsobj, "smokey", -2.001, 2.001);
+  smoke.add(paramsobj, "smokez", -2.001, 2.001);
+  smoke.open();
+  
+  var stats = new Stats();
+  stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+  document.body.appendChild( stats.domElement );
+
+  
+  const geometry = new THREE.SphereGeometry(sphereRadius);
+  
+  function makeInstance(geometry, color, x, y, z) {
+      
+  
+      const material = new THREE.MeshPhongMaterial({color});
+  
+      const sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
+  
+      sphere.position.x = x;
+      sphere.position.y = y;
+      sphere.position.z = z;
+  
+      return sphere;
+  }
+  
+  var ss = {};
+  
+  //var s = makeInstance(geometry, 0x44aa88,  -.2, .7, -.75);
+  
+  for (let i=0;i < 100;i++){
+    let _posx = Math.random()*.01*(Math.random() > .5? 1:-1);
+    let _posz = Math.random()*.01*(Math.random() > .5? 1:-1);
+    ss[i] = {particle:null, start:false}
+    ss[i].particle = makeInstance(geometry, paramsobj.smokecolor,  paramsobj.smokex+_posx, paramsobj.smokey, paramsobj.smokez+_posz);
+  }
   
   
   function resizeRendererToDisplaySize(renderer) {
@@ -147,7 +187,7 @@ function makeInstance(geometry, color, x, y, z) {
         object.position.x = 0;
         object.position.y = -.5;
         object.position.z = -1;
-        object.rotation.x = Math.PI/4;
+        //object.rotation.x = Math.PI/4;
         //object.scale.z = 200;
         
         //https://stackoverflow.com/questions/39850083/three-js-objloader-texture
@@ -169,15 +209,42 @@ function makeInstance(geometry, color, x, y, z) {
 });
   
   function animate() {
-    var ss = s;
-    //s.position.x = x;
-    ss.position.y += .01;
-    ss.position.z += .01;
+    //var s_a = s;
+    ////s.position.x = x;
+    //s_a.position.y += .01;
+    //s_a.position.z += .01;
+    //
+    //if (s_a.position.y > 1.2){
+    //    scene.remove(ss);
+    //    s = makeInstance(geometry, 0x44aa88,  -.2, .7, -.75);
+    //}
     
-    if (ss.position.y > 1.2){
-        scene.remove(ss);
-        s = makeInstance(geometry, 0x44aa88,  -.2, .7, -.75);
+    stats.begin();
+    
+    for (let i = 0; i < 100; i++) {
+      if (ss[i].start === false) {
+        ss[i].start = Math.random() > .2? false:true;
+        //console.log(ss[i].start);
+      }
+      else {
+        let s_a = ss[i].particle;
+        s_a.position.y += .01;
+        //s_a.position.x += .001;
+        //s_a.position.z += .01;
+        
+        //if (s_a.position.y > 1.2){
+        if (s_a.position.y > 1.6){
+            scene.remove(s_a);
+            let _posx = Math.random()*.01*(Math.random() > .5? 1:-1);
+            let _posz = Math.random()*.01*(Math.random() > .5? 1:-1);
+            ss[i] = {particle:null, start:false}
+            ss[i].particle = makeInstance(geometry, 0x44aa88,  paramsobj.smokex+_posx, paramsobj.smokey, paramsobj.smokez+_posz);
+        }
+      }
     }
+    
+    stats.end();
+
     
 	requestAnimationFrame( animate );
 

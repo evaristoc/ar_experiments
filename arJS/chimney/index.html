@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<!--- references:
+https://threejsfundamentals.org/threejs/lessons/threejs-rendering-on-demand.html
+https://threejsfundamentals.org/threejs/lessons/threejs-debugging-javascript.html
+https://observablehq.com/@mbostock/hello-three-js-orbit-controls
+https://dustinpfister.github.io/2018/04/13/threejs-orbit-controls/
+https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
+--->
+
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>THREE.js + Poly: Smoking Chimney</title>
+   
+</head>
+
+<body>
+<div></div>
+<canvas id="c" tabindex="1"></canvas>
+  
+    <script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://threejs.org/examples/js/loaders/MTLLoader.js"></script>
+    <!--<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>-->
+    <script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/js/controls/OrbitControls.js"></script>
+<!--- source: https://threejsfundamentals.org/threejs/lessons/threejs-rendering-on-demand.html --->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
+    <!-- include jsartookit -->
+	<script src="../arjs/jsartoolkit5/artoolkit.min.js"></script>
+	<script src="../arjs/jsartoolkit5/artoolkit.api.js"></script>
+	<!-- include threex.artoolkit -->
+	<script src="../arjs/threex/threex-artoolkitsource.js"></script>
+	<script src="../arjs/threex/threex-artoolkitcontext.js"></script>
+	<script src="../arjs/threex/threex-arbasecontrols.js"></script>
+	<script src="../arjs/threex/threex-armarkercontrols.js"></script>
+
+<script>
+'use strict';
+
+        /** cloned from https://codepen.io/rainner/details/LREdXd **/
+		/**
+            * Global utils 
+        */
+		
+		        /** cloned from https://codepen.io/rainner/details/LREdXd **/
+                
+    /**********************
+        PRE-GLOBALS
+     ********************/
+        
+        var arToolkitSource, arToolkitContext;
+        var markerRoot;
+
+    /**********************
+        VIEWPORT UTILS
+     ********************/
+        (function() {
+            
+            var _w = window,
+                _s = window.screen,
+                _b = document.body,
+                _d = document.documentElement;
+            
+            window.Utils = {
+            
+                // screen info 
+                screen: function() 
+                {
+                    var width  = Math.max( 0, _w.innerWidth || _d.clientWidth || _b.clientWidth || 0 );
+                    var height = Math.max( 0, _w.innerHeight || _d.clientHeight || _b.clientHeight || 0 );
+                    
+                    return {
+                        width   : width, 
+                        height  : height, 
+                        centerx : width / 2, 
+                        centery : height / 2, 
+                        ratio   : width / height, 
+                    };
+                }, 
+            }; 
+        })();
+
+
+    /**********************
+        FACTORY OBJECT
+     ********************/
+    
+    (function(){
+     //constructor parameters
+     
+     var FactoryObj = function(scene, render){
+        this. _scene = scene;
+        this._textureLoader = new THREE.TextureLoader();
+        this._textureLoad = this._textureLoader.load('./assets/PUSHILIN_factory.png');
+        this._mtlLoader = new THREE.MTLLoader();
+        this._objLoader = new THREE.OBJLoader();
+        this._mtlLoader.setPath( 'assets/' );
+        this._objLoader.setPath( 'assets/' );
+        this._url = 'PUSHILIN_factory';
+        this.to = {
+          x: 0.0,
+          y: -.5,
+          z: -1.0
+          };
+
+        this.launch()      
+        let f = (function(){
+          console.log(111);
+        })()
+          
+        //launch;
+
+      }      
+      
+      //console.log(FactoryObj.launch);
+      
+      //constructor prototyping: instantiation (constructor) and methods
+      FactoryObj.prototype = {
+        constructor : FactoryObj,
+        
+        launch : function(){
+                    console.log(this);
+                    //console.log(new FactoryObj);
+                    //FactoryObj.prototype.mtlLoading;
+                  },
+        //mtlLoading : FactoryObj.mtlLoader(FactoryObj.url+'.mtl', function(materials){
+        //                materials.preload();
+        //                FactoryObj.objLoader.setMaterials( materials );
+        //                FactoryObj.objLoading;
+        //              }),
+        //objLoading : FactoryObj.objLoader(FactoryObj.url+'.obj', function(obj) {
+        //                obj.position.x = FactoryObj.to.x;
+        //                obj.position.y = FactoryObj.to.y;
+        //                obj.position.z = FactoryObj.to.z;
+        //                //https://stackoverflow.com/questions/39850083/three-js-objloader-texture
+        //                object.traverse(function (child) {   // aka setTexture
+        //                    if (child instanceof THREE.Mesh) {
+        //                        child.material.map = FactoryObj.texture;
+        //                    }
+        //                });
+        //                FactoryObj.scene.add( object );
+        //                render();
+        //              })
+      };
+      
+      window.FactoryObj = FactoryObj;  
+      
+    })()
+    
+    var a = new FactoryObj(1,2);
+    
+    /**********************
+      PSEUDO-PARTICLES OBJECTS
+     ********************/
+    
+    /**********************
+        SCENE SETUP
+     ********************/
+//    (function(){
+//        var screen    = Utils.screen(); 
+//        var renderer  = null;
+//        var camera    = null; 
+//        var scene     = null;
+//        //to        = { px: 0, py: 0, pz: 2 };
+//        try {
+//            renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } ); 
+//            camera = new THREE.Camera();
+//            scene    = new THREE.Scene();
+//        }
+//        catch( e ) {
+//            alert( "THREE.JS Error: " + e.toString() ); 
+//            return; 
+//        }
+//        
+//            function setup()
+//            {
+//
+//                camera.position.set( 0, 0, 0 );
+//                camera.rotation.set( 0, 0, 0 );
+//
+//                function render() {
+//                  renderer.setPixelRatio( window.devicePixelRatio );
+//                  renderer.setClearColor( 0x000000, 0 );
+//                  renderer.sortObjects = true;
+//                  renderer.setSize( 640, 480 );
+//                  renderer.domElement.style["display"]  = "block";
+//                  renderer.domElement.style["position"] = "fixed";
+//                  //renderer.domElement.style["position"] = "absolute";
+//                  renderer.domElement.style["width"]    = "100%";
+//                  renderer.domElement.style["height"]   = "100%";
+//                  renderer.domElement.style["z-index"]  = "-1";
+//                  //
+//                  renderer.domElement.style["top"] = '0px';
+//                  renderer.domElement.style["left"] = '0px';
+//                  
+//                  document.body.appendChild( renderer.domElement );              
+//                  renderer.render(scene, camera);
+//                }
+//                
+//
+//
+//            	////////////////////////////////////////////////////////////
+//                // setup arToolkitSource
+//                ////////////////////////////////////////////////////////////
+//            
+//                arToolkitSource = new THREEx.ArToolkitSource({
+//                    sourceType : 'webcam',
+//                });
+//            
+//                function onResize()
+//                {
+//                    console.log('onResize');
+//					arToolkitSource.onResize()	
+//                    arToolkitSource.copySizeTo(renderer.domElement)	
+//                    if ( arToolkitContext.arController !== null )
+//                    {
+//                        arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
+//                    }	
+//                }
+//            
+//                arToolkitSource.init(function onReady(){
+//                    onResize()
+//                });
+//                
+//                // handle resize event
+//                window.addEventListener('resize', function(){
+//                    onResize()
+//                });
+//                
+//                ////////////////////////////////////////////////////////////
+//                // setup arToolkitContext
+//                ////////////////////////////////////////////////////////////	
+//            
+//                // create atToolkitContext
+//                arToolkitContext = new THREEx.ArToolkitContext({
+//                    cameraParametersUrl: 'data/camera_para.dat',
+//                    detectionMode: 'mono'
+//                });
+//                
+//                // copy projection matrix to camera when initialization complete
+//                arToolkitContext.init( function onCompleted(){
+//                    camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+//                });
+//                
+//                ////////////////////////////////////////////////////////////
+//                // setup markerRoots
+//                ////////////////////////////////////////////////////////////
+//                
+//                
+//                // build markerControls
+//                markerRoot = new THREE.Object3D();
+//                scene.add(markerRoot);
+//                let markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+//                    type: 'pattern', patternUrl: "data/hiro.patt",
+//                })
+//            };
+//
+//            /**********************
+//                DRAW/ANIMATION LOOP
+//             ********************/
+//            function draw() 
+//            {
+//				
+//				if ( arToolkitSource.ready !== false ){
+//					console.log('ready');
+//					arToolkitContext.update( arToolkitSource.domElement );
+//				}
+//                var _ = new FactoryObj(scene, render);
+//            };
+//			
+//			
+//			setup();
+//			draw();
+//
+//      
+//      })()
+
+</script>
+
+
+
+
+</body>
+
+</html>

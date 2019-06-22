@@ -84,12 +84,12 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
     
     /* test */
     (function(){
-      var FactoryObj = function(scene, render){
-         this._scene = scene;
+      var FactoryObj = function(markerRoot, render){
+         this._subScene = markerRoot;
          this._render = render;
-         this._x = 0;
-         this._y = 0;
-         this._z = 0;
+         this._x = 1;
+         this._y = 1;
+         this._z = 1;
          this.launch();
         };
       
@@ -99,7 +99,7 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
             return new THREE.MeshBasicMaterial();
           },
         geometry: function(){
-            return new THREE.CubeGeometry(2,2,2);
+            return new THREE.BoxGeometry(1,1,1);
           },
         launch: function(){
             let z = this;
@@ -109,7 +109,8 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
             mesh.position.x = z._x;
             mesh.position.y = z._y;
             mesh.position.z = z._z;
-            //z._scene.add(mesh);
+            markerRoot.add(mesh);
+            console.log('scene inside object', markerRoot);
             //z._render();
         }
       };
@@ -219,9 +220,48 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
     //  
     //})();
     
-    var a = new FactoryObj(console.log,console.log);
+    //var a = new FactoryObj(console.log,console.log);
+    //console.log(a);
     
-    console.log(a);
+    //var width = window.innerWidth;
+    //var height = window.innerHeight;
+    //var color = new THREE.Color("#f9f4ee");
+    //var cubeColor = new THREE.Color("#f9f4ee");
+    //
+    //// ste up our camera
+    //var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
+    //camera.position.y = 1.2;
+    //camera.position.z = 8;
+    //
+    //// create our scene
+    //var scene = new THREE.Scene();
+    //
+    //// create a renderer and then append it to the dom
+    //var renderer = new THREE.WebGLRenderer({antialias: true});
+    //renderer.setSize(width, height);
+    //renderer.setPixelRatio(devicePixelRatio);
+    //renderer.setClearColor(0x282828);
+    //document.body.appendChild(renderer.domElement);
+    //
+    //// add our cube to our scene
+    ////scene.add(cube);
+    //
+    //// create a light
+    //var pointLight = new THREE.PointLight(0xffffff);
+    //pointLight.position.set(0, 500, 300);
+    //scene.add(pointLight);
+    //
+    ////renderer.render(scene, camera);
+    //
+    //new FactoryObj(scene, function(){renderer.render(scene, camera);})
+    //
+    //function onWindowResize( event ) {
+    //    renderer.setSize( window.innerWidth, window.innerHeight );
+    //    camera.aspect = window.innerWidth / window.innerHeight;
+    //    camera.updateProjectionMatrix();
+    //};
+    //
+    //window.addEventListener( 'resize', onWindowResize, false );
     
     
     /**********************
@@ -231,126 +271,140 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
     /**********************
         SCENE SETUP
      ********************/
-    //(function(){
-    //    var screen    = Utils.screen(); 
-    //    var renderer  = null;
-    //    var camera    = null; 
-    //    var scene     = null;
-    //    //to        = { px: 0, py: 0, pz: 2 };
-    //    try {
-    //        renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } ); 
-    //        camera = new THREE.Camera();
-    //        scene    = new THREE.Scene();
-    //    }
-    //    catch( e ) {
-    //        alert( "THREE.JS Error: " + e.toString() ); 
-    //        return; 
-    //    }
-    //    
-    //    function render() {
-    //      renderer.setPixelRatio( window.devicePixelRatio );
-    //      renderer.setClearColor( 0x000000, 0 );
-    //      renderer.sortObjects = true;
-    //      renderer.setSize( 640, 480 );
-    //      renderer.domElement.style["display"]  = "block";
-    //      renderer.domElement.style["position"] = "fixed";
-    //      //renderer.domElement.style["position"] = "absolute";
-    //      renderer.domElement.style["width"]    = "100%";
-    //      renderer.domElement.style["height"]   = "100%";
-    //      renderer.domElement.style["z-index"]  = "-1";
-    //      //
-    //      renderer.domElement.style["top"] = '0px';
-    //      renderer.domElement.style["left"] = '0px';
-    //      
-    //      document.body.appendChild( renderer.domElement );              
-    //      renderer.render(scene, camera);
-    //    }
-    //
-    //
-    //    function setup() {
-    //    
-    //        camera.position.set( 0, 0, 0 );
-    //        camera.rotation.set( 0, 0, 0 );
-    //    
-    //
-    //    
-    //    
-    //        ////////////////////////////////////////////////////////////
-    //        // setup arToolkitSource
-    //        ////////////////////////////////////////////////////////////
-    //    
-    //        arToolkitSource = new THREEx.ArToolkitSource({
-    //            sourceType : 'webcam',
-    //        });
-    //    
-    //        function onResize()
-    //        {
-    //            console.log('onResize');
-    //            arToolkitSource.onResize()	
-    //            arToolkitSource.copySizeTo(renderer.domElement)	
-    //            if ( arToolkitContext.arController !== null )
-    //            {
-    //                arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
-    //            }	
-    //        }
-    //    
-    //        arToolkitSource.init(function onReady(){
-    //            onResize()
-    //        });
-    //        
-    //        // handle resize event
-    //        window.addEventListener('resize', function(){
-    //            onResize()
-    //        });
-    //        
-    //        ////////////////////////////////////////////////////////////
-    //        // setup arToolkitContext
-    //        ////////////////////////////////////////////////////////////	
-    //    
-    //        // create atToolkitContext
-    //        arToolkitContext = new THREEx.ArToolkitContext({
-    //            cameraParametersUrl: '../arjs/data/camera_para.dat',
-    //            detectionMode: 'mono'
-    //        });
-    //        
-    //        // copy projection matrix to camera when initialization complete
-    //        arToolkitContext.init( function onCompleted(){
-    //            camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
-    //        });
-    //        
-    //        ////////////////////////////////////////////////////////////
-    //        // setup markerRoots
-    //        ////////////////////////////////////////////////////////////
-    //        
-    //        
-    //        // build markerControls
-    //        markerRoot = new THREE.Object3D();
-    //        scene.add(markerRoot);
-    //        let markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
-    //            type: 'pattern', patternUrl: "../arjs/data/hiro.patt",
-    //        })
-    //    };
-    //    
-    //    /**********************
-    //        DRAW/ANIMATION LOOP
-    //     ********************/
-    //    function draw() 
-    //    {
-    //        
-    //        if ( arToolkitSource.ready !== false ){
-    //            console.log('ready');
-    //            arToolkitContext.update( arToolkitSource.domElement );
-    //        }
-    //        //console.log(render);
-    //        new FactoryObj(scene, render);
-    //    };
-    //    
-    //    
-    //    setup();
-    //    draw();
-    //
-    //  
-    //})();
+    (function(){
+        var screen    = Utils.screen(); 
+        var renderer  = null;
+        var camera    = null; 
+        var scene     = null;
+        //to        = { px: 0, py: 0, pz: 2 };
+        try {
+            renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } ); 
+            camera = new THREE.Camera();
+            scene    = new THREE.Scene();
+        }
+        catch( e ) {
+            alert( "THREE.JS Error: " + e.toString() ); 
+            return; 
+        }
+        
+        (function() {
+          renderer.setPixelRatio( window.devicePixelRatio );
+          renderer.setClearColor( 0x000000, 0 );
+          renderer.sortObjects = true;
+          renderer.setSize( 640, 480 );
+          renderer.domElement.style["display"]  = "block";
+          renderer.domElement.style["position"] = "fixed";
+          //renderer.domElement.style["position"] = "absolute";
+          renderer.domElement.style["width"]    = "100%";
+          renderer.domElement.style["height"]   = "100%";
+          renderer.domElement.style["z-index"]  = "-1";
+          //
+          renderer.domElement.style["top"] = '0px';
+          renderer.domElement.style["left"] = '0px';
+          
+          document.body.appendChild( renderer.domElement );
+          //renderer.render(scene, camera);
+        })();
+    
+    
+        function setup() {
+        
+            camera.position.set( 0, 0, 0 );
+            camera.rotation.set( 0, 0, 0 );
+        
+    
+        
+        
+            ////////////////////////////////////////////////////////////
+            // setup arToolkitSource
+            ////////////////////////////////////////////////////////////
+        
+            arToolkitSource = new THREEx.ArToolkitSource({
+                sourceType : 'webcam',
+            });
+        
+            function onResize()
+            {
+                console.log('onResize');
+                arToolkitSource.onResize()	
+                arToolkitSource.copySizeTo(renderer.domElement)	
+                if ( arToolkitContext.arController !== null )
+                {
+                    arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
+                }	
+            }
+        
+            arToolkitSource.init(function onReady(){
+                onResize()
+            });
+            
+            // handle resize event
+            window.addEventListener('resize', function(){
+                onResize()
+            });
+            
+            ////////////////////////////////////////////////////////////
+            // setup arToolkitContext
+            ////////////////////////////////////////////////////////////	
+        
+            // create atToolkitContext
+            arToolkitContext = new THREEx.ArToolkitContext({
+                cameraParametersUrl: '../arjs/data/camera_para.dat',
+                detectionMode: 'mono'
+            });
+            
+            // copy projection matrix to camera when initialization complete
+            arToolkitContext.init( function onCompleted(){
+                camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+            });
+            
+            ////////////////////////////////////////////////////////////
+            // setup markerRoots
+            ////////////////////////////////////////////////////////////
+            
+            
+            // build markerControls
+            markerRoot = new THREE.Object3D();
+            scene.add(markerRoot);
+            let markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+                type: 'pattern', patternUrl: "../arjs/data/hiro.patt",
+            })
+        };
+        
+        /**********************
+            DRAW/ANIMATION LOOP
+         ********************/
+        function draw() 
+        {
+            
+            requestAnimationFrame(draw);
+            
+            if ( arToolkitSource.ready !== false ){
+                //console.log('ready');
+                arToolkitContext.update( arToolkitSource.domElement );
+            }
+            //console.log(factoryObj._render);
+            //factoryObj._render();
+            if (!factoryObj) {
+              factoryObj = new FactoryObj(markerRoot, 11111);
+            }else{
+              //console.log(scene);
+              //console.log(factoryObj._scene);
+              //console.log(factoryObj._render);
+              //factoryObj._render();
+              renderer.render(scene, camera);
+            };
+            
+        };
+        
+        
+        setup();
+        //let factoryObj = new FactoryObj(scene, render);
+        let factoryObj;
+        draw();
+    
+      
+    })();
 
 </script>
 

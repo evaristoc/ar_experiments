@@ -79,48 +79,150 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
       })();
 
     /**********************
-        TEST: WHITE CUBE
+        FACTORY OBJECT
      ********************/
     
-    /*=========== object creation ===========*/
+    /* test */
+    (function(){
+      var FactoryObj = function(markerRoot, render){
+         this._subScene = markerRoot;
+         this._render = render;
+         this._x = 1;
+         this._y = 1;
+         this._z = 1;
+         this.launch();
+        };
+      
+      FactoryObj.prototype = {
+        constructor: FactoryObj,
+        material: function(){
+            return new THREE.MeshBasicMaterial();
+          },
+        geometry: function(){
+            return new THREE.BoxGeometry(1,1,1);
+          },
+        launch: function(){
+            let z = this;
+            let mat = z.material();
+            let geo = z.geometry();
+            let mesh = new THREE.Mesh(geo, mat);
+            mesh.position.x = z._x;
+            mesh.position.y = z._y;
+            mesh.position.z = z._z;
+            markerRoot.add(mesh);
+            console.log('scene inside object', markerRoot);
+            //z._render();
+        }
+      };
+      
+      window.FactoryObj = FactoryObj;
+      
+    })();
+    
     //(function(){
-    //  var FactoryObj = function(markerRoot, render){
-    //     this._subScene = markerRoot;
+    // //constructor parameters
+    // 
+    //  var FactoryObj = function(scene, render){
+    //     this._scene = scene;
     //     this._render = render;
-    //     this._x = 1;
-    //     this._y = 1;
-    //     this._z = 1;
+    //     this._textureLoader = new THREE.TextureLoader();
+    //     this._textureLoad = this._textureLoader.load('./assets/PUSHILIN_factory.png');
+    //     this._mtlLoader = new THREE.MTLLoader();
+    //     this._objLoader = new THREE.OBJLoader();
+    //     this._mtlLoader.setPath( 'assets/' );
+    //     this._objLoader.setPath( 'assets/' );
+    //     this._url = 'PUSHILIN_factory';
+    //     this.to = {
+    //       x: 0.0,
+    //       y: -.5,
+    //       z: -1.0
+    //       };
+    //
     //     this.launch();
-    //    };
+    //     //var e = this.launch()      
+    //     //let f = (function(){
+    //     //  console.log(111);
+    //     //})()
+    //       
+    //     //launch;
+    //
+    //   }      
     //  
+    //  //console.log(FactoryObj.launch);
+    //  
+    //  //constructor prototyping: instantiation (constructor) and methods
     //  FactoryObj.prototype = {
-    //    constructor: FactoryObj,
-    //    material: function(){
-    //        return new THREE.MeshBasicMaterial();
-    //      },
-    //    geometry: function(){
-    //        return new THREE.BoxGeometry(1,1,1);
-    //      },
-    //    launch: function(){
-    //        let z = this;
-    //        let mat = z.material();
-    //        let geo = z.geometry();
-    //        let mesh = new THREE.Mesh(geo, mat);
-    //        mesh.position.x = z._x;
-    //        mesh.position.y = z._y;
-    //        mesh.position.z = z._z;
-    //        //markerRoot.add(mesh);
-    //        this._subScene.add(mesh);
-    //        console.log('scene inside object', markerRoot);
-    //        //z._render();
-    //    }
+    //    constructor : FactoryObj,
+    //    
+    //    launch : function(){
+    //                //console.log(this);
+    //                //console.log(new FactoryObj);
+    //                //FactoryObj.prototype.mtlLoading;
+    //                this.mtlLoading();
+    //              },
+    //    //mtlLoading : function(){
+    //    //                  console.log(typeof this._mtlLoader);
+    //    //                  //return this._mtlLoader(this._url+'.mtl', function(materials){
+    //    //                  //                              materials.preload();
+    //    //                  //                              console.log(this);
+    //    //                  //                              //this.objLoader.setMaterials( materials );
+    //    //                  //                              //this.objLoading;
+    //    //                  //        })
+    //    //              },
+    //    mtlLoading : function(){ //<------------------------------------ `this` OBJECT WONT BE CORRECTLY POINTED IF THIS IS NOT A FUNCTION
+    //                      //=*
+    //                      //console.log(typeof this._mtlLoader.load);//<-- HERE STILL WORK BUT...
+    //                      //*=
+    //                      let z = this; //<----------------------------- RELEVANT: OTHER USES OF `this` BECOME `undefined`
+    //                      
+    //                      //=*
+    //                      //HOW TO IMPROVE THE LINE ABOVE?
+    //                      //1. IT COULD THOUGHT BY USING call/apply/bind (nicer)
+    //                      //[code]this._mtlLoader.load.call(this, this._url+'.mtl', callback)
+    //                      //
+    //                      //   HOWEVER, I MIGHT NEED TO KNOW THE ACTUAL PROPERTY NAMES PASSED TO `xxxxx.load`? EG. https://www.w3schools.com/js/js_function_call.asp
+    //                      //   IT DOESN'T READ THEM AS SIMPLE ARGUMENTS
+    //                      //
+    //                      //2. IT CAN BE DONE BY USING ES6 SYNTAX
+    //                      //[code]()=>{}
+    //                      //
+    //                      //KEEPING CURRENT FORMAT...
+    //                      //*=
+    //                      z._mtlLoader.load(z._url+'.mtl', function(materials){ // this function doesn't require to return
+    //                                                    //materials.preload();
+    //                                                    //console.log(materials, z, z.objLoading);
+    //                                                    z._objLoader.setMaterials( materials );
+    //                                                    z.objLoading();
+    //                              })                          
+    //                  },
+    //    objLoading : function(){
+    //                    let z = this;
+    //                    console.log(this); //<---- USEFUL...
+    //                    z._objLoader.load(z._url+'.obj', function(obj) {
+    //                        obj.position.x = z.to.x;
+    //                        obj.position.y = z.to.y;
+    //                        obj.position.z = z.to.z;
+    //                        //https://stackoverflow.com/questions/39850083/three-js-objloader-texture
+    //                        obj.traverse(function (child) {   // aka setTexture
+    //                            if (child instanceof THREE.Mesh) {
+    //                                child.material.map = z._textureLoad;
+    //                            }
+    //                        });                         
+    //                        //console.log('who', this, z); //<---- USEFUL...
+    //                        z._scene.add(obj);
+    //                        z._render();
+    //                      })
+    //                  }
+    //    
     //  };
     //  
-    //  window.FactoryObj = FactoryObj;
+    //  window.FactoryObj = FactoryObj;  
     //  
     //})();
     
-    /*=========== basic scene ============*/
+    //var a = new FactoryObj(console.log,console.log);
+    //console.log(a);
+    
     //var width = window.innerWidth;
     //var height = window.innerHeight;
     //var color = new THREE.Color("#f9f4ee");
@@ -160,116 +262,7 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
     //};
     //
     //window.addEventListener( 'resize', onWindowResize, false );
-
-    /**********************
-        FACTORY OBJECT
-     ********************/
     
-    (function(){
-     //constructor parameters
-     
-      var FactoryObj = function(markerRoot, render){
-         this._subScene = markerRoot;
-         this._render = render;
-         this._textureLoader = new THREE.TextureLoader();
-         this._textureLoad = this._textureLoader.load('./assets/PUSHILIN_factory.png');
-         this._mtlLoader = new THREE.MTLLoader();
-         this._objLoader = new THREE.OBJLoader();
-         this._mtlLoader.setPath( 'assets/' );
-         this._objLoader.setPath( 'assets/' );
-         this._url = 'PUSHILIN_factory';
-         this.to = {
-           x: 0.0,
-           y: -.5,
-           z: -1.0
-           };
-    
-         this.launch();
-         //var e = this.launch()      
-         //let f = (function(){
-         //  console.log(111);
-         //})()
-           
-         //launch;
-    
-       }      
-      
-      //console.log(FactoryObj.launch);
-      
-      //constructor prototyping: instantiation (constructor) and methods
-      FactoryObj.prototype = {
-        constructor : FactoryObj,
-        
-        launch : function(){
-                    //console.log(this);
-                    //console.log(new FactoryObj);
-                    //FactoryObj.prototype.mtlLoading;
-                    this.mtlLoading();
-                  },
-        //mtlLoading : function(){
-        //                  console.log(typeof this._mtlLoader);
-        //                  //return this._mtlLoader(this._url+'.mtl', function(materials){
-        //                  //                              materials.preload();
-        //                  //                              console.log(this);
-        //                  //                              //this.objLoader.setMaterials( materials );
-        //                  //                              //this.objLoading;
-        //                  //        })
-        //              },
-        mtlLoading : function(){ //<------------------------------------ `this` OBJECT WONT BE CORRECTLY POINTED IF THIS IS NOT A FUNCTION
-                          //=*
-                          //console.log(typeof this._mtlLoader.load);//<-- HERE STILL WORK BUT...
-                          //*=
-                          let z = this; //<----------------------------- RELEVANT: OTHER USES OF `this` BECOME `undefined`
-                          
-                          //=*
-                          //HOW TO IMPROVE THE LINE ABOVE?
-                          //1. IT COULD THOUGHT BY USING call/apply/bind (nicer)
-                          //[code]this._mtlLoader.load.call(this, this._url+'.mtl', callback)
-                          //
-                          //   HOWEVER, I MIGHT NEED TO KNOW THE ACTUAL PROPERTY NAMES PASSED TO `xxxxx.load`? EG. https://www.w3schools.com/js/js_function_call.asp
-                          //   IT DOESN'T READ THEM AS SIMPLE ARGUMENTS
-                          //
-                          //2. IT CAN BE DONE BY USING ES6 SYNTAX
-                          //[code]()=>{}
-                          //
-                          //KEEPING CURRENT FORMAT...
-                          //*=
-                          z._mtlLoader.load(z._url+'.mtl', function(materials){ // this function doesn't require to return
-                                                        //materials.preload();
-                                                        //console.log(materials, z, z.objLoading);
-                                                        z._objLoader.setMaterials( materials );
-                                                        z.objLoading();
-                                  })                          
-                      },
-        objLoading : function(){
-                        let z = this;
-                        console.log(this); //<---- USEFUL...
-                        z._objLoader.load(z._url+'.obj', function(obj) {
-                            obj.position.x = z.to.x;
-                            obj.position.y = z.to.y;
-                            obj.position.z = z.to.z;
-                            //https://stackoverflow.com/questions/39850083/three-js-objloader-texture
-                            obj.traverse(function (child) {   // aka setTexture
-                                if (child instanceof THREE.Mesh) {
-                                    child.material.map = z._textureLoad;
-                                }
-                            });                         
-                            //console.log('who', this, z); //<---- USEFUL...
-                            z._subScene.add(obj);
-                            //z._render();
-                          })
-                      }
-        
-      };
-      
-      window.FactoryObj = FactoryObj;  
-      
-    })();
-    
-    //var a = new FactoryObj(console.log,console.log);
-    //console.log(a);
-    
-   
     
     /**********************
       PSEUDO-PARTICLES OBJECTS

@@ -168,9 +168,8 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
     (function(){
      //constructor parameters
      
-      var FactoryObj = function(markerRoot, render){
+      var FactoryObj = function(markerRoot){
          this._subScene = markerRoot;
-         this._render = render;
          this._textureLoader = new THREE.TextureLoader();
          this._textureLoad = this._textureLoader.load('./assets/PUSHILIN_factory.png');
          this._mtlLoader = new THREE.MTLLoader();
@@ -294,7 +293,12 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
             return; 
         }
         
-        (function() {
+        var ambientLight = new THREE.AmbientLight(0xffffff);
+        ambientLight.position.set(0, 5, 3);
+        scene.add(ambientLight);
+        
+        
+        function render() {
           renderer.setPixelRatio( window.devicePixelRatio );
           renderer.setClearColor( 0x000000, 0 );
           renderer.sortObjects = true;
@@ -311,7 +315,7 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
           
           document.body.appendChild( renderer.domElement );
           //renderer.render(scene, camera);
-        })();
+        };
     
     
         function setup() {
@@ -393,20 +397,15 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
             //console.log(factoryObj._render);
             //factoryObj._render();
             if (!factoryObj) {
-              factoryObj = new FactoryObj(markerRoot, 11111);
+              factoryObj = new FactoryObj(markerRoot);
             }else{
-              //console.log(scene);
-              //console.log(factoryObj._scene);
-              //console.log(factoryObj._render);
-              //factoryObj._render();
-              renderer.render(scene, camera);
+              renderer.render(scene, camera); //<--- PUBLIC `scene` AND `camera`
             };
             
         };
         
-        
+        render();
         setup();
-        //let factoryObj = new FactoryObj(scene, render);
         let factoryObj;
         draw();
     

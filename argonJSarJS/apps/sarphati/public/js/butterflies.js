@@ -203,7 +203,7 @@ Butterfly.prototype.butinit = function(){
   var geometryWL = new THREE.PlaneGeometry(10, 15);
   var materialWL = new THREE.MeshBasicMaterial({
     transparent:true,
-    map: new THREE.TextureLoader().load('tempassets/b1w.png'),
+    map: new THREE.TextureLoader().load('public/assets/b1w.png'),
     side: THREE.DoubleSide,
     depthTest: true
   });
@@ -216,16 +216,14 @@ Butterfly.prototype.butinit = function(){
   var geometryWR = new THREE.PlaneGeometry(10, 15);
   var materialWR = new THREE.MeshBasicMaterial({
     transparent:true,
-    map: new THREE.TextureLoader().load('tempassets/b1w.png'),
+    map: new THREE.TextureLoader().load('public/assets/b1w.png'),
     side: THREE.DoubleSide,
     depthTest: true
   });
   
-  //var meshWR = new THREE.Mesh( geometryW,materialW );
   var meshWR = new THREE.Mesh( geometryWR, materialWR )
   meshWR.material.color.setHex(0xff0000);
   var rwing = new THREE.Object3D();
-  //meshWL.rotation.y = Math.PI;
   meshWR.rotation.y = Math.PI;
   meshWR.position.x = 5;
   rwing.add(meshWR);
@@ -233,6 +231,35 @@ Butterfly.prototype.butinit = function(){
   this.butterF.add(rwing);
   
 }
+
+function Smoke(){
+  this.smoke = new THREE.Object3D();
+  this.init();
+}
+
+Smoke.prototype.init = function(){
+    
+      var z = this;
+      var textureLoader = new THREE.TextureLoader();
+      
+      textureLoader.load('public/assets/clouds.png', function (texture) {
+        var smokeMaterial = new THREE.MeshLambertMaterial({
+          //color: 0xffffff,
+          color:'red',
+          map: texture,
+          transparent: true
+        });
+        smokeMaterial.map.minFilter = THREE.LinearFilter;
+        var smokeGeometry = new THREE.PlaneBufferGeometry(10, 10);
+        //var smokeGeometry = new THREE.BoxGeometry(1,1,1);
+        //var smokeMaterial = new THREE.MeshBasicMaterial();
+        var smokeMesh = new THREE.Mesh(smokeGeometry, smokeMaterial);
+        //smokeMesh.position.set(0,0,0);
+        //smokeMesh.rotation.x = Math.PI/2;
+        z.smoke.add(smokeMesh);
+      });
+}
+
 
 var objects = [];
 
@@ -249,19 +276,6 @@ function init() {
     element.style.position = 'relative';
     element.style.transformStyle = 'preserve-3d';
 
-    // if it's Argon make it bright red
-    //if (i==17) element.style.backgroundColor = 'rgba(127,0,0,1)';
-
-    //var number = document.createElement( 'div' );
-    //number.className = 'number';
-    //number.textContent = i + 1;
-    //element.appendChild( number );
-
-    //var symbol = document.createElement( 'div' );
-    //symbol.className = 'symbol';
-    //symbol.textContent = item[ 0 ];
-    //element.appendChild( symbol );
-
     var details = document.createElement( 'div' );
     details.className = 'details';
     details.innerHTML = item[ 1 ] + '<br>' + item[ 2 ];
@@ -277,29 +291,27 @@ function init() {
     element.appendChild( face );
 
     var object = new Butterfly().butterF;
-    //var object = new THREE.CSS3DObject( element );
-    //console.log( object );
     var geometryW = new THREE.BoxGeometry(10, 10, 10);
     var materialW = new THREE.MeshBasicMaterial({color:'black'});
-    //var object = new THREE.Mesh(geometryW, materialW);
-    //object.scale.set(100, 100, 100);
-    
-    //var object = new Butterfly().butterF;
     
     object.position.x = Math.random() * 4000 - 2000;
     object.position.y = Math.random() * 4000 - 2000;
     object.position.z = Math.random() * 4000 - 2000;
-    //object.matrixAutoUpdate = false;
     objects.push( object );
-    //console.log(typeof object)
 
     // Add each object our root node
     periodicTable.add(object);
+    
+
   }
-  
-  //console.log(periodicTable);  
-  
-  // table
+
+    var smokeMesh = new Smoke().smoke;
+    smokeMesh.position.x = 2;
+    smokeMesh.position.y = 2;
+    smokeMesh.position.z = -20;
+    stage.add(smokeMesh);
+    //stage.add(smokeMesh);  
+    // table
 
   for ( var i = 0; i < objects.length; i ++ ) {
 
@@ -320,10 +332,6 @@ function init() {
   var vector = stage.position; //World coordinates to be looked at
 
   for ( var i = 0; i < objects.length; i ++ ) {
-
-    //var phi = Math.acos( -1 + ( 2 * i ) / objects.length ); //angle: Math.acos == arccosine; -1 + 2*(numItems)/totalItems is a range between -1 and 1
-    
-    //var negORpos = Math.random() >= .5? 1:-1;
     var phi = Math.acos(Math.random()*(Math.random() >= .5? 1:-1))
     var theta = Math.sqrt( objects.length * Math.PI ) * phi; //(Math.sqr of totalItems*PI) angle
     var target = new THREE.Object3D();
@@ -341,31 +349,12 @@ function init() {
   spherePos = function(){
         var vector = stage.position; //World coordinates to be looked at
         var phi, theta;
-        //function coords(coord){
-        //    var x = 800 * Math.cos( theta ) * Math.sin( phi );
-        //    var y = 800 * Math.sin( theta ) * Math.sin( phi );
-        //    var z = 800 * Math.cos( phi );
-        //    if (coord == 'x') {
-        //        return x
-        //    }else if (coord == 'y') {
-        //        return y
-        //    }else if (coord == 'z') {
-        //        return z
-        //    }
-        //}
     
         for ( var i = 0; i < objects.length; i ++ ) {
-      
-          //var phi = Math.acos( -1 + ( 2 * i ) / objects.length ); //angle: Math.acos == arccosine; -1 + 2*(numItems)/totalItems is a range between -1 and 1
-          
-          //var negORpos = Math.random() >= .5? 1:-1;
+
           phi = Math.acos(Math.random()*(Math.random() >= .5? 1:-1))
           theta = Math.sqrt( objects.length * Math.PI ) * phi; //(Math.sqr of totalItems*PI) angle
           var target = new THREE.Object3D();
-      
-          //target.position.x = coords('x')
-          //target.position.y = coords('y')
-          //target.position.z = coords('z')
  
            target.position.x = 800 * Math.cos( theta ) * Math.sin( phi );
            target.position.y = 800 * Math.sin( theta ) * Math.sin( phi );
@@ -377,81 +366,14 @@ function init() {
 
         }
         
-        //callback(11111);
-    //console.log(targets.sphere[0].position)
-    console.log(1111);
-    //return targets
   }
   
-  //window.spherePos = spherePos;
-  
-  // helix
-
-  var vector = new THREE.Vector3(0, 0, 0);
-
-  for ( var i = 0; i < objects.length; i ++ ) {
-
-    var phi = i * 0.175 + Math.PI;
-
-    target = new THREE.Object3D();
-
-    target.position.x = 900 * Math.sin( -phi );
-    target.position.y = - ( i * 8 ) + 450;
-    target.position.z = 900 * Math.cos( -phi );
-
-    vector.x = -target.position.x * 2;
-    vector.y = -target.position.y;
-    vector.z = -target.position.z * 2;
-
-    target.lookAt( vector );
-
-    targets.helix.push( target );
-
-  }
-
-  // grid
-  for ( var i = 0; i < objects.length; i ++ ) {
-
-    target = new THREE.Object3D();
-
-    target.position.x = ( ( i % 5 ) * 400 ) - 800;
-    target.position.y = ( - ( Math.floor( i / 5 ) % 5 ) * 400 ) + 800;
-    target.position.z = ( Math.floor( i / 25 ) ) * 1000 - 2500;
-
-    targets.grid.push( target );
-
-  }
-
 
   // move the menu to the Argon HUD.  We don't duplicate it because we only
   // use it in mono mode
   var hudContainer = document.getElementById( 'hud' );
   hud.hudElements[0].appendChild(hudContainer);
-
-  // Add button event listeners
-  var button = document.getElementById( 'table' );
-  button.addEventListener( 'click', function ( event ) {
-    //transform( targets.table, 2000 );
-    transform( targets.sphere, 1000 ); 
-  }, false );
-
-  var button = document.getElementById( 'sphere' );
-  button.addEventListener( 'click', function ( event ) {
-    transform( targets.sphere, 1000 );
-    //spherePos();
-    //move(targets.sphere, 2000);
-  }, false );
   
-  //var button = document.getElementById( 'helix' );
-  //button.addEventListener( 'click', function ( event ) {
-  //  transform( targets.helix, 2000 );
-  //}, false );
-  //
-  //var button = document.getElementById( 'grid' );
-  //button.addEventListener( 'click', function ( event ) {
-  //  transform( targets.grid, 2000 );
-  //}, false );
-
   transform( targets.sphere, 1000 );
 
   // do not need to respond to windowResize events.  Argon handles this for us
@@ -470,24 +392,12 @@ function transform( targets, duration ) {
 
         var object = objects[ i ];
         var target = targets[ i ];
-        //console.log(1111);
-
         var pos = new TWEEN.Tween( object.position )
           .to( { x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration )
-          //.repeat(10)
-          //.easing( TWEEN.Easing.Exponential.Out )
-          //.yoyo(true)
-          //.call(()=>{console.log(1111)})
-          //.onUpdate(()=>{spherePos()})
           .start();
-        
-        
-        //window.posTWEEN = pos;
-        //tweenfunc = pos;
         
         var rot = new TWEEN.Tween(object.rotation)
             .to({ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration)
-            //.easing( TWEEN.Easing.Exponential.Out )
             .start();
         
         var c = pos.chain(rot)
@@ -498,7 +408,6 @@ function transform( targets, duration ) {
 
       new TWEEN.Tween( this )
         .to( {}, duration * 2 )
-//					.onUpdate( render )
         .start();
   
 }
@@ -528,18 +437,10 @@ app.updateEvent.on(function () {
     
     //// update the moving DIVs, if need be
     if (typeof spherePos === 'function') {
-    //    console.log(typeof spherePos);
-    //    spherePos(TWEEN.update);
-        //spherePos();
     }
-    //
-    //  
-    ////spherePos( TWEEN.update );
-    //
-    //console.log(typeof tweenfunc)
+    
     counter += 1
     if (typeof tweenfunc === 'object' && counter > 45) {
-    //    tweenfunc.onComplete(()=>{spherePos(); transform(targets.sphere, 1000)});
     spherePos();
     transform(targets.sphere, 1000);
     counter = 0;
@@ -547,8 +448,6 @@ app.updateEvent.on(function () {
     
     
     TWEEN.update();
-    
-    //setInterval(()=>{spherePos();TWEEN.update()}, 1000);
     
 });
 

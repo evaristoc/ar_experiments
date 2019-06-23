@@ -244,13 +244,13 @@ Smoke.prototype.init = function(){
       
       textureLoader.load('public/assets/clouds.png', function (texture) {
         var smokeMaterial = new THREE.MeshLambertMaterial({
-          //color: 0xffffff,
-          color:'red',
+          color: 0x000000,
+          //color:'red',
           map: texture,
-          transparent: true
+          //transparent: true
         });
         smokeMaterial.map.minFilter = THREE.LinearFilter;
-        var smokeGeometry = new THREE.PlaneBufferGeometry(10, 10);
+        var smokeGeometry = new THREE.PlaneBufferGeometry(20, 20);
         //var smokeGeometry = new THREE.BoxGeometry(1,1,1);
         //var smokeMaterial = new THREE.MeshBasicMaterial();
         var smokeMesh = new THREE.Mesh(smokeGeometry, smokeMaterial);
@@ -262,6 +262,7 @@ Smoke.prototype.init = function(){
 
 
 var objects = [];
+var s;
 
 function init() {
   // some of the exact locations of content below have been changed slightly from the original
@@ -310,6 +311,7 @@ function init() {
     smokeMesh.position.y = 2;
     smokeMesh.position.z = -20;
     stage.add(smokeMesh);
+    s = smokeMesh;
     //stage.add(smokeMesh);  
     // table
 
@@ -384,31 +386,30 @@ function init() {
 var tweenfunc; 
 
 function transform( targets, duration ) {
-  //console.log(TWEEN.Tween);
-  TWEEN.removeAll();
+    //console.log(TWEEN.Tween);
+    TWEEN.removeAll();
     
+    for ( var i = 0; i < objects.length; i ++ ) {
 
-      for ( var i = 0; i < objects.length; i ++ ) {
-
-        var object = objects[ i ];
-        var target = targets[ i ];
-        var pos = new TWEEN.Tween( object.position )
-          .to( { x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration )
-          .start();
-        
-        var rot = new TWEEN.Tween(object.rotation)
-            .to({ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration)
-            .start();
-        
-        var c = pos.chain(rot)
-        
-        tweenfunc = c;
-
-      }
-
-      new TWEEN.Tween( this )
-        .to( {}, duration * 2 )
+      var object = objects[ i ];
+      var target = targets[ i ];
+      var pos = new TWEEN.Tween( object.position )
+        .to( { x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration )
         .start();
+      
+      var rot = new TWEEN.Tween(object.rotation)
+          .to({ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration)
+          .start();
+      
+      var c = pos.chain(rot)
+      
+      tweenfunc = c;
+
+    }
+
+    new TWEEN.Tween( this )
+      .to( {}, duration * 2 )
+      .start();
   
 }
 
@@ -446,7 +447,7 @@ app.updateEvent.on(function () {
     counter = 0;
     }
     
-    
+    s.rotation.z += .01;
     TWEEN.update();
     
 });

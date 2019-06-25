@@ -110,6 +110,34 @@ Butterfly.prototype.butinit = function(){
   
 }
 
+function Smoke(){
+  this.smoke = new THREE.Object3D();
+  this.init();
+}
+
+Smoke.prototype.init = function(){
+    
+      var z = this;
+      var textureLoader = new THREE.TextureLoader();
+      
+      textureLoader.load('public/assets/clouds.png', function (texture) {
+        var smokeMaterial = new THREE.MeshLambertMaterial({
+          color: 0x000000,
+          //color:'red',
+          map: texture,
+          //transparent: true
+        });
+        smokeMaterial.map.minFilter = THREE.LinearFilter;
+        var smokeGeometry = new THREE.PlaneBufferGeometry(20, 20);
+        //var smokeGeometry = new THREE.BoxGeometry(1,1,1);
+        //var smokeMaterial = new THREE.MeshBasicMaterial();
+        var smokeMesh = new THREE.Mesh(smokeGeometry, smokeMaterial);
+        //smokeMesh.position.set(0,0,0);
+        //smokeMesh.rotation.x = Math.PI/2;
+        z.smoke.add(smokeMesh);
+      });
+}
+
 
 var objects = [];
 var s;
@@ -135,6 +163,14 @@ function init() {
 
   }
 
+    var smokeMesh = new Smoke().smoke;
+    smokeMesh.position.x = 2;
+    smokeMesh.position.y = 2;
+    smokeMesh.position.z = -20;
+    stage.add(smokeMesh);
+    s = smokeMesh;
+    //stage.add(smokeMesh);  
+    // table
 
   for ( var i = 0; i < objects.length; i ++ ) {
 
@@ -230,6 +266,7 @@ function transform( targets, duration ) {
       .to( {}, duration * 2 )
       .start();
   
+    //s.rotation.z += .01;
 }
 
 var counter = 0;
@@ -266,7 +303,7 @@ app.updateEvent.on(function () {
     counter = 0;
     }
     
-    //s.rotation.z += .01;
+    s.rotation.z += .01;
     TWEEN.update();
     
 });

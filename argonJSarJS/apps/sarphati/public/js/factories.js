@@ -1,38 +1,3 @@
-<!DOCTYPE html>
-<!--- references:
-https://threejsfundamentals.org/threejs/lessons/threejs-rendering-on-demand.html
-https://threejsfundamentals.org/threejs/lessons/threejs-debugging-javascript.html
-https://observablehq.com/@mbostock/hello-three-js-orbit-controls
-https://dustinpfister.github.io/2018/04/13/threejs-orbit-controls/
-https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
---->
-
-<html lang="en" >
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <title>THREE.js + Poly: Smoking Chimney</title>
-   
-</head>
-
-<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
-<!--<canvas id="c" tabindex="1"></canvas>-->
-  
-    <!--<script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/three.min.js"></script>-->
-    <script src='../../arjs/js/three.js'></script>
-    <script src="https://threejs.org/examples/js/loaders/OBJLoader.js"></script>
-    <script src="https://threejs.org/examples/js/loaders/MTLLoader.js"></script>
-    <!-- include jsartookit -->
-	<script src="../../arjs/jsartoolkit5/artoolkit.min.js"></script>
-	<script src="../arjs/jsartoolkit5/artoolkit.api.js"></script>
-	<!-- include threex.artoolkit -->
-	<script src="../../arjs/threex/threex-artoolkitsource.js"></script>
-	<script src="../../arjs/threex/threex-artoolkitcontext.js"></script>
-	<script src="../arjs/threex/threex-arbasecontrols.js"></script>
-	<script src="../../arjs/threex/threex-armarkercontrols.js"></script>
-
-<script>
 'use strict';
 
         /** cloned from https://codepen.io/rainner/details/LREdXd **/
@@ -171,11 +136,11 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
       var FactoryObj = function(markerRoot){
          this._subScene = markerRoot;
          this._textureLoader = new THREE.TextureLoader();
-         this._textureLoad = this._textureLoader.load('./assets/PUSHILIN_factory.png');
+         this._textureLoad = this._textureLoader.load('./public/assets/PUSHILIN_factory.png');
          this._mtlLoader = new THREE.MTLLoader();
          this._objLoader = new THREE.OBJLoader();
-         this._mtlLoader.setPath( 'assets/' );
-         this._objLoader.setPath( 'assets/' );
+         this._mtlLoader.setPath( 'public/assets/' );
+         this._objLoader.setPath( 'public/assets/' );
          this._url = 'PUSHILIN_factory';
          this.to = {
            x: 0.0,
@@ -443,7 +408,7 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
         
             // create atToolkitContext
             arToolkitContext = new THREEx.ArToolkitContext({
-                cameraParametersUrl: '../arjs/data/camera_para.dat',
+                cameraParametersUrl: '../../arjs/data/camera_para.dat',
                 detectionMode: 'mono'
             });
             
@@ -461,7 +426,7 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
             markerRoot = new THREE.Object3D();
             scene.add(markerRoot);
             let markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
-                type: 'pattern', patternUrl: "../arjs/data/hiro.patt",
+                type: 'pattern', patternUrl: "../../arjs/data/hiro.patt",
             })
         };
         
@@ -521,12 +486,3 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
     
       
     })();
-
-</script>
-
-
-
-
-</body>
-
-</html>

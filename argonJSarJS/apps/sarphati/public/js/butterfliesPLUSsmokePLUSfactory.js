@@ -110,6 +110,34 @@ Butterfly.prototype.butinit = function(){
   
 }
 
+function Smoke(){
+  this.smoke = new THREE.Object3D();
+  this.init();
+}
+
+Smoke.prototype.init = function(){
+    
+      var z = this;
+      var textureLoader = new THREE.TextureLoader();
+      
+      textureLoader.load('public/assets/clouds.png', function (texture) {
+        var smokeMaterial = new THREE.MeshLambertMaterial({
+          color: 0x000000,
+          //color:'red',
+          map: texture,
+          //transparent: true
+        });
+        smokeMaterial.map.minFilter = THREE.LinearFilter;
+        var smokeGeometry = new THREE.PlaneBufferGeometry(20, 20);
+        //var smokeGeometry = new THREE.BoxGeometry(1,1,1);
+        //var smokeMaterial = new THREE.MeshBasicMaterial();
+        var smokeMesh = new THREE.Mesh(smokeGeometry, smokeMaterial);
+        //smokeMesh.position.set(0,0,0);
+        //smokeMesh.rotation.x = Math.PI/2;
+        z.smoke.add(smokeMesh);
+      });
+}
+
 
 var objects = [];
 var s;
@@ -135,13 +163,23 @@ function init() {
 
   }
 
+    var smokeMesh = new Smoke().smoke;
+    smokeMesh.position.x = 2;
+    smokeMesh.position.y = 2;
+    smokeMesh.position.z = -20;
+    stage.add(smokeMesh);
+    s = smokeMesh;
+    //stage.add(smokeMesh);  
+    // table
 
   for ( var i = 0; i < objects.length; i ++ ) {
 
+    var item = tableContent[ i ];
+
     var target = new THREE.Object3D();
 
-    target.position.x = ( i * 140 ) - 1330;
-    target.position.y = - ( i * 180 ) + 990;
+    target.position.x = ( item[ 3 ] * 140 ) - 1330;
+    target.position.y = - ( item[ 4 ] * 180 ) + 990;
     target.position.z = - 1000;
 
     targets.table.push( target );
@@ -195,7 +233,7 @@ function init() {
   var hudContainer = document.getElementById( 'hud' );
   hud.hudElements[0].appendChild(hudContainer);
   
-  transform( targets.sphere, 1000 );
+  //transform( targets.sphere, 1000 );
 
   // do not need to respond to windowResize events.  Argon handles this for us
   //    window.addEventListener( 'resize', onWindowResize, false );
@@ -253,21 +291,14 @@ app.updateEvent.on(function () {
       butterfliesContainer.position.set(0, userStagePose.position.y, 0);
     }
     
-    //posTWEEN.onUpdate(()=>{spherePos();})
-    
-    //// update the moving DIVs, if need be
-    if (typeof spherePos === 'function') {
-    }
-    
-    counter += 1
-    if (typeof tweenfunc === 'object' && counter > 45) {
-    spherePos();
-    transform(targets.sphere, 1000);
-    counter = 0;
-    }
-    
-    //s.rotation.z += .01;
-    TWEEN.update();
+    //counter += 1
+    //if (typeof tweenfunc === 'object' && counter > 45) {
+    //spherePos();
+    //transform(targets.sphere, 1000);
+    //counter = 0;
+    //}
+    //
+    //TWEEN.update();
     
 });
 

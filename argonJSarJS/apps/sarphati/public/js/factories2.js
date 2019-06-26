@@ -421,6 +421,7 @@
             });
             
             // copy projection matrix to camera when initialization complete
+            // E: this means the camera is under total control of arToolkit: I can't use it for any other thing :(
             arToolkitContext.init( function onCompleted(){
                 camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
             });

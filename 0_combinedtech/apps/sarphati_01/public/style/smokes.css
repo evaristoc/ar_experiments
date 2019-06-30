@@ -1,0 +1,26 @@
+
+/*Downloaded from https://www.codeseek.co/marcobiedermann/threejs-smoke-particles-jympXQ */
+/* layout/base.css */
+
+body {
+  margin: 0;
+}
+
+/* modules/canvas.css */
+
+canvas {
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+#monitor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#monitor {
+  transform: scaleX(-1);
+}

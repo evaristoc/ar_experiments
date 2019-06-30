@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Hello, world!</title>
+	<!-- include three.js library -->
+	<script src='js/three.js'></script>
+	<!-- include jsartookit -->
+	<script src="jsartoolkit5/artoolkit.min.js"></script>
+	<script src="jsartoolkit5/artoolkit.api.js"></script>
+	<!-- include threex.artoolkit -->
+	<script src="threex/threex-artoolkitsource.js"></script>
+	<script src="threex/threex-artoolkitcontext.js"></script>
+	<script src="threex/threex-arbasecontrols.js"></script>
+	<script src="threex/threex-armarkercontrols.js"></script>
+</head>
+    <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+        <script>
+        /** cloned from https://codepen.io/rainner/details/LREdXd **/
+		/**
+            * Global utils 
+        */
+		
+		        /** cloned from https://codepen.io/rainner/details/LREdXd **/
+        
+        var arToolkitSource, arToolkitContext;
+        var markerRoot;
+
+        (function() {
+            
+            var _w = window,
+                _s = window.screen,
+                _b = document.body,
+                _d = document.documentElement;
+            
+            window.Utils = {
+            
+                // screen info 
+                screen: function() 
+                {
+                    var width  = Math.max( 0, _w.innerWidth || _d.clientWidth || _b.clientWidth || 0 );
+                    var height = Math.max( 0, _w.innerHeight || _d.clientHeight || _b.clientHeight || 0 );
+                    
+                    return {
+                        width   : width, 
+                        height  : height, 
+                        centerx : width / 2, 
+                        centery : height / 2, 
+                        ratio   : width / height, 
+                    };
+                }, 
+            }; 
+        })();
+
+        /**
+         * Firework object
+         */ 
+        (function() {
+            
+            // constructor 
+            var Firework = function( scene ) 
+            { //properties
+                this.scene    = scene; 
+                this.done     = false; 
+                this.dest     = []; 
+                this.colors   = []; 
+                this.geometry = null;
+                this.points   = null;
+                this.material = new THREE.PointsMaterial({
+                    size: .1,
+                    color: 0xffffff,
+                    //color: 'blue', 
+					opacity: 1,
+                    vertexColors: true,
+                    transparent: true,
+                    depthTest: true,
+                });
+                this.launch(); 
+            }; 
+            
+            // prototype (constructor assigned to itself)
+            Firework.prototype = {
+                constructor: Firework, 
+                
+                // reset 
+                reset: function()
+                {
+                    //this.scene.remove( this.points );
+                    markerRoot.remove( this.points );
+                    this.dest     = []; // `dest` for destination
+                    this.colors   = []; 
+                    this.geometry = null;
+                    this.points   = null;
+                }, 
+                
+                // launch
+                launch: function() 
+                {
+                    var x = THREE.Math.randFloat( -1, 1 ); //x, y and z are random numbers, but x relies on width of screen
+                    var y = THREE.Math.randFloat( .5, 1.0 );
+                    var z = THREE.Math.randFloat( -1., 1. ); 
+                    
+                    var from = new THREE.Vector3( x, -1, z ); //not visible, well below the screen
+                    var to   = new THREE.Vector3( x, y, z );    //will go in straight line from start to end (explosion)
+                    
+                    var color = new THREE.Color();
+                    color.setHSL( THREE.Math.randFloat( 0.1, 0.9 ), 1, 0.9 );
+                    this.colors.push( color ); 
+                    
+                    this.geometry = new THREE.Geometry(); //a very basic geometry that will be characterized later
+                    this.points   = new THREE.Points( this.geometry, this.material ); //a very specific kind of Mesh?
+                    
+                    this.geometry.colors = this.colors; //an array
+                    this.geometry.vertices.push( from ); //a vector with variables x and z
+                    this.dest.push( to );                //a vector with variables x, y and z
+                    this.colors.push( color );           //twice? see line 103
+                    markerRoot.add( this.points );
+					////https://threejs.org/docs/#api/en/geometries/SphereGeometry
+					//var geometry = new THREE.SphereGeometry( 1, 32, 32 );
+					//var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+					//var sphere = new THREE.Mesh( geometry, material );
+					//
+					//markerRoot.add( sphere )
+                },
+				
+				// explode
+				explode_set: function( vector ) 
+				{
+					markerRoot.remove( this.points );  
+					this.dest     = []; 
+					this.colors   = []; 
+					this.geometry = new THREE.Geometry();
+					this.points   = new THREE.Points( this.geometry, this.material );
+					
+					for( var i = 0; i < 80; i++ ) //80 new points
+					{
+						var color = new THREE.Color();
+						color.setHSL( THREE.Math.randFloat( 0.1, 0.9 ), 1, 0.5 );
+						this.colors.push( color ); 
+						
+						var from = new THREE.Vector3( //previous vector position into a ranged random position
+							THREE.Math.randFloat( vector.x - .010, vector.x + .010 ), 
+							THREE.Math.randFloat( vector.y - .010, vector.y + .010 ), 
+							THREE.Math.randFloat( vector.z - .010, vector.z + .010 )
+						); 
+						var to = new THREE.Vector3( //previous vector position into a ranged random position outside screen
+							THREE.Math.randFloat( vector.x - 1., vector.x + 1. ), 
+							THREE.Math.randFloat( vector.y - 1., vector.y + 1. ), 
+							THREE.Math.randFloat( vector.z - 1., vector.z + 1. )
+						); 
+						this.geometry.vertices.push( from ); 
+						this.dest.push( to ); 
+					}
+					this.geometry.colors = this.colors;
+					markerRoot.add( this.points );  
+				},
+				// update
+				explode_ani: function() 
+				{
+					// only if objects exist
+					if( this.points && this.geometry )
+					{
+						var total = this.geometry.vertices.length; 
+		
+						// lerp (change) particle positions 
+						for( var i = 0; i < total; i++ )
+						{
+							this.geometry.vertices[i].x += ( this.dest[i].x - this.geometry.vertices[i].x ) / 20; //make 20 steps before exploding
+							this.geometry.vertices[i].y += ( this.dest[i].y - this.geometry.vertices[i].y ) / 20;
+							this.geometry.vertices[i].z += ( this.dest[i].z - this.geometry.vertices[i].z ) / 20;
+							this.geometry.verticesNeedUpdate = true; //relevant!!
+						}
+						// watch first particle for explosion 
+						if( total === 1 ) 
+						{
+							if( Math.ceil( this.geometry.vertices[0].y ) > ( this.dest[0].y - .020 ) ) //reached an altitude threshold
+							{
+								this.explode_set( this.geometry.vertices[0] ); 
+								return; 
+							}
+						}
+						// fade out exploded particles 
+						if( total > 1 ) 
+						{
+							this.material.opacity -= 0.015; 
+							this.material.colorsNeedUpdate = true; //relevant!!!
+						}
+						// remove, reset and stop animating 
+						if( this.material.opacity <= 0 )
+						{
+							this.reset(); 
+							this.done = true; 
+							return; 
+						}
+					}
+				},
+            
+            }; 
+            
+            // export 
+            window.Firework = Firework;  
+        })();
+		
+		
+		(function() {
+            
+            var screen    = Utils.screen(), 
+                renderer  = null, 
+                camera    = null, 
+                scene     = null, 
+                to        = { px: 0, py: 0, pz: 2 }, 
+                fireworks = []; 
+            
+            try {
+                renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } ); 
+                camera = new THREE.Camera();
+                scene    = new THREE.Scene();
+            }
+            catch( e ) {
+                alert( "THREE.JS Error: " + e.toString() ); 
+                return; 
+            } 
+
+            function setup()
+            {
+
+                camera.position.set( 0, 0, 0 );
+                camera.rotation.set( 0, 0, 0 );
+                
+                renderer.setPixelRatio( window.devicePixelRatio );
+                renderer.setClearColor( 0x000000, 0 );
+                renderer.sortObjects = true;
+                renderer.setSize( 640, 480 );
+                renderer.domElement.style["display"]  = "block";
+                renderer.domElement.style["position"] = "fixed";
+                //renderer.domElement.style["position"] = "absolute";
+                renderer.domElement.style["width"]    = "100%";
+                renderer.domElement.style["height"]   = "100%";
+                renderer.domElement.style["z-index"]  = "-1";
+                //
+                renderer.domElement.style["top"] = '0px';
+                renderer.domElement.style["left"] = '0px';
+                
+                document.body.appendChild( renderer.domElement );
+
+            	////////////////////////////////////////////////////////////
+                // setup arToolkitSource
+                ////////////////////////////////////////////////////////////
+            
+                arToolkitSource = new THREEx.ArToolkitSource({
+                    sourceType : 'webcam',
+                });
+            
+                function onResize()
+                {
+                    console.log('onResize');
+					arToolkitSource.onResize()	
+                    arToolkitSource.copySizeTo(renderer.domElement)	
+                    if ( arToolkitContext.arController !== null )
+                    {
+                        arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
+                    }	
+                }
+            
+                arToolkitSource.init(function onReady(){
+                    onResize()
+                });
+                
+                // handle resize event
+                window.addEventListener('resize', function(){
+                    onResize()
+                });
+                
+                ////////////////////////////////////////////////////////////
+                // setup arToolkitContext
+                ////////////////////////////////////////////////////////////	
+            
+                // create atToolkitContext
+                arToolkitContext = new THREEx.ArToolkitContext({
+                    cameraParametersUrl: 'data/camera_para.dat',
+                    detectionMode: 'mono'
+                });
+                
+                // copy projection matrix to camera when initialization complete
+                arToolkitContext.init( function onCompleted(){
+                    camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+                });
+                
+                ////////////////////////////////////////////////////////////
+                // setup markerRoots
+                ////////////////////////////////////////////////////////////
+                
+                
+                // build markerControls
+                markerRoot = new THREE.Object3D();
+                scene.add(markerRoot);
+                let markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+                    type: 'pattern', patternUrl: "data/HNY2019.patt",
+                })
+
+            };
+			
+			
+			// animation loop 
+            function draw() 
+            {
+                requestAnimationFrame(draw);
+                // add fireworks 
+                if( THREE.Math.randInt( 1, 20 ) === 10 ) //random appearence of fireworks
+                {
+					//var __ = new Firework( scene );
+					console.log(markerRoot)
+					fireworks.push( new Firework( scene ) ); //a queue of fireworks
+					//markerRoot;
+				}
+				
+				// update fireworks 
+				for( var i = 0; i < fireworks.length; i++ )
+				{
+					if( fireworks[ i ].done ) // cleanup 
+					{
+						fireworks.splice( i, 1 ); 
+						continue; 
+					}
+					fireworks[ i ].explode_ani();
+				}
+				
+				if ( arToolkitSource.ready !== false ){
+					console.log('ready');
+					arToolkitContext.update( arToolkitSource.domElement );
+				}
+                
+                //// lerp camera position (change with element)
+                //camera.position.x += ( to.px - camera.position.x ) / .040;
+                //camera.position.y += ( to.py - camera.position.y ) / .040;
+                //camera.position.z += ( to.pz - camera.position.z ) / .040;
+                
+                // render 
+                renderer.render( scene, camera );
+            };
+			
+			
+			setup();
+			draw();
+		})();
+		
+		
+        </script>
+    </body>
+</html5>

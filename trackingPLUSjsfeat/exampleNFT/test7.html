@@ -32,31 +32,31 @@
             var app = (function NFT_Module(){
         
                 /*--- misc var ---*/
-                var gui;
-                var options;
-                var ctx;
-                var canvasWidth;
-                var canvasHeight;
-                var stat = new profiler();
+                var _guiGlobal;
+                var _optionsGlobal;
+                var _ctxGraphics;
+                var _canvasWidthGraphics;
+                var _canvasHeightGraphics;
+                var _statprofiler = new profiler();
                 /*--- img related var ---*/
-                var img_u8;
-                var img_u8_smooth;
-                var screen_corners;
-                var num_corners;
-                var screen_descriptors;
+                var _img_u8Global;
+                var _img_u8_smoothGlobal;
+                var _screen_cornersGlobal;
+                var _num_cornersGlobal;
+                var _screen_descriptorsGlobal;
                 /*--- detection related var ---*/
-                var pattern_corners;
-                var pattern_descriptors;
-                var pattern_preview;
-                var num_train_levels = 4;
+                var _pattern_cornersGlobal;
+                var _pattern_descriptorsGlobal;
+                var _pattern_previewGlobal;
+                var _num_train_levelsGlobal = 4;
                 /*--- matched related var ---*/
-                var matches;
-                var homo3x3;
-                var match_mask;
-                var good_matches_num = [];
+                var _matchesGlobal;
+                var _homo3x3Global;
+                var _match_maskGlobal;
+                var _good_matches_numGlobal = [];
                 /*--- coordinates of detected object ---*/
-                var startbox = {x:[],y:[]};
-                var linesbox = [{x:[],y:[]}, {x:[],y:[]},{x:[],y:[]}, {x:[],y:[]}];
+                var _startboxGlobal = {x:[],y:[]};
+                var _linesboxGlobal = [{x:[],y:[]}, {x:[],y:[]},{x:[],y:[]}, {x:[],y:[]}];
                 
                 /*--- OPERATIONAL OBJECTS ---*/
                 
@@ -74,8 +74,11 @@
         
            
                 function NFT(){
-                    this.blur_size = 5;
-                    this.match_threshold = 30;
+                    this.options = {
+                        blur_size : 5,
+                        match_threshold : 30
+                    }
+                    this.nft;
                 };
                 
                 NFT.prototype.constructor = NFT;
@@ -85,8 +88,8 @@
                 };
                 
                 NFT.prototype.train_pattern_PYRDOWN = function() {
-                        var THIS = this;
-                        console.log(this);
+                        var THIS = this; // calls to NFT DIRECTLY not the instantition at app!!!?? Hmmmm....
+                        //console.log(this); 
                         /*levels, indexes*/
                         var level=0;
                         var i=0;
@@ -99,49 +102,49 @@
                         var max_pattern_size = 512;
                         var max_per_level = 300;
                         var sc_inc = Math.sqrt(2.0); // magic number ;) E: values should be powers of two; we are scaling down
-                        var sc0 = Math.min(max_pattern_size/img_u8.cols, max_pattern_size/img_u8.rows);
+                        var sc0 = Math.min(max_pattern_size/_img_u8Global.cols, max_pattern_size/_img_u8Global.rows);
                         /*matrices: per level analysis*/
-                        var level0_img = new jsfeat.matrix_t(img_u8.cols, img_u8.rows, jsfeat.U8_t | jsfeat.C1_t);
-                        var level_img = new jsfeat.matrix_t(img_u8.cols, img_u8.rows, jsfeat.U8_t | jsfeat.C1_t);
+                        var level0_img = new jsfeat.matrix_t(_img_u8Global.cols, _img_u8Global.rows, jsfeat.U8_t | jsfeat.C1_t);
+                        var level_img = new jsfeat.matrix_t(_img_u8Global.cols, _img_u8Global.rows, jsfeat.U8_t | jsfeat.C1_t);
                         /*resizings and initializations*/
                         var new_width=0;
                         var new_height=0;
-                        new_width = (img_u8.cols*sc0)|0;
-                        new_height = (img_u8.rows*sc0)|0;
-                        jsfeat.imgproc.resample(img_u8, level0_img, new_width, new_height); //of level0_img
+                        new_width = (_img_u8Global.cols*sc0)|0;
+                        new_height = (_img_u8Global.rows*sc0)|0;
+                        jsfeat.imgproc.resample(_img_u8Global, level0_img, new_width, new_height); //of level0_img
                         
                         // prepare preview and run pyrdown
-                        pattern_preview = new jsfeat.matrix_t(new_width>>1, new_height>>1, jsfeat.U8_t | jsfeat.C1_t);
-                        jsfeat.imgproc.pyrdown(level0_img, pattern_preview);
-                        for(level=0; level < num_train_levels; ++level) {
-                            pattern_corners[level] = [];
-                            level_corners = pattern_corners[level];
+                        _pattern_previewGlobal = new jsfeat.matrix_t(new_width>>1, new_height>>1, jsfeat.U8_t | jsfeat.C1_t);
+                        jsfeat.imgproc.pyrdown(level0_img, _pattern_previewGlobal);
+                        for(level=0; level < _num_train_levelsGlobal; ++level) {
+                            _pattern_cornersGlobal[level] = [];
+                            level_corners = _pattern_cornersGlobal[level];
                             // preallocate corners array
                             i = (new_width*new_height) >> level;
                             while(--i >= 0) {
                                 level_corners[i] = new jsfeat.keypoint_t(0,0,0,0,-1);
                             }
-                            pattern_descriptors[level] = new jsfeat.matrix_t(32, max_per_level, jsfeat.U8_t | jsfeat.C1_t);
+                            _pattern_descriptorsGlobal[level] = new jsfeat.matrix_t(32, max_per_level, jsfeat.U8_t | jsfeat.C1_t);
                         }
                         // do the first level
-                        level_corners = pattern_corners[0];
-                        level_descr = pattern_descriptors[0];
-                        jsfeat.imgproc.gaussian_blur(level0_img, level_img, options.blur_size|0); // this is more robust
-                        corners_num = THIS.detect_keypoints_YAPE06(level_img, level_corners, max_per_level);
+                        level_corners = _pattern_cornersGlobal[0];
+                        level_descr = _pattern_descriptorsGlobal[0];
+                        jsfeat.imgproc.gaussian_blur(level0_img, level_img, this.options.blur_size|0); // this is more robust
+                        corners_num = this.detect_keypoints_YAPE06(level_img, level_corners, max_per_level);
                         jsfeat.orb.describe(level_img, level_corners, corners_num, level_descr);
                         console.log("train " + level_img.cols + "x" + level_img.rows + " points: " + corners_num);
                         sc /= sc_inc;
                         // lets do multiple scale levels
                         // we can use Canvas context draw method for faster resize
                         // but its nice to demonstrate that you can do everything with jsfeat
-                        for(level = 1; level < num_train_levels; ++level) {
-                            level_corners = pattern_corners[level];
-                            level_descr = pattern_descriptors[level];
+                        for(level = 1; level < _num_train_levelsGlobal; ++level) {
+                            level_corners = _pattern_cornersGlobal[level];
+                            level_descr = _pattern_descriptorsGlobal[level];
                             new_width = (level0_img.cols*sc)|0;
                             new_height = (level0_img.rows*sc)|0;
                             jsfeat.imgproc.resample(level0_img, level_img, new_width, new_height);
-                            jsfeat.imgproc.gaussian_blur(level_img, level_img, options.blur_size|0);
-                            corners_num = THIS.detect_keypoints_YAPE06(level_img, level_corners, max_per_level);
+                            jsfeat.imgproc.gaussian_blur(level_img, level_img, this.options.blur_size|0);
+                            corners_num = this.detect_keypoints_YAPE06(level_img, level_corners, max_per_level);
                             jsfeat.orb.describe(level_img, level_corners, corners_num, level_descr);
                             // fix the coordinates due to scale level
                             for(i = 0; i < corners_num; ++i) {
@@ -155,7 +158,7 @@
                   
                  NFT.prototype.detect_keypoints_YAPE06 = function(img, corners, max_allowed){
                         var THIS = this;
-                        console.log(THIS);
+                        //console.error('in detect_keypoints_YAPE06', THIS);
                         //detect features
                         var count = jsfeat.yape06.detect(img, corners, 17);
                         // sort by score and reduce the count if needed
@@ -170,6 +173,111 @@
                         }
                         return count;          
                   };
+
+
+              NFT.prototype.match_pattern_DESCRIPTORS = function() {
+                  var THIS = this;
+                  var q_cnt = _screen_descriptorsGlobal.rows;
+                  var query_du8 = _screen_descriptorsGlobal.data;
+                  var query_u32 = _screen_descriptorsGlobal.buffer.i32; // cast to integer buffer
+                  var qd_off = 0;
+                  var qidx=0;
+                  var level=0;
+                  var pidx=0;
+                  var k=0;
+                  var num_matches = 0;
+                  for(qidx = 0; qidx < q_cnt; ++qidx) {
+                      var best_dist = 256;
+                      var best_dist2 = 256;
+                      var best_idx = -1;
+                      var best_level = -1;
+                      for(level = 0; level < _num_train_levelsGlobal; ++level) {
+                          var level_descr = _pattern_descriptorsGlobal[level];
+                          var ld_cnt = level_descr.rows;
+                          var ld_i32 = level_descr.buffer.i32; // cast to integer buffer
+                          var ld_off = 0;
+                          for(pidx = 0; pidx < ld_cnt; ++pidx) {
+                              var curr_d = 0;
+                              // our descriptor is 32 bytes so we have 8 Integers
+                              for(k=0; k < 8; ++k) {
+                                  curr_d += this.HELPERS.popcnt32( query_u32[qd_off+k]^ld_i32[ld_off+k] );
+                              }
+                              if(curr_d < best_dist) {
+                                  best_dist2 = best_dist;
+                                  best_dist = curr_d;
+                                  best_level = level;
+                                  best_idx = pidx;
+                              } else if(curr_d < best_dist2) {
+                                  best_dist2 = curr_d;
+                              }
+                              ld_off += 8; // next descriptor
+                          }
+                      }
+                      // filter out by some threshold
+                      if(best_dist < options.match_threshold) {
+                          _matchesGlobal[num_matches].screen_idx = qidx;
+                          _matchesGlobal[num_matches].pattern_level = best_level;
+                          _matchesGlobal[num_matches].pattern_idx = best_idx;
+                          num_matches++;
+                      }
+                      //
+                      /* filter using the ratio between 2 closest matches
+                      if(best_dist < 0.8*best_dist2) {
+                          _matchesGlobal[num_matches].screen_idx = qidx;
+                          _matchesGlobal[num_matches].pattern_lev = best_lev;
+                          _matchesGlobal[num_matches].pattern_idx = best_idx;
+                          num_matches++;
+                      }
+                      */
+                      qd_off += 8; // next query descriptor
+                  }
+                  return num_matches;
+              };
+
+                
+                NFT.prototype.find_transform_RANSAC = function(_matchesGlobal, count) {
+                   // motion kernel
+                   var mm_kernel = new jsfeat.motion_model.homography2d();
+                   // ransac params
+                   var num_model_points = 4;
+                   var reproj_threshold = 3;
+                   var ransac_param = new jsfeat.ransac_params_t(num_model_points,
+                                                                 reproj_threshold, 0.5, 0.99);
+                   var pattern_xy = [];
+                   var screen_xy = [];
+                   // construct correspondences
+                   for(var i = 0; i < count; ++i) {
+                       var m = _matchesGlobal[i];
+                       var s_kp = _screen_cornersGlobal[m.screen_idx];
+                       var p_kp = _pattern_cornersGlobal[m.pattern_level][m.pattern_idx];
+                       pattern_xy[i] = {"x":p_kp.x, "y":p_kp.y};
+                       screen_xy[i] =  {"x":s_kp.x, "y":s_kp.y};
+                   }
+                   // estimate motion
+                   var ok = false;
+                   ok = jsfeat.motion_estimator.ransac(ransac_param, mm_kernel,
+                                                       pattern_xy, screen_xy, count, _homo3x3Global, _match_maskGlobal, 1000);
+                   // extract good matches and re-estimate
+                   var good_cnt = 0;
+                   if(ok) {
+                       for(var i=0; i < count; ++i) {
+                           if(_match_maskGlobal.data[i]) {
+                               pattern_xy[good_cnt].x = pattern_xy[i].x;
+                               pattern_xy[good_cnt].y = pattern_xy[i].y;
+                               screen_xy[good_cnt].x = screen_xy[i].x;
+                               screen_xy[good_cnt].y = screen_xy[i].y;
+                               good_cnt++;
+                           }
+                       }
+                       // run kernel directly with inliers only
+                       mm_kernel.run(pattern_xy, screen_xy, _homo3x3Global, good_cnt);
+                   } else {
+                       jsfeat.matmath.identity_3x3(_homo3x3Global, 1.0);
+                   }
+                   return good_cnt;
+               };
+               
+
 
                 NFT.prototype.HELPERS = (function(){
                               return {
@@ -251,169 +359,10 @@
                   
                   
                   }());
-              //  
-              //  NFT.prototype.find_transform_RANSAC = function(matches, count) {
-              //     // motion kernel
-              //     var mm_kernel = new jsfeat.motion_model.homography2d();
-              //     // ransac params
-              //     var num_model_points = 4;
-              //     var reproj_threshold = 3;
-              //     var ransac_param = new jsfeat.ransac_params_t(num_model_points,
-              //                                                   reproj_threshold, 0.5, 0.99);
-              //     var pattern_xy = [];
-              //     var screen_xy = [];
-              //     // construct correspondences
-              //     for(var i = 0; i < count; ++i) {
-              //         var m = matches[i];
-              //         var s_kp = screen_corners[m.screen_idx];
-              //         var p_kp = pattern_corners[m.pattern_level][m.pattern_idx];
-              //         pattern_xy[i] = {"x":p_kp.x, "y":p_kp.y};
-              //         screen_xy[i] =  {"x":s_kp.x, "y":s_kp.y};
-              //     }
-              //     // estimate motion
-              //     var ok = false;
-              //     ok = jsfeat.motion_estimator.ransac(ransac_param, mm_kernel,
-              //                                         pattern_xy, screen_xy, count, homo3x3, match_mask, 1000);
-              //     // extract good matches and re-estimate
-              //     var good_cnt = 0;
-              //     if(ok) {
-              //         for(var i=0; i < count; ++i) {
-              //             if(match_mask.data[i]) {
-              //                 pattern_xy[good_cnt].x = pattern_xy[i].x;
-              //                 pattern_xy[good_cnt].y = pattern_xy[i].y;
-              //                 screen_xy[good_cnt].x = screen_xy[i].x;
-              //                 screen_xy[good_cnt].y = screen_xy[i].y;
-              //                 good_cnt++;
-              //             }
-              //         }
-              //         // run kernel directly with inliers only
-              //         mm_kernel.run(pattern_xy, screen_xy, homo3x3, good_cnt);
-              //     } else {
-              //         jsfeat.matmath.identity_3x3(homo3x3, 1.0);
-              //     }
-              //     return good_cnt;
-              // };
-              // 
-              //NFT.prototype.match_pattern_DESCRIPTORS = function() {
-              //    var THIS = this;
-              //    var q_cnt = screen_descriptors.rows;
-              //    var query_du8 = screen_descriptors.data;
-              //    var query_u32 = screen_descriptors.buffer.i32; // cast to integer buffer
-              //    var qd_off = 0;
-              //    var qidx=0;
-              //    var level=0;
-              //    var pidx=0;
-              //    var k=0;
-              //    var num_matches = 0;
-              //    for(qidx = 0; qidx < q_cnt; ++qidx) {
-              //        var best_dist = 256;
-              //        var best_dist2 = 256;
-              //        var best_idx = -1;
-              //        var best_level = -1;
-              //        for(level = 0; level < num_train_levels; ++level) {
-              //            var level_descr = pattern_descriptors[level];
-              //            var ld_cnt = level_descr.rows;
-              //            var ld_i32 = level_descr.buffer.i32; // cast to integer buffer
-              //            var ld_off = 0;
-              //            for(pidx = 0; pidx < ld_cnt; ++pidx) {
-              //                var curr_d = 0;
-              //                // our descriptor is 32 bytes so we have 8 Integers
-              //                for(k=0; k < 8; ++k) {
-              //                    curr_d += this.HELPERS.popcnt32( query_u32[qd_off+k]^ld_i32[ld_off+k] );
-              //                }
-              //                if(curr_d < best_dist) {
-              //                    best_dist2 = best_dist;
-              //                    best_dist = curr_d;
-              //                    best_level = level;
-              //                    best_idx = pidx;
-              //                } else if(curr_d < best_dist2) {
-              //                    best_dist2 = curr_d;
-              //                }
-              //                ld_off += 8; // next descriptor
-              //            }
-              //        }
-              //        // filter out by some threshold
-              //        if(best_dist < options.match_threshold) {
-              //            matches[num_matches].screen_idx = qidx;
-              //            matches[num_matches].pattern_level = best_level;
-              //            matches[num_matches].pattern_idx = best_idx;
-              //            num_matches++;
-              //        }
-              //        //
-              //        /* filter using the ratio between 2 closest matches
-              //        if(best_dist < 0.8*best_dist2) {
-              //            matches[num_matches].screen_idx = qidx;
-              //            matches[num_matches].pattern_lev = best_lev;
-              //            matches[num_matches].pattern_idx = best_idx;
-              //            num_matches++;
-              //        }
-              //        */
-              //        qd_off += 8; // next query descriptor
-              //    }
-              //    return num_matches;
-              //};
-              //
-              //NFT.prototype.tCorners_HELPER = function(M, w, h) {
-              //    var pt = [ {'x':0,'y':0}, {'x':w,'y':0}, {'x':w,'y':h}, {'x':0,'y':h} ];
-              //    var z=0.0, i=0, px=0.0, py=0.0;
-              //    for (; i < 4; ++i) {
-              //        px = M[0]*pt[i].x + M[1]*pt[i].y + M[2];
-              //        py = M[3]*pt[i].x + M[4]*pt[i].y + M[5];
-              //        z = M[6]*pt[i].x + M[7]*pt[i].y + M[8];
-              //        pt[i].x = px/z;
-              //        pt[i].y = py/z;
-              //    }
-              //    return pt;
-              //};
-              //  
-              //
-              //function average(a){
-              //  if (a.length === 0) {
-              //    return
-              //  }else {
-              //    let s = a.reduce((a,b)=>{return a+b}, false);
-              //    return s/a.length;
-              //  }
-              //};
-              //  
-              //var startbox = {x:[],y:[]};
-              //var linesbox = [{x:[],y:[]}, {x:[],y:[]},{x:[],y:[]}, {x:[],y:[]}]
-              ////E: one of the functions from:
-              ////    https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
-              ////    http://bl.ocks.org/nitaku/fdbb70c3baa36e8feb4e
-              //var lineSegmentsIntersect = (x1, y1, x2, y2, x3, y3, x4, y4)=> {
-              //    //var a_dx = Math.abs(x2 - x1);
-              //    //var a_dy = Math.abs(y2 - y1);
-              //    //var b_dx = Math.abs(x4 - x3);
-              //    //var b_dy = Math.abs(y4 - y3);
-              //    var a_dx = x2 - x1;
-              //    var a_dy = y2 - y1;
-              //    var b_dx = x4 - x3;
-              //    var b_dy = y4 - y3;          
-              //    var s = (-a_dy * (x1 - x3) + a_dx * (y1 - y3)) / (-b_dx * a_dy + a_dx * b_dy);
-              //    var t = (+b_dx * (y1 - y3) - b_dy * (x1 - x3)) / (-b_dx * a_dy + a_dx * b_dy);
-              //    return (s >= 0 && s <= 1 && t >= 0 && t <= 1);
-              //};
-              //
-              //NFT.prototype.Graphics.render_matches = function(ctx, matches, count) {
-              //      for(var i = 0; i < count; ++i) {
-              //          var m = matches[i];
-              //          var s_kp = screen_corners[m.screen_idx];
-              //          var p_kp = pattern_corners[m.pattern_lev][m.pattern_idx];
-              //          if(match_mask.data[i]) {
-              //              ctx.strokeStyle = "rgb(0,255,0)";
-              //          } else {
-              //              ctx.strokeStyle = "rgb(255,0,0)";
-              //          }
-              //          ctx.beginPath();
-              //          ctx.moveTo(s_kp.x,s_kp.y);
-              //          ctx.lineTo(p_kp.x*0.5, p_kp.y*0.5); // our preview is downscaled
-              //          ctx.lineWidth=1;
-              //          ctx.stroke();
-              //      }
-              //  };
-              //  
-              NFT.prototype.Graphics.outerbox_coords = function(){
+
+              
+             
+              NFT.prototype.boundbox_coords = function(){
                   // get the projected pattern corners
                   var THIS = this;
                   console.log(this);
@@ -450,9 +399,9 @@
                   };
 
                   try{
-                    var shape_pts = THIS.Graphics.tCorners(homo3x3.data, pattern_preview.cols*2, pattern_preview.rows*2);
+                    var shape_pts = THIS.Graphics.tCorners(_homo3x3Global.data, _pattern_previewGlobal.cols*2, _pattern_previewGlobal.rows*2);
                   }catch(error){
-                    console.log(error);
+                    console.log('At outerbox_coords, tCorners did not run', error);
                   }
                 
                   var intersect = false;
@@ -465,26 +414,26 @@
                   if (!intersect) {
                     for (let i = 0; i < 4; ++i){
                         if (i === 0) {
-                          if (startbox.x.length < avesize) {
-                            startbox.x.push(shape_pts[i].x)
+                          if (_startboxGlobal.x.length < avesize) {
+                            _startboxGlobal.x.push(shape_pts[i].x)
                           }else{
-                            startbox.x = _updatecoord(shape_pts[i].x, startbox.x, maxdevX);
+                            _startboxGlobal.x = _updatecoord(shape_pts[i].x, _startboxGlobal.x, maxdevX);
                           };
-                          if (startbox.y.length < avesize) {
-                            startbox.y.push(shape_pts[i].y)
+                          if (_startboxGlobal.y.length < avesize) {
+                            _startboxGlobal.y.push(shape_pts[i].y)
                           }else{
-                            lstartbox.y = _updatecoord(shape_pts[i].y, startbox.y, maxdevY);
+                            _startboxGlobal.y = _updatecoord(shape_pts[i].y, _startboxGlobal.y, maxdevY);
                           }
                         };
-                        if (linesbox[i].x.length < avesize) {
-                          linesbox[i].x.push(shape_pts[i].x)
+                        if (_linesboxGlobal[i].x.length < avesize) {
+                          _linesboxGlobal[i].x.push(shape_pts[i].x)
                         }else{
-                          linesbox[i].x = _updatecoord(shape_pts[i].x, linesbox[i].x, maxdevX, true, 'x');
+                          _linesboxGlobal[i].x = _updatecoord(shape_pts[i].x, _linesboxGlobal[i].x, maxdevX, true, 'x');
                         };
-                        if (linesbox[i].y.length < avesize) {
-                          linesbox[i].y.push(shape_pts[i].y);
+                        if (_linesboxGlobal[i].y.length < avesize) {
+                          _linesboxGlobal[i].y.push(shape_pts[i].y);
                         }else{
-                          linesbox[i].y = _updatecoord(shape_pts[i].y, linesbox[i].y, maxdevY, true, 'y');
+                          _linesboxGlobal[i].y = _updatecoord(shape_pts[i].y, _linesboxGlobal[i].y, maxdevY, true, 'y');
                         }
                     };
                   };
@@ -497,46 +446,47 @@
                   return COORDS.push(coords);
                 };
               
-              NFT.prototype.Graphics.render_pattern_shape = function(ctx, render=true) {
-                  var THIS = this;
-                  ctx.strokeStyle = "rgb(0,0,255)";
-                  ctx.beginPath();                                     
-                  ctx.moveTo(THIS.HELPERS.average(startbox.x),THIS.HELPERS.average(startbox.y));
-                  for(let i = 1; i < 4; ++i){
-                    ctx.lineTo(THIS.HELPERS.average(linesbox[i].x),THIS.HELPERS.average(linesbox[i].y));
-                  }
-                  ctx.lineTo(THIS.HELPERS.average(linesbox[0].x),THIS.HELPERS.average(linesbox[0].y));
 
-                  ctx.lineWidth=4;
-                  ctx.stroke();
-              };
-              //
-              //
-              //NFT.prototype.Graphics.render_corners = function(corners, count, img, step) {
-              //    var pix = (0xff << 24) | (0x00 << 16) | (0xff << 8) | 0x00;
-              //    for(var i=0; i < count; ++i)
-              //    {
-              //        var x = corners[i].x;
-              //        var y = corners[i].y;
-              //        var off = (x + y * step);
-              //        img[off] = pix;
-              //        img[off-1] = pix;
-              //        img[off+1] = pix;
-              //        img[off-step] = pix;
-              //        img[off+step] = pix;
-              //    }
-              //};
-              //
-              //
-              //NFT.prototype.Graphics.render_mono_image = function(src, dst, sw, sh, dw) {
-              //    var alpha = (0xff << 24);
-              //    for(var i = 0; i < sh; ++i) {
-              //        for(var j = 0; j < sw; ++j) {
-              //            var pix = src[i*sw+j];
-              //            dst[i*dw+j] = alpha | (pix << 16) | (pix << 8) | pix;
-              //        }
-              //    }
-              //};
+              NFT.prototype.Graphics = {
+                    render_pattern_shape : function(_ctxGraphics) {
+                                var THIS = this;
+                                _ctxGraphics.strokeStyle = "rgb(0,0,255)";
+                                _ctxGraphics.beginPath();                                     
+                                _ctxGraphics.moveTo(THIS.HELPERS.average(_startboxGlobal.x),THIS.HELPERS.average(_startboxGlobal.y));
+                                for(let i = 1; i < 4; ++i){
+                                  _ctxGraphics.lineTo(THIS.HELPERS.average(_linesboxGlobal[i].x),THIS.HELPERS.average(_linesboxGlobal[i].y));
+                                }
+                                _ctxGraphics.lineTo(THIS.HELPERS.average(_linesboxGlobal[0].x),THIS.HELPERS.average(_linesboxGlobal[0].y));
+              
+                                _ctxGraphics.lineWidth=4;
+                                _ctxGraphics.stroke();
+                            },
+                    render_corners : function(corners, count, img, step) {
+                                var pix = (0xff << 24) | (0x00 << 16) | (0xff << 8) | 0x00; //color??? pixeling??? Clever...
+                                for(var i=0; i < count; ++i)
+                                {
+                                    var x = corners[i].x;
+                                    var y = corners[i].y;
+                                    var off = (x + y * step);
+                                    img[off] = pix;
+                                    img[off-1] = pix;
+                                    img[off+1] = pix;
+                                    img[off-step] = pix;
+                                    img[off+step] = pix;
+                                }
+                            },
+                    render_mono_image : function(src, dst, sw, sh, dw) {
+                                var alpha = (0xff << 24);
+                                for(var i = 0; i < sh; ++i) {
+                                    for(var j = 0; j < sw; ++j) {
+                                        var pix = src[i*sw+j];
+                                        dst[i*dw+j] = alpha | (pix << 16) | (pix << 8) | pix;
+                                    }
+                                }
+                            }
+                
+                
+                };
                 
                 /*--- PRIVATE FUNCTIONS setup ---*/
                 
@@ -546,111 +496,112 @@
                 
                 /*--- PUBLIC FUNCTIONS ---*/
                 function app(videoWidth, videoHeight) {
-                   var THIS = this;
-                   //console.log(THIS.name === ''?THIS:THIS.name);
+                   //var THIS = this;
+                   //`this` points to window global, so it will find variables there for canvas, but the ctx is specific to NFT
                    (function canvas_setup(){
-                      canvasWidth  = canvas.width;
-                      canvasHeight = canvas.height;
-                      ctx = canvas.getContext('2d');
-                      ctx.fillStyle = "rgb(0,255,0)";
-                      ctx.strokeStyle = "rgb(0,255,0)";            
+                      _canvasWidthGraphics  = canvas.width;
+                      _canvasHeightGraphics = canvas.height;
+                      _ctxGraphics = canvas.getContext('2d');
+                      _ctxGraphics.fillStyle = "rgb(0,255,0)";
+                      _ctxGraphics.strokeStyle = "rgb(0,255,0)";            
                     }());
                    
                    (function patternimg_init(){
-                      img_u8 = new jsfeat.matrix_t(640, 480, jsfeat.U8_t | jsfeat.C1_t);
+                      _img_u8Global = new jsfeat.matrix_t(640, 480, jsfeat.U8_t | jsfeat.C1_t);
                       // after blur
-                      img_u8_smooth = new jsfeat.matrix_t(640, 480, jsfeat.U8_t | jsfeat.C1_t);            
+                      _img_u8_smoothGlobal = new jsfeat.matrix_t(640, 480, jsfeat.U8_t | jsfeat.C1_t);            
                       // we wll limit to 500 strongest points
-                      screen_descriptors = new jsfeat.matrix_t(32, 500, jsfeat.U8_t | jsfeat.C1_t);
-                      pattern_descriptors = [];
-                      screen_corners = [];
-                      pattern_corners = [];
-                      matches = [];
+                      _screen_descriptorsGlobal = new jsfeat.matrix_t(32, 500, jsfeat.U8_t | jsfeat.C1_t);
+                      _pattern_descriptorsGlobal = [];
+                      _screen_cornersGlobal = [];
+                      _pattern_cornersGlobal = [];
+                      _matchesGlobal = [];
                       var i = 640*480;
                       while(--i >= 0) {
-                          screen_corners[i] = new jsfeat.keypoint_t(0,0,0,0,-1);
-                          matches[i] = new Match_t();
+                          _screen_cornersGlobal[i] = new jsfeat.keypoint_t(0,0,0,0,-1);
+                          _matchesGlobal[i] = new Match_t();
                       }
                       // transform matrix
-                      homo3x3 = new jsfeat.matrix_t(3,3,jsfeat.F32C1_t);
-                      match_mask = new jsfeat.matrix_t(500,1,jsfeat.U8C1_t);
+                      _homo3x3Global = new jsfeat.matrix_t(3,3,jsfeat.F32C1_t);
+                      _match_maskGlobal = new jsfeat.matrix_t(500,1,jsfeat.U8C1_t);
                     }());
         
-                   options = new NFT();
+                   this.nftInstance = new NFT();
                    //options.test_init();
-                   gui = new dat.GUI();
-                   gui.add(options, "blur_size", 3, 9).step(1);
-                   gui.add(options, "match_threshold", 16, 128);
-                   gui.add(options, "train_pattern_PYRDOWN");
-                   stat.add("grayscale");
-                   stat.add("gauss blur");
-                   stat.add("keypoints");
-                   stat.add("orb descriptors");
-                   stat.add("matching");
+                   _guiGlobal = new dat.GUI();
+                   _guiGlobal.add(this.nftInstance.options, "blur_size", 3, 9).step(1);
+                   _guiGlobal.add(this.nftInstance.options, "match_threshold", 16, 128);
+                   _guiGlobal.add(this.nftInstance, "train_pattern_PYRDOWN");
+                   _statprofiler.add("grayscale");
+                   _statprofiler.add("gauss blur");
+                   _statprofiler.add("keypoints");
+                   _statprofiler.add("orb descriptors");
+                   _statprofiler.add("matching");
                };
                
-              //function tick() {
-              //    compatibility.requestAnimationFrame(tick);
-              //    stat.new_frame();
-              //    if (video.readyState === video.HAVE_ENOUGH_DATA) {
-              //        ctx.drawImage(video, 0, 0, 640, 480);
-              //        //ctx.drawImage(foto, 100,100);
-              //        var imageData = ctx.getImageData(0, 0, 640, 480);
-              //        stat.start("grayscale");
-              //        jsfeat.imgproc.grayscale(imageData.data, 640, 480, img_u8);
-              //        stat.stop("grayscale");
-              //        stat.start("gauss blur");
-              //        jsfeat.imgproc.gaussian_blur(img_u8, img_u8_smooth, options.blur_size|0);
-              //        stat.stop("gauss blur");
-              //        jsfeat.fast_corners.set_threshold(options.match_threshold);
-              //        stat.start("keypoints");
-              //        num_corners = detect_keypoints(img_u8_smooth, screen_corners, 500);
-              //        stat.stop("keypoints");
-              //        stat.start("orb descriptors");
-              //        jsfeat.orb.describe(img_u8_smooth, screen_corners, num_corners, screen_descriptors);
-              //        stat.stop("orb descriptors");
-              //        // render result back to canvas
-              //        var data_u32 = new Uint32Array(imageData.data.buffer);
-              //        render_corners(screen_corners, num_corners, data_u32, 640);
-              //        // render pattern and matches
-              //        var num_matches = 0;
-              //        var good_matches = 0;
-              //        if(pattern_preview) {
-              //            render_mono_image(pattern_preview.data, data_u32, pattern_preview.cols, pattern_preview.rows, 640);
-              //            stat.start("matching");
-              //            num_matches = match_pattern();
-              //            good_matches = NFT.find_transform_RANSAC(matches, num_matches);
-              //            stat.stop("matching");
+              function tick(t) {// tick WON'T BE BOUND to nft! It will be bound to an object that CONTAINS it, PASSED FROM app!
+                  compatibility.requestAnimationFrame(tick.bind(this)); //although the same object, each binding IS DIFFERENT, so it is STATELESS!!
+                  //console.error(this.nft);
+                  _statprofiler.new_frame();
+                  if (this.video.readyState === this.video.HAVE_ENOUGH_DATA) {
+                      _ctxGraphics.drawImage(this.video, 0, 0, 640, 480);
+              //        //_ctxGraphics.drawImage(foto, 100,100);
+                      var imageData = _ctxGraphics.getImageData(0, 0, 640, 480);
+                      _statprofiler.start("grayscale");
+                      jsfeat.imgproc.grayscale(imageData.data, 640, 480, _img_u8Global);
+                      _statprofiler.stop("grayscale");
+                      _statprofiler.start("gauss blur");
+                      jsfeat.imgproc.gaussian_blur(_img_u8Global, _img_u8_smoothGlobal, this.nftInstance.options.blur_size|0);
+                      _statprofiler.stop("gauss blur");
+                      jsfeat.fast_corners.set_threshold(this.nftInstance.options.match_threshold);
+                      _statprofiler.start("keypoints");
+                      _num_cornersGlobal = this.nftInstance.detect_keypoints_YAPE06(_img_u8_smoothGlobal, _screen_cornersGlobal, 500);
+                      _statprofiler.stop("keypoints");
+                      _statprofiler.start("orb descriptors");
+                      jsfeat.orb.describe(_img_u8_smoothGlobal, _screen_cornersGlobal, _num_cornersGlobal, _screen_descriptorsGlobal);
+                      _statprofiler.stop("orb descriptors");
+                      // render result back to canvas
+                      var data_u32 = new Uint32Array(imageData.data.buffer);
+                      this.nft.Graphics.render_corners(_screen_cornersGlobal, _num_cornersGlobal, data_u32, 640);
+                      // render pattern and matches
+                      var num_matches = 0;
+                      var good_matches = 0;
+                      if(_pattern_previewGlobal) {
+                          this.nftInstance.Graphics.render_mono_image(_pattern_previewGlobal.data, data_u32, _pattern_previewGlobal.cols, _pattern_previewGlobal.rows, 640);
+                          _statprofiler.start("matching");
+                          num_matches = this.nftInstance.match_pattern();
+              //            good_matches = this.nft.find_transform_RANSAC(_matchesGlobal, num_matches);
+              //            _statprofiler.stop("matching");
               //        };
               //        
-              //        ctx.putImageData(imageData, 0, 0);
+                    //  _ctxGraphics.putImageData(imageData, 0, 0);
               //        
               //        if(num_matches) {
-              //            render_matches(ctx, matches, num_matches);
+              //            render_matches(_ctxGraphics, _matchesGlobal, num_matches);
               //            //if(good_matches > 8)
-              //            //    render_pattern_shape(ctx);
-              //            if (good_matches_num.length > 20) {
-              //              good_matches_num.shift();
+              //            //    render_pattern_shape(_ctxGraphics);
+              //            if (_good_matches_numGlobal.length > 20) {
+              //              _good_matches_numGlobal.shift();
               //            };
               //            if(good_matches > 5){
-              //              good_matches_num.push(1);
+              //              _good_matches_numGlobal.push(1);
               //            }else{
-              //              good_matches_num.push(0);
+              //              _good_matches_numGlobal.push(0);
               //              COORDS = [[NaN, NaN, NaN, NaN]];
               //            };
-              //            if (good_matches_num && good_matches_num.reduce((a,b)=>{return a+b},0)/good_matches_num.length > .5) {
-              //                console.log(good_matches_num);
-              //                render_pattern_shape(ctx);
-              //                //render_hull(ctx, matches, num_matches);
+              //            if (_good_matches_numGlobal && _good_matches_numGlobal.reduce((a,b)=>{return a+b},0)/_good_matches_numGlobal.length > .5) {
+              //                console.log(_good_matches_numGlobal);
+              //                render_pattern_shape(_ctxGraphics);
+              //                //render_hull(_ctxGraphics, _matchesGlobal, num_matches);
               //                
               //              }
               //            }
               //
-              //        $('#log').html(stat.log());
-              //    }
-              //};
+                      $('#log').html(_statprofiler.log());
+                  }
+              };
               
-              return {app: app};
+              return {app: app, tick: tick, video: null};
         
             }());
             
@@ -660,7 +611,7 @@
                 const WIDTH = 480;
                 const HEIGHT = 360;
                 var canvas;
-                var ctx;
+                var _ctxSETUP;
                 var video;
                 const width = Math.round(60 * WIDTH / HEIGHT);
                 const height = 60;
@@ -684,10 +635,9 @@
                 /*--- Middleware ---*/
                 function _findVideoSizeMiddleW(){
                     var THIS = this;
-                    console.log(THIS.name === ''?THIS:THIS.name, width, height);
                     if (video.videoWidth > 0 && video.videoHeight > 0) {
-                        video.removeEventListener('loadeddata', function(e){_findVideoSizeMiddleW()});
                         _onDimensionsReadyMiddleW(video.videoWidth, video.videoHeight);
+                        video.removeEventListener('loadeddata', function(e){_findVideoSizeMiddleW()});
                     } else {
                           if(attempts < 10) {
                               attempts++;
@@ -700,9 +650,16 @@
                   
                   function _onDimensionsReadyMiddleW(width, height){
                       var THIS = this;
-                      console.log(THIS.name === ''?THIS:THIS.name, width, height);
                       app_EXTERNAL.app(width, height);
-                      //compatibility.requestAnimationFrame(tick_EXTERNAL);
+                      var counter = 0;
+                      //function _updateframes(t){
+                      //      app_EXTERNAL.video = video;
+                      //      console.log(t);
+                      //      app_EXTERNAL.tick();                       
+                      //};
+                      //compatibility.requestAnimationFrame(_updateframes); //leave function!!
+                      //app_EXTERNAL.video = video;
+                      app_EXTERNAL.tick(); 
                   };
                 
                 var init_obj = {
@@ -711,15 +668,16 @@
                               canvas = document.getElementById('canvas');
                               canvas.width = WIDTH;
                               canvas.height = HEIGHT;
-                              ctx = canvas.getContext('2d');
-                              ctx.fillStyle = "rgb(0,255,0)";
-                              ctx.strokeStyle = "rgb(0,255,0)";
+                              _ctxSETUP = canvas.getContext('2d');
+                              _ctxSETUP.fillStyle = "rgb(0,255,0)";
+                              _ctxSETUP.strokeStyle = "rgb(0,255,0)";
                             },
                     video_init : function(){
                               var THIS = this;
                               video = document.getElementById('webcam');
+                              app_EXTERNAL.video = video;
                               try{
-                                  console.log(video);
+                                  //console.log(video);
                                   video.addEventListener('loadeddata', function(e){_findVideoSizeMiddleW()});
                                   var attemps = 0;
                                   var voptions = {};

@@ -61,7 +61,7 @@
                 /*--- OPERATIONAL OBJECTS ---*/
                 
                 // our point match structure
-                function Match_t(screen_idx, pattern_lev, pattern_idx, distance) {
+                function Match_t(screen_idx, pattern_level, pattern_idx, distance) {
                     if (typeof screen_idx === "undefined") { screen_idx=0; }
                     if (typeof pattern_level === "undefined") { pattern_level=0; }
                     if (typeof pattern_idx === "undefined") { pattern_idx=0; }
@@ -214,7 +214,7 @@
                           }
                       }
                       // filter out by some threshold
-                      if(best_dist < options.match_threshold) {
+                      if(best_dist < this.options.match_threshold) {
                           _matchesGlobal[num_matches].screen_idx = qidx;
                           _matchesGlobal[num_matches].pattern_level = best_level;
                           _matchesGlobal[num_matches].pattern_idx = best_idx;
@@ -224,7 +224,7 @@
                       /* filter using the ratio between 2 closest matches
                       if(best_dist < 0.8*best_dist2) {
                           _matchesGlobal[num_matches].screen_idx = qidx;
-                          _matchesGlobal[num_matches].pattern_lev = best_lev;
+                          _matchesGlobal[num_matches].pattern_level = best_lev;
                           _matchesGlobal[num_matches].pattern_idx = best_idx;
                           num_matches++;
                       }
@@ -365,17 +365,19 @@
               NFT.prototype.boundbox_coords = function(){
                   // get the projected pattern corners
                   var THIS = this;
-                  console.log(this);
+                  //console.log(this);
                   const avesize = 20;
                   const maxdevX = 25; //pixels
                   const maxdevY = 25; //pixels
                   var findminmaxX = [];
                   var findminmaxY = [];
+                  var _averageFunc = this.HELPERS.average;
                  
                   
                   function _updatecoord(current_coord, previous_coords, dev, l=false, coord=false){
                       let proposed_coord;
-                      let average = THIS.HELPERS.average(previous_coords);
+                      //console.error(this); //window
+                      let average = _averageFunc(previous_coords);
                       switch(current_coord){
                           case current_coord < average - dev:
                               proposed_coord = average - dev;
@@ -390,25 +392,24 @@
                       previous_coords.push(proposed_coord);
                       if (l && coord) {
                         if (coord === 'x') {
-                            findminmaxX.push(THIS.HELPERS.average(previous_coords));
+                            findminmaxX.push(_averageFunc(previous_coords));
                         }else if (coord === 'y') {
-                            findminmaxY.push(THIS.HELPERS.average(previous_coords));
+                            findminmaxY.push(_averageFunc(previous_coords));
                         }
                       }
                       return previous_coords
                   };
 
                   try{
-                    var shape_pts = THIS.Graphics.tCorners(_homo3x3Global.data, _pattern_previewGlobal.cols*2, _pattern_previewGlobal.rows*2);
+                    var shape_pts = this.HELPERS.tcorners(_homo3x3Global.data, _pattern_previewGlobal.cols*2, _pattern_previewGlobal.rows*2);
                   }catch(error){
-                    console.log('At outerbox_coords, tCorners did not run', error);
+                    console.error('At outerbox_coords, tCorners did not run', error);
                   }
-                
                   var intersect = false;
-                  if (THIS.HELPERS.linesegmentsintersect(shape_pts[0].x,shape_pts[0].y, shape_pts[1].x,shape_pts[1].y, shape_pts[2].x,shape_pts[2].y, shape_pts[3].x,shape_pts[3].y)) {
+                  if (this.HELPERS.linesegmentsintersect(shape_pts[0].x,shape_pts[0].y, shape_pts[1].x,shape_pts[1].y, shape_pts[2].x,shape_pts[2].y, shape_pts[3].x,shape_pts[3].y)) {
                     intersect = true;
                   };
-                  if (THIS.HELPERS.linesegmentsintersect(shape_pts[1].x,shape_pts[1].y, shape_pts[2].x,shape_pts[2].y, shape_pts[3].x,shape_pts[3].y, shape_pts[0].x,shape_pts[0].y)) {
+                  if (this.HELPERS.linesegmentsintersect(shape_pts[1].x,shape_pts[1].y, shape_pts[2].x,shape_pts[2].y, shape_pts[3].x,shape_pts[3].y, shape_pts[0].x,shape_pts[0].y)) {
                     intersect = true;
                   };
                   if (!intersect) {
@@ -450,13 +451,14 @@
               NFT.prototype.Graphics = {
                     render_pattern_shape : function(_ctxGraphics) {
                                 var THIS = this;
+                                //console.error(this);
                                 _ctxGraphics.strokeStyle = "rgb(0,0,255)";
                                 _ctxGraphics.beginPath();                                     
-                                _ctxGraphics.moveTo(THIS.HELPERS.average(_startboxGlobal.x),THIS.HELPERS.average(_startboxGlobal.y));
+                                _ctxGraphics.moveTo(this.HELPERS.average(_startboxGlobal.x),this.HELPERS.average(_startboxGlobal.y));
                                 for(let i = 1; i < 4; ++i){
-                                  _ctxGraphics.lineTo(THIS.HELPERS.average(_linesboxGlobal[i].x),THIS.HELPERS.average(_linesboxGlobal[i].y));
+                                  _ctxGraphics.lineTo(this.HELPERS.average(_linesboxGlobal[i].x),this.HELPERS.average(_linesboxGlobal[i].y));
                                 }
-                                _ctxGraphics.lineTo(THIS.HELPERS.average(_linesboxGlobal[0].x),THIS.HELPERS.average(_linesboxGlobal[0].y));
+                                _ctxGraphics.lineTo(this.HELPERS.average(_linesboxGlobal[0].x),this.HELPERS.average(_linesboxGlobal[0].y));
               
                                 _ctxGraphics.lineWidth=4;
                                 _ctxGraphics.stroke();
@@ -483,9 +485,26 @@
                                         dst[i*dw+j] = alpha | (pix << 16) | (pix << 8) | pix;
                                     }
                                 }
-                            }
-                
-                
+                            },
+                            
+                    render_matches :   function (ctx, matches, count) {
+                                for(var i = 0; i < count; ++i) {
+                                    var m = matches[i];
+                                    var s_kp = _screen_cornersGlobal[m.screen_idx];
+                                    var p_kp = _pattern_cornersGlobal[m.pattern_level][m.pattern_idx];
+                                    if(_match_maskGlobal.data[i]) {
+                                        ctx.strokeStyle = "rgb(0,255,0)";
+                                    } else {
+                                        ctx.strokeStyle = "rgb(255,0,0)";
+                                    }
+                                    //ctx.beginPath();
+                                    //ctx.moveTo(s_kp.x,s_kp.y);
+                                    //ctx.lineTo(p_kp.x*0.5, p_kp.y*0.5); // our preview is downscaled
+                                    //ctx.lineWidth=1;
+                                    ctx.stroke();
+                                }
+                            },
+                    HELPERS : {average : new NFT().HELPERS.average}
                 };
                 
                 /*--- PRIVATE FUNCTIONS setup ---*/
@@ -496,6 +515,9 @@
                 
                 /*--- PUBLIC FUNCTIONS ---*/
                 function app(videoWidth, videoHeight) {
+                    /*
+                    this function will set declared globals to initial values as well as instantiate NFT functionality
+                    */
                    //var THIS = this;
                    //`this` points to window global, so it will find variables there for canvas, but the ctx is specific to NFT
                    (function canvas_setup(){
@@ -540,6 +562,10 @@
                };
                
               function tick(t) {// tick WON'T BE BOUND to nft! It will be bound to an object that CONTAINS it, PASSED FROM app!
+                    /*
+                       OBSERVATION:
+                       part of this functionality runs EVEN WHEN IT IS NOT NEEDED. It starts as soon as there is some video available
+                   */
                   compatibility.requestAnimationFrame(tick.bind(this)); //although the same object, each binding IS DIFFERENT, so it is STATELESS!!
                   //console.error(this.nft);
                   _statprofiler.new_frame();
@@ -562,41 +588,42 @@
                       _statprofiler.stop("orb descriptors");
                       // render result back to canvas
                       var data_u32 = new Uint32Array(imageData.data.buffer);
-                      this.nft.Graphics.render_corners(_screen_cornersGlobal, _num_cornersGlobal, data_u32, 640);
+                      this.nftInstance.Graphics.render_corners(_screen_cornersGlobal, _num_cornersGlobal, data_u32, 640);
                       // render pattern and matches
                       var num_matches = 0;
                       var good_matches = 0;
                       if(_pattern_previewGlobal) {
                           this.nftInstance.Graphics.render_mono_image(_pattern_previewGlobal.data, data_u32, _pattern_previewGlobal.cols, _pattern_previewGlobal.rows, 640);
                           _statprofiler.start("matching");
-                          num_matches = this.nftInstance.match_pattern();
-              //            good_matches = this.nft.find_transform_RANSAC(_matchesGlobal, num_matches);
-              //            _statprofiler.stop("matching");
-              //        };
-              //        
-                    //  _ctxGraphics.putImageData(imageData, 0, 0);
-              //        
-              //        if(num_matches) {
-              //            render_matches(_ctxGraphics, _matchesGlobal, num_matches);
-              //            //if(good_matches > 8)
-              //            //    render_pattern_shape(_ctxGraphics);
-              //            if (_good_matches_numGlobal.length > 20) {
-              //              _good_matches_numGlobal.shift();
-              //            };
-              //            if(good_matches > 5){
-              //              _good_matches_numGlobal.push(1);
-              //            }else{
-              //              _good_matches_numGlobal.push(0);
-              //              COORDS = [[NaN, NaN, NaN, NaN]];
-              //            };
-              //            if (_good_matches_numGlobal && _good_matches_numGlobal.reduce((a,b)=>{return a+b},0)/_good_matches_numGlobal.length > .5) {
-              //                console.log(_good_matches_numGlobal);
-              //                render_pattern_shape(_ctxGraphics);
+                          num_matches = this.nftInstance.match_pattern_DESCRIPTORS(); //use mostly global variables
+                          good_matches = this.nftInstance.find_transform_RANSAC(_matchesGlobal, num_matches);
+                          _statprofiler.stop("matching");
+                      };
+                      
+                      _ctxGraphics.putImageData(imageData, 0, 0); //render all changes into the image
+                      
+                      if(num_matches) {
+                          this.nftInstance.Graphics.render_matches(_ctxGraphics, _matchesGlobal, num_matches);
+                          //if(good_matches > 8)
+                          //    render_pattern_shape(_ctxGraphics);
+                          if (_good_matches_numGlobal.length > 20) {
+                            _good_matches_numGlobal.shift();
+                          };
+                          if(good_matches > 5){
+                            _good_matches_numGlobal.push(1);
+                          }else{
+                            _good_matches_numGlobal.push(0);
+                            COORDS = [[NaN, NaN, NaN, NaN]];
+                          };
+                          if (_good_matches_numGlobal && _good_matches_numGlobal.reduce((a,b)=>{return a+b},0)/_good_matches_numGlobal.length > .5) {
+                              //console.log(_good_matches_numGlobal);
+                              this.nftInstance.boundbox_coords();
+                              this.nftInstance.Graphics.render_pattern_shape(_ctxGraphics);
               //                //render_hull(_ctxGraphics, _matchesGlobal, num_matches);
               //                
-              //              }
-              //            }
-              //
+                            }
+                          }
+              
                       $('#log').html(_statprofiler.log());
                   }
               };
@@ -666,11 +693,11 @@
                     canvas_init : function(){
                               var THIS = this;
                               canvas = document.getElementById('canvas');
-                              canvas.width = WIDTH;
-                              canvas.height = HEIGHT;
-                              _ctxSETUP = canvas.getContext('2d');
-                              _ctxSETUP.fillStyle = "rgb(0,255,0)";
-                              _ctxSETUP.strokeStyle = "rgb(0,255,0)";
+                              //canvas.width = WIDTH; //Why I defined canvas and ctxSETUP HERE??? Why with those sizes?
+                              //canvas.height = HEIGHT;
+                              //_ctxSETUP = canvas.getContext('2d');
+                              //_ctxSETUP.fillStyle = "rgb(0,255,0)";
+                              //_ctxSETUP.strokeStyle = "rgb(0,255,0)";
                             },
                     video_init : function(){
                               var THIS = this;
@@ -683,9 +710,11 @@
                                   var voptions = {};
                                   var mob = _detectmob();
                                   if (mob) {
-                                    voptions = { video: { facingMode: { exact: "environment" }, width: WIDTH, height: HEIGHT }, audio:false }
+                                    //voptions = { video: { facingMode: { exact: "environment" }, width: WIDTH, height: HEIGHT }, audio:false };
+                                    voptions = { video: { facingMode: { exact: "environment" } }, audio:false };
                                   }else{
-                                    voptions = {video: {width: WIDTH, height: HEIGHT}, audio: false}
+                                    //voptions = {video: {width: WIDTH, height: HEIGHT}, audio: false};
+                                    voptions = { video: true, audio: false }
                                   };
                                   compatibility.getUserMedia(voptions,
                                                               function(stream){

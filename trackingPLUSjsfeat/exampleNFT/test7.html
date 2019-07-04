@@ -343,14 +343,14 @@
                                             }                
                                     },
                                    linesegmentsintersect: function(x1, y1, x2, y2, x3, y3, x4, y4){
-                                            //var a_dx = Math.abs(x2 - x1);
-                                            //var a_dy = Math.abs(y2 - y1);
-                                            //var b_dx = Math.abs(x4 - x3);
-                                            //var b_dy = Math.abs(y4 - y3);
-                                            var a_dx = x2 - x1;
-                                            var a_dy = y2 - y1;
-                                            var b_dx = x4 - x3;
-                                            var b_dy = y4 - y3;          
+                                            var a_dx = Math.abs(x2 - x1);
+                                            var a_dy = Math.abs(y2 - y1);
+                                            var b_dx = Math.abs(x4 - x3);
+                                            var b_dy = Math.abs(y4 - y3);
+                                            //var a_dx = x2 - x1;
+                                            //var a_dy = y2 - y1;
+                                            //var b_dx = x4 - x3;
+                                            //var b_dy = y4 - y3;          
                                             var s = (-a_dy * (x1 - x3) + a_dx * (y1 - y3)) / (-b_dx * a_dy + a_dx * b_dy);
                                             var t = (+b_dx * (y1 - y3) - b_dy * (x1 - x3)) / (-b_dx * a_dy + a_dx * b_dy);
                                             return (s >= 0 && s <= 1 && t >= 0 && t <= 1);                        
@@ -405,6 +405,7 @@
                   }catch(error){
                     console.error('At outerbox_coords, tCorners did not run', error);
                   }
+                  //intersect NOT WORKING!!!
                   var intersect = false;
                   if (this.HELPERS.linesegmentsintersect(shape_pts[0].x,shape_pts[0].y, shape_pts[1].x,shape_pts[1].y, shape_pts[2].x,shape_pts[2].y, shape_pts[3].x,shape_pts[3].y)) {
                     intersect = true;
@@ -412,7 +413,7 @@
                   if (this.HELPERS.linesegmentsintersect(shape_pts[1].x,shape_pts[1].y, shape_pts[2].x,shape_pts[2].y, shape_pts[3].x,shape_pts[3].y, shape_pts[0].x,shape_pts[0].y)) {
                     intersect = true;
                   };
-                  if (!intersect) {
+                  if (intersect===false) {
                     for (let i = 0; i < 4; ++i){
                         if (i === 0) {
                           if (_startboxGlobal.x.length < avesize) {
@@ -462,6 +463,7 @@
               
                                 _ctxGraphics.lineWidth=4;
                                 _ctxGraphics.stroke();
+                                _ctxGraphics.closePath();
                             },
                     render_corners : function(corners, count, img, step) {
                                 var pix = (0xff << 24) | (0x00 << 16) | (0xff << 8) | 0x00; //color??? pixeling??? Clever...
@@ -497,10 +499,12 @@
                                     } else {
                                         ctx.strokeStyle = "rgb(255,0,0)";
                                     }
-                                    //ctx.beginPath();
-                                    //ctx.moveTo(s_kp.x,s_kp.y);
-                                    //ctx.lineTo(p_kp.x*0.5, p_kp.y*0.5); // our preview is downscaled
-                                    //ctx.lineWidth=1;
+                                    //draw line by line
+                                    //OBS: if lines COMMENTED, takes ctx from render_pattern_shape!!!
+                                    ctx.beginPath();
+                                    ctx.moveTo(s_kp.x,s_kp.y);
+                                    ctx.lineTo(p_kp.x*0.5, p_kp.y*0.5); // our preview is downscaled
+                                    ctx.lineWidth=1;
                                     ctx.stroke();
                                 }
                             },
@@ -603,7 +607,9 @@
                       _ctxGraphics.putImageData(imageData, 0, 0); //render all changes into the image
                       
                       if(num_matches) {
-                          this.nftInstance.Graphics.render_matches(_ctxGraphics, _matchesGlobal, num_matches);
+                          /* OBS: render_matches below not required */
+                          //this.nftInstance.Graphics.render_matches(_ctxGraphics, _matchesGlobal, num_matches);
+                          
                           //if(good_matches > 8)
                           //    render_pattern_shape(_ctxGraphics);
                           if (_good_matches_numGlobal.length > 20) {

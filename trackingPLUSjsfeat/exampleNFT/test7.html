@@ -338,7 +338,10 @@
                                             if (arr.length === 0) {
                                               return
                                             }else {
-                                              let s = arr.reduce((a,b)=>{return a+b}, false);
+                                              let s = arr.reduce((a,b)=>{return a+b}, false); // failing to run *.reduce
+                                              //console.error('in average', Object.prototype.toString.call(arr));
+                                              //let s = 0;
+                                              //arr.forEach( v => s += v );
                                               return s/arr.length;
                                             }                
                                     },
@@ -375,29 +378,38 @@
                  
                   
                   function _updatecoord(current_coord, previous_coords, dev, l=false, coord=false){
-                      let proposed_coord;
                       //console.error(this); //window
                       let average = _averageFunc(previous_coords);
-                      switch(current_coord){
-                          case current_coord < average - dev:
-                              proposed_coord = average - dev;
-                              break;
-                          case current_coord > average + dev:
-                              proposed_coord =  average + dev;
-                              break;
-                          default:
-                              proposed_coord = current_coord;
+                      
+                      function _proposed_coordFunc(current_coord){
+                        let proposed_coord;
+                        switch(current_coord){
+                            case current_coord < average - dev:
+                                proposed_coord = average - dev;
+                                break;
+                            case current_coord > average + dev:
+                                proposed_coord =  average + dev;
+                                break;
+                            default:
+                                proposed_coord = current_coord;
+                        };
+                        return proposed_coord
                       };
-                      previous_coords.shift();
-                      previous_coords.push(proposed_coord);
-                      if (l && coord) {
+                      if (l === false) {
+                        previous_coords.shift();
+                        let entry = _proposed_coordFunc(current_coord);
+                        return previous_coords.push(entry);
+                      } else {
+                        let first_proposed = _proposed_coordFunc(current_coord);
+                        previous_coords.shift();
+                        let entry = _proposed_coordFunc(first_proposed); //based on test4previous.html
                         if (coord === 'x') {
                             findminmaxX.push(_averageFunc(previous_coords));
                         }else if (coord === 'y') {
                             findminmaxY.push(_averageFunc(previous_coords));
-                        }
+                        };                        
+                        return previous_coords.push(entry);
                       }
-                      return previous_coords
                   };
 
                   try{
@@ -419,23 +431,27 @@
                           if (_startboxGlobal.x.length < avesize) {
                             _startboxGlobal.x.push(shape_pts[i].x)
                           }else{
-                            _startboxGlobal.x = _updatecoord(shape_pts[i].x, _startboxGlobal.x, maxdevX);
+                            //_startboxGlobal.x = _updatecoord(shape_pts[i].x, _startboxGlobal.x, maxdevX); //WRONG!
+                            _updatecoord(shape_pts[i].x, _startboxGlobal.x, maxdevX);
                           };
                           if (_startboxGlobal.y.length < avesize) {
                             _startboxGlobal.y.push(shape_pts[i].y)
                           }else{
-                            _startboxGlobal.y = _updatecoord(shape_pts[i].y, _startboxGlobal.y, maxdevY);
+                            //_startboxGlobal.y = _updatecoord(shape_pts[i].y, _startboxGlobal.y, maxdevY); //WRONG!
+                            _updatecoord(shape_pts[i].y, _startboxGlobal.y, maxdevY);
                           }
                         };
                         if (_linesboxGlobal[i].x.length < avesize) {
                           _linesboxGlobal[i].x.push(shape_pts[i].x)
                         }else{
-                          _linesboxGlobal[i].x = _updatecoord(shape_pts[i].x, _linesboxGlobal[i].x, maxdevX, true, 'x');
+                          //_linesboxGlobal[i].x = _updatecoord(shape_pts[i].x, _linesboxGlobal[i].x, maxdevX, true, 'x'); //WRONG!
+                          _updatecoord(shape_pts[i].x, _linesboxGlobal[i].x, maxdevX, true, 'x');
                         };
                         if (_linesboxGlobal[i].y.length < avesize) {
                           _linesboxGlobal[i].y.push(shape_pts[i].y);
                         }else{
-                          _linesboxGlobal[i].y = _updatecoord(shape_pts[i].y, _linesboxGlobal[i].y, maxdevY, true, 'y');
+                          //_linesboxGlobal[i].y = _updatecoord(shape_pts[i].y, _linesboxGlobal[i].y, maxdevY, true, 'y'); //WRONG!
+                          _updatecoord(shape_pts[i].y, _linesboxGlobal[i].y, maxdevY, true, 'y');
                         }
                     };
                   };
@@ -619,10 +635,16 @@
                             _good_matches_numGlobal.push(1);
                           }else{
                             _good_matches_numGlobal.push(0);
+                          };
+                          //var total_goods = 0;
+                          //_good_matches_numGlobal.forEach(function(v){total_goods += v});
+                          if (_good_matches_numGlobal.reduce(function(total,added){return total + added}) < 10) { //failed to run *.reduce
+                          //if (total_goods < 10) {
                             COORDS = [[NaN, NaN, NaN, NaN]];
                           };
-                          if (_good_matches_numGlobal && _good_matches_numGlobal.reduce((a,b)=>{return a+b},0)/_good_matches_numGlobal.length > .5) {
-                              //console.log(_good_matches_numGlobal);
+                          if (_good_matches_numGlobal && _good_matches_numGlobal.reduce((a,b)=>{return a+b},0)/_good_matches_numGlobal.length > .5) { //failed to run *.reduce
+                          //if (_good_matches_numGlobal && total_goods/_good_matches_numGlobal.length > .5) {
+                              console.log(_good_matches_numGlobal);
                               this.nftInstance.boundbox_coords();
                               this.nftInstance.Graphics.render_pattern_shape(_ctxGraphics);
               //                //render_hull(_ctxGraphics, _matchesGlobal, num_matches);

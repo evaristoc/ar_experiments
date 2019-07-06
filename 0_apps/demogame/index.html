@@ -1,0 +1,61 @@
+---
+---
+<html>
+<head>
+    <title>Cubesquitos (demo game) - argonJS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  	<meta name="keywords" content="{{ site.keywords }}">
+    <!-- Origin Trial Token, feature = WebVR, origin = https://argonjs.io, expires = 2017-06-06 -->
+    <meta http-equiv="origin-trial" data-feature="WebVR" data-expires="2017-06-06" content="ArfXzMSluPfAfoVDD+ne9oWykUyDeLFD/z4/0uRCdZ1491aSrytWyj7gnGhwK1/Tzg/D+UOvNgD2+L9PWqF5XwwAAABceyJvcmlnaW4iOiJodHRwczovL2FyZ29uanMuaW86NDQzIiwiZmVhdHVyZSI6IldlYlZSIiwiZXhwaXJ5IjoxNDk2NzcxODA0LCJpc1N1YmRvbWFpbiI6dHJ1ZX0=">
+    <script src="../../argonJS/argonjs-resources/lib/three/three.min.js"></script>
+    <script src="../../argonJS/argonjs-resources/lib/argon.min_e.js"></script>
+    <script src="../../argonJS/argonjs-resources/lib/CSS3DArgonHUD.js"></script>
+	<script src="../../public/js/tween.min.js"></script>
+    <script src="../../public/js/stats.min.js"></script>
+  	<link rel="stylesheet" type="text/css" href="assets/style/style.css">
+</head>
+  <body>
+    <div id="argon" style="position:relative;">
+		<video id="video" width="100%" height="100%" style="position:absolute; margin:0px;" autoplay></video>
+		<div id="hud" style="pointer-events:auto"></div>
+		<!--<div onclick="hideMe(this)" id="description">
+		  <h2>Draggable Cubes</h2>
+		  <h5>(click to dismiss)</h5>
+		  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</p>
+		</div>-->
+		<div id="remainingBlocks"></div>
+	</div>
+  </body>
+	<script>
+		function hideMe(elem) {
+		    elem.style.display = 'none';
+		}	
+	</script>
+  <script src="assets/js/app_cubedestroywithoutboxPoseboxEntity.js">//_cubedestroy, _argonoriginal, _withoutcrosshair, _cubes, _withoutcrosshairlight</script>
+  	<script>
+	// Grab elements, create settings, etc.: hack
+	var video = document.getElementById('video');
+	
+	// Get access to the camera!
+	if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+		// Not adding `{ audio: true }` since we only want video now
+		//navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(function(stream) {
+		navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } }, audio: false }).then(function(stream) {
+			//video.src = window.URL.createObjectURL(stream);
+			video.srcObject = stream;
+			video.play();
+		});
+	}else{
+		alert('getUserMedia() is not supported by your browser');
+	};
+	</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-63191442-2', 'auto');
+  ga('send', 'pageview');
+</script>  
+</html>

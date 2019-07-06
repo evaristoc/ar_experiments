@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="Page_15-back" size="0.215900 0.279400" />
+    <ImageTarget name="Page_14-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_14-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_13-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_13-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_12-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_12-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_11-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_11-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_10-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_10-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_09-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_09-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_08-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_08-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_07-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_07-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_06-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_06-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_05-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_05-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_04-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_04-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_03-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_03-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_02-2" size="0.215900 0.279400" />
+    <ImageTarget name="Page_02-1" size="0.215900 0.279400" />
+    <ImageTarget name="Page_01-cover" size="0.215900 0.279400" />
+  </Tracking>
+</QCARConfig>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>p5JS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	</head>
+  <body>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.min.js"></script>
+		<script>
+
+var poems = {
+				w2w_quotes : [
+							`
+							Sappho, who wrongs you?
+							For if she flees, soon she'll pursue,
+							she doesn't accept gifts,
+							but she'll give, if not now loving,
+							soon she'll love even against her will
+							
+							@Sappho`,
+							`
+							I, my dearest Phyllis,
+							who revere you as divine,
+							who idolize your disdain,
+							and venerate your rigor
+							
+							@Sister Juana Inés de la Cruz
+							`,
+							`
+							I have closed the double doors.
+							In what corner of the heavens is she?
+							A horizontal flute Beyond the red walls Blown
+							as gently as the breeze Blows the willow floss.
+							
+							@Wu Tsao`,
+							`
+							Tell me,
+							Was Venus more beautiful
+							Than you are,
+							When she topped
+							The crinkled waves,
+							Drifting shoreward
+							On her plaited shell?
+							
+							@Amy Lowell`],
+				w2m_quotes : [
+							`
+							I long for him most during these long moonless nights.
+							I lie awake, hot,
+							the growing fires
+							of passion bursting in my heart.
+							
+							@Ono no Komachi`,
+							`
+							Cover mine eyes,
+							O my Love!
+							Mine eyes that are weary of bliss
+							As of light that is poignant and strong
+							O silence my lips with a kiss,
+							My lips that are weary of song!
+							
+							@Sarojini Naidu`,
+							`
+							Remember me when I am gone away,
+							Gone far away into the silent land;
+							When you can no more hold me by the hand,
+							Nor I half turn to go yet turning stay
+							
+							@Christina Rossetti`,
+							`
+							It's the fire in my eyes,
+							And the flash of my teeth,
+							The swing in my waist,
+							And the joy in my feet.
+							I'm a woman
+							Phenomenally.
+							Phenomenal woman,
+							That's me.
+							
+							@Maya Angelou`],
+				m2m_quotes : [
+							`
+							Oh secret voice of dark love!
+							Oh bleeting without wool!
+							Oh wound!
+							Oh drooping camellia, needle of gall!
+							Oh current without sea, city without wall!
+							@Garcia Lorca`,
+							`
+							It shall be, I said, for eternity
+							Twixt you and me!
+							Dear friend, those times are over and done,
+							Love's web is spun.
+							
+							@Oscar Wilde`,
+							`
+							Sweet Child,
+							thou star of love and beauty bright,
+							Alone thou lookest on the midnight skies;
+							Oh! That my spirit were yon
+							Heaven of light To gaze upon thee with a thousand eyes.
+							
+							@Plato`,
+							`
+							Thousand leagues, friend's heart cordial;
+							one strand,
+							fragrant silk purple resplendent.
+							Breaking the seal,
+							it glistens with a rose hue of the sun at eve –
+							The pattern fills
+							in the width of a breeze arising on autumnal waters.
+							
+							@Bo Juyi`],
+				m2w_quotes : [
+							`
+							Deep, as drops from a statue's plinth
+							The bee sucked in by the hyacinth,
+							So will I bury me while burning,
+							Quench like him at a plunge my yearning,
+							Eyes in your eyes, lips on your lips!
+							
+							@Robert Browning`,
+							`
+							I like for you to be still
+							And you seem far away
+							It sounds as though you are lamenting
+							A butterfly cooing like a dove
+							And you hear me from far away
+							And my voice does not reach you
+							
+							@Pablo Neruda`,
+							`
+							GIVE me women, wine, and snuff
+							Untill I cry out 'hold, enough!'
+							You may do so sans objection
+							Till the day of resurrection:
+							For, bless my beard, they aye shall be
+							My beloved Trinity.
+							
+							@John Keats`,
+							`
+							The horizon behind is a wall of dark
+							etched with a memory,
+							fixed with a woman's face-they fight on and on,
+							boots in the mud and heads in the gray
+							rain-for the women they hate and the women they love-
+							for the women they left behind, they fight on.
+							
+							@Carl Sandburg`]
+ }
+//https://p5js.org/examples/input-mouse-functions.html
+let pg;
+let c;
+let currentc;
+let r1 = 60;
+let r2 = 60;
+let innerw = screen.width/2;
+let innerh = screen.height/2;
+let innerx = screen.width/5;
+let innery = 75;
+let rand = 1.0;
+let val = 0;
+let poem = '';
+let color = ['255','blue','#ff1493','red','#daa520'];
+let overbound1 = false;
+let tx = 0;
+let ty = 0;
+
+function setup() {
+  createCanvas(screen.width, screen.height); //before, 750,400
+  pg = createGraphics(innerw, innerh);
+	c = color[0];
+	currentc = c;
+	stroke(255);
+	
+}
+
+function draw() {
+  fill(0, 12);
+  rect(0, 0, width, height);
+	fill(c);
+  noStroke();
+  ellipse(mouseX, mouseY, r1, r2);
+	// Test if the cursor is over boun1
+  
+	if (
+    mouseX > innerx - r1 &&
+    mouseX < innerx + r1 &&		
+		mouseY > innery - r1 &&
+    mouseY < innery + r1
+  ) {
+		fill(color[1])
+		c = color[1]
+	} else {
+		noFill()
+		} 
+	 ellipse(innerx, innery, r1, r2);
+
+
+	if (
+    mouseX > innerx + innerw - r1 &&
+    mouseX < innerx + innerw + r1 &&
+    mouseY > innery - r1 &&
+    mouseY < innery + r1
+  ) {
+		fill(color[2])
+		c = color[2]
+	} else {
+		noFill()
+		} 
+	ellipse(innerx + innerw,innery, r1, r2);
+    
+
+
+	
+		if (
+    mouseX > innerx + innerw - r1 &&
+    mouseX < innerx + innerw + r1 &&
+		mouseY > innery + innerh - r1 &&
+    mouseY < innery + innerh + r1
+  ) {
+		fill(color[3])
+		c = color[3]
+	} else {
+		noFill()
+		} 
+	ellipse(innerx + innerw,innery + innerh, r1, r2);
+	
+	
+		if (
+    mouseX > innerx - r1 &&
+    mouseX < innerx + r1 &&
+    mouseY > innery + innerh - r1 &&
+    mouseY < innery + innerh + r1
+  ) {
+		fill(color[4])
+		c = color[4]
+	} else {
+		noFill()
+		} 
+	ellipse(innerx,innery + innerh, r1, r2);
+
+
+	
+	
+		if (
+    mouseX > innerx + innerw - r1 &&
+    mouseX < innerx + innerw + r1 &&
+    mouseY > innery - r1 &&
+    mouseY < innery + r1
+  ) {
+		c = color[2]
+		ellipse(mouseX, mouseY, r1, r2)
+	}
+	
+	
+  pg.background(51);
+  pg.noFill();
+  pg.stroke(255);
+  pg.ellipse(mouseX - innerx, mouseY - innery, r1, r2);
+	if (currentc != c) {
+		currentc = c
+		rand = Math.random()
+		if (rand <= .25) {
+			val = 0;
+		}else if (rand <= .5) {
+			val = 1;
+		}else if (rand <= .75) {
+			val = 2
+		}else if (rand <= 1.) {
+			val = 3
+		}
+	}
+	if (c === color[1]) {
+		poem = poems.m2w_quotes[val];
+		tx = mouseX - 2*r1;
+		ty = mouseY + r1;
+	} else if (c === color[2]) {
+		poem = poems.m2m_quotes[val];
+		tx = mouseX - 2*r1;
+		ty = mouseY + r1;
+	} else if (c === color[3]) {
+		poem = poems.w2m_quotes[val];
+		tx = mouseX - 2*r1;
+		ty = mouseY - poem.length + r1/2;
+	} else if (c === color[4]) {
+		poem = poems.w2w_quotes[val];
+		tx = mouseX - 2*r1;
+		ty = mouseY - poem.length + r1/2;
+	}
+	
+	pg.text(poem, tx - innerx, ty - innery)
+	
+
+  //Draw the offscreen buffer to the screen with image()
+  image(pg, innerx, innery);
+}
+
+//function windowResized() {
+//  resizeCanvas(windowWidth, windowHeight);
+//}
+
+	
+		</script>
+  <style></style>
+  </body>
+</html>

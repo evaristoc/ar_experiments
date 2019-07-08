@@ -29,8 +29,6 @@ function _classCallCheck(instance, Constructor) {
                       }
                     }
 
-var _statsGlobal;
-
 /* smoke.js */
 video = document.getElementById( 'video' );
 
@@ -90,8 +88,7 @@ var Smoke = function () {
       var width = this.width,
           height = this.height;
 
-      _statsGlobal = new Stats();
-      
+
       this.clock = new THREE.Clock();
 
       var renderer = this.renderer = new THREE.WebGLRenderer({alpha:true}); //make background transparent with alpha
@@ -129,7 +126,6 @@ var Smoke = function () {
       this.addParticles();
       this.addBackground();
 
-      document.body.appendChild( _statsGlobal.domElement );
       document.body.appendChild(renderer.domElement);
     }
   },
@@ -180,7 +176,7 @@ var Smoke = function () {
       var textureLoader = new THREE.TextureLoader();
       var smokeParticles = this.smokeParticles = []; //<--- smokeParticles is an attribute of the class
 
-      textureLoader.load('assets/grph/clouds.png', function (texture) {
+      textureLoader.load('public/assets/clouds.png', function (texture) {
         var smokeMaterial = new THREE.MeshLambertMaterial({
           //color: 0xffffff,
           color:'red',
@@ -261,15 +257,10 @@ var Smoke = function () {
     //E: runs evolveSmoke and re-render; assign update function to requestAnimationFrame
     key: 'update',
     value: function update() {
-      
-      _statsGlobal.begin();
-        
       this.evolveSmoke(this.clock.getDelta());
       this.render();
 
       requestAnimationFrame(this.update.bind(this));
-      
-      _statsGlobal.end();
     }
   },
   {

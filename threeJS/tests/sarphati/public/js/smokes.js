@@ -16,7 +16,7 @@ var _createClass = function () {
                           Object.defineProperty(target, descriptor.key, descriptor);
                         }
                       }
-                      return function (Constructor, protoProps, staticProps) {
+                      return function (Constructor, protoProps, staticProps) { //later called as `this`, options and defaults
                         if (protoProps) defineProperties(Constructor.prototype, protoProps);
                         if (staticProps) defineProperties(Constructor, staticProps);
                         return Constructor;

@@ -38,11 +38,11 @@ Thumbs.db
 
 #
 #########################
-**/build*
-**/img*
-**/image*
-**/src
-**/**-master
+*/build*
+*/img*
+*/image*
+*/src
+*/*-master
 
 # opencvJS implementation
 #########################

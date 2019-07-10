@@ -216,7 +216,7 @@ var app = (function APPmodule(){
                 (function canvas_setup(){
                     _canvasWidthGraphics  = app_canvas.width;
                     _canvasHeightGraphics = app_canvas.height;
-                    _ctxGraphics = canvas.getContext('2d');
+                    _ctxGraphics = app_canvas.getContext('2d');
                     _ctxGraphics.fillStyle = "rgb(0,255,0)";
                     _ctxGraphics.strokeStyle = "rgb(0,255,0)";
                     _app_vid = app_video;

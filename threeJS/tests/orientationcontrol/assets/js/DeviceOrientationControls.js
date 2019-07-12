@@ -93,7 +93,8 @@ THREE.DeviceOrientationControls = function( object ) {
 	this.update = function() {
 
 		if ( scope.enabled === false ) return;
-
+        
+        //E: why an offset angle for Z? probably to do with this: https://www.reddit.com/r/threejs/comments/6x5ub8/augmented_reality_controls/?
 		var alpha = scope.deviceOrientation.alpha ? THREE.Math.degToRad( scope.deviceOrientation.alpha ) + this.alphaOffsetAngle : 0; // Z
 		var beta = scope.deviceOrientation.beta ? THREE.Math.degToRad( scope.deviceOrientation.beta ) : 0; // X'
 		var gamma = scope.deviceOrientation.gamma ? THREE.Math.degToRad( scope.deviceOrientation.gamma ) : 0; // Y''
@@ -104,7 +105,7 @@ THREE.DeviceOrientationControls = function( object ) {
 
 	};
 
-	this.updateAlphaOffsetAngle = function( angle ) { //E: why an offset angle for Z?
+	this.updateAlphaOffsetAngle = function( angle ) {
 
 		this.alphaOffsetAngle = angle;
 		this.update();

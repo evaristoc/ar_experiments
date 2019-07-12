@@ -47,12 +47,15 @@
 		<script>
 			(function() {
 				  "use strict";
+				  var statsGlobal = new Stats();
 				  window.addEventListener('load', function() {
 						var container, camera, scene, renderer, controls, geometry, mesh;
 						var animate = function(){
+							statsGlobal.begin();
 							window.requestAnimationFrame( animate );
 							controls.update();
 							renderer.render(scene, camera);
+							statsGlobal.end();
 						};
 						container = document.getElementById( 'container' );
 						camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
@@ -76,6 +79,7 @@
 						renderer.domElement.style.position = 'absolute';
 						renderer.domElement.style.top = 0;
 						container.appendChild(renderer.domElement);
+						container.appendChild( statsGlobal.domElement );
 						window.addEventListener('resize', function() {
 							camera.aspect = window.innerWidth / window.innerHeight;
 							camera.updateProjectionMatrix();

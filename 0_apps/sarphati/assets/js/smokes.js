@@ -32,7 +32,7 @@ function _classCallCheck(instance, Constructor) {
 var _statsGlobal;
 
 /* smoke.js */
-video = document.getElementById( 'video' );
+var video = document.getElementById( 'video' );
 
 if ( navigator.mediaDevices && navigator.mediaDevices.getUserMedia ) {
     //var constraints = { video: { width: 1280, height: 720, facingMode: 'user' } };
@@ -210,33 +210,33 @@ var Smoke = function () {
     //-- it also reflects LIGHT
     key: 'addBackground',
     value: function addBackground() {
-      var scene = this.scene;
+      //var scene = this.scene;
 
-      var textureLoader = new THREE.TextureLoader();
-      var textGeometry = new THREE.PlaneBufferGeometry(600, 320);
-
-      //textureLoader.load('background.jpg', function (texture) {
-      //  var textMaterial = new THREE.MeshLambertMaterial({
-      //    blending: THREE.AdditiveBlending,
-      //    color: 0xffffff,
-      //    //color:'red',
-      //    map: texture,
-      //    opacity: 1,
-      //    transparent: true
-      //  });
-      //  textMaterial.map.minFilter = THREE.LinearFilter;
-      //  var text = new THREE.Mesh(textGeometry, textMaterial);
+      //var textureLoader = new THREE.TextureLoader();
+      //var textGeometry = new THREE.PlaneBufferGeometry(600, 320);
       //
-      //  text.position.z = 800;
-      //  //scene.add(text);
-      //});
+      ////textureLoader.load('background.jpg', function (texture) {
+      ////  var textMaterial = new THREE.MeshLambertMaterial({
+      ////    blending: THREE.AdditiveBlending,
+      ////    color: 0xffffff,
+      ////    //color:'red',
+      ////    map: texture,
+      ////    opacity: 1,
+      ////    transparent: true
+      ////  });
+      ////  textMaterial.map.minFilter = THREE.LinearFilter;
+      ////  var text = new THREE.Mesh(textGeometry, textMaterial);
+      ////
+      ////  text.position.z = 800;
+      ////  //scene.add(text);
+      ////});
       
-      var texture = new THREE.VideoTexture( video );
-      var textMaterial = new THREE.MeshBasicMaterial( { map: texture } );
-      textMaterial.map.minFilter = THREE.LinearFilter;
-      var text = new THREE.Mesh(textGeometry, textMaterial);
-      text.position.z = 800;
-      //scene.add(text);
+      //var texture = new THREE.VideoTexture( video );
+      //var textMaterial = new THREE.MeshBasicMaterial( { map: texture } );
+      //textMaterial.map.minFilter = THREE.LinearFilter;
+      //var text = new THREE.Mesh(textGeometry, textMaterial);
+      //text.position.z = 800;
+      ////scene.add(text);
     }
   },
   {

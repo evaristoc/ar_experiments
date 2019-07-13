@@ -155,14 +155,14 @@ var Scene = function(){ //adding parameters here and then calling them will have
                       //-- it also reflects LIGHT
                       key: 'addBackground',
                       value: function addBackground(video) {
-                        var scene = this.scene;
-                        var textureLoader = new THREE.TextureLoader();
-                        var textGeometry = new THREE.PlaneBufferGeometry(600, 320);
-                        var texture = new THREE.VideoTexture( video );
-                        var textMaterial = new THREE.MeshBasicMaterial( { map: texture } );
-                        textMaterial.map.minFilter = THREE.LinearFilter;
-                        var text = new THREE.Mesh(textGeometry, textMaterial);
-                        text.position.z = 800;
+                        //var scene = this.scene;
+                        //var textureLoader = new THREE.TextureLoader();
+                        //var textGeometry = new THREE.PlaneBufferGeometry(600, 320);
+                        //var texture = new THREE.VideoTexture( video );
+                        //var textMaterial = new THREE.MeshBasicMaterial( { map: texture } );
+                        //textMaterial.map.minFilter = THREE.LinearFilter;
+                        //var text = new THREE.Mesh(textGeometry, textMaterial);
+                        //text.position.z = 800;
                       }
                     },
                     {

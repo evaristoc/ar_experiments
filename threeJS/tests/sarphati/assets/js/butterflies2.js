@@ -89,37 +89,45 @@ var Butterfly = function () {
         meshObj:new THREE.Object3D(),
         confBodyWings: [
                     {
-                      bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1.png'),
+                      //bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1.png'),
+                      bodyTexture: new THREE.TextureLoader().load('assets/grph/b1.png'),
                       bodyW: 10,
                       bodyH: 15,
-                      wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1w.png'),
+                      //wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1w.png'),
+                      wingTexture: new THREE.TextureLoader().load('assets/grph/b1w.png'),
                       wingW: 10, wingH: 15,
                       wingX: 5.5
                     },
                     {
-                      bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1.png'),
+                      //bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1.png'),
+                      bodyTexture: new THREE.TextureLoader().load('assets/grph/b1.png'),
                       bodyW: 6,
                       bodyH: 9,
-                      wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b2w.png'),
+                      //wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b2w.png'),
+                      wingTexture: new THREE.TextureLoader().load('assets/grph/b2w.png'),
                       wingW: 15,
                       wingH: 20,
                       wingX: 7.5
                     },
                     {
-                      bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1.png'),
+                      //bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1.png'),
+                      bodyTexture: new THREE.TextureLoader().load('assets/grph/b1.png'),
                       bodyW: 8,
                       bodyH: 12,
-                      wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b3w.png'),
+                      //wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b3w.png'),
+                      wingTexture: new THREE.TextureLoader().load('assets/grph/b3w.png'),
                       wingW: 10,
                       wingH: 15,
                       wingX: 5.5
                     },
                     {
-                      bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b4.png'),
+                      //bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b4.png'),
+                      bodyTexture: new THREE.TextureLoader().load('assets/grph/b4.png'),
                       bodyW: 6,
                       bodyH: 10,
                       bodyY: 2,
-                      wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b4w.png'),
+                      //wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b4w.png'),
+                      wingTexture: new THREE.TextureLoader().load('assets/grph/b4w.png'),
                       wingW: 15,
                       wingH: 20,
                       wingX: 8 },
@@ -150,7 +158,7 @@ var Butterfly = function () {
                     
                     var geometry = new THREE.PlaneGeometry(bconf.wingW, bconf.wingH);
                     var material = new THREE.MeshBasicMaterial({
-                                        transparent: false,
+                                        transparent: true,
                                         //color: 'yellow',
                                         map: bconf.wingTexture,
                                         side: THREE.DoubleSide,

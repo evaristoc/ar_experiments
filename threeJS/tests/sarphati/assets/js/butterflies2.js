@@ -3,6 +3,11 @@
 --- _createClass seems to be a factory or a builder
 --- _classCallCheck is a private function to check for class as a function (function instantiated as Constructor in this case)
 */
+
+const statsGlobal = new Stats();
+const guiGlobal = new dat.GUI();
+guiGlobal.close();
+
 var _createClass = function () {
                       function defineProperties(target, props) {
                         for (var i = 0; i < props.length; i++) {
@@ -83,6 +88,7 @@ var Butterfly = function () {
 
       _classCallCheck(this, Butterfly); //E: this is in this case var Smoke defined AS GLOBAL; the question is if that variable is defined as Smoke Constructor
       
+      
       var defaults = {
         lwing: new THREE.Object3D(),
         rwing: new THREE.Object3D(),
@@ -140,6 +146,10 @@ var Butterfly = function () {
         velocityLimit: 1.2,
         attraction: 0.03
       };
+
+      //<>gui.add(conf, 'move');
+      //<>gui.add(conf, 'followMouse');
+      //<>gui.add(conf, 'shuffle');
   
       Object.assign(this, options, defaults);
       this.init();
@@ -311,6 +321,7 @@ var Scene = function(){ //adding parameters here and then calling them will have
                             this.addButterflies();
                       
                             document.body.appendChild(renderer.domElement);
+                            document.body.appendChild(statsGlobal.domElement);
                         }
                      },
                     {
@@ -372,10 +383,19 @@ var Scene = function(){ //adding parameters here and then calling them will have
                      value: []
                     },
                     {
+                     key: 'nbButterflies',
+                     value: 1
+                    },
+                    {
                      key: 'addButterflies',
                      value: function addButterflies(){
                         var scene = this.scene;
-                        const nbButterflies = 15;
+                        for(let i = 0; i < this.butterflies.length; i++){
+                          scene.remove(this.butterflies[i].meshObj);
+                        };
+                        this.butterflies = [];
+                        //const nbButterflies = 15;
+                        const nbButterflies = this.nbButterflies;
                         function shuffle(_b){
                             for (var i = 0; i < _b.length; i++) {
                               _b[i].shuffleHELPER();
@@ -397,12 +417,14 @@ var Scene = function(){ //adding parameters here and then calling them will have
                         var zelf = this;
                         var scene = this.scene;
                         //console.error(zelf);
+                        statsGlobal.begin();
                         requestAnimationFrame(update.bind(this));
                         TWEEN.update();
                         for (var i = 0; i < this.butterflies.length; i++) {
                           this.butterflies[i].move();
                         };
                         this.render();
+                        statsGlobal.end();
                       }
                     },
                     {
@@ -437,7 +459,6 @@ var Scene = function(){ //adding parameters here and then calling them will have
 
 var app = (function APPmodule(){
             /*--- misc var ---*/
-            var _guiGlobal;
             var _optionsGlobal;
             var _ctxGraphics;
             var _canvasWidthGraphics;
@@ -453,10 +474,15 @@ var app = (function APPmodule(){
                     _ctxGraphics.strokeStyle = "rgb(0,255,0)";
                     _app_vid = app_video;
                   }());
-                var cube = new Cube();
+                //var cube = new Cube();
                 var scene = new Scene();
                 scene.width = _canvasWidthGraphics;
                 scene.height = _canvasHeightGraphics;
+                var guicontroller = guiGlobal.add(scene, 'nbButterflies').step(1);
+                guicontroller.onChange(function(val){
+                          console.log(val);
+                          scene.addButterflies();
+                        });
                 //console.log(scene.width, _canvasWidthGraphics, scene.height, _canvasHeightGraphics);
                 scene.init(); //if instantiated at CLASS, this will instantiate another canvas!; but if not previous instantiation, I can modify defaults
                 //scene.addBackground(_app_vid);

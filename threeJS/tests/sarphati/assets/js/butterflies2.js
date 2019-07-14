@@ -88,10 +88,41 @@ var Butterfly = function () {
         rwing: new THREE.Object3D(),
         meshObj:new THREE.Object3D(),
         confBodyWings: [
-                    { bodyTexture: null, bodyW: 10, bodyH: 15, wingTexture: null, wingW: 10, wingH: 15, wingX: 5.5 },
-                    { bodyTexture: null, bodyW: 6, bodyH: 9, wingTexture: null, wingW: 15, wingH: 20, wingX: 7.5 },
-                    { bodyTexture: null, bodyW: 8, bodyH: 12, wingTexture: null, wingW: 10, wingH: 15, wingX: 5.5 },
-                  { bodyTexture: null, bodyW: 6, bodyH: 10, bodyY: 2, wingTexture: null, wingW: 15, wingH: 20, wingX: 8 },
+                    {
+                      bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1.png'),
+                      bodyW: 10,
+                      bodyH: 15,
+                      wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1w.png'),
+                      wingW: 10, wingH: 15,
+                      wingX: 5.5
+                    },
+                    {
+                      bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1.png'),
+                      bodyW: 6,
+                      bodyH: 9,
+                      wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b2w.png'),
+                      wingW: 15,
+                      wingH: 20,
+                      wingX: 7.5
+                    },
+                    {
+                      bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b1.png'),
+                      bodyW: 8,
+                      bodyH: 12,
+                      wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b3w.png'),
+                      wingW: 10,
+                      wingH: 15,
+                      wingX: 5.5
+                    },
+                    {
+                      bodyTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b4.png'),
+                      bodyW: 6,
+                      bodyH: 10,
+                      bodyY: 2,
+                      wingTexture: new THREE.TextureLoader().load('https://klevron.github.io/codepen/butterflies/b4w.png'),
+                      wingW: 15,
+                      wingH: 20,
+                      wingX: 8 },
                   ],
         destination: new THREE.Vector3(),
         minWingRotation: -Math.PI / 6,

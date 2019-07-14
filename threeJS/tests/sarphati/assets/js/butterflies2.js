@@ -175,7 +175,7 @@ var Butterfly = function () {
                   
                     geometry = new THREE.PlaneGeometry(bconf.bodyW, bconf.bodyH);
                     material = new THREE.MeshBasicMaterial({
-                                        transparent: false,
+                                        transparent: true,
                                         map: bconf.bodyTexture,
                                         side: THREE.DoubleSide,
                                         depthTest: false

@@ -149,8 +149,13 @@ var Butterfly = function () {
                     var bconf = this.confBodyWings[Math.floor(this.rndHELPER(4))];
                     
                     var geometry = new THREE.PlaneGeometry(bconf.wingW, bconf.wingH);
-                    var material = new THREE.MeshBasicMaterial({ transparent: false, color: 'yellow', side: THREE.DoubleSide, depthTest: false });
-                    
+                    var material = new THREE.MeshBasicMaterial({
+                                        transparent: false,
+                                        //color: 'yellow',
+                                        map: bconf.wingTexture,
+                                        side: THREE.DoubleSide,
+                                        depthTest: false
+                                      });
                     var lwmesh = new THREE.Mesh(geometry, material);
                     lwmesh.position.x = -bconf.wingX;
                     this.lwing.add(lwmesh);
@@ -161,7 +166,12 @@ var Butterfly = function () {
                     this.rwing.add(rwmesh);
                   
                     geometry = new THREE.PlaneGeometry(bconf.bodyW, bconf.bodyH);
-                    material = new THREE.MeshBasicMaterial({ transparent: false, map: bconf.bodyTexture, side: THREE.DoubleSide, depthTest: false });
+                    material = new THREE.MeshBasicMaterial({
+                                        transparent: false,
+                                        map: bconf.bodyTexture,
+                                        side: THREE.DoubleSide,
+                                        depthTest: false
+                                      });
                     var body = new THREE.Mesh(geometry, material);
                     if (bconf.bodyY) body.position.y = bconf.bodyY;
                     

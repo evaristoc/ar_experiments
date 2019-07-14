@@ -384,7 +384,7 @@ var Scene = function(){ //adding parameters here and then calling them will have
                     },
                     {
                      key: 'nbButterflies',
-                     value: 1
+                     value: 15
                     },
                     {
                      key: 'addButterflies',
@@ -394,18 +394,20 @@ var Scene = function(){ //adding parameters here and then calling them will have
                           scene.remove(this.butterflies[i].meshObj);
                         };
                         this.butterflies = [];
-                        //const nbButterflies = 15;
+                        
                         const nbButterflies = this.nbButterflies;
                         function shuffle(_b){
                             for (var i = 0; i < _b.length; i++) {
                               _b[i].shuffleHELPER();
                             };
                         };
+                        
                         for (var i = 0; i < nbButterflies; i++) {
                           var b = new Butterfly();
                           this.butterflies.push(b);
                           scene.add(b.meshObj);
                         };
+                        
                         shuffle(this.butterflies);
                         //console.log(this.butterflies);
                      }

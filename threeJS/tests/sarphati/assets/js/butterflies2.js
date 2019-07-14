@@ -76,6 +76,158 @@ var Cube = function () {
     return Cube;
 }(); //<--- run ALL the functions at instantiation
 
+var Butterfly = function () {
+    //E:
+    /*  FUNCTION OBJECT: Smoke */
+    function Butterfly(options) {
+
+      _classCallCheck(this, Butterfly); //E: this is in this case var Smoke defined AS GLOBAL; the question is if that variable is defined as Smoke Constructor
+      
+      var defaults = {
+        lwing: new THREE.Object3D(),
+        rwing: new THREE.Object3D(),
+        meshObj:new THREE.Object3D(),
+        confBodyWings: [
+                    { bodyTexture: null, bodyW: 10, bodyH: 15, wingTexture: null, wingW: 10, wingH: 15, wingX: 5.5 },
+                    { bodyTexture: null, bodyW: 6, bodyH: 9, wingTexture: null, wingW: 15, wingH: 20, wingX: 7.5 },
+                    { bodyTexture: null, bodyW: 8, bodyH: 12, wingTexture: null, wingW: 10, wingH: 15, wingX: 5.5 },
+                  { bodyTexture: null, bodyW: 6, bodyH: 10, bodyY: 2, wingTexture: null, wingW: 15, wingH: 20, wingX: 8 },
+                  ],
+        destination: new THREE.Vector3(),
+        minWingRotation: -Math.PI / 6,
+        maxWingRotation: Math.PI / 2 - 0.1,
+        wingRotation: 0,
+        velocity: new THREE.Vector3(),
+        velocityLimit: 1.2,
+        attraction: 0.03
+      };
+  
+      Object.assign(this, options, defaults);
+      this.init();
+    }
+  
+    //E: it is HERE where the Constructor type is assigned and the real class created
+    // notice that the design by this author consists in passing all the properties as OBJECTS to the FACTORY
+    _createClass(Butterfly, [
+            { 
+            key: 'init',
+            value: function init() {
+                    //console.error('velocity', this.velocity)
+                    this.velocity.set(this.rndHELPER(1, true), this.rndHELPER(1, true), this.rndHELPER(1, true));
+                    
+                    var bconf = this.confBodyWings[Math.floor(this.rndHELPER(4))];
+                    
+                    var geometry = new THREE.PlaneGeometry(bconf.wingW, bconf.wingH);
+                    var material = new THREE.MeshBasicMaterial({ transparent: false, color: 'yellow', side: THREE.DoubleSide, depthTest: false });
+                    
+                    var lwmesh = new THREE.Mesh(geometry, material);
+                    lwmesh.position.x = -bconf.wingX;
+                    this.lwing.add(lwmesh);
+                  
+                    var rwmesh = new THREE.Mesh(geometry, material);
+                    rwmesh.rotation.y = Math.PI;
+                    rwmesh.position.x = bconf.wingX;
+                    this.rwing.add(rwmesh);
+                  
+                    geometry = new THREE.PlaneGeometry(bconf.bodyW, bconf.bodyH);
+                    material = new THREE.MeshBasicMaterial({ transparent: false, map: bconf.bodyTexture, side: THREE.DoubleSide, depthTest: false });
+                    var body = new THREE.Mesh(geometry, material);
+                    if (bconf.bodyY) body.position.y = bconf.bodyY;
+                    
+                    var group = new THREE.Object3D();
+                    group.add(body);
+                    group.add(this.lwing);
+                    group.add(this.rwing);
+                    group.rotation.x = Math.PI / 2;
+                    group.rotation.y = Math.PI;
+                    
+                    this.setWingRotation(this.wingRotation);
+                    this.initTween();
+                    
+                    this.meshObj.add(group);
+                    
+                }
+            },
+            {
+            key: 'mesh',
+            value: function mesh(){
+                return meshObj
+              }
+            },
+            {
+             key: 'initTween',
+             value: function initTween(){
+                //console.error('in initTween', this.velocityLimit, this.velocity.length());
+                var rangevel = this.velocityLimit - this.velocity.length();
+                var duration = this.limitHELPER(rangevel, 0.1, 1.5) * 1000;
+                this.wingRotation = this.minWingRotation;
+                  this.tweenWingRotation = new TWEEN.Tween(this)
+                        .to({ wingRotation: this.maxWingRotation }, duration)
+                        .repeat(1)
+                        .yoyo(true)
+                        // .easing(TWEEN.Easing.Cubic.InOut)
+                        .onComplete(function(object) {
+                          object.initTween();
+                        })
+                        .start();
+             }
+            },
+            {
+             key: 'setWingRotation',
+             value: function setWingRotation(y){
+                this.lwing.rotation.y = y;
+                this.rwing.rotation.y = -y;
+             }
+            },
+            {
+             key: 'move',
+             value: function move(){
+                var destination = this.destination;
+                var dv = this.destination.clone().sub(this.meshObj.position).normalize();
+                this.velocity.x += this.attraction * dv.x;
+                this.velocity.y += this.attraction * dv.y;
+                this.velocity.z += this.attraction * dv.z;
+                this.limitVelocity.bind(this);
+                this.setWingRotation(this.wingRotation);
+                this.meshObj.lookAt(this.meshObj.position.clone().add(this.velocity));
+                this.meshObj.position.add(this.velocity);
+             }
+            },
+            {
+             key: 'limitVelocity',
+             value: function limitVelocity(){
+                this.velocity.x = this.limitHELPER(this.velocity.x, -this.velocityLimit, this.velocityLimit);
+                this.velocity.y = this.limitHELPER(this.velocity.y, -this.velocityLimit, this.velocityLimit);
+                this.velocity.z = this.limitHELPER(this.velocity.z, -this.velocityLimit, this.velocityLimit);
+             }
+            },
+            {
+             key: 'shuffleHELPER',
+             value: function shuffleHELPER(){
+                var p = new THREE.Vector3(this.rndHELPER(1, true), this.rndHELPER(1, true), this.rndHELPER(1, true)).normalize().multiplyScalar(100);
+                this.meshObj.position.set(p.x, p.y, p.z);
+                var scale = this.rndHELPER(0.4) + 0.1;
+                this.meshObj.scale.set(scale, scale, scale);
+             }
+            },
+            {
+             key: 'limitHELPER',
+             value: function limitHELPER(number, minL, maxL){
+                return Math.min(Math.max(number, minL), maxL);
+             }
+            },
+            {
+             key: 'rndHELPER',
+             value: function rndHELPER(max, negative){
+                return negative ? Math.random() * 2 * max - max : Math.random() * max;
+             }
+            }
+      ]);
+  
+    //E: return the class!
+    return Butterfly;
+}(); //<--- run ALL the functions at instantiation
+
 var Scene = function(){ //adding parameters here and then calling them will have NO effect over defaults
         function Scene(options){
             _classCallCheck(this, Scene);
@@ -84,8 +236,8 @@ var Scene = function(){ //adding parameters here and then calling them will have
               height: window.innerHeight
             };
             Object.assign(this, options, defaults);
-            //this.onResize = this.onResize.bind(this);
-            //this.addEventListeners();
+            this.onResize = this.onResize.bind(this);
+            this.addEventListeners();
             //this.init();            
         };
         
@@ -107,6 +259,7 @@ var Scene = function(){ //adding parameters here and then calling them will have
                             this.scene = new THREE.Scene();
                             this.addCamera();
                             this.addLights();
+                            this.addButterflies();
                       
                             document.body.appendChild(renderer.domElement);
                         }
@@ -139,7 +292,7 @@ var Scene = function(){ //adding parameters here and then calling them will have
                   
                         var camera = this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 1, 10000);
                   
-                        camera.position.z = 1000;
+                        camera.position.z = 10;
                         scene.add(camera);
                       }
                     },
@@ -166,11 +319,41 @@ var Scene = function(){ //adding parameters here and then calling them will have
                       }
                     },
                     {
+                     key: 'butterflies',
+                     value: []
+                    },
+                    {
+                     key: 'addButterflies',
+                     value: function addButterflies(){
+                        var scene = this.scene;
+                        const nbButterflies = 15;
+                        function shuffle(_b){
+                            for (var i = 0; i < _b.length; i++) {
+                              _b[i].shuffleHELPER();
+                            };
+                        };
+                        for (var i = 0; i < nbButterflies; i++) {
+                          var b = new Butterfly();
+                          this.butterflies.push(b);
+                          scene.add(b.meshObj);
+                        };
+                        shuffle(this.butterflies);
+                        //console.log(this.butterflies);
+                     }
+                    },
+                    {
                       //E: runs evolveSmoke and re-render; assign update function to requestAnimationFrame
                       key: 'update',
                       value: function update() {
+                        var zelf = this;
                         var scene = this.scene;
-                        //this.render();
+                        //console.error(zelf);
+                        requestAnimationFrame(update.bind(this));
+                        TWEEN.update();
+                        for (var i = 0; i < this.butterflies.length; i++) {
+                          this.butterflies[i].move();
+                        };
+                        this.render();
                       }
                     },
                     {
@@ -227,9 +410,10 @@ var app = (function APPmodule(){
                 scene.height = _canvasHeightGraphics;
                 //console.log(scene.width, _canvasWidthGraphics, scene.height, _canvasHeightGraphics);
                 scene.init(); //if instantiated at CLASS, this will instantiate another canvas!; but if not previous instantiation, I can modify defaults
-                scene.addBackground(_app_vid);
-                scene.addMesh(cube.mesh());
+                //scene.addBackground(_app_vid);
+                //scene.addMesh(cube.mesh());
                 scene.render();
+                scene.update();
             };
         return {app_init: app_init, tick: ()=>console.log('tick')};
     }());

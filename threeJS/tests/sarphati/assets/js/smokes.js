@@ -176,7 +176,7 @@ var Smoke = function () {
       var textureLoader = new THREE.TextureLoader();
       var smokeParticles = this.smokeParticles = []; //<--- smokeParticles is an attribute of the class
 
-      textureLoader.load('public/assets/clouds.png', function (texture) {
+      textureLoader.load('assets/grph/clouds.png', function (texture) {
         var smokeMaterial = new THREE.MeshLambertMaterial({
           //color: 0xffffff,
           color:'red',

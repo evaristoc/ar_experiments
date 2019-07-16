@@ -23,7 +23,7 @@ Some of the libraries/frameworks used so far:
 Models, animations and examples are usually found on codepen, Poly, three.js' pages, tutorials.
 
 ###Code Revisions
-For those who like to have an insight of the code, I am posting pictures of some of my whiteboard analyses of some chosen scripts as well as the modifications I am making on them. When modifying a script I usually look for better readibility, re-usability and separation of concerns. I usually write ES5 JS OOP / Module Pattern because I find it still more compatible and widespread in this sector (graphic design with JS) but there could be examples with other characteristics.
+For those who like to have an insight of the code, I am posting pictures of some of my whiteboard analyses of some scripts, either originals or modifications. When modifying a script I usually look for better readibility, re-usability and separation of concerns. I usually write ES5 JS OOP / Module Pattern because I have found it still largerly widespread in computer graphics with JS, but there could be examples with other characteristics.
 
 ---
 

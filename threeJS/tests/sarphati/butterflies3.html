@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sarphati: Butterflies - threeJS</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="EC">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no,minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js'></script>
+  	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.3.0/Tween.min.js"></script>
+	<script src="https://threejs.org/examples/js/loaders/OBJLoader.js"></script>
+	<script src="https://threejs.org/examples/js/loaders/MTLLoader.js"></script>
+    <script type="text/javascript" src="../../../public/js/compatibility.js"></script>
+    <script type="text/javascript" src="../../../public/js/stats.min.v17.js"></script>
+    <script type="text/javascript" src="../../../public/js/profiler.js"></script>
+    <script type="text/javascript" src="../../../public/js/dat.gui.min.js"></script>
+    <link rel="stylesheet" href="./assets/style/butterflies.css"><!-- TODO -->  
+</head>
+
+<body>
+
+    <!--<video id="video" autoplay style="display:none;"></video>
+    <div id="monitor"></div>-->
+    <video id="webcam" autoplay style="position:absolute; z-index:-1000;"></video>
+    <div style="position:absolute; width:640px;height:480px;margin: 10px auto;">
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <div id="no_rtc" class="alert alert-error" style="display:none;"></div>
+    <div id="log" class="alert alert-info"></div>
+    </div>
+    <script  src="./assets/js/butterflies3.js"></script>
+
+
+
+
+</body>
+
+</html>

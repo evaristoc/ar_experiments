@@ -218,7 +218,7 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
                           //=*
                           //console.log(typeof this._mtlLoader.load);//<-- HERE STILL WORK BUT...
                           //*=
-                          let z = this; //<----------------------------- RELEVANT: OTHER USES OF `this` BECOME `undefined`
+                          let zelf = this; //<----------------------------- RELEVANT: OTHER USES OF `this` BECOME `undefined`
                           
                           //=*
                           //HOW TO IMPROVE THE LINE ABOVE?
@@ -233,28 +233,28 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
                           //
                           //KEEPING CURRENT FORMAT...
                           //*=
-                          z._mtlLoader.load(z._url+'.mtl', function(materials){ // this function doesn't require to return
+                          zelf._mtlLoader.load(zelf._url+'.mtl', function(materials){ // this function doesn't require to return
                                                         //materials.preload();
                                                         //console.log(materials, z, z.objLoading);
-                                                        z._objLoader.setMaterials( materials );
-                                                        z.objLoading();
+                                                        zelf._objLoader.setMaterials( materials );
+                                                        zelf.objLoading();
                                   })                          
                       },
         objLoading : function(){
-                        let z = this;
+                        let zelf = this;
                         console.log(this); //<---- USEFUL...
-                        z._objLoader.load(z._url+'.obj', function(obj) {
+                        zelf._objLoader.load(zelf._url+'.obj', function(obj) {
                             obj.position.x = z.to.x;
                             obj.position.y = z.to.y;
                             obj.position.z = z.to.z;
                             //https://stackoverflow.com/questions/39850083/three-js-objloader-texture
                             obj.traverse(function (child) {   // aka setTexture
                                 if (child instanceof THREE.Mesh) {
-                                    child.material.map = z._textureLoad;
+                                    child.material.map = zelf._textureLoad;
                                 }
                             });                         
                             //console.log('who', this, z); //<---- USEFUL...
-                            z._subScene.add(obj);
+                            zelf._subScene.add(obj);
                             //z._render();
                           })
                       }
@@ -336,19 +336,19 @@ https://www.learnthreejs.com/load-3d-model-using-three-js-obj-loader/
             return new THREE.SphereGeometry(radius);
           },
         launch: function(){
-            let z = this;
-            let mat = z.material(z._color);
-            let geo = z.geometry(z._radius);
+            let zelf = this;
+            let mat = zelf.material(zelf._color);
+            let geo = zelf.geometry(zelf._radius);
             let mesh = new THREE.Mesh(geo, mat);
             let _diffx = Math.random()*.01*(Math.random() > .5? 1:-1);
             let _diffz = Math.random()*.01*(Math.random() > .5? 1:-1);
-            mesh.position.x = z._x + _diffx;
-            mesh.position.y = z._y;
-            mesh.position.z = z._z + _diffz;
+            mesh.position.x = zelf._x + _diffx;
+            mesh.position.y = zelf._y;
+            mesh.position.z = zelf._z + _diffz;
             //markerRoot.add(mesh);
             this._subScene.add(mesh);
             console.log('scene inside object', markerRoot);
-            z._particle = mesh;
+            zelf._particle = mesh;
         }
       };
       

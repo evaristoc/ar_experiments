@@ -316,22 +316,7 @@ var Chimney = function(){
 };
 
 
-var ARJS = function(){
-        function ARJS(options){
-            _classCallCheck(this, ARJS);
-            var defaults = {
-                
-            };
-            Object.assign(this, options, defaults);
-            this.init();           
-        };
-        
-        _createClass(
-            ARJS,
-            []
-        )
-        ;
-};
+
 
 
 var Scene = function(){ //adding parameters here and then calling them will have NO effect over defaults

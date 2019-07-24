@@ -1,10 +1,10 @@
-##*Experiencing Augmented Reality and Computer Vision with Javascript*
+## *Experiencing Augmented Reality and Computer Vision with Javascript*
 
 Here you will find my explorations around Augmented Reality and Computer Vision, all in Javascript. I also explore 2d, pseudo-3d and 3d graphics.
 
 What I am doing is just making quick-and-dirty modifications from existing Javascript libraries and examples. Because the exploratory nature of the repo several scripts are verbosely commented and explained ([example](https://github.com/evaristoc/ar_experiments/blob/gh-pages/trackingPLUSjsfeat/nftPLUSaframe/test4.html)). Don't expect production-ready projects but mostly demos.
 
-###Sources
+### Sources
 
 Some of the libraries/frameworks used so far:
 * [three.js](https://threejs.org/)
@@ -22,7 +22,7 @@ Some of the libraries/frameworks used so far:
 
 Models, animations and examples are usually found on codepen, Poly, three.js' pages, tutorials.
 
-###Code Revisions
+### Code Revisions
 For those who like to have an insight of the code, I am posting pictures of some of my whiteboard analyses of some scripts, either originals or modifications. When modifying a script I usually look for better readibility, re-usability and separation of concerns. I usually write ES5 JS OOP / Module Pattern because I have found it still largerly widespread in computer graphics with JS, but there could be examples with other characteristics.
 
 ---

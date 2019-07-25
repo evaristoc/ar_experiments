@@ -1,6 +1,8 @@
 var scene, camera, cameraCtrl, light, renderer, clock, deltaTime, totalTime;
-var whw = window.innerWidth;
-var whh = window.innerHeight;
+//var whw = window.innerWidth;
+//var whh = window.innerHeight;
+var whw = 400;
+var whh = 700;
 var opacitybackground = 0.0;
 
 function rnd(max, negative) {
@@ -229,8 +231,8 @@ function initialize()
 	
     renderer.setClearAlpha(opacitybackground);
     //renderer.setClearColor(new THREE.Color('lightgrey'), 0)
-	renderer.setSize( 640, 480 );
-	//renderer.setSize(whw, whh);
+    //renderer.setSize( 640, 480 ); //width, height
+	renderer.setSize(whw, whh);
     renderer.domElement.style.position = 'absolute'
 	renderer.domElement.style.top = '0px'
 	renderer.domElement.style.left = '0px'

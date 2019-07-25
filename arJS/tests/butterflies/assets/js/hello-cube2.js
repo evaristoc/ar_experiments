@@ -345,7 +345,7 @@ function update1() //just a bit of house-keeping: moving some functionality not 
         camera = new THREE.Camera();
         scene.add(camera);
         render();
-        $('.sidenav').width(wWidth);
+        //$('.sidenav').width(wWidth);
 
         // build markerControls
         markerRoot1 = new THREE.Group();
@@ -364,7 +364,7 @@ function update1() //just a bit of house-keeping: moving some functionality not 
         arToolkitContext.init( function onCompleted(){
             camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
         });
-        //update2();
+        update2();
 
     }else{
         requestAnimationFrame(animate);

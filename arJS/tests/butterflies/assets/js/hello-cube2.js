@@ -1,8 +1,8 @@
 var scene, camera, cameraCtrl, light, renderer, clock, deltaTime, totalTime;
 //var whw = window.innerWidth;
 //var whh = window.innerHeight;
-var whw = 400;
-var whh = 700;
+var wWidth = Math.max( 0, window.innerWidth || document.body.clientWidth || document.documentElement.clientWidth || 0 );
+var wHeight = Math.max( 0, window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight || 0 );;
 var opacitybackground = 0.0;
 
 function rnd(max, negative) {
@@ -220,7 +220,7 @@ function initialize()
 	scene.add( ambientLight );
 				
 	//camera = new THREE.Camera();
-    camera = new THREE.PerspectiveCamera(50, whw / whh, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(50, wWidth / wHeight, 0.1, 1000);
     cameraCtrl = new THREE.OrbitControls(camera);	
     scene.add(camera);
     
@@ -229,10 +229,11 @@ function initialize()
 		alpha: true
 	});
 	
+    renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setClearAlpha(opacitybackground);
     //renderer.setClearColor(new THREE.Color('lightgrey'), 0)
     //renderer.setSize( 640, 480 ); //width, height
-	renderer.setSize(whw, whh);
+	renderer.setSize(wWidth, wHeight);
     renderer.domElement.style.position = 'absolute'
 	renderer.domElement.style.top = '0px'
 	renderer.domElement.style.left = '0px'
@@ -344,7 +345,7 @@ function update1() //just a bit of house-keeping: moving some functionality not 
         camera = new THREE.Camera();
         scene.add(camera);
         render();
-        $('.sidenav').width(whw);
+        $('.sidenav').width(wWidth);
 
         // build markerControls
         markerRoot1 = new THREE.Group();

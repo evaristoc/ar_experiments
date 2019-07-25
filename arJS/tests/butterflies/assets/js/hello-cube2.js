@@ -297,18 +297,19 @@ function initialize()
 	})
 
     
-	let geometry1	= new THREE.CubeGeometry(1,1,1);
-	let material1	= new THREE.MeshNormalMaterial({
-		transparent: true,
-		opacity: 0.5,
-		side: THREE.DoubleSide
-	}); 
-	
-	mesh1 = new THREE.Mesh( geometry1, material1 );
-	mesh1.position.y = 0.5;
-
-    
-	markerRoot1.add( mesh1 );
+//	/*--- test volume ---*/
+//    let geometry1	= new THREE.CubeGeometry(1,1,1);
+//	let material1	= new THREE.MeshNormalMaterial({
+//		transparent: true,
+//		opacity: 0.5,
+//		side: THREE.DoubleSide
+//	}); 
+//	
+//	mesh1 = new THREE.Mesh( geometry1, material1 );
+//	mesh1.position.y = 0.5;
+//
+//    
+//	markerRoot1.add( mesh1 );
 }
 
 var smokeParticles = {};
@@ -340,7 +341,7 @@ function update1() //just a bit of house-keeping: moving some functionality not 
         scene.add(camera);
         render();
         console.log($('.sidenav'));
-        $('.sidenav').width('400px');
+        $('.sidenav').width(window.innerWidth);
 
         // build markerControls
         markerRoot1 = new THREE.Group();

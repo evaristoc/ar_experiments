@@ -14,7 +14,7 @@ var arToolkitSource, arToolkitContext;
 var markerRoot1, markerRoot2;
 
 var mesh1;
-const nbButterflies = 50;
+const nbButterflies = 10;
 var lengthB = 1;
 var conf;
 var butterflies;
@@ -234,9 +234,16 @@ function initialize()
     //renderer.setClearColor(new THREE.Color('lightgrey'), 0)
     //renderer.setSize( 640, 480 ); //width, height
 	renderer.setSize(wWidth, wHeight);
-    renderer.domElement.style.position = 'absolute'
-	renderer.domElement.style.top = '0px'
-	renderer.domElement.style.left = '0px'
+//    renderer.domElement.style.position = 'absolute'
+//	renderer.domElement.style.top = '0px'
+//	renderer.domElement.style.left = '0px'
+    renderer.domElement.style["display"]  = "block";
+    renderer.domElement.style["position"] = "fixed";
+    //renderer.domElement.style["position"] = "absolute";
+    renderer.domElement.style["width"]    = "100%";
+    renderer.domElement.style["height"]   = "100%";
+    renderer.domElement.style["top"] = '0px';
+    renderer.domElement.style["left"] = '0px';
 	document.body.appendChild( renderer.domElement );
     
     document.body.appendChild(stats.domElement);

@@ -1,5 +1,6 @@
 var scene, camera, cameraCtrl, light, renderer, clock, deltaTime, totalTime;
-var whw, whh;
+var whw = window.innerWidth;
+var whh = window.innerHeight;
 var opacitybackground = 0.0;
 
 function rnd(max, negative) {
@@ -25,6 +26,7 @@ animate();
 
 function initialize()
 {
+    
     conf = {
       attraction: 0.03,
       velocityLimit: 1.2,
@@ -216,7 +218,7 @@ function initialize()
 	scene.add( ambientLight );
 				
 	//camera = new THREE.Camera();
-    camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(50, whw / whh, 0.1, 1000);
     cameraCtrl = new THREE.OrbitControls(camera);	
     scene.add(camera);
     
@@ -227,8 +229,8 @@ function initialize()
 	
     renderer.setClearAlpha(opacitybackground);
     //renderer.setClearColor(new THREE.Color('lightgrey'), 0)
-	//renderer.setSize( 640, 480 );
-	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.setSize( 640, 480 );
+	//renderer.setSize(whw, whh);
     renderer.domElement.style.position = 'absolute'
 	renderer.domElement.style.top = '0px'
 	renderer.domElement.style.left = '0px'
@@ -340,8 +342,7 @@ function update1() //just a bit of house-keeping: moving some functionality not 
         camera = new THREE.Camera();
         scene.add(camera);
         render();
-        console.log($('.sidenav'));
-        $('.sidenav').width(window.innerWidth);
+        $('.sidenav').width(whw);
 
         // build markerControls
         markerRoot1 = new THREE.Group();

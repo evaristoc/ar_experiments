@@ -28,7 +28,8 @@
 }
 
 /* Position and style the close button (top right corner) */
-.sidenav .closebtn {
+/* .sidenav .closebtn {*/
+.closebtn {
   position: absolute;
   top: 0;
   right: 25px;

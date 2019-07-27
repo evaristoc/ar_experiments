@@ -14,7 +14,7 @@ var arToolkitSource, arToolkitContext;
 var markerRoot1, markerRoot2;
 
 var mesh1;
-const nbButterflies = 10;
+const nbButterflies = 200;
 var lengthB = 1;
 var conf;
 var butterflies;
@@ -24,7 +24,6 @@ var destination = new THREE.Vector3();
 var stats = new Stats();
 
 initialize();
-animate();
 
 function initialize()
 {
@@ -393,6 +392,15 @@ function update1() //just a bit of house-keeping: moving some functionality not 
     };
 }
 
+/* Set the width of the side navigation to 0 */
+function closeStart() {
+  //document.getElementById("mySidenav2").style.width = "0";
+  // Removes an element from the document
+  var element = document.getElementById("mySidenav2");
+  element.parentNode.removeChild(element);
+  animate();
+}
+
 
 /* Set the width of the side navigation to 0 */
 function closeNav() {
@@ -459,8 +467,6 @@ function init() {
   onWindowResize();
   window.addEventListener('resize', onWindowResize, false);
 
-
-  animate();
 };
 
 

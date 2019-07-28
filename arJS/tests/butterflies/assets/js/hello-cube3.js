@@ -14,7 +14,7 @@ var arToolkitSource, arToolkitContext;
 var markerRoot1, markerRoot2;
 
 var mesh1;
-const nbButterflies = 200;
+const nbButterflies = 100;
 var lengthB = 1;
 var conf;
 var butterflies;
@@ -351,7 +351,7 @@ function update1() //just a bit of house-keeping: moving some functionality not 
         camera = new THREE.Camera();
         scene.add(camera);
         render();
-        $('.sidenav').width(wWidth);
+        $('.sidenav').width(wWidth*1.5);
 
         // build markerControls
         markerRoot1 = new THREE.Group();
@@ -381,7 +381,7 @@ function update1() //just a bit of house-keeping: moving some functionality not 
       if (Math.random() <= .05) {
         scene.remove(butterflies[0].o3d);
         butterflies.shift();
-        renderer.setClearAlpha(lengthB/(1.25*nbButterflies));
+        renderer.setClearAlpha(lengthB/(1.2*nbButterflies));
         lengthB += 1;
       };
       if (conf.move) {

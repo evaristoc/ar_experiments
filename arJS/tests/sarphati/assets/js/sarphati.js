@@ -353,7 +353,7 @@ var Butterfly = function () {
 
 
 /**********************
-  ARJS OBJECT
+  ARJS OBJECT (tool)
  ********************/
 var ARJS = function(){
       
@@ -432,179 +432,179 @@ var ARJS = function(){
             camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
         });
 
-/**********************
-  SCENE OBJECT
- ********************/
-var Scene = function(){ //adding parameters here and then calling them will have NO effect over defaults
-        function Scene(options){
-            _classCallCheck(this, Scene);
-            var defaults = {
-              width: window.innerWidth, // currently pointing to a outer-scoped variable: TODO as getter/setter?
-              height: window.innerHeight
-            };
-            Object.assign(this, options, defaults);
-            this.onResize = this.onResize.bind(this);
-            this.addEventListeners();
-            //this.init();            
-        };
-        
-        _createClass(Scene,
-                     [{
-                        key: 'init',
-                        value: function init(){
-                            
-                            var width = this.width;
-                            var height = this.height;
-                            
-                            this.clock = new THREE.Clock();
-                            
-                            var renderer = this.renderer = new THREE.WebGLRenderer({alpha:true}); //make background transparent with alpha
-                            renderer.setClearAlpha(0.0);
-                            
-                            renderer.setSize(width, height);
-                            
-                            this.scene = new THREE.Scene();
-                            this.addCamera();
-                            this.addLights();
-                            this.addButterflies();
-                      
-                            document.body.appendChild(renderer.domElement);
-                            document.body.appendChild(statsGlobal.domElement);
-                        }
-                     },
-                    {
-                      //E: addLight is exactly that; it is pointing close to the center and difuse
-                      key: 'addMesh',
-                      value: function addMesh(mesh) {
-                        var scene = this.scene;
-                        scene.add(mesh);
-                      }
-                    },                     
-                    {
-                      //E: addLight is exactly that; it is pointing close to the center and difuse
-                      key: 'addLights',
-                      value: function addLights() {
-                        var scene = this.scene;
-                  
-                        var light = new THREE.DirectionalLight(0xffffff, 0.75);
-                  
-                        light.position.set(-1, 0, 1);
-                        scene.add(light);
-                      }
-                    },
-                    {
-                      //E: addCamera is exactly that; usual settings
-                      key: 'addCamera',
-                      value: function addCamera() {
-                        var scene = this.scene;
-                  
-                        var camera = this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 1, 10000);
-                  
-                        camera.position.z = 10;
-                        scene.add(camera);
-                      }
-                    },
-                    {
-                      key: 'render',
-                      value: function render() {
-                        this.renderer.render(this.scene, this.camera);
-                      }
-                    },
-                    {
-                      //E: addBackground is exactly that, with some modifications of texture (blending, map.minFilter as linear);
-                      //-- it is VERY up front
-                      //-- it also reflects LIGHT
-                      key: 'addBackground',
-                      value: function addBackground(video) {
-                        //var scene = this.scene;
-                        //var textureLoader = new THREE.TextureLoader();
-                        //var textGeometry = new THREE.PlaneBufferGeometry(600, 320);
-                        //var texture = new THREE.VideoTexture( video );
-                        //var textMaterial = new THREE.MeshBasicMaterial( { map: texture } );
-                        //textMaterial.map.minFilter = THREE.LinearFilter;
-                        //var text = new THREE.Mesh(textGeometry, textMaterial);
-                        //text.position.z = 800;
-                      }
-                    },
-                    {
-                     key: 'butterflies',
-                     value: []
-                    },
-                    {
-                     key: 'nbButterflies',
-                     value: 15
-                    },
-                    {
-                     key: 'addButterflies',
-                     value: function addButterflies(){
-                        var scene = this.scene;
-                        for(let i = 0; i < this.butterflies.length; i++){
-                          scene.remove(this.butterflies[i].meshObj);
-                        };
-                        this.butterflies = [];
-                        
-                        const nbButterflies = this.nbButterflies;
-                        function shuffle(_b){
-                            for (var i = 0; i < _b.length; i++) {
-                              _b[i].shuffleHELPER();
-                            };
-                        };
-                        
-                        for (var i = 0; i < nbButterflies; i++) {
-                          var b = new Butterfly();
-                          this.butterflies.push(b);
-                          scene.add(b.meshObj);
-                        };
-                        
-                        shuffle(this.butterflies);
-                        //console.log(this.butterflies);
-                     }
-                    },
-                    {
-                      //E: runs evolveSmoke and re-render; assign update function to requestAnimationFrame
-                      key: 'update',
-                      value: function update() {
-                        var zelf = this;
-                        var scene = this.scene;
-                        //console.error(zelf);
-                        statsGlobal.begin();
-                        requestAnimationFrame(update.bind(this));
-                        TWEEN.update();
-                        for (var i = 0; i < this.butterflies.length; i++) {
-                          this.butterflies[i].move();
-                        };
-                        this.render();
-                        statsGlobal.end();
-                      }
-                    },
-                    {
-                      //E: helper for resizing parameters
-                      key: 'onResize',
-                      value: function onResize() {
-                        var camera = this.camera;
-                  
-                  
-                        var windowWidth = window.innerWidth;
-                        var windowHeight = window.innerHeight;
-                  
-                        camera.aspect = windowWidth / windowHeight;
-                        camera.updateProjectionMatrix();
-                  
-                        this.renderer.setSize(windowWidth, windowHeight);
-                      }
-                    },
-                    {
-                      //E: helper for adding listeners (resizing)
-                      key: 'addEventListeners',
-                      value: function addEventListeners() {
-                        window.addEventListener('resize', this.onResize);
-                      }
-                    }
-                     ]);
-        
-        return Scene;
-    
-    }();
+///**********************
+//  SCENE OBJECT
+// ********************/
+//var Scene = function(){ //adding parameters here and then calling them will have NO effect over defaults
+//        function Scene(options){
+//            _classCallCheck(this, Scene);
+//            var defaults = {
+//              width: window.innerWidth, // currently pointing to a outer-scoped variable: TODO as getter/setter?
+//              height: window.innerHeight
+//            };
+//            Object.assign(this, options, defaults);
+//            this.onResize = this.onResize.bind(this);
+//            this.addEventListeners();
+//            //this.init();            
+//        };
+//        
+//        _createClass(Scene,
+//                     [{
+//                        key: 'init',
+//                        value: function init(){
+//                            
+//                            var width = this.width;
+//                            var height = this.height;
+//                            
+//                            this.clock = new THREE.Clock();
+//                            
+//                            var renderer = this.renderer = new THREE.WebGLRenderer({alpha:true}); //make background transparent with alpha
+//                            renderer.setClearAlpha(0.0);
+//                            
+//                            renderer.setSize(width, height);
+//                            
+//                            this.scene = new THREE.Scene();
+//                            this.addCamera();
+//                            this.addLights();
+//                            this.addButterflies();
+//                      
+//                            document.body.appendChild(renderer.domElement);
+//                            document.body.appendChild(statsGlobal.domElement);
+//                        }
+//                     },
+//                    {
+//                      //E: addLight is exactly that; it is pointing close to the center and difuse
+//                      key: 'addMesh',
+//                      value: function addMesh(mesh) {
+//                        var scene = this.scene;
+//                        scene.add(mesh);
+//                      }
+//                    },                     
+//                    {
+//                      //E: addLight is exactly that; it is pointing close to the center and difuse
+//                      key: 'addLights',
+//                      value: function addLights() {
+//                        var scene = this.scene;
+//                  
+//                        var light = new THREE.DirectionalLight(0xffffff, 0.75);
+//                  
+//                        light.position.set(-1, 0, 1);
+//                        scene.add(light);
+//                      }
+//                    },
+//                    {
+//                      //E: addCamera is exactly that; usual settings
+//                      key: 'addCamera',
+//                      value: function addCamera() {
+//                        var scene = this.scene;
+//                  
+//                        var camera = this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 1, 10000);
+//                  
+//                        camera.position.z = 10;
+//                        scene.add(camera);
+//                      }
+//                    },
+//                    {
+//                      key: 'render',
+//                      value: function render() {
+//                        this.renderer.render(this.scene, this.camera);
+//                      }
+//                    },
+//                    {
+//                      //E: addBackground is exactly that, with some modifications of texture (blending, map.minFilter as linear);
+//                      //-- it is VERY up front
+//                      //-- it also reflects LIGHT
+//                      key: 'addBackground',
+//                      value: function addBackground(video) {
+//                        //var scene = this.scene;
+//                        //var textureLoader = new THREE.TextureLoader();
+//                        //var textGeometry = new THREE.PlaneBufferGeometry(600, 320);
+//                        //var texture = new THREE.VideoTexture( video );
+//                        //var textMaterial = new THREE.MeshBasicMaterial( { map: texture } );
+//                        //textMaterial.map.minFilter = THREE.LinearFilter;
+//                        //var text = new THREE.Mesh(textGeometry, textMaterial);
+//                        //text.position.z = 800;
+//                      }
+//                    },
+//                    {
+//                     key: 'butterflies',
+//                     value: []
+//                    },
+//                    {
+//                     key: 'nbButterflies',
+//                     value: 15
+//                    },
+//                    {
+//                     key: 'addButterflies',
+//                     value: function addButterflies(){
+//                        var scene = this.scene;
+//                        for(let i = 0; i < this.butterflies.length; i++){
+//                          scene.remove(this.butterflies[i].meshObj);
+//                        };
+//                        this.butterflies = [];
+//                        
+//                        const nbButterflies = this.nbButterflies;
+//                        function shuffle(_b){
+//                            for (var i = 0; i < _b.length; i++) {
+//                              _b[i].shuffleHELPER();
+//                            };
+//                        };
+//                        
+//                        for (var i = 0; i < nbButterflies; i++) {
+//                          var b = new Butterfly();
+//                          this.butterflies.push(b);
+//                          scene.add(b.meshObj);
+//                        };
+//                        
+//                        shuffle(this.butterflies);
+//                        //console.log(this.butterflies);
+//                     }
+//                    },
+//                    {
+//                      //E: runs evolveSmoke and re-render; assign update function to requestAnimationFrame
+//                      key: 'update',
+//                      value: function update() {
+//                        var zelf = this;
+//                        var scene = this.scene;
+//                        //console.error(zelf);
+//                        statsGlobal.begin();
+//                        requestAnimationFrame(update.bind(this));
+//                        TWEEN.update();
+//                        for (var i = 0; i < this.butterflies.length; i++) {
+//                          this.butterflies[i].move();
+//                        };
+//                        this.render();
+//                        statsGlobal.end();
+//                      }
+//                    },
+//                    {
+//                      //E: helper for resizing parameters
+//                      key: 'onResize',
+//                      value: function onResize() {
+//                        var camera = this.camera;
+//                  
+//                  
+//                        var windowWidth = window.innerWidth;
+//                        var windowHeight = window.innerHeight;
+//                  
+//                        camera.aspect = windowWidth / windowHeight;
+//                        camera.updateProjectionMatrix();
+//                  
+//                        this.renderer.setSize(windowWidth, windowHeight);
+//                      }
+//                    },
+//                    {
+//                      //E: helper for adding listeners (resizing)
+//                      key: 'addEventListeners',
+//                      value: function addEventListeners() {
+//                        window.addEventListener('resize', this.onResize);
+//                      }
+//                    }
+//                     ]);
+//        
+//        return Scene;
+//    
+//    }();
 
 
 /**********************
@@ -629,7 +629,34 @@ var app = (function APPmodule(){
                     _app_vid = app_video;
                   }());
                 //var cube = new Cube();
-                var scene = new Scene();
+                var scene = new THREE.Scene();
+                var clock = new THREE.Clock();
+                
+                var renderer1 = (function(){
+                                  var renderer = new THREE.WebGLRenderer({
+                                      antialias : true,
+                                      alpha: true
+                                  });
+                                  
+                                  renderer.setPixelRatio( window.devicePixelRatio );
+                                  renderer.setClearAlpha(opacitybackground);
+                                  //renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+                                  //renderer.setSize( 640, 480 ); //width, height
+                                  renderer.setSize(wWidth, wHeight);
+                              //    renderer.domElement.style.position = 'absolute'
+                              //	renderer.domElement.style.top = '0px'
+                              //	renderer.domElement.style.left = '0px'
+                                  renderer.domElement.style["display"]  = "block";
+                                  renderer.domElement.style["position"] = "fixed";
+                                  //renderer.domElement.style["position"] = "absolute";
+                                  renderer.domElement.style["width"]    = "100%";
+                                  renderer.domElement.style["height"]   = "100%";
+                                  renderer.domElement.style["top"] = '0px';
+                                  renderer.domElement.style["left"] = '0px'; 
+                                  return renderer;
+                          }());
+                
+                
                 scene.width = _canvasWidthGraphics;
                 scene.height = _canvasHeightGraphics;
                 var guicontroller = guiGlobal.add(scene, 'nbButterflies').step(1);

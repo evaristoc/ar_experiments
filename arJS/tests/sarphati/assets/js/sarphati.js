@@ -5,8 +5,8 @@
 */
 
 const statsGlobal = new Stats();
-const guiGlobal = new dat.GUI();
-guiGlobal.close();
+//const guiGlobal = new dat.GUI();
+//guiGlobal.close();
 
 var _createClass = function () {
                       function defineProperties(target, props) {
@@ -424,182 +424,6 @@ var ARJS = function(){
       return ARJS;
 }();
 
-	
-
-///**********************
-//  SCENE OBJECT
-// ********************/
-//var Scene = function(){ //adding parameters here and then calling them will have NO effect over defaults
-//        function Scene(options){
-//            _classCallCheck(this, Scene);
-//            var defaults = {
-//              width: window.innerWidth, // currently pointing to a outer-scoped variable: TODO as getter/setter?
-//              height: window.innerHeight
-//            };
-//            Object.assign(this, options, defaults);
-//            this.onResize = this.onResize.bind(this);
-//            this.addEventListeners();
-//            //this.init();            
-//        };
-//        
-//        _createClass(Scene,
-//                     [{
-//                        key: 'init',
-//                        value: function init(){
-//                            
-//                            var width = this.width;
-//                            var height = this.height;
-//                            
-//                            this.clock = new THREE.Clock();
-//                            
-//                            var renderer = this.renderer = new THREE.WebGLRenderer({alpha:true}); //make background transparent with alpha
-//                            renderer.setClearAlpha(0.0);
-//                            
-//                            renderer.setSize(width, height);
-//                            
-//                            this.scene = new THREE.Scene();
-//                            this.addCamera();
-//                            this.addLights();
-//                            this.addButterflies();
-//                      
-//                            document.body.appendChild(renderer.domElement);
-//                            document.body.appendChild(statsGlobal.domElement);
-//                        }
-//                     },
-//                    {
-//                      //E: addLight is exactly that; it is pointing close to the center and difuse
-//                      key: 'addMesh',
-//                      value: function addMesh(mesh) {
-//                        var scene = this.scene;
-//                        scene.add(mesh);
-//                      }
-//                    },                     
-//                    {
-//                      //E: addLight is exactly that; it is pointing close to the center and difuse
-//                      key: 'addLights',
-//                      value: function addLights() {
-//                        var scene = this.scene;
-//                  
-//                        var light = new THREE.DirectionalLight(0xffffff, 0.75);
-//                  
-//                        light.position.set(-1, 0, 1);
-//                        scene.add(light);
-//                      }
-//                    },
-//                    {
-//                      //E: addCamera is exactly that; usual settings
-//                      key: 'addCamera',
-//                      value: function addCamera() {
-//                        var scene = this.scene;
-//                  
-//                        var camera = this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 1, 10000);
-//                  
-//                        camera.position.z = 10;
-//                        scene.add(camera);
-//                      }
-//                    },
-//                    {
-//                      key: 'render',
-//                      value: function render() {
-//                        this.renderer.render(this.scene, this.camera);
-//                      }
-//                    },
-//                    {
-//                      //E: addBackground is exactly that, with some modifications of texture (blending, map.minFilter as linear);
-//                      //-- it is VERY up front
-//                      //-- it also reflects LIGHT
-//                      key: 'addBackground',
-//                      value: function addBackground(video) {
-//                        //var scene = this.scene;
-//                        //var textureLoader = new THREE.TextureLoader();
-//                        //var textGeometry = new THREE.PlaneBufferGeometry(600, 320);
-//                        //var texture = new THREE.VideoTexture( video );
-//                        //var textMaterial = new THREE.MeshBasicMaterial( { map: texture } );
-//                        //textMaterial.map.minFilter = THREE.LinearFilter;
-//                        //var text = new THREE.Mesh(textGeometry, textMaterial);
-//                        //text.position.z = 800;
-//                      }
-//                    },
-//                    {
-//                     key: 'butterflies',
-//                     value: []
-//                    },
-//                    {
-//                     key: 'nbButterflies',
-//                     value: 15
-//                    },
-//                    {
-//                     key: 'addButterflies',
-//                     value: function addButterflies(){
-//                        var scene = this.scene;
-//                        for(let i = 0; i < this.butterflies.length; i++){
-//                          scene.remove(this.butterflies[i].meshObj);
-//                        };
-//                        this.butterflies = [];
-//                        
-//                        const nbButterflies = this.nbButterflies;
-//                        function shuffle(_b){
-//                            for (var i = 0; i < _b.length; i++) {
-//                              _b[i].shuffleHELPER();
-//                            };
-//                        };
-//                        
-//                        for (var i = 0; i < nbButterflies; i++) {
-//                          var b = new Butterfly();
-//                          this.butterflies.push(b);
-//                          scene.add(b.meshObj);
-//                        };
-//                        
-//                        shuffle(this.butterflies);
-//                        //console.log(this.butterflies);
-//                     }
-//                    },
-//                    {
-//                      //E: runs evolveSmoke and re-render; assign update function to requestAnimationFrame
-//                      key: 'update',
-//                      value: function update() {
-//                        var zelf = this;
-//                        var scene = this.scene;
-//                        //console.error(zelf);
-//                        statsGlobal.begin();
-//                        requestAnimationFrame(update.bind(this));
-//                        TWEEN.update();
-//                        for (var i = 0; i < this.butterflies.length; i++) {
-//                          this.butterflies[i].move();
-//                        };
-//                        this.render();
-//                        statsGlobal.end();
-//                      }
-//                    },
-//                    {
-//                      //E: helper for resizing parameters
-//                      key: 'onResize',
-//                      value: function onResize() {
-//                        var camera = this.camera;
-//                  
-//                  
-//                        var windowWidth = window.innerWidth;
-//                        var windowHeight = window.innerHeight;
-//                  
-//                        camera.aspect = windowWidth / windowHeight;
-//                        camera.updateProjectionMatrix();
-//                  
-//                        this.renderer.setSize(windowWidth, windowHeight);
-//                      }
-//                    },
-//                    {
-//                      //E: helper for adding listeners (resizing)
-//                      key: 'addEventListeners',
-//                      value: function addEventListeners() {
-//                        window.addEventListener('resize', this.onResize);
-//                      }
-//                    }
-//                     ]);
-//        
-//        return Scene;
-//    
-//    }();
-
 
 /**********************
   APP MODULE
@@ -613,15 +437,24 @@ var app = (function APPmodule(){
             var _canvasHeightGraphics;
             var _app_vid;
             var scene;
+            var clock;
+            var wWidth = window.innerWidth;
+            var wHeight = window.innerHeight;
+            var cameraCtrl;
+            
             
             var sceneelements1 = {
+              renderer: null,
+              camera: null,
+              cameraCtrl: null,
+              opacitybackground: 0,
               renderer1_init: function(){
                             var renderer = new THREE.WebGLRenderer({
                                 antialias : true,
                                 alpha: true
                             });
                             renderer.setPixelRatio( window.devicePixelRatio );
-                            renderer.setClearAlpha(opacitybackground);
+                            renderer.setClearAlpha(this.opacitybackground);
                             renderer.setSize(wWidth, wHeight);
                             renderer.domElement.style["display"]  = "block";
                             renderer.domElement.style["position"] = "fixed";
@@ -638,7 +471,10 @@ var app = (function APPmodule(){
                           ambient: function(){ return new THREE.AmbientLight( 0xcccccc, 0.5 )},
                       },
               cameraCtrls1_init: {
-                          orbit: function(){ return new THREE.OrbitControls(this.camera);}
+                          orbit: function(){
+                            var camera = this.camera;
+                            return new THREE.OrbitControls(camera);
+                            }
                       },
               listeners1_init: {
                 onResize: function(){
@@ -647,11 +483,13 @@ var app = (function APPmodule(){
                     var windowHeight = window.innerHeight;
                     camera.aspect = windowWidth / windowHeight;
                     camera.updateProjectionMatrix();
-                    this.renderer1.setSize(windowWidth, windowHeight);
+                    this.renderer.setSize(windowWidth, windowHeight);
                 },
               },
               objects1: {
                 butterflies : [],
+                
+                nbButterflies: 100,
                 
                 bttfls_init : function(){
                     for(let i = 0; i < this.butterflies.length; i++){
@@ -660,6 +498,7 @@ var app = (function APPmodule(){
                     this.butterflies = [];
                           
                     const nbButterflies = this.nbButterflies;
+                    
                     function shuffle(_b){
                         for (var i = 0; i < _b.length; i++) {
                           _b[i].shuffleHELPER();
@@ -681,8 +520,9 @@ var app = (function APPmodule(){
                     var zelf = this;
                     //console.error(zelf);
                     statsGlobal.begin();
-                    compatibility.requestAnimationFrame(update1.bind(this));
-                    this.cameraCtrl1.update();
+                    compatibility.requestAnimationFrame(this.update1.bind(this));
+                    //this.cameraCtrl.update();
+                    cameraCtrl.update();
                     TWEEN.update();
                     for (var i = 0; i < this.objects1.butterflies.length; i++) {
                       this.objects1.butterflies[i].move();
@@ -717,20 +557,33 @@ var app = (function APPmodule(){
                     _app_vid = app_video;
                   }());
                 //var cube = new Cube();
-                var scene = new THREE.Scene();
-                var clock = new THREE.Clock();
+                scene = new THREE.Scene();
+                clock = new THREE.Clock();
 
-                var guicontroller = guiGlobal.add(scene, 'nbButterflies').step(1);
-                guicontroller.onChange(function(val){
-                          console.log(val);
-                          scene.addButterflies();
-                        });
-
+                //var guicontroller = guiGlobal.add(sceneelements1.objects1, 'nbButterflies').step(1);
+                //guicontroller.onChange(function(val){
+                //          console.log(val);
+                //          sceneelements1.objects1.bttfls_init();
+                //        });
+               
+               
+               sceneelements1.renderer = sceneelements1.renderer1_init();
+               sceneelements1.camera = sceneelements1.camera1_init();
+               cameraCtrl = new THREE.OrbitControls(new THREE.PerspectiveCamera(50, wWidth / wHeight, 0.1, 1000));
+               scene.add(sceneelements1.camera);
+               //sceneelements1.cameraCtrl = sceneelements1.cameraCtrls1_init.orbit.call(sceneelements1);
+               
+               scene.add(sceneelements1.lights1_init.ambient());
+               sceneelements1.objects1.bttfls_init();
+               
+               window.addEventListener('onresize', sceneelements1.listeners1_init.onResize.bind(sceneelements1));
+               
+               sceneelements1.update1();
 
             };
             
             
-        return {app_init: app_init, tick: ()=>console.log('tick')};
+        return {app_init: app_init, tick: ()=>console.log('tick'), video: null};
     }());
 
 
@@ -810,6 +663,7 @@ var app = (function APPmodule(){
                       compatibility.getUserMedia(voptions,
                                                   function(stream){
                                                     //const videoS = document.querySelector('video');
+                                                    console.error(111);
                                                     try {
                                                         //deprecated
                                                         VIDEOGlobal.src = compatibility.URL.createObjectURL(stream);
@@ -828,7 +682,7 @@ var app = (function APPmodule(){
                     }catch(error){
                       $('#canvas').hide();
                       $('#log').hide();
-                      $('#no_rtc').html('<h4>Something goes wrong...</h4>');
+                      $('#no_rtc').html('<h4>Something went wrong...</h4>');
                       $('#no_rtc').show();                        
                     }
                 },
@@ -840,253 +694,3 @@ var app = (function APPmodule(){
         init_obj.video_init();               
     })
   }(app))
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-
-var scene, camera, cameraCtrl, light, renderer, clock, deltaTime, totalTime;
-//var whw = window.innerWidth;
-//var whh = window.innerHeight;
-var wWidth = Math.max( 0, window.innerWidth || document.body.clientWidth || document.documentElement.clientWidth || 0 );
-var wHeight = Math.max( 0, window.innerHeight || document.body.clientHeight || document.documentElement.clientHeight || 0 );;
-var opacitybackground = 0.0;
-
-function rnd(max, negative) {
-  return negative ? Math.random() * 2 * max - max : Math.random() * max;
-}
-
-var arToolkitSource, arToolkitContext;
-
-var markerRoot1, markerRoot2;
-
-var mesh1;
-const nbButterflies = 100;
-var lengthB = 1;
-var conf;
-var butterflies;
-var bodyTexture, wingTexture1, wingTexture2, wingTexture3, bodyTexture4, wingTexture4;
-var destination = new THREE.Vector3();
-
-var stats = new Stats();
-
-initialize();
-
-function initialize()
-{
-    
-    
-    
-    scene = new THREE.Scene();
-
-
-	document.body.appendChild( renderer.domElement );
-    
-    document.body.appendChild(stats.domElement);
-
-	clock = new THREE.Clock();
-	deltaTime = 0;
-	totalTime = 0;
-    
-
-	////////////////////////////////////////////////////////////
-	// setup arToolkitSource
-	////////////////////////////////////////////////////////////
-
-	arToolkitSource = new THREEx.ArToolkitSource({
-		sourceType : 'webcam',
-	});
-
-	function onResize()
-	{
-		arToolkitSource.onResize()	
-		arToolkitSource.copySizeTo(renderer.domElement)	
-		if ( arToolkitContext.arController !== null )
-		{
-			arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
-		}	
-	}
-
-	arToolkitSource.init(function onReady(){
-		onResize()
-	});
-	
-	// handle resize event
-	window.addEventListener('resize', function(){
-		onResize()
-	});
-	
-	////////////////////////////////////////////////////////////
-	// setup arToolkitContext
-	////////////////////////////////////////////////////////////	
-
-	// create atToolkitContext
-	arToolkitContext = new THREEx.ArToolkitContext({
-		cameraParametersUrl: '../../arjs-resources/data/camera_para.dat',
-		detectionMode: 'mono'
-	});
-	
-	//// copy projection matrix to camera when initialization complete
-	//arToolkitContext.init( function onCompleted(){
-	//	camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
-	//});
-
-	////////////////////////////////////////////////////////////
-	// setup markerRoots
-	////////////////////////////////////////////////////////////
-
-	initButterflies();
-    
-    
-//	/*--- test volume ---*/
-//    let geometry1	= new THREE.CubeGeometry(1,1,1);
-//	let material1	= new THREE.MeshNormalMaterial({
-//		transparent: true,
-//		opacity: 0.5,
-//		side: THREE.DoubleSide
-//	}); 
-//	
-//	mesh1 = new THREE.Mesh( geometry1, material1 );
-//	mesh1.position.y = 0.5;
-//
-//    
-//	markerRoot1.add( mesh1 );
-}
-
-var smokeParticles = {};
-var factoryObj;
-
-function update1() //just a bit of house-keeping: moving some functionality not strictly related to animation here 
-{
-	console.log(111);
-    deltaTime = clock.getDelta();
-	totalTime += deltaTime;
-    stats.update();
-    cameraCtrl.update();
-    TWEEN.update();
-    
-    //setInterval(function(){
-    //  if (butterflies[0]) {
-    //    scene.remove(butterflies[0].o3d);
-    //    butterflies.shift();
-    //    renderer.setClearAlpha(lengthB/(2*nbButterflies));
-    //    lengthB += 1;
-    //  };
-    //},
-    //1000 + deltaTime*rnd(40000));
-
-    if (butterflies.length === 0) {
-        console.log(333, butterflies[0]);
-        scene.remove(camera);
-        camera = new THREE.Camera();
-        scene.add(camera);
-        render();
-        $('.sidenav').width(wWidth*1.5);
-
-        // build markerControls
-        markerRoot1 = new THREE.Group();
-        scene.add(markerRoot1);
-        let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
-            type: 'pattern', patternUrl: "../../arjs-resources/data/hiro.patt",
-        });
-        scene.add(markerRoot1);
-        // copy projection matrix to camera when initialization complete
-        factoryObj = new FactoryObj(markerRoot1);
-        smokeParticles = {};
-        for (let i=0;i < 100;i++){
-          smokeParticles[i] = {particle:null, start:false}
-          smokeParticles[i].particle = new Particle(markerRoot1);
-        }; 
-        arToolkitContext.init( function onCompleted(){
-            camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
-        });
-        //update2();
-
-    }else{
-        requestAnimationFrame(animate);
-        render();
-    }; 
-
-    if (butterflies[0]) {
-      if (Math.random() <= .05) {
-        scene.remove(butterflies[0].o3d);
-        butterflies.shift();
-        renderer.setClearAlpha(lengthB/(1.2*nbButterflies));
-        lengthB += 1;
-      };
-      if (conf.move) {
-        for (var i = 0; i < butterflies.length; i++) {
-          butterflies[i].move();
-        }
-      };
-    };
-}
-
-/* Set the width of the side navigation to 0 */
-function closeStart() {
-  //document.getElementById("mySidenav2").style.width = "0";
-  // Removes an element from the document
-  var element = document.getElementById("mySidenav2");
-  element.parentNode.removeChild(element);
-  animate();
-}
-
-
-/* Set the width of the side navigation to 0 */
-function closeNav() {
-  document.getElementById("mySidenav").style.width = "0";
-  update2();
-}
-
-function update2() //just a bit of house-keeping: moving some functionality not strictly related to animation here 
-{
-	console.log(222);
-    requestAnimationFrame(update2);
-    deltaTime = clock.getDelta();
-	totalTime += deltaTime;
-    stats.update();
-    
-    
-    for (let i = 0; i < 100; i++) {
-      if (smokeParticles[i].start === false) {
-        smokeParticles[i].start = Math.random() > .2? false:true;
-        console.log(smokeParticles[i].start);
-      }
-      else {
-        let s_a = smokeParticles[i].particle._particle;
-        s_a.position.y += .01;
-    
-        if (s_a.position.y > 1.6){
-            markerRoot1.remove(s_a);
-            smokeParticles[i] = {particle:null, start:false}
-            smokeParticles[i].particle = new Particle(markerRoot1);
-        }
-      }
-    }
-    
-    if (!factoryObj) {
-      factoryObj = new FactoryObj(markerRoot);
-    }    
-    
-    
-    // update artoolkit on every frame
-	if ( arToolkitSource.ready !== false )
-		arToolkitContext.update( arToolkitSource.domElement );
-    render();
-}
-
-function render()
-{
-	renderer.render( scene, camera );
-}
-
-
-function animate()
-{
-    update1();
-}

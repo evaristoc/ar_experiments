@@ -447,7 +447,7 @@ var app = (function APPmodule(){
               renderer: null,
               camera: null,
               cameraCtrl: null,
-              opacitybackground: 0,
+              opacitybackground: 1.0,
               renderer1_init: function(){
                             var renderer = new THREE.WebGLRenderer({
                                 antialias : true,
@@ -496,7 +496,8 @@ var app = (function APPmodule(){
                             scene.remove(this.butterflies[i].meshObj);
                     };
                     this.butterflies = [];
-                          
+                                   
+                     
                     const nbButterflies = this.nbButterflies;
                     
                     function shuffle(_b){
@@ -510,7 +511,7 @@ var app = (function APPmodule(){
                       this.butterflies.push(b);
                       scene.add(b.meshObj);
                     };
-                    
+                   
                     shuffle(this.butterflies);
                     //console.log(this.butterflies);                  
                 }
@@ -518,8 +519,8 @@ var app = (function APPmodule(){
               },
               update1: function(){
                     var zelf = this;
-                    //console.error(zelf);
-                    statsGlobal.begin();
+                    //console.error(zelf.objects1.butterflies.length);
+                    //statsGlobal.begin();
                     compatibility.requestAnimationFrame(this.update1.bind(this));
                     //this.cameraCtrl.update();
                     cameraCtrl.update();
@@ -527,7 +528,8 @@ var app = (function APPmodule(){
                     for (var i = 0; i < this.objects1.butterflies.length; i++) {
                       this.objects1.butterflies[i].move();
                     };
-                    statsGlobal.end();                
+                    //statsGlobal.end();
+                    this.renderer.render(scene, this.camera);
               }
               
             };
@@ -566,16 +568,17 @@ var app = (function APPmodule(){
                 //          sceneelements1.objects1.bttfls_init();
                 //        });
                
-               
                sceneelements1.renderer = sceneelements1.renderer1_init();
                sceneelements1.camera = sceneelements1.camera1_init();
-               cameraCtrl = new THREE.OrbitControls(new THREE.PerspectiveCamera(50, wWidth / wHeight, 0.1, 1000));
+               sceneelements1.camera.position.z = 10;
+               cameraCtrl = new THREE.OrbitControls(sceneelements1.camera);
                scene.add(sceneelements1.camera);
                //sceneelements1.cameraCtrl = sceneelements1.cameraCtrls1_init.orbit.call(sceneelements1);
                
                scene.add(sceneelements1.lights1_init.ambient());
                sceneelements1.objects1.bttfls_init();
                
+               document.body.appendChild(sceneelements1.renderer.domElement);
                window.addEventListener('onresize', sceneelements1.listeners1_init.onResize.bind(sceneelements1));
                
                sceneelements1.update1();
@@ -663,7 +666,6 @@ var app = (function APPmodule(){
                       compatibility.getUserMedia(voptions,
                                                   function(stream){
                                                     //const videoS = document.querySelector('video');
-                                                    console.error(111);
                                                     try {
                                                         //deprecated
                                                         VIDEOGlobal.src = compatibility.URL.createObjectURL(stream);

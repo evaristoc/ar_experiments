@@ -563,10 +563,6 @@ var app = (function APPmodule(){
               arToolkitContext: null,
               init: function(){
 
-                    this.arToolkitSource = new THREEx.ArToolkitSource({
-                        sourceType : 'webcam',
-                    });
-                    
                     this.camera = this.camera_init();
                     scene.add(this.camera);
 
@@ -644,10 +640,27 @@ var app = (function APPmodule(){
                 //var cube = new Cube();
                 scene = new THREE.Scene();
                 clock = new THREE.Clock();
-               //sceneelements1.init();
-               //sceneelements1.update();
-               sceneelements2.init();
-               sceneelements2.update();
+
+                //var guicontroller = guiGlobal.add(sceneelements1.objects1, 'nbButterflies').step(1);
+                //guicontroller.onChange(function(val){
+                //          console.log(val);
+                //          sceneelements1.objects1.bttfls_init();
+                //        });
+               
+               //sceneelements1.renderer = sceneelements1.renderer1_init();
+               //sceneelements1.camera = sceneelements1.camera1_init();
+               //sceneelements1.camera.position.z = 10;
+               //cameraCtrl = new THREE.OrbitControls(sceneelements1.camera);
+               //scene.add(sceneelements1.camera);
+               ////sceneelements1.cameraCtrl = sceneelements1.cameraCtrls1_init.orbit.call(sceneelements1);
+               //
+               //scene.add(sceneelements1.lights1_init.ambient());
+               //sceneelements1.objects1.bttfls_init();
+               //
+               //document.body.appendChild(sceneelements1.renderer.domElement);
+               //window.addEventListener('onresize', sceneelements1.listeners1_init.onResize.bind(sceneelements1));
+               sceneelements1.init();
+               sceneelements1.update();
 
             };
             
@@ -687,19 +700,17 @@ var app = (function APPmodule(){
     /*--- Middleware ---*/
     function _findVideoSizeMiddleW(){
         var THIS = this;
-        console.error(333, CANVASGlobal, VIDEOGlobal);
-        if (VIDEOGlobal != undefined && VIDEOGlobal.videoWidth > 0 && VIDEOGlobal.videoHeight > 0) {
+        if (VIDEOGlobal.videoWidth > 0 && VIDEOGlobal.videoHeight > 0) {
             _onDimensionsReadyMiddleW(VIDEOGlobal.videoWidth, VIDEOGlobal.videoHeight);
             VIDEOGlobal.removeEventListener('loadeddata', function(e){_findVideoSizeMiddleW()});
         } else {
-              //if(attempts < 10) {
-              //    attempts++;
-              //    setTimeout(_findVideoSizeMiddleW, 200);
-              //} else {
-              //   _onDimensionsReadyMiddleW(640, 480);
-              //}
+              if(attempts < 10) {
+                  attempts++;
+                  setTimeout(_findVideoSizeMiddleW, 200);
+              } else {
+                 _onDimensionsReadyMiddleW(640, 480);
+              }
           };
-        _onDimensionsReadyMiddleW(640, 480); //always enter this one; only for testing
       };
       
       function _onDimensionsReadyMiddleW(widthGlobal, heightGlobal){
@@ -720,41 +731,34 @@ var app = (function APPmodule(){
                   app_EXTERNAL.video = VIDEOGlobal;
                   try{
                       //console.log(video);
+                      VIDEOGlobal.addEventListener('loadeddata', function(e){_findVideoSizeMiddleW()});
                       var attemps = 0;
-                      _findVideoSizeMiddleW();
-                      //var voptions = {};
-                      //var mob = _detectmob();
-                      //VIDEOGlobal.addEventListener(
-                      //                              'loadeddata',
-                      //                              function(e){
-                      //                               console.log(111, e);
-                      //                               _findVideoSizeMiddleW()
-                      //                              }
-                      //                              );
-                      //if (mob) {
-                      //  //voptions = { video: { facingMode: { exact: "environment" }, width: WIDTH, height: HEIGHT }, audio:false };
-                      //  voptions = { video: { facingMode: { exact: "environment" } }, audio:false };
-                      //}else{
-                      //  //voptions = {video: {width: WIDTH, height: HEIGHT}, audio: false};
-                      //  voptions = { video: true, audio: false }
-                      //};
-                      //compatibility.getUserMedia(voptions,
-                      //                            function(stream){
-                      //                              //const videoS = document.querySelector('video');
-                      //                              try {
-                      //                                  //deprecated
-                      //                                  VIDEOGlobal.src = compatibility.URL.createObjectURL(stream);
-                      //                                }catch(error){
-                      //                                  VIDEOGlobal.srcObject = stream;
-                      //                                };
-                      //                                setTimeout(function(){VIDEOGlobal.play();},500);
-                      //                            },
-                      //                            function(error){
-                      //                                $('#canvas').hide();
-                      //                                $('#log').hide();
-                      //                                $('#no_rtc').html('<h4>WebRTC not available.</h4>');
-                      //                                $('#no_rtc').show();
-                      //                            });
+                      var voptions = {};
+                      var mob = _detectmob();
+                      if (mob) {
+                        //voptions = { video: { facingMode: { exact: "environment" }, width: WIDTH, height: HEIGHT }, audio:false };
+                        voptions = { video: { facingMode: { exact: "environment" } }, audio:false };
+                      }else{
+                        //voptions = {video: {width: WIDTH, height: HEIGHT}, audio: false};
+                        voptions = { video: true, audio: false }
+                      };
+                      compatibility.getUserMedia(voptions,
+                                                  function(stream){
+                                                    //const videoS = document.querySelector('video');
+                                                    try {
+                                                        //deprecated
+                                                        VIDEOGlobal.src = compatibility.URL.createObjectURL(stream);
+                                                      }catch(error){
+                                                        VIDEOGlobal.srcObject = stream;
+                                                      };
+                                                      setTimeout(function(){VIDEOGlobal.play();},500);
+                                                  },
+                                                  function(error){
+                                                      $('#canvas').hide();
+                                                      $('#log').hide();
+                                                      $('#no_rtc').html('<h4>WebRTC not available.</h4>');
+                                                      $('#no_rtc').show();
+                                                  });
                       
                     }catch(error){
                       $('#canvas').hide();

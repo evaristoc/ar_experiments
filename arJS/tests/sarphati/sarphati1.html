@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Sarphati - story in AR.JS</title>
+	<!-- include three.js library -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js'></script>
+    <script src="https://threejs.org/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://threejs.org/examples/js/loaders/MTLLoader.js"></script>
+	<!--<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>-->
+	<script type="text/javascript" src="../../../public/js/three_86/orbitcontrols.js"></script>
+	<script type="text/javascript" src="../../../public/js/stats.min.v17.js"></script>
+	<!-- include tween.js -->
+  	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.3.0/Tween.min.js"></script>
+	<!-- include jsartookit -->
+	<script src="../../arjs-resources/jsartoolkit5/artoolkit.min.js"></script>
+	<script src="../../arjs-resources/jsartoolkit5/artoolkit.api.js"></script>
+	<!-- include threex.artoolkit -->
+	<script src="../../arjs-resources/threex/threex-artoolkitsource.js"></script>
+	<script src="../../arjs-resources/threex/threex-artoolkitcontext.js"></script>
+	<script src="../../arjs-resources/threex/threex-arbasecontrols.js"></script>
+	<script src="../../arjs-resources/threex/threex-armarkercontrols.js"></script>
+	<!-- include miscelaneous -->
+    <script type="text/javascript" src="../../../public/js/compatibility.js"></script>
+    <script type="text/javascript" src="../../../public/js/stats.min.v17.js"></script>
+    <script type="text/javascript" src="../../../public/js/profiler.js"></script>
+    <script type="text/javascript" src="../../../public/js/dat.gui.min.js"></script>
+	<!-- styles -->
+	<link rel="stylesheet" type="text/css" href="assets/style/butterflies.css">
+</head>
+
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a>Alles werd donker en we konden niet meer leven! Hulp! Kunt je de brond van CO2 vinden?</a>
+		<a><img src="https://data.whicdn.com/images/97140491/large.jpg"></a>
+	</div>
+	<video id='webcam' autoplay style="position:absolute; z-index:-1;"></video>
+	<div style="position:absolute; width:640px;height:480px;margin: 10px auto;">
+		<canvas id='canvas'></canvas>
+		<div id='log'></div>
+		<div id='no_rtc'></div>
+	</div>
+	<!--<div id="mySidenav2">
+		  <a href="javascript:void(0)" class="closebtn" onclick="closeStart()" style="z-index:3">&times;</a>
+		  <img src="https://i.pinimg.com/originals/11/82/59/11825905d01ed4019758674917a84d8d.jpg"></img>
+	</div>-->
+<!-- 
+  Example created by Lee Stemkoski: https://github.com/stemkoski
+  Based on the AR.js library and examples created by Jerome Etienne: https://github.com/jeromeetienne/AR.js/
+-->
+
+<script src="assets/js/sarphati1.js"></script>
+
+</body>
+</html>

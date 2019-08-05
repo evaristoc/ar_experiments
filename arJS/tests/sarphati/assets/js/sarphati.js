@@ -583,7 +583,7 @@ var app = (function APPmodule(){
                     
                     var onResize = this.listeners_init.onResize;
                     //console.error(this);
-                    //onResize.bind(this); //didn't work :(
+                    //onResize.bind(this); //trying binding `this` to onResize didn't work :(
                     var zelf = this;
                     //this.arToolkitSource.init(function onReady(){
                     arToolkitSource.init(function onReady(){
@@ -669,7 +669,7 @@ var app = (function APPmodule(){
                 clock = new THREE.Clock();
                sceneelements1.init();
                //sceneelements1.update();
-               sceneelements2.renderer = sceneelements1.renderer;
+               sceneelements2.renderer = sceneelements1.renderer; //both renderers are the same
                sceneelements2.init();
                //sceneelements2.update();
 
@@ -711,19 +711,25 @@ var app = (function APPmodule(){
     /*--- Middleware ---*/
     function _findVideoSizeMiddleW(){
         var THIS = this;
-        //console.error(333, CANVASGlobal, VIDEOGlobal);
+        //console.error(333);
         if (VIDEOGlobal != undefined && VIDEOGlobal.videoWidth > 0 && VIDEOGlobal.videoHeight > 0) {
+            console.error(3331);
             _onDimensionsReadyMiddleW(VIDEOGlobal.videoWidth, VIDEOGlobal.videoHeight);
             VIDEOGlobal.removeEventListener('loadeddata', function(e){_findVideoSizeMiddleW()});
+        } else if (0) { // what happens with `attempts`???????
+              console.error(3332);
+              if(attempts < 10) {
+                  attempts++;
+                  setTimeout(_findVideoSizeMiddleW, 200);
+              } else {
+                 _onDimensionsReadyMiddleW(640, 480);
+              }
         } else {
-              //if(attempts < 10) {
-              //    attempts++;
-              //    setTimeout(_findVideoSizeMiddleW, 200);
-              //} else {
-              //   _onDimensionsReadyMiddleW(640, 480);
-              //}
-          };
-        _onDimensionsReadyMiddleW(640, 480); //always enter this one; only for testing
+          console.error(3333);
+          _onDimensionsReadyMiddleW(100, 100); //always enter this one; only for testing
+        };
+        //console.error(333);
+        //_onDimensionsReadyMiddleW(100, 100); //always enter this one; only for testing
       };
       
       function _onDimensionsReadyMiddleW(widthGlobal, heightGlobal){
@@ -745,40 +751,38 @@ var app = (function APPmodule(){
                   try{
                       //console.log(video);
                       var attemps = 0;
-                      _findVideoSizeMiddleW();
-                      //var voptions = {};
-                      //var mob = _detectmob();
-                      //VIDEOGlobal.addEventListener(
-                      //                              'loadeddata',
-                      //                              function(e){
-                      //                               console.log(111, e);
-                      //                               _findVideoSizeMiddleW()
-                      //                              }
-                      //                              );
-                      //if (mob) {
-                      //  //voptions = { video: { facingMode: { exact: "environment" }, width: WIDTH, height: HEIGHT }, audio:false };
-                      //  voptions = { video: { facingMode: { exact: "environment" } }, audio:false };
-                      //}else{
-                      //  //voptions = {video: {width: WIDTH, height: HEIGHT}, audio: false};
-                      //  voptions = { video: true, audio: false }
-                      //};
-                      //compatibility.getUserMedia(voptions,
-                      //                            function(stream){
-                      //                              //const videoS = document.querySelector('video');
-                      //                              try {
-                      //                                  //deprecated
-                      //                                  VIDEOGlobal.src = compatibility.URL.createObjectURL(stream);
-                      //                                }catch(error){
-                      //                                  VIDEOGlobal.srcObject = stream;
-                      //                                };
-                      //                                setTimeout(function(){VIDEOGlobal.play();},500);
-                      //                            },
-                      //                            function(error){
-                      //                                $('#canvas').hide();
-                      //                                $('#log').hide();
-                      //                                $('#no_rtc').html('<h4>WebRTC not available.</h4>');
-                      //                                $('#no_rtc').show();
-                      //                            });
+                      var voptions = {};
+                      var mob = _detectmob();
+                      VIDEOGlobal.addEventListener(
+                                                    'loadeddata',
+                                                    function(e){
+                                                     _findVideoSizeMiddleW()
+                                                    }
+                                                    );
+                      if (mob) {
+                        //voptions = { video: { facingMode: { exact: "environment" }, width: WIDTH, height: HEIGHT }, audio:false };
+                        voptions = { video: { facingMode: { exact: "environment" } }, audio:false };
+                      }else{
+                        //voptions = {video: {width: WIDTH, height: HEIGHT}, audio: false};
+                        voptions = { video: true, audio: false }
+                      };
+                      compatibility.getUserMedia(voptions,
+                                                  function(stream){
+                                                    //const videoS = document.querySelector('video');
+                                                    try {
+                                                        //deprecated
+                                                        VIDEOGlobal.src = compatibility.URL.createObjectURL(stream);
+                                                      }catch(error){
+                                                        VIDEOGlobal.srcObject = stream;
+                                                      };
+                                                      setTimeout(function(){VIDEOGlobal.play();},500);
+                                                  },
+                                                  function(error){
+                                                      $('#canvas').hide();
+                                                      $('#log').hide();
+                                                      $('#no_rtc').html('<h4>WebRTC not available.</h4>');
+                                                      $('#no_rtc').show();
+                                                  });
                       
                     }catch(error){
                       $('#canvas').hide();
@@ -787,11 +791,23 @@ var app = (function APPmodule(){
                       $('#no_rtc').show();                        
                     }
                 },
+        arjsvideo_init : function(){ //all settings will be managed by arJS, so go straight to app with no many setups
+                  var THIS = this;
+                  try{
+                      _findVideoSizeMiddleW();
+                    }catch(error){
+                      $('#canvas').hide();
+                      $('#log').hide();
+                      $('#no_rtc').html('<h4>Something went wrong...</h4>');
+                      $('#no_rtc').show();                        
+                    }          
+                }
       };
       
     $(window).load(function(){
         'use strict';
         init_obj.canvas_init();
-        init_obj.video_init();               
+        //init_obj.video_init();
+        init_obj.arjsvideo_init();
     })
   }(app))

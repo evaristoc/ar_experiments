@@ -559,11 +559,12 @@ var app = (function APPmodule(){
             var sceneelements2 = {
               renderer: null,
               camera: null,
-              artToolkitContext: null,
+              arToolkitSource: null,
               arToolkitContext: null,
               init: function(){
 
-                    this.arToolkitSource = new THREEx.ArToolkitSource({
+                    //this.arToolkitSource = new THREEx.ArToolkitSource({
+                    window.arToolkitSource = new THREEx.ArToolkitSource({ //arToolkitSource for camera search can be set as window
                         sourceType : 'webcam',
                     });
                     
@@ -580,12 +581,24 @@ var app = (function APPmodule(){
                         detectionMode: 'mono'
                     });
                     
-                    this.arToolkitSource.init(function onReady(){
-                        this.listeners_init.onResize.call(this);
+                    var onResize = this.listeners_init.onResize;
+                    //console.error(this);
+                    //onResize.bind(this); //didn't work :(
+                    var zelf = this;
+                    //this.arToolkitSource.init(function onReady(){
+                    arToolkitSource.init(function onReady(){
+                        onResize(zelf);
                     });
                     
+                    //E: a simple solution for onResize not look for the window scope from arToolkitSource.onResizeElement() method in onResize listener,
+                    // needed a wrapper function, and to pass context as argument to onResize after context normalization (`var zelf = this`)
+                    //https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
+                    function intheeventlistenerhandler(){
+                        onResize(zelf);  
+                    } 
+                    
                     // handle resize event
-                    window.addEventListener('resize', this.listeners_init.onResize.bind(this));
+                    window.addEventListener('resize', intheeventlistenerhandler);
                   
                 },
               renderer_init: function(){
@@ -601,13 +614,23 @@ var app = (function APPmodule(){
                     //not required for this part
                 },
               listeners_init: {
-                  onResize: function(){
-                    this.arToolkitSource.onResize()	
-                    this.arToolkitSource.copySizeTo(this.renderer.domElement)	
-                    if ( this.arToolkitContext.arController !== null )
+                  //onResize: function(){
+                  //  console.error(this);
+                  //  this.arToolkitSource.onResize()	
+                  //  this.arToolkitSource.copySizeTo(this.renderer.domElement)	
+                  //  if ( this.arToolkitContext.arController !== null )
+                  //  {
+                  //      this.arToolkitSource.copySizeTo(this.arToolkitContext.arController.canvas)	
+                  //  }	
+                  //},
+                  onResize: function(t){
+                    //console.error(t);
+                    arToolkitSource.onResizeElement(); //this function involves a non-explicit while-loop that is hard to handle with `this`!!	
+                    arToolkitSource.copyElementSizeTo(t.renderer.domElement);
+                    if ( t.arToolkitContext.arController !== null )
                     {
-                        this.arToolkitSource.copySizeTo(this.arToolkitContext.arController.canvas)	
-                    }	
+                        arToolkitSource.copySizeTo(t.arToolkitContext.arController.canvas)	
+                    };
                   }
                 },
               objects:{
@@ -644,10 +667,11 @@ var app = (function APPmodule(){
                 //var cube = new Cube();
                 scene = new THREE.Scene();
                 clock = new THREE.Clock();
-               //sceneelements1.init();
+               sceneelements1.init();
                //sceneelements1.update();
+               sceneelements2.renderer = sceneelements1.renderer;
                sceneelements2.init();
-               sceneelements2.update();
+               //sceneelements2.update();
 
             };
             
@@ -687,7 +711,7 @@ var app = (function APPmodule(){
     /*--- Middleware ---*/
     function _findVideoSizeMiddleW(){
         var THIS = this;
-        console.error(333, CANVASGlobal, VIDEOGlobal);
+        //console.error(333, CANVASGlobal, VIDEOGlobal);
         if (VIDEOGlobal != undefined && VIDEOGlobal.videoWidth > 0 && VIDEOGlobal.videoHeight > 0) {
             _onDimensionsReadyMiddleW(VIDEOGlobal.videoWidth, VIDEOGlobal.videoHeight);
             VIDEOGlobal.removeEventListener('loadeddata', function(e){_findVideoSizeMiddleW()});

@@ -563,11 +563,7 @@ var app = (function APPmodule(){
               arToolkitContext: null,
               init: function(){
 
-                    //this.arToolkitSource = new THREEx.ArToolkitSource({
-                    window.arToolkitSource = new THREEx.ArToolkitSource({ //arToolkitSource for camera search can be set as window
-                        sourceType : 'webcam',
-                    });
-                    
+                   
                     this.camera = this.camera_init();
                     scene.add(this.camera);
 
@@ -580,23 +576,21 @@ var app = (function APPmodule(){
                         cameraParametersUrl: '../../arjs-resources/data/camera_para.dat',
                         detectionMode: 'mono'
                     });
-                    
-                    var onResize = this.listeners_init.onResize;
-                    //console.error(this);
-                    //onResize.bind(this); //trying binding `this` to onResize didn't work :(
-                    var zelf = this;
-                    //this.arToolkitSource.init(function onReady(){
-                    arToolkitSource.init(function onReady(){
-                        onResize(zelf);
-                    });
-                    
                     //E: a simple solution for onResize not look for the window scope from arToolkitSource.onResizeElement() method in onResize listener,
                     // needed a wrapper function, and to pass context as argument to onResize after context normalization (`var zelf = this`)
                     //https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
+                    //console.error(this);
+                    //onResize.bind(this); //trying binding `this` to onResize didn't work :(
+                    var zelf = this;
+                    var onResize = this.listeners_init.onResize;
                     function intheeventlistenerhandler(){
                         onResize(zelf);  
-                    } 
-                    
+                    }                     
+
+                    arToolkitSource.init(function onReady(){
+                        intheeventlistenerhandler();
+                    });
+
                     // handle resize event
                     window.addEventListener('resize', intheeventlistenerhandler);
                   
@@ -629,7 +623,8 @@ var app = (function APPmodule(){
                     arToolkitSource.copyElementSizeTo(t.renderer.domElement);
                     if ( t.arToolkitContext.arController !== null )
                     {
-                        arToolkitSource.copySizeTo(t.arToolkitContext.arController.canvas)	
+                        console.log(t.arToolkitContext.arController);
+                        arToolkitSource.copyElementSizeTo(t.arToolkitContext.arController.canvas)	
                     };
                   }
                 },
@@ -712,12 +707,13 @@ var app = (function APPmodule(){
     function _findVideoSizeMiddleW(){
         var THIS = this;
         //console.error(333);
+        //console.error(attempts);
         if (VIDEOGlobal != undefined && VIDEOGlobal.videoWidth > 0 && VIDEOGlobal.videoHeight > 0) {
-            console.error(3331);
+            //console.error(3331);
             _onDimensionsReadyMiddleW(VIDEOGlobal.videoWidth, VIDEOGlobal.videoHeight);
             VIDEOGlobal.removeEventListener('loadeddata', function(e){_findVideoSizeMiddleW()});
-        } else if (0) { // what happens with `attempts`???????
-              console.error(3332);
+        } else if (attempts !== false) { // what happens with `attempts`?? why must be a global?????
+              //console.error(3332);
               if(attempts < 10) {
                   attempts++;
                   setTimeout(_findVideoSizeMiddleW, 200);
@@ -725,11 +721,10 @@ var app = (function APPmodule(){
                  _onDimensionsReadyMiddleW(640, 480);
               }
         } else {
-          console.error(3333);
-          _onDimensionsReadyMiddleW(100, 100); //always enter this one; only for testing
+          //console.error(3333);
+          //arjs entry
+          _onDimensionsReadyMiddleW(null, null); //always enter this one; only for testing
         };
-        //console.error(333);
-        //_onDimensionsReadyMiddleW(100, 100); //always enter this one; only for testing
       };
       
       function _onDimensionsReadyMiddleW(widthGlobal, heightGlobal){
@@ -791,9 +786,17 @@ var app = (function APPmodule(){
                       $('#no_rtc').show();                        
                     }
                 },
-        arjsvideo_init : function(){ //all settings will be managed by arJS, so go straight to app with no many setups
+        arjsvideo_init : function(){
                   var THIS = this;
                   try{
+                      window.attempts = false;
+                    ////////////////////////////////////////////////////////////
+                    // setup arToolkitSource as global for easy access
+                    //all settings will be managed by arJS, so go straight to app with no many setups
+                    ////////////////////////////////////////////////////////////
+                      window.arToolkitSource = new THREEx.ArToolkitSource({ //arToolkitSource for camera search can be set as window
+                          sourceType : 'webcam',
+                      });
                       _findVideoSizeMiddleW();
                     }catch(error){
                       $('#canvas').hide();

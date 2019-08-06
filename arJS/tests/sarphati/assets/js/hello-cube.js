@@ -188,7 +188,8 @@ function initialize()
 		arToolkitSource.copySizeTo(renderer.domElement)	
 		if ( arToolkitContext.arController !== null )
 		{
-			arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
+			//console.error(4444);
+            arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
 		}	
 	}
 

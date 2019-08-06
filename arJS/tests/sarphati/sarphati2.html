@@ -30,7 +30,27 @@
 </head>
 
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
-<script src="assets/js/sarphati.js"></script>
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a>Alles werd donker en we konden niet meer leven! Hulp! Kunt je de brond van CO2 vinden?</a>
+		<a><img src="https://data.whicdn.com/images/97140491/large.jpg"></a>
+	</div>
+	<video id='webcam' autoplay style="position:absolute; z-index:-1;"></video>
+	<div style="position:absolute; width:640px;height:480px;margin: 10px auto;">
+		<canvas id='canvas'></canvas>
+		<div id='log'></div>
+		<div id='no_rtc'></div>
+	</div>
+	<!--<div id="mySidenav2">
+		  <a href="javascript:void(0)" class="closebtn" onclick="closeStart()" style="z-index:3">&times;</a>
+		  <img src="https://i.pinimg.com/originals/11/82/59/11825905d01ed4019758674917a84d8d.jpg"></img>
+	</div>-->
+<!-- 
+  Example created by Lee Stemkoski: https://github.com/stemkoski
+  Based on the AR.js library and examples created by Jerome Etienne: https://github.com/jeromeetienne/AR.js/
+-->
+
+<script src="assets/js/sarphat2.js"></script>
 
 </body>
 </html>

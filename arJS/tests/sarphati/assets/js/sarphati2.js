@@ -359,6 +359,76 @@ var Butterfly = function () {
 })();
 
 
+/**********************
+  ARJS OBJECT (tool)
+ ********************/
+var ARJS = function(){
+      
+      function ARJS(options){
+          _classCallCheck(this, ARJS);
+          var defaults = {
+            arToolkitSource: new THREEx.ArToolkitSource(),
+            arToolkitContext: new THREEx.ArToolkitContext(),
+            markerRoot: new THREE.Object3D(),
+            markerControls : new THREEx.ArMarkerControls
+          };
+          Object.assign(this, options, defaults);
+          this.init();
+      };
+      
+      _createClass(ARJS,
+      [
+        {
+          key:'init',
+          value: function init(){
+            console.log('ARJS');
+            
+            this.arToolkitSource.sourceType = 'webcam';
+            
+            this.arToolkitContext.cameraParametersUrl = '../../arjs-resources/data/camera_para.dat';
+            this.arToolkitContext.detectionMode = 'mono';
+          }
+        },
+        {
+          key: 'artoolkitcontextinit',
+          value: function artoolkitcontextinit(camera){
+              function onCompleted(){
+                camera.projectionMatrix.copy( this.arToolkitContext.getProjectionMatrix() );
+              };
+              
+              this.arToolkitContext.init(onCompleted.bind(this)); //otherwise `this` of onCompleted is window
+          }
+        },
+        {
+          key: 'linkobjtomarker',
+          value: function linkobjtomarker(){
+            this.markerControls(
+                                this.arToolkitContext,
+                                this.markerRoot,
+                                {
+                                  type: 'pattern',
+                                  patternUrl: "../../arjs-resources/data/hiro.patt"
+                                }
+                              );
+          }
+        },
+        {
+          key:'onResize',
+          value: function onResize(renderer){
+            this.arToolkitSource.onResize();
+            this.arToolkitSource.copySizeTo(renderer.domElement);
+            if ( this.arToolkitContext.arController !== null )
+            {
+                this.arToolkitSource.copySizeTo(this.arToolkitContext.arController.canvas);	
+            };           
+          }
+        }
+      ]
+      );
+      
+      return ARJS;
+}();
+
 
 /**********************
   APP MODULE
@@ -389,31 +459,33 @@ var app = (function APPmodule(){
               camera: null,
               //cameraCtrl: null,
               opacitybackground: 1.0,
-              arToolkitSource: null,
+              //init: function(){
+              //            this.renderer = this.renderer_init();
+              //            this.camera = this.camera_init();
+              //            this.camera.position.z = 10;
+              //            cameraCtrl = new THREE.OrbitControls(this.camera);
+              //            scene.add(this.camera);
+              //            //sceneelements1.cameraCtrl = sceneelements1.cameraCtrls1_init.orbit.call(sceneelements1);
+              //            
+              //            scene.add(this.lights_init.ambient());
+              //            this.objects.bttfls_init();
+              //            
+              //            document.body.appendChild(this.renderer.domElement);
+              //            window.addEventListener('onresize', this.listeners_init.onResize.bind(this));
+              //      
+              //      },
               init: function(){
                           this.renderer = this.renderer_init();
                           this.camera = this.camera_init();
-                          this.camera.position.z = 10;
+                          //this.camera.position.z = 10;
                           cameraCtrl = new THREE.OrbitControls(this.camera);
                           scene.add(this.camera);
                           //sceneelements1.cameraCtrl = sceneelements1.cameraCtrls1_init.orbit.call(sceneelements1);
                           
                           scene.add(this.lights_init.ambient());
-                          this.objects.bttfls_init();
-                          
-                          document.body.appendChild(this.renderer.domElement);
-                          window.addEventListener('onresize', this.listeners_init.onResize.bind(this));
-                    
-                    },
-              initAR: function(){
-                          this.renderer = this.renderer_init();
-                          this.camera = this.camera_init();
-                          this.camera.position.z = 75;
-                          cameraCtrl = new THREE.OrbitControls(this.camera);
-                          scene.add(this.camera);
-                          scene.add(this.lights_init.ambient());
+                          //this.objects.bttfls_init();
 
-                          let geometry1	= new THREE.CubeGeometry(1,1,1);
+                          let geometry1	= new THREE.CubeGeometry(10,10,10);
                           let material1	= new THREE.MeshNormalMaterial({
                               transparent: true,
                               opacity: 0.5,
@@ -424,26 +496,22 @@ var app = (function APPmodule(){
                           mesh1.position.y = 0.5;
                           scene.add(mesh1);
                           
-                          document.body.appendChild(this.renderer.domElement);
-                          //window.addEventListener('onresize', this.listeners_init.onResize.bind(this));
-                          ////E: a simple solution for onResize not look for the window scope from arToolkitSource.onResizeElement() method in onResize listener,
-                          //// needed a wrapper function, and to pass context as argument to onResize after context normalization (`var zelf = this`)
-                          ////https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
-                          ////console.error(this);
-                          ////onResize.bind(this); //trying binding `this` to onResize didn't work :(
-                          this.arToolkitSource = new THREEx.ArToolkitSource({ //arToolkitSource for camera search can be set as window
-                              sourceType : 'webcam',
-                          });
+                          
+                          //E: a simple solution for onResize not look for the window scope from arToolkitSource.onResizeElement() method in onResize listener,
+                          // needed a wrapper function, and to pass context as argument to onResize after context normalization (`var zelf = this`)
+                          //https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
+                          //console.error(this);
+                          //onResize.bind(this); //trying binding `this` to onResize didn't work :(
                           var zelf = this;
                           var onResize = this.listeners_init.onResizeAR;
                           function intheeventlistenerhandler(){
                               onResize(zelf);  
                           }                     
-                          
-                          this.arToolkitSource.init(function onReady(){
+      
+                          arToolkitSource.init(function onReady(){
                               intheeventlistenerhandler();
                           });
-                          
+      
                           // handle resize event
                           window.addEventListener('resize', intheeventlistenerhandler);                    
                     },
@@ -469,7 +537,7 @@ var app = (function APPmodule(){
                     return new THREE.PerspectiveCamera(50, wWidth / wHeight, 0.1, 1000)
                       },
               lights_init: {
-                          ambient: function(){ return new THREE.AmbientLight( 0xcccccc, 1.5 )},
+                          ambient: function(){ return new THREE.AmbientLight( 0xcccccc, 0.5 )},
                       },
               cameraCtrls_init: {
                           orbit: function(){
@@ -480,18 +548,23 @@ var app = (function APPmodule(){
               listeners_init: {
                 onResize: function(){
                     var camera = this.camera;
+                    //var windowWidth = window.innerWidth;
+                    //var windowHeight = window.innerHeight;
+                    //camera.aspect = windowWidth / windowHeight;
+                    //camera.updateProjectionMatrix();
+                    //this.renderer.setSize(windowWidth, windowHeight);
                     camera.aspect = wWidth / wHeight;
                     camera.updateProjectionMatrix();
                     this.renderer.setSize(wWidth , wHeight);
                 },
                 onResizeAR: function(t){
                     //console.error(t);
-                    t.arToolkitSource.onResizeElement(); //this function involves a non-explicit while-loop that is hard to handle with `this`!!	
-                    t.arToolkitSource.copyElementSizeTo(t.renderer.domElement);
+                    arToolkitSource.onResizeElement(); //this function involves a non-explicit while-loop that is hard to handle with `this`!!	
+                    arToolkitSource.copyElementSizeTo(t.renderer.domElement);
                     if ( t.arToolkitContext !== undefined && t.arToolkitContext.arController !== null )
                     {
                         //console.log(t.arToolkitContext.arController);
-                        t.arToolkitSource.copyElementSizeTo(t.arToolkitContext.arController.canvas)	
+                        arToolkitSource.copyElementSizeTo(t.arToolkitContext.arController.canvas)	
                     } else { // is this ok???
                         var camera = t.camera;
                         camera.aspect = wWidth / wHeight;
@@ -539,38 +612,130 @@ var app = (function APPmodule(){
                     compatibility.requestAnimationFrame(this.update.bind(this));
                     //this.cameraCtrl.update();
                     cameraCtrl.update();
-                    TWEEN.update();
-                    for (var i = 0; i < this.objects.butterflies.length; i++) {
-                      this.objects.butterflies[i].move();
-                    };
+                    //TWEEN.update();
+                    //for (var i = 0; i < this.objects.butterflies.length; i++) {
+                    //  this.objects.butterflies[i].move();
+                    //};
                     //statsGlobal.end();
                     this.renderer.render(scene, this.camera);
-              },
-              updateAR: function(){
-                    var zelf = this;
-                    //statsGlobal.update();
-                    cameraCtrl.update();
-                    compatibility.requestAnimationFrame(this.updateAR.bind(this));
-                    this.renderer.render(scene, this.camera);
-              },
+              }
               
             };
             
+            /////////////////////////////////////////////////////
+            /// scene 2
+            /////////////////////////////////////////////////////
+            var sceneelements2 = {
+              renderer: null,
+              camera: null,
+              arToolkitSource: null,
+              arToolkitContext: null,
+              init: function(){
+
+                   
+                    this.camera = this.camera_init();
+                    scene.add(this.camera);
+
+                    ////////////////////////////////////////////////////////////
+                    // setup arToolkitContext
+                    ////////////////////////////////////////////////////////////	
+                
+                    // create atToolkitContext
+                    this.arToolkitContext = new THREEx.ArToolkitContext({
+                        cameraParametersUrl: '../../arjs-resources/data/camera_para.dat',
+                        detectionMode: 'mono'
+                    });
+                    //E: a simple solution for onResize not look for the window scope from arToolkitSource.onResizeElement() method in onResize listener,
+                    // needed a wrapper function, and to pass context as argument to onResize after context normalization (`var zelf = this`)
+                    //https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
+                    //console.error(this);
+                    //onResize.bind(this); //trying binding `this` to onResize didn't work :(
+                    var zelf = this;
+                    var onResize = this.listeners_init.onResize;
+                    function intheeventlistenerhandler(){
+                        onResize(zelf);  
+                    }                     
+
+                    arToolkitSource.init(function onReady(){
+                        intheeventlistenerhandler();
+                    });
+
+                    // handle resize event
+                    window.addEventListener('resize', intheeventlistenerhandler);
+                  
+                },
+              renderer_init: function(){
+                    //same as sceneelements1
+                },
+              camera_init: function(){
+                  return new THREE.Camera();
+                },
+              lights_init: {
+                    //same as sceneelements1
+                },
+              cameraCtrls_init: {
+                    //not required for this part
+                },
+              listeners_init: {
+                  //onResize: function(){
+                  //  console.error(this);
+                  //  this.arToolkitSource.onResize()	
+                  //  this.arToolkitSource.copySizeTo(this.renderer.domElement)	
+                  //  if ( this.arToolkitContext.arController !== null )
+                  //  {
+                  //      this.arToolkitSource.copySizeTo(this.arToolkitContext.arController.canvas)	
+                  //  }	
+                  //},
+                  onResize: function(t){
+                    //console.error(t);
+                    arToolkitSource.onResizeElement(); //this function involves a non-explicit while-loop that is hard to handle with `this`!!	
+                    arToolkitSource.copyElementSizeTo(t.renderer.domElement);
+                    if ( t.arToolkitContext.arController !== null )
+                    {
+                        console.log(t.arToolkitContext.arController);
+                        arToolkitSource.copyElementSizeTo(t.arToolkitContext.arController.canvas)	
+                    };
+                  }
+                },
+              objects:{
+                  factory: function(){
+                    var markerRoot1 = new THREE.Group();
+                    scene.add(markerRoot1);
+                    var markerControls1 = new THREEx.ArMarkerControls(
+                                                                      this.arToolkitContext,
+                                                                      markerRoot1,
+                                                                      {
+                                                                        type: 'pattern',
+                                                                        patternUrl: "../../arjs-resources/data/hiro.patt",
+                                                                      });
+                    
+                  }
+                },
+              update:function(){
+                    	if ( this.arToolkitSource.ready !== false ) this.arToolkitContext.update( this.arToolkitSource.domElement );
+                }
+            };
             
 
             function app_init(app_canvas, app_video, videoWidth, videoHeight) {
                 (function canvas_setup(){
+                    //_canvasWidthGraphics  = app_canvas.width;
+                    //_canvasHeightGraphics = app_canvas.height;
+                    //_ctxGraphics = app_canvas.getContext('2d');
+                    //_ctxGraphics.fillStyle = "rgb(0,255,0)";
+                    //_ctxGraphics.strokeStyle = "rgb(0,255,0)";
+                    //_app_vid = app_video;
                     wWidth = videoWidth;
                     wHeight = videoHeight;                    
                   }());
                 //var cube = new Cube();
                 scene = new THREE.Scene();
                 clock = new THREE.Clock();
-               //sceneelements1.init();
-               //sceneelements1.update();               
-               sceneelements1.initAR();
-               sceneelements1.updateAR();
-
+               sceneelements1.init();
+               sceneelements1.update();
+               //sceneelements2.renderer = sceneelements1.renderer; //both renderers are the same
+               //sceneelements2.init();
+               //sceneelements2.update();
 
             };
             
@@ -588,7 +753,6 @@ var app = (function APPmodule(){
     const HEIGHTGlobal = 360;
     var CANVASGlobal;
     var VIDEOGlobal;
-    var SCREENGlobal = 
     const widthGlobal = Math.round(60 * WIDTHGlobal / HEIGHTGlobal);
     const heightGlobal = 60;
 
@@ -628,7 +792,7 @@ var app = (function APPmodule(){
         } else {
           //console.error(3333);
           //arjs entry
-          _onDimensionsReadyMiddleW(600, 600); //always enter this one; only for testing
+          _onDimensionsReadyMiddleW(null, null); //always enter this one; only for testing
         };
       };
       
@@ -699,7 +863,9 @@ var app = (function APPmodule(){
                     // setup arToolkitSource as global for easy access
                     //all settings will be managed by arJS, so go straight to app with no many setups
                     ////////////////////////////////////////////////////////////
-
+                      window.arToolkitSource = new THREEx.ArToolkitSource({ //arToolkitSource for camera search can be set as window
+                          sourceType : 'webcam',
+                      });
                       _findVideoSizeMiddleW();
                     }catch(error){
                       $('#canvas').hide();

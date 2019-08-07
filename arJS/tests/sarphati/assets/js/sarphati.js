@@ -413,6 +413,8 @@ var app = (function APPmodule(){
                           scene.add(this.camera);
                           scene.add(this.lights_init.ambient());
 
+                          /*
+                          //TEST OBJECT
                           let geometry1	= new THREE.CubeGeometry(1,1,1);
                           let material1	= new THREE.MeshNormalMaterial({
                               transparent: true,
@@ -422,7 +424,11 @@ var app = (function APPmodule(){
                           
                           var mesh1 = new THREE.Mesh( geometry1, material1 );
                           mesh1.position.y = 0.5;
+                          mesh1.rotation.y = Math.PI/4;
                           scene.add(mesh1);
+                          */
+                          
+                          this.objects.bttfls_init();
                           
                           document.body.appendChild(this.renderer.domElement);
                           //window.addEventListener('onresize', this.listeners_init.onResize.bind(this));
@@ -550,6 +556,10 @@ var app = (function APPmodule(){
                     var zelf = this;
                     //statsGlobal.update();
                     cameraCtrl.update();
+                    TWEEN.update();
+                    for (var i = 0; i < this.objects.butterflies.length; i++) {
+                      this.objects.butterflies[i].move();
+                    };
                     compatibility.requestAnimationFrame(this.updateAR.bind(this));
                     this.renderer.render(scene, this.camera);
               },
@@ -561,7 +571,7 @@ var app = (function APPmodule(){
             function app_init(app_canvas, app_video, videoWidth, videoHeight) {
                 (function canvas_setup(){
                     wWidth = videoWidth;
-                    wHeight = videoHeight;                    
+                    wHeight = videoHeight;
                   }());
                 //var cube = new Cube();
                 scene = new THREE.Scene();
@@ -588,7 +598,6 @@ var app = (function APPmodule(){
     const HEIGHTGlobal = 360;
     var CANVASGlobal;
     var VIDEOGlobal;
-    var SCREENGlobal = 
     const widthGlobal = Math.round(60 * WIDTHGlobal / HEIGHTGlobal);
     const heightGlobal = 60;
 
@@ -608,6 +617,38 @@ var app = (function APPmodule(){
            return false;
          }        
     }
+    
+    /**********************
+        VIEWPORT UTILS
+     ********************/
+      (function() {
+          
+          var _w = window,
+              _s = window.screen,
+              _b = document.body,
+              _d = document.documentElement;
+          
+          window.Utils = {
+          
+              // screen info 
+              screen: function() 
+              {
+                  var width  = Math.max( 0, _w.innerWidth || _d.clientWidth || _b.clientWidth || 0 );
+                  var height = Math.max( 0, _w.innerHeight || _d.clientHeight || _b.clientHeight || 0 );
+                  
+                  return {
+                      width   : width, 
+                      height  : height, 
+                      centerx : width / 2, 
+                      centery : height / 2, 
+                      ratio   : width / height, 
+                  };
+              }, 
+          }; 
+      })();
+    
+    var SCREENGlobal = Utils.screen();
+    
     /*--- Middleware ---*/
     function _findVideoSizeMiddleW(){
         var THIS = this;
@@ -628,13 +669,13 @@ var app = (function APPmodule(){
         } else {
           //console.error(3333);
           //arjs entry
-          _onDimensionsReadyMiddleW(600, 600); //always enter this one; only for testing
+          _onDimensionsReadyMiddleW(SCREENGlobal.width, SCREENGlobal.height); //always enter this one; only for testing
         };
       };
       
-      function _onDimensionsReadyMiddleW(widthGlobal, heightGlobal){
+      function _onDimensionsReadyMiddleW(globalwidth, globalheight){
           var THIS = this;
-          app_EXTERNAL.app_init(CANVASGlobal, VIDEOGlobal, widthGlobal, heightGlobal);
+          app_EXTERNAL.app_init(CANVASGlobal, VIDEOGlobal, globalwidth, globalheight);
           var counter = 0;
           app_EXTERNAL.tick(); 
       };

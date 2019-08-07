@@ -1,5 +1,5 @@
 /* The side navigation menu */
-#mySidenav2 {
+#entryscene1 {
   height: 100%; /* 100% Full-height */
   width: 100%; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
@@ -12,9 +12,16 @@
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
+#entryscene1 img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 70%; /* 100% Full-height */
+  width: 70%; /* 0 width - change this with JavaScript */
+}
 
 /* The side navigation menu */
-.sidenav {
+#entryscene2 {
   height: 100%; /* 100% Full-height */
   width: 0; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
@@ -28,7 +35,7 @@
 }
 
 /* The navigation menu links */
-.sidenav a {
+#entryscene2 a {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
   font-size: 25px;
@@ -37,10 +44,11 @@
   transition: 0.3s;
 }
 
-/* When you mouse over the navigation links, change their color */
+/* When you mouse over the navigation links, change their color 
 .sidenav a:hover {
   color: #f1f1f1;
 }
+*/
 
 /* Position and style the close button (top right corner) */
 /* .sidenav .closebtn {*/

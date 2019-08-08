@@ -618,6 +618,8 @@ var app = (function APPmodule(){
                         //    camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
                         //});
                         //update2();
+                        console.error(sceneelements2);
+                        closeNav.bind(sceneelements2);
                 
                     }else{
                       compatibility.requestAnimationFrame(this.updateAR.bind(this));
@@ -806,8 +808,8 @@ var app = (function APPmodule(){
                //sceneelements1.update();               
                sceneelements1.initAR();
                sceneelements1.updateAR();
-               console.log(scene.children);
-               closeNav.call(sceneelements2);
+               //console.log(scene.children);
+               //closeNav.call(sceneelements2);
 
 
             };
@@ -1003,7 +1005,7 @@ var app = (function APPmodule(){
           /* Set the width of the side navigation to 0 */
         window.closeNav = function() {
             document.getElementById("entryscene2").style.width = "0";
-            console.log(this);
+            //console.log(this);
             this.initAR();
             this.updateAR();
         }

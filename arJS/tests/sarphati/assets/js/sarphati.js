@@ -305,6 +305,7 @@ var Butterfly = function () {
                             }
                         });                         
                         //zelf._subScene.add(obj);
+                        console.error(zelf);
                         zelf._subScene = obj;
                       })
                   }
@@ -683,9 +684,10 @@ var app = (function APPmodule(){
                               cameraParametersUrl: '../../arjs-resources/data/camera_para.dat',
                               detectionMode: 'mono'
                           });
-
+                          
+                          var zelf = this;
                           this.arToolkitContext.init( function onCompleted(){
-                              this.camera.projectionMatrix.copy( this.arToolkitContext.getProjectionMatrix() );
+                              this.camera.projectionMatrix.copy.call( this, arToolkitContext.getProjectionMatrix() );
                           });
                           
                           
@@ -758,7 +760,8 @@ var app = (function APPmodule(){
                 smokeparticles: {},
                 factory_init: function(){
                           var f = new FactoryObj();
-                          f._subScene.name = "factory";
+                          //console.error(f, f._subScene);
+                          //f._subScene.name = "factory";
                           this.markerRoot1.add(f._subScene);
                       },
                 particle_init: function(i){
@@ -797,6 +800,27 @@ var app = (function APPmodule(){
             
   
             function app_init(app_canvas, app_video, gl_w, gl_h) {
+                ////window scope variables and functions
+                ///* Set the width of the side navigation to 0 */
+                //window.closeEntryImg = (function() {
+                //    //document.getElementById("mySidenav2").style.width = "0";
+                //    // Removes an element from the document
+                //    var element = document.getElementById("entryscene1");
+                //    element.parentNode.removeChild(element);
+                //    this.canvas_init();
+                //    this.arjsvideo_init();
+                //});
+                //
+                //  
+                ////  /* Set the width of the side navigation to 0 */
+                //window.closeNav = (function() {
+                //    document.getElementById("entryscene2").style.width = "0";
+                //    //console.log(this);
+                //    this.initAR();
+                //    this.updateAR();
+                //});
+              
+              
                 (function canvas_setup(){
                     globalWidth = gl_w;
                     globalHeight = gl_h;
@@ -809,7 +833,13 @@ var app = (function APPmodule(){
                sceneelements1.initAR();
                sceneelements1.updateAR();
                //console.log(scene.children);
-               //closeNav.call(sceneelements2);
+               //window.closeNav.bind(sceneelements2);
+                window.closeNav = function() {
+                    document.getElementById("entryscene2").style.width = "0";
+                    //console.log(this);
+                    sceneelements2.initAR();
+                    sceneelements2.updateAR();
+                };
 
 
             };
@@ -914,7 +944,8 @@ var app = (function APPmodule(){
     function _onDimensionsReadyMiddleW(gl_w, gl_h){
           app_EXTERNAL.app_init(CANVASGlobal, VIDEOGlobal, gl_w, gl_h);
           var counter = 0;
-          app_EXTERNAL.tick(); 
+          app_EXTERNAL.tick();
+          console.error(init_obj);
     };
     
     var init_obj = {
@@ -990,8 +1021,8 @@ var app = (function APPmodule(){
       
     $(window).load(function(){
         'use strict';
-        //window scope variables and functions
-        /* Set the width of the side navigation to 0 */
+        ////window scope variables and functions
+        ///* Set the width of the side navigation to 0 */
         window.closeEntryImg = (function() {
             //document.getElementById("mySidenav2").style.width = "0";
             // Removes an element from the document
@@ -1002,17 +1033,19 @@ var app = (function APPmodule(){
         }).bind(init_obj);
         
           
-          /* Set the width of the side navigation to 0 */
-        window.closeNav = function() {
-            document.getElementById("entryscene2").style.width = "0";
-            //console.log(this);
-            this.initAR();
-            this.updateAR();
-        }
+        ////  /* Set the width of the side navigation to 0 */
+        //window.closeNav = (function() {
+        //    document.getElementById("entryscene2").style.width = "0";
+        //    //console.log(this);
+        //    this.initAR();
+        //    this.updateAR();
+        //});
         
-        //canvas and video initialization
+        //window.closeEntryImg.bind(init_obj);
+        
+        ////canvas and video initialization
         //init_obj.canvas_init();
-        //init_obj.video_init();
+        ////init_obj.video_init();
         //init_obj.arjsvideo_init();
     })
   }(app))

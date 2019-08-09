@@ -8,6 +8,10 @@ const statsGlobal = new Stats();
 //const guiGlobal = new dat.GUI();
 //guiGlobal.close();
 
+/**********************
+  CLASS CREATOR
+ ********************/   
+
 var _createClass = function () {
                       function defineProperties(target, props) {
                         for (var i = 0; i < props.length; i++) {
@@ -31,6 +35,44 @@ function _classCallCheck(instance, Constructor) {
                         throw new TypeError("Cannot call a class as a function");
                       }
                     };
+
+/**********************
+  EMITTER INTERFACE
+ ********************/ 
+
+
+(function() {
+  //a simple synchronous emitter interface based on https://netbasal.com/javascript-the-magic-behind-event-emitter-cce3abcbcef9
+  var  CustomEventEmitter = function(){
+    this.events = {};
+  };
+  
+  CustomEventEmitter.prototype ={
+      constructor: CustomEventEmitter,
+      emit: function(eventName, data){ //create an emit event and associate it to a function
+              var event = this.events[eventName];
+              if( event ) {
+                event.forEach(fn => {
+                  fn.call(null, data);
+                });
+              }        
+            },
+      subscribe: function(eventName, fn){ //register the emit event so it can be used later
+              if(!this.events[eventName]) {
+                this.events[eventName] = []; //for a new event to be registered, make a list of functions associated to it
+              };
+              this.events[eventName].push(fn);
+              return (function(){ this.events[eventName] = this.events[eventName].filter(eventFn => fn !== eventFn); }).bind(this);
+            },
+        //to unsubscribe an emitter do:
+        //  var unsubscribe = emitter.subscribe(eventName, data);
+        //  unsubscribe();
+  };
+  
+  window.CustomEventEmitter = CustomEventEmitter;
+  
+})();
+
 
 /**********************
   CUBE OBJECT
@@ -257,8 +299,11 @@ var Butterfly = function () {
  
   //var FactoryObj = function(markerRoot){
   //   this._subScene = markerRoot;
-  var FactoryObj = function(){
-     this._subScene = null;
+  var FactoryObj = function(mr){
+     this._subScene = mr;
+     //this._subScene = null;
+     //this._subScene = function(o){return new Promise(function(resolve,reject){if(o){resolve(o)}else{reject(null)}})};
+     this._Object = null;
      this._textureLoader = new THREE.TextureLoader();
      this._textureLoad = this._textureLoader.load('./assets/PUSHILIN_factory.png');
      this._mtlLoader = new THREE.MTLLoader();
@@ -304,9 +349,13 @@ var Butterfly = function () {
                                 child.material.map = zelf._textureLoad;
                             }
                         });                         
-                        //zelf._subScene.add(obj);
-                        console.error(zelf);
-                        zelf._subScene = obj;
+                        obj.name = "factory1";
+                        zelf._subScene.add(obj); //because it is async... :(
+                        //console.error(zelf);
+                        //zelf._subScene = obj;
+                        //zelf._subScene = zelf._subScene(obj);
+                        //zelf._Object = obj;
+                        //console.error('1111', zelf._subScene(obj));
                       })
                   }
     
@@ -523,7 +572,7 @@ var app = (function APPmodule(){
               objects: {
                 butterflies : [],
                 
-                nbButterflies: 50,
+                nbButterflies: 10,
                 
                 bttfls_init : function(){
                     for(let i = 0; i < this.butterflies.length; i++){
@@ -619,8 +668,8 @@ var app = (function APPmodule(){
                         //    camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
                         //});
                         //update2();
-                        console.error(sceneelements2);
-                        closeNav.bind(sceneelements2);
+                        //console.error(sceneelements2);
+                        //closeNav.bind(sceneelements2);
                 
                     }else{
                       compatibility.requestAnimationFrame(this.updateAR.bind(this));
@@ -687,8 +736,13 @@ var app = (function APPmodule(){
                           
                           var zelf = this;
                           this.arToolkitContext.init( function onCompleted(){
-                              this.camera.projectionMatrix.copy.call( this, arToolkitContext.getProjectionMatrix() );
+                            zelf.camera.projectionMatrix.copy(zelf.arToolkitContext.getProjectionMatrix());
                           });
+                          //var c = this.camera.projectionMatrix.copy;
+                          //var arcgpm = this.arToolkitContext.getProjectionMatrix;
+                          //this.arToolkitContext.init( function onCompleted(){
+                          //    c( arcgpm() );
+                          //});
                           
                           
                           ////////////////////////////////////////////////////////////
@@ -758,12 +812,25 @@ var app = (function APPmodule(){
                 markerRoot1: new THREE.Group(),
                 test: null,
                 smokeparticles: {},
-                factory_init: function(){
-                          var f = new FactoryObj();
-                          //console.error(f, f._subScene);
-                          //f._subScene.name = "factory";
-                          this.markerRoot1.add(f._subScene);
-                      },
+                //factory_init: function(){
+                //          var f = new FactoryObj();
+                //          //console.error(f, f._subScene);
+                //          //f._subScene.name = "factory";
+                //          this.markerRoot1.add(f._subScene);
+                //      },
+                //factory_init: function(){
+                //          var f = new FactoryObj();
+                //          //console.error(f, f._subScene);
+                //          //f._subScene.name = "factory";
+                //          f._subScene.then(function(o){o.name = 'factory'; this.markerRoot1.add(o)}).catch(function(e){if(e===null){console.log('no factory object was built')};})
+                //      },
+                //factory_init: function(){
+                //          var f = new FactoryObj();
+                //          console.error(f, f._Object);
+                //      },
+               factory_init: function(){
+                          var f = new FactoryObj(this.markerRoot1);
+                       },
                 particle_init: function(i){
                         var p = new Particle();
                         p._subScene.name = "smokeparticle"+i;
@@ -834,12 +901,18 @@ var app = (function APPmodule(){
                sceneelements1.updateAR();
                //console.log(scene.children);
                //window.closeNav.bind(sceneelements2);
-                window.closeNav = function() {
-                    document.getElementById("entryscene2").style.width = "0";
-                    //console.log(this);
+               emitter.subscribe('event:close-nav', function(data) {
+                    //console.error('event:close-nav was successfully called');
                     sceneelements2.initAR();
-                    sceneelements2.updateAR();
-                };
+                    //console.error(scene);
+                    sceneelements2.updateAR();                    
+                });
+                //window.closeNav = function() {
+                //    document.getElementById("entryscene2").style.width = "0";
+                //    //console.log(this);
+                //    sceneelements2.initAR();
+                //    sceneelements2.updateAR();
+                //};
 
 
             };
@@ -945,7 +1018,7 @@ var app = (function APPmodule(){
           app_EXTERNAL.app_init(CANVASGlobal, VIDEOGlobal, gl_w, gl_h);
           var counter = 0;
           app_EXTERNAL.tick();
-          console.error(init_obj);
+          //console.error(init_obj);
     };
     
     var init_obj = {
@@ -1032,7 +1105,12 @@ var app = (function APPmodule(){
             this.arjsvideo_init();
         }).bind(init_obj);
         
-          
+        window.emitter = new CustomEventEmitter(); //it must be public or something that can travel between modules
+        
+        window.closeNav = function(){
+            document.getElementById("entryscene2").style.width = "0";
+            emitter.emit('event:close-nav', {});
+        };
         ////  /* Set the width of the side navigation to 0 */
         //window.closeNav = (function() {
         //    document.getElementById("entryscene2").style.width = "0";

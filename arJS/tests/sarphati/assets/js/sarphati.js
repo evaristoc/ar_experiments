@@ -572,7 +572,7 @@ var app = (function APPmodule(){
               objects: {
                 butterflies : [],
                 
-                nbButterflies: 10,
+                nbButterflies: 100,
                 
                 bttfls_init : function(){
                     for(let i = 0; i < this.butterflies.length; i++){
@@ -618,6 +618,8 @@ var app = (function APPmodule(){
               updateAR: function(){
                     var zelf = this;
                     //statsGlobal.update();
+                    
+                    $("#intro").delay(350).fadeOut(10000);
                     cameraCtrl.update();
                     TWEEN.update();
                     //for (var i = 0; i < this.objects.butterflies.length; i++) {
@@ -632,7 +634,7 @@ var app = (function APPmodule(){
                           //the setTimeout must be into a closure because the MESH WILL BE IMMEDIATELY DELETED! In this way it is kept in memory
                           //REMEMBER: setTimeout works correctly with CALLBACKS (also closures), so METHODS must be inside one
                           setTimeout(function(){scene.remove(_b)},5000); //find a better transition...             
-                        })(this.objects.butterflies[0].meshObj);
+                        }(this.objects.butterflies[0].meshObj));
                         this.objects.butterflies.shift();
                         this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
                         this.opacitybackground += 1;  
@@ -649,6 +651,7 @@ var app = (function APPmodule(){
                         //scene.add(camera);
                         //this.renderer.render(scene, this.camera);
                         $('#entryscene2').width(globalWidth);
+                        $('#log').html("test width "+globalWidth);
                 
                         //// build markerControls
                         //markerRoot1 = new THREE.Group();
@@ -1125,5 +1128,6 @@ var app = (function APPmodule(){
         //init_obj.canvas_init();
         ////init_obj.video_init();
         //init_obj.arjsvideo_init();
+    
     })
   }(app))

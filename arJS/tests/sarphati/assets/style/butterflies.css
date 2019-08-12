@@ -28,7 +28,8 @@
   z-index: 1; /* Stay on top */
   top: 0; /* Stay at the top */
   right: 0;
-  background-color: #111; /* Black*/
+  /*background-color: #111;*/ /* Black*/
+  background-color: transparent;
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 60px; /* Place content 60px from the top */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
@@ -42,6 +43,17 @@
   color: #818181;
   display: block;
   transition: 0.3s;
+}
+
+#entryscene2 img{
+  -webkit-transform: scaleX(-1) rotateZ(45deg);
+  transform: scaleX(-1) rotateZ(45deg);
+  margin-right: 15px;
+}
+
+
+h2 {
+  font-family: "Times New Roman", Times, serif;
 }
 
 /* When you mouse over the navigation links, change their color 

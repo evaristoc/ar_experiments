@@ -633,7 +633,7 @@ var app = (function APPmodule(){
                         (function(_b){
                           //the setTimeout must be into a closure because the MESH WILL BE IMMEDIATELY DELETED! In this way it is kept in memory
                           //REMEMBER: setTimeout works correctly with CALLBACKS (also closures), so METHODS must be inside one
-                          setTimeout(function(){scene.remove(_b)},5000); //find a better transition...             
+                          setTimeout(function(){scene.remove(_b)},7000); //find a better transition...             
                         }(this.objects.butterflies[0].meshObj));
                         this.objects.butterflies.shift();
                         this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));

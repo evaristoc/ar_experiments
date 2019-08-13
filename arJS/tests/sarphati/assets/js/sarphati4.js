@@ -572,7 +572,7 @@ var app = (function APPmodule(){
               objects: {
                 butterflies : [],
                 
-                nbButterflies: 1,
+                nbButterflies: 100,
                 
                 bttfls_init : function(){
                     for(let i = 0; i < this.butterflies.length; i++){
@@ -619,7 +619,7 @@ var app = (function APPmodule(){
                     var zelf = this;
                     //statsGlobal.update();
                     
-                    $("#intro").delay(350).fadeOut(1);
+                    $("#intro").delay(350).fadeOut(10000);
                     cameraCtrl.update();
                     TWEEN.update();
                     //for (var i = 0; i < this.objects.butterflies.length; i++) {
@@ -748,22 +748,7 @@ var app = (function APPmodule(){
                           //    c( arcgpm() );
                           //});
                           
-                          var patternArray = ["letterA", "letterB", "letterC", "letterD"];
-                          var colorArray   = [0xff0000, 0xff8800, 0xffff00, 0x00cc00];
-                          for (let i = 0; i < 4; i++)
-                          {
-                              let markerRoot2 = new THREE.Group();
-                              scene.add(markerRoot2);
-                              let markerControls1 = new THREEx.ArMarkerControls(
-                                                            this.arToolkitContext,
-                                                            markerRoot2,
-                                                            {
-                                                              type : 'pattern',
-                                                              patternUrl : "../../arjs-resources/data/" + patternArray[i] + ".patt",
-                                                    });
-                              this.objects.testcube_init(colorArray[i], markerRoot2);
-
-                          };
+                          
                           ////////////////////////////////////////////////////////////
                           // setup MarkerControls
                           ////////////////////////////////////////////////////////////	                          
@@ -855,19 +840,6 @@ var app = (function APPmodule(){
                         p._subScene.name = "smokeparticle"+i;
                         this.markerRoot1.add(p._subScene);
                         return p;
-                },
-                testcube_init: function(cubecolor, mr){
-                              var mesh = new THREE.Mesh( 
-                                      new THREE.CubeGeometry(1.25,1.25,1.25), 
-                                      new THREE.MeshBasicMaterial(
-                                                  {
-                                                    color:cubecolor,
-                                                    transparent:true,
-                                                    opacity:0.5
-                                                  }) 
-                                    );
-                              mesh.position.y = 1.25/2;
-                              mr.add( mesh );                          
                 }
               },
               update: function(){

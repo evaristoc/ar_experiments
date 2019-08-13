@@ -650,7 +650,8 @@ var app = (function APPmodule(){
                         //camera = new THREE.Camera();
                         //scene.add(camera);
                         //this.renderer.render(scene, this.camera);
-                        $('#entryscene2').width(globalWidth);
+                        //$('#entryscene2').width(globalWidth);
+                        $('#entryscene2').width("100%");
                         $('#log').html("test width "+globalWidth);
                 
                         //// build markerControls

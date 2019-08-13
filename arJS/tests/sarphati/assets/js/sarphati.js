@@ -572,7 +572,7 @@ var app = (function APPmodule(){
               objects: {
                 butterflies : [],
                 
-                nbButterflies: 1,
+                nbButterflies: 100,
                 
                 bttfls_init : function(){
                     for(let i = 0; i < this.butterflies.length; i++){
@@ -619,7 +619,7 @@ var app = (function APPmodule(){
                     var zelf = this;
                     //statsGlobal.update();
                     
-                    $("#intro").delay(350).fadeOut(1);
+                    $("#intro").delay(350).fadeOut(15000);
                     cameraCtrl.update();
                     TWEEN.update();
                     //for (var i = 0; i < this.objects.butterflies.length; i++) {

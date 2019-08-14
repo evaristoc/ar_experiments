@@ -52,8 +52,9 @@
 }
 
 
-#intro h2 {
+.intro h2 {
   font-family: "Times New Roman", Times, serif;
+  color: orange;
 }
 
 /* When you mouse over the navigation links, change their color 
@@ -76,11 +77,11 @@
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
-  #intro h2 { font-size:35px;}
+  .intro h2 { font-size:45px;}
 }
 
 @media screen and (max-width: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
-  #intro h2 { font-size:35px;}
+  .intro h2 { font-size:45px;}
 }

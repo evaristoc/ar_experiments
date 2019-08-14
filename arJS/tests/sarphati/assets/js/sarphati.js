@@ -619,7 +619,17 @@ var app = (function APPmodule(){
                     var zelf = this;
                     //statsGlobal.update();
                     
-                    $("#intro").delay(350).fadeOut(15000);
+                    //var p = $("#intro");
+                    //p.delay(350).fadeOut(5000, function(){var p = $("#intro"); p.html("<p>HELLO</p>"); p.show(); p.fadeIn(6000);}); //generates a loop!!
+                    //$("#intro").html("<p>HELLO</p>").fadeIn(15000);
+                    console.log($("#intro_text1").css("opacity"));
+                    if (($("#intro_text1").css("opacity") - 1/500) <= 0) {
+                      //code
+                      $("#intro_text1").hide();
+                    }else{
+                      $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/500);
+                    };
+                    
                     cameraCtrl.update();
                     TWEEN.update();
                     //for (var i = 0; i < this.objects.butterflies.length; i++) {
@@ -651,6 +661,8 @@ var app = (function APPmodule(){
                         //scene.add(camera);
                         //this.renderer.render(scene, this.camera);
                         //$('#entryscene2').width(globalWidth);
+                        //$("#intro_text2").fadeOut(700);
+                        $("#intro_text2").css("display", "none");
                         $('#entryscene2').width("100%");
                         $('#log').html("test width "+globalWidth);
                 
@@ -1143,6 +1155,9 @@ var app = (function APPmodule(){
             document.getElementById("entryscene2").style.width = "0";
             emitter.emit('event:close-nav', {});
         };
+
+        //$("#intro_text1").delay(350).fadeOut(6000);
+        $("#intro_text2").delay(6500).fadeIn(3000);
         ////  /* Set the width of the side navigation to 0 */
         //window.closeNav = (function() {
         //    document.getElementById("entryscene2").style.width = "0";

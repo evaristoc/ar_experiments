@@ -623,11 +623,11 @@ var app = (function APPmodule(){
                     //p.delay(350).fadeOut(5000, function(){var p = $("#intro"); p.html("<p>HELLO</p>"); p.show(); p.fadeIn(6000);}); //generates a loop!!
                     //$("#intro").html("<p>HELLO</p>").fadeIn(15000);
                     console.log($("#intro_text1").css("opacity"));
-                    if (($("#intro_text1").css("opacity") - 1/500) <= 0) {
+                    if (($("#intro_text1").css("opacity") - 1/800) <= 0) {
                       //code
                       $("#intro_text1").hide();
                     }else{
-                      $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/500);
+                      $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/800);
                     };
                     
                     cameraCtrl.update();

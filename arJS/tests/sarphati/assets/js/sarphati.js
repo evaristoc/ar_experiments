@@ -447,7 +447,7 @@ var app = (function APPmodule(){
               init: function(){
                           this.renderer = this.renderer_init();
                           this.camera = this.camera_init();
-                          this.camera.position.z = 10;
+                          this.camera.position.z = 5;
                           cameraCtrl = new THREE.OrbitControls(this.camera);
                           scene.add(this.camera);
                           //sceneelements1.cameraCtrl = sceneelements1.cameraCtrls1_init.orbit.call(sceneelements1);
@@ -572,7 +572,7 @@ var app = (function APPmodule(){
               objects: {
                 butterflies : [],
                 
-                nbButterflies: 100,
+                nbButterflies: 50,
                 
                 bttfls_init : function(){
                     for(let i = 0; i < this.butterflies.length; i++){

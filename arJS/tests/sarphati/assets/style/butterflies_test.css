@@ -1,0 +1,83 @@
+/* The side navigation menu */
+#entryscene2 {
+  height: 100%; /* 100% Full-height */
+  width: 100%; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  right: 0;
+  /*background-color: #111;*/ /* Black*/
+  background-color: transparent;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  display: inline-block;
+}
+
+/* The navigation menu links */
+#entryscene2 a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  display: block;
+  transition: 0.3s;
+}
+
+/* The navigation menu links */
+#entryscene2 p {
+  padding: 8px 8px 8px 12px;
+  text-decoration: none;
+  font-size: 15px;
+  /*color: #818181;*/
+  color: black;
+  /*display: block;
+  transition: 0.3s;*/
+}
+
+#entryscene2 img{
+  -webkit-transform: scaleX(-1) rotateZ(25deg);
+  transform: scaleX(-1) rotateZ(25deg);
+  margin-top: -150px;
+  margin-right: -150px;
+  /*margin-right: -355px;
+  margin-top: 15px;
+  float:right;*/
+}
+
+#entryscene2 img.resize{
+}
+
+
+.intro h2 {
+  font-family: "Times New Roman", Times, serif;
+  color: orange;
+}
+
+/* When you mouse over the navigation links, change their color 
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+*/
+
+/* Position and style the close button (top right corner) */
+/* .sidenav .closebtn {*/
+.closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+  .intro h2 { font-size:45px;}
+}
+
+@media screen and (max-width: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+  .intro h2 { font-size:45px;}
+}

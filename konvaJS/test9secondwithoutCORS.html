@@ -329,66 +329,96 @@
    //var loadimg = new Image();
    
    let i;
-
-
-    
-    
     
     function loadFunction(){
-        //Konva.Image.fromURL(window.location.href.split('?q=')[1],
-        //          function(kImg){
-        //            //console.log('here');
-        //            layer = new Konva.Layer();
-        //            stage.add(layer);
-        //            layer.add(trevi1Group);
-        //            kImg.id("oldimg");
-        //            kImg.width(wI);
-        //            kImg.height(hI);
-        //            kImg.opacity(.8);
-        //            i = kImg;
-        //            trevi1Group.add(kImg);
-        //            
-        //            addAnchor(trevi1Group, 0, 0, 'topLeft');
-        //            addAnchor(trevi1Group, wI, 0, 'topRight');
-        //            addAnchor(trevi1Group, wI, hI, 'bottomRight');
-        //            addAnchor(trevi1Group, 0, hI, 'bottomLeft');
-        //            
-        //            layer.draw();
-        //            
-        //          }
-        //)
-        // main API:
-        var imageObj = new Image();
-        //imageObj.src = 'https://images.memorix.nl/ams/thumb/250x250/925c2dcc-9cf6-4881-24f1-72e9c21963d6.jpg'
-        imageObj.src = window.location.href.split('?q=')[1];
-        imageObj.onload = function() {
-            var oldPhotoKonva = new Konva.Image({
-              id: "oldimg",
-              image: imageObj,
-              width: wI,
-              height: hI,
-              opacity: .8
-            });
-            i = oldPhotoKonva;
-            // add the shape to the layer
-            layer = new Konva.Layer();
-            stage.add(layer);
-            layer.add(trevi1Group);
-            trevi1Group.add(oldPhotoKonva);
-            addAnchor(trevi1Group, 0, 0, 'topLeft');
-            addAnchor(trevi1Group, wI, 0, 'topRight');
-            addAnchor(trevi1Group, wI, hI, 'bottomRight');
-            addAnchor(trevi1Group, 0, hI, 'bottomLeft');
-            layer.batchDraw();
-        };
+        Konva.Image.fromURL(window.location.href.split('?q=')[1],
+                  function(kImg){
+                    //console.log('here');
+                    layer = new Konva.Layer();
+                    stage.add(layer);
+                    layer.add(trevi1Group);
+                    kImg.id("oldimg");
+                    kImg.width(wI);
+                    kImg.height(hI);
+                    kImg.opacity(.8);
+                    i = kImg;
+                    trevi1Group.add(kImg);
+                    
+                    addAnchor(trevi1Group, 0, 0, 'topLeft');
+                    addAnchor(trevi1Group, wI, 0, 'topRight');
+                    addAnchor(trevi1Group, wI, hI, 'bottomRight');
+                    addAnchor(trevi1Group, 0, hI, 'bottomLeft');
+                    
+                    layer.draw();
+                    
+                  }
+        )
     }
+    //imageObj1.src = 'assets/trevi1.jpg';
+    
+    
 
+
+    
+   
+    //function loadFunction(){ //instead of imageNode.onload = function(){xxxx draw()}
+    //    console.log('here');
+    //    layer = new Konva.Layer();
+    //    stage.add(layer);
+    //    layer.add(trevi1Group);
+    //    
+    //    //function imgsucess(img){
+    //    //          console.log(img);
+    //    //          if (img) {
+    //    //            document.getElementById('loadimgerror').innerHTML = '';
+    //    //            imageObj1.src = img;
+    //    //            trevi1Img.image(imageObj1);
+    //    //            trevi1Group.add(trevi1Img);
+    //    //    
+    //    //            addAnchor(trevi1Group, 0, 0, 'topLeft');
+    //    //            addAnchor(trevi1Group, wI, 0, 'topRight');
+    //    //            addAnchor(trevi1Group, wI, hI, 'bottomRight');
+    //    //            addAnchor(trevi1Group, 0, hI, 'bottomLeft');
+    //    //    
+    //    //            layer.draw();
+    //    //          }else{
+    //    //            console.log("error")
+    //    //          }
+    //    //        
+    //    //        }
+    //    //function imgerror(err){ document.getElementById('loadimgerror').innerHTML = 'got an error loading image' }
+    //    
+    //    //loadimg(window.location.href.split('?q=')[1])
+    //    //.then((d)=>{imgsucess(d)})
+    //    ////.catch(()=>{console.log('error', this)})
+    //    
+    //    
+    //    
+    //    //imageObj1.src = window.location.href.split('?q=')[1];
+    //    trevi1Img.image(imageObj1);
+    //    //trevi1Img.width = wI;
+    //    //trevi1Img.height = hI;
+    //    //trevi1Img.opacity = .8;        
+    //    trevi1Group.add(trevi1Img);
+    //    
+    //    addAnchor(trevi1Group, 0, 0, 'topLeft');
+    //    addAnchor(trevi1Group, wI, 0, 'topRight');
+    //    addAnchor(trevi1Group, wI, hI, 'bottomRight');
+    //    addAnchor(trevi1Group, 0, hI, 'bottomLeft');
+    //    
+    //    layer.draw();
+    //    
+    //}
     
     function removeFunction(){ //instead of imageNode.onload = function(){xxxx draw()}
         console.log('there');
         layer.destroy();
     }
 
+    //imageObj1.onload = function() {
+    //    trevi1Img.image(imageObj1);
+    //    layer.draw();
+    //};
    
     var anim = new Konva.Animation(function () {
             // do nothing, animation just need to update the layer

@@ -68,6 +68,7 @@
   </div>
 </div>-->
   <div id="stage-parent">
+    <img id='loadimg'/>
     <div id="loadimgerror"></div>
     <div id="container"></div>
 </div>
@@ -84,6 +85,84 @@
 
 
   <script>
+    
+    
+  var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
+  function doCORSRequest(options, printResult) {
+    var x = new XMLHttpRequest();
+    x.open(options.method, cors_api_url + options.url);
+    x.onload = x.onerror = function() {
+      printResult(
+        options.method + ' ' + options.url + '\n' +
+        x.status + ' ' + x.statusText + '\n\n' +
+        (x.responseText || ''),
+        x
+      );
+    };
+    if (/^POST/i.test(options.method)) {
+      x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    }
+    x.send(options.data);
+  };
+  
+  (function(){
+    //https://stackoverflow.com/questions/7650587/using-javascript-to-display-a-blob
+    //https://ourcodeworld.com/articles/read/322/how-to-convert-a-base64-image-into-a-image-file-and-upload-it-with-an-asynchronous-form-using-jquery
+    var imgcontainer = document.getElementById('loadimg');
+    //imgcontainer.src = 'https://d1b6qx0io027tg.cloudfront.net/thumbs/500x500/609cb142-1948-1aac-cf3d-dbc485ca0910.jpg';
+  //  doCORSRequest( {
+  //                 method: 'GET',
+  //                 url:'https://images.memorix.nl/ams/thumb/250x250/925c2dcc-9cf6-4881-24f1-72e9c21963d6.jpg',
+  //                 data:''
+  //                 },
+  //                 function printResult(printresult, result) {
+  //                    var blob = new Blob(['Welcome to <b>base64.guru</b>!'], {type: 'text/html'});
+  //                    console.log(blob);
+  //                    //var data = result.responseText
+  //                    ////outputField.value = result;
+  //                    ////console.log(printresult);
+  //                    ////console.log(result);
+  //                    ////imgcontainer.src = result.responseURL;
+  //                    ////imgcontainer.src = URL.createObjectURL(result.response);
+  //                    //
+  //                    //
+  //                    //var canvas = document.getElementById("c");
+  //                    //var ctx = canvas.getContext("2d");
+  //                    //var baseImg = ctx.createImageData(100, 100);
+  //                    //baseImg.src = 'img/base.jpeg';
+  //                    //var bytesArray = new Uint8ClampedArray(data.length);
+  //                    //// Iterate through every pixel
+  //                    //for (let i = 0; i < baseImg.data.length; i += 4) {
+  //                    //  // Modify pixel data
+  //                    //  baseImg.data[i + 0] = 0;  // R value
+  //                    //  baseImg.data[i + 1] = 0;  // G value
+  //                    //  baseImg.data[i + 2] = 0;  // B value
+  //                    //  baseImg.data[i + 3] = 0;  // A value
+  //                    //  //baseImg.data[i + 0] = bytesArray[i + 0];  // R value
+  //                    //  //baseImg.data[i + 1] = bytesArray[i + 1];  // G value
+  //                    //  //baseImg.data[i + 2] = bytesArray[i + 2];  // B value
+  //                    //  //baseImg.data[i + 3] = bytesArray[i + 3];  // A value
+  //                    //  //console.log(typeof bytesArray[i + 0]);
+  //                    //  break
+  //                    //}
+  //                    ////baseImg.data(bytesArray);
+  //                    //ctx.putImageData(baseImg, 20, 20);
+  //                    ////var bytesArray = new Uint8Array(data.length / 2);
+  //                    ////for (var i = 0; i < data.length; i += 2) {
+  //                    ////    bytesArray[i / 2] = parseInt(data.substring(i, i + 2), /* base = */ 16);
+  //                    ////};
+  //                    //// Make a Blob from the bytes
+  //                    ////var blob = new Blob([bytes], {type: 'image/bmp'});
+  //                    //console.log(bytesArray);
+  //                    ////console.log(blob);
+  //                    ////imgcontainer.src = URL.createObjectURL(blob);
+  //                    //////imgcontainer.src = result.responseText;
+  //                 }
+  //             ); 
+  }())
+
+    
+    
     ////available in some, check: https://developers.google.com/web/fundamentals/native-hardware/fullscreen/
     //document.body.requestFullscreen(); //<-- doesnt exist :(
     /* Get the documentElement (<html>) to display the page in fullscreen */
@@ -329,66 +408,99 @@
    //var loadimg = new Image();
    
    let i;
-
-
-    
-    
     
     function loadFunction(){
-        //Konva.Image.fromURL(window.location.href.split('?q=')[1],
-        //          function(kImg){
-        //            //console.log('here');
-        //            layer = new Konva.Layer();
-        //            stage.add(layer);
-        //            layer.add(trevi1Group);
-        //            kImg.id("oldimg");
-        //            kImg.width(wI);
-        //            kImg.height(hI);
-        //            kImg.opacity(.8);
-        //            i = kImg;
-        //            trevi1Group.add(kImg);
-        //            
-        //            addAnchor(trevi1Group, 0, 0, 'topLeft');
-        //            addAnchor(trevi1Group, wI, 0, 'topRight');
-        //            addAnchor(trevi1Group, wI, hI, 'bottomRight');
-        //            addAnchor(trevi1Group, 0, hI, 'bottomLeft');
-        //            
-        //            layer.draw();
-        //            
-        //          }
-        //)
-        // main API:
-        var imageObj = new Image();
-        //imageObj.src = 'https://images.memorix.nl/ams/thumb/250x250/925c2dcc-9cf6-4881-24f1-72e9c21963d6.jpg'
-        imageObj.src = window.location.href.split('?q=')[1];
-        imageObj.onload = function() {
-            var oldPhotoKonva = new Konva.Image({
-              id: "oldimg",
-              image: imageObj,
-              width: wI,
-              height: hI,
-              opacity: .8
-            });
-            i = oldPhotoKonva;
-            // add the shape to the layer
-            layer = new Konva.Layer();
-            stage.add(layer);
-            layer.add(trevi1Group);
-            trevi1Group.add(oldPhotoKonva);
-            addAnchor(trevi1Group, 0, 0, 'topLeft');
-            addAnchor(trevi1Group, wI, 0, 'topRight');
-            addAnchor(trevi1Group, wI, hI, 'bottomRight');
-            addAnchor(trevi1Group, 0, hI, 'bottomLeft');
-            layer.batchDraw();
-        };
+        Konva.Image.fromURL(
+                  //window.location.href.split('?q=')[1],
+                  'https://d1b6qx0io027tg.cloudfront.net/thumbs/500x500/609cb142-1948-1aac-cf3d-dbc485ca0910.jpg',
+                  //'https://scontent-ams4-1.xx.fbcdn.net/v/t1.0-9/70473520_1863181990492958_4634231873722122240_n.jpg?_nc_cat=103&_nc_oc=AQmSB93mvGZbvKJATAEoow2iLB-cTmcbGfN1I3Ueo-MV-CRLhRMAitza0ZNR9ywB7ck&_nc_ht=scontent-ams4-1.xx&oh=e49beea0369c43bb7a70107e119503dc&oe=5E3BC0BA',
+                  function(kImg){
+                    //console.log('here');
+                    layer = new Konva.Layer();
+                    stage.add(layer);
+                    layer.add(trevi1Group);
+                    kImg.id("oldimg");
+                    kImg.width(wI);
+                    kImg.height(hI);
+                    kImg.opacity(.8);
+                    i = kImg;
+                    trevi1Group.add(kImg);
+                    
+                    addAnchor(trevi1Group, 0, 0, 'topLeft');
+                    addAnchor(trevi1Group, wI, 0, 'topRight');
+                    addAnchor(trevi1Group, wI, hI, 'bottomRight');
+                    addAnchor(trevi1Group, 0, hI, 'bottomLeft');
+                    
+                    layer.draw();
+                    
+                  }
+        )
     }
+    //imageObj1.src = 'assets/trevi1.jpg';
+    
+    
 
+
+    
+   
+    //function loadFunction(){ //instead of imageNode.onload = function(){xxxx draw()}
+    //    console.log('here');
+    //    layer = new Konva.Layer();
+    //    stage.add(layer);
+    //    layer.add(trevi1Group);
+    //    
+    //    //function imgsucess(img){
+    //    //          console.log(img);
+    //    //          if (img) {
+    //    //            document.getElementById('loadimgerror').innerHTML = '';
+    //    //            imageObj1.src = img;
+    //    //            trevi1Img.image(imageObj1);
+    //    //            trevi1Group.add(trevi1Img);
+    //    //    
+    //    //            addAnchor(trevi1Group, 0, 0, 'topLeft');
+    //    //            addAnchor(trevi1Group, wI, 0, 'topRight');
+    //    //            addAnchor(trevi1Group, wI, hI, 'bottomRight');
+    //    //            addAnchor(trevi1Group, 0, hI, 'bottomLeft');
+    //    //    
+    //    //            layer.draw();
+    //    //          }else{
+    //    //            console.log("error")
+    //    //          }
+    //    //        
+    //    //        }
+    //    //function imgerror(err){ document.getElementById('loadimgerror').innerHTML = 'got an error loading image' }
+    //    
+    //    //loadimg(window.location.href.split('?q=')[1])
+    //    //.then((d)=>{imgsucess(d)})
+    //    ////.catch(()=>{console.log('error', this)})
+    //    
+    //    
+    //    
+    //    //imageObj1.src = window.location.href.split('?q=')[1];
+    //    trevi1Img.image(imageObj1);
+    //    //trevi1Img.width = wI;
+    //    //trevi1Img.height = hI;
+    //    //trevi1Img.opacity = .8;        
+    //    trevi1Group.add(trevi1Img);
+    //    
+    //    addAnchor(trevi1Group, 0, 0, 'topLeft');
+    //    addAnchor(trevi1Group, wI, 0, 'topRight');
+    //    addAnchor(trevi1Group, wI, hI, 'bottomRight');
+    //    addAnchor(trevi1Group, 0, hI, 'bottomLeft');
+    //    
+    //    layer.draw();
+    //    
+    //}
     
     function removeFunction(){ //instead of imageNode.onload = function(){xxxx draw()}
         console.log('there');
         layer.destroy();
     }
 
+    //imageObj1.onload = function() {
+    //    trevi1Img.image(imageObj1);
+    //    layer.draw();
+    //};
    
     var anim = new Konva.Animation(function () {
             // do nothing, animation just need to update the layer

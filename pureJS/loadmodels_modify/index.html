@@ -55,39 +55,20 @@ function main() {
 
   {
     const color = 0xFFFFFF;
-    const intensity = 1;
+    //const color = 0x7CFC00;
+		const intensity = 1;
     const light = new THREE.DirectionalLight(color, intensity);
     //light.position.set(-1, 2, 4);
     light.position.set(10, 50, 130);
     scene.add(light);
   }
 
-  //const boxWidth = 1;
-  //const boxHeight = 1;
-  //const boxDepth = 1;
-  //const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-
-  //function makeInstance(geometry, color, x) {
-  //  const material = new THREE.MeshPhongMaterial({color});
-  //
-  //  const cube = new THREE.Mesh(geometry, material);
-  //  scene.add(cube);
-  //
-  //  cube.position.x = x;
-  //
-  //  return cube;
-  //}
-  //
-  ////makeInstance(geometry, 0x44aa88,  0);
-  ////makeInstance(geometry, 0x8844aa, -2);
-  ////makeInstance(geometry, 0xaa8844,  2);
 
   const sphereX = 1;
   const sphereY = 1;
   const sphereRadius = 0.1;
   var paramsobj ={
     smokecolor : 0x44aa88,
-    //smokecolor : 0xFFFFFF,
     //smokex : -.2,
     //smokey : .7,
     //smokez : -.75
@@ -103,51 +84,14 @@ function main() {
   var gui = new dat.GUI();
   gui.remember(paramsobj);
   
-  //var cam = gui.addFolder('Camera');
-  var smoke = gui.addFolder('Smoke Simulation');
-  smoke.add(paramsobj, "smokex", -2.001, 2.001);
-  smoke.add(paramsobj, "smokey", -2.001, 2.001);
-  smoke.add(paramsobj, "smokez", -2.001, 2.001);
-  smoke.open();
+
   
   var stats = new Stats();
   stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild( stats.domElement );
 
   
-  const geometry = new THREE.SphereGeometry(sphereRadius);
-  
-  function makeInstance(geometry, color, x, y, z) {
-      
-  
-      const material = new THREE.MeshPhongMaterial({color});
-  
-      const sphere = new THREE.Mesh(geometry, material);
-      scene.add(sphere);
-  
-      sphere.position.x = x;
-      sphere.position.y = y;
-      sphere.position.z = z;
-  
-      return sphere;
-  }
-  
-  var ss = {};
-  
-  //var s = makeInstance(geometry, 0x44aa88,  -.2, .7, -.75);
-  
-  for (let i=0;i < 100;i++){
-    let _posx = Math.random()*.01*(Math.random() > .5? 1:-1);
-    let _posz = Math.random()*.01*(Math.random() > .5? 1:-1);
-    ss[i] = {particle:null, start:false}
-    ss[i].particle = makeInstance(geometry,
-                                  paramsobj.smokecolor,
-                                  paramsobj.smokex+_posx,
-                                  paramsobj.smokey,
-                                  paramsobj.smokez+_posz);
-  }
-  
-  
+
   function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
     //const width = canvas.clientWidth*1;
@@ -182,7 +126,7 @@ function main() {
   var object;
   mtlLoader.load( url, function( materials ) {
     materials.preload();
-
+		console.log('materials', materials);
     var objLoader = new THREE.OBJLoader();
     objLoader.setMaterials( materials );
     objLoader.setPath( 'archive/' );
@@ -194,17 +138,17 @@ function main() {
         object.position.z = -1;
         //object.rotation.x = Math.PI/4;
         //object.scale.z = 200;
-        
         //https://stackoverflow.com/questions/39850083/three-js-objloader-texture
             object.traverse(function (child) {   // aka setTexture
                 if (child instanceof THREE.Mesh) {
+									  console.log('child', child);
                     child.material.map = texture;
                 }
             });
         scene.add( object );
         // Draw!
-        console.log(object);
-       //object.children[0].material.color.r = 0.0;
+        console.log('object', object, object.children[0].material.color);
+				object.children[0].material.color.r = 0.0;
        //render();
        //controls.addEventListener("change", render());
        //console.log(controls);
@@ -213,59 +157,7 @@ function main() {
     });
 
 });
-  
-  function animate() {
-    //var s_a = s;
-    ////s.position.x = x;
-    //s_a.position.y += .01;
-    //s_a.position.z += .01;
-    //
-    //if (s_a.position.y > 1.2){
-    //    scene.remove(ss);
-    //    s = makeInstance(geometry, 0x44aa88,  -.2, .7, -.75);
-    //}
-    
-    stats.begin();
-    
-    for (let i = 0; i < 100; i++) {
-      if (ss[i].start === false) {
-        ss[i].start = Math.random() > .2? false:true;
-        //console.log(ss[i].start);
-      }
-      else {
-        let s_a = ss[i].particle;
-        s_a.position.y += .01;
-        //s_a.position.x += .001;
-        //s_a.position.z += .01;
-        
-        //if (s_a.position.y > 1.2){
-        if (s_a.position.y > 1.6){
-            scene.remove(s_a);
-            let _posx = Math.random()*.01*(Math.random() > .5? 1:-1);
-            let _posz = Math.random()*.01*(Math.random() > .5? 1:-1);
-            ss[i] = {particle:null, start:false}
-            ss[i].particle = makeInstance(geometry, 0x44aa88,  paramsobj.smokex+_posx, paramsobj.smokey, paramsobj.smokez+_posz);
-            
-            //if (object.children[0].material.color.r > 0.0001) {
-            //  object.children[0].material.color.r =  object.children[0].material.color.r - 0.0001;
-            //}
-        }
-      }
-    }
-    
-    stats.end();
 
-    
-	requestAnimationFrame( animate );
-
-	// required if controls.enableDamping or controls.autoRotate are set to true
-	//controls.update();
-    //console.log(1111);
-
-	render();
-
-}
-  animate();
 
   controls.addEventListener('change', render);
   window.addEventListener('resize', render);

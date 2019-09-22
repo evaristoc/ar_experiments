@@ -377,7 +377,7 @@ var Butterfly = function () {
         this._subScene = null;
         this._particle = null;
         this._radius = 0.1;
-        //this._color = 0x44aa88;
+        this._color = 0x44aa88;
         this._x = -.189; //-.7
         this._y = .55;
         this._z = -1.71;
@@ -387,9 +387,7 @@ var Butterfly = function () {
   Particle.prototype = {
     constructor: Particle,
     material: function(){
-        //return new THREE.MeshBasicMaterial({color:0xbebebe});
-        //https://www.htmlcsscolor.com/hex/BEBEBE
-        return new THREE.MeshBasicMaterial({color:0x323232});
+        return new THREE.MeshBasicMaterial({color:0xbebebe});
       },
     geometry: function(radius){
         return new THREE.SphereGeometry(radius);
@@ -574,7 +572,7 @@ var app = (function APPmodule(){
               objects: {
                 butterflies : [],
                 
-                nbButterflies: 5,
+                nbButterflies: 50,
                 
                 bttfls_init : function(){
                     for(let i = 0; i < this.butterflies.length; i++){
@@ -664,7 +662,6 @@ var app = (function APPmodule(){
                         //this.renderer.render(scene, this.camera);
                         //$('#entryscene2').width(globalWidth);
                         //$("#intro_text2").fadeOut(700);
-                        $("#addedtext").hide();
                         $("#intro_text2").css("display", "none");
                         $('#entryscene2').width("100%");
                         $('#log').html("test width "+globalWidth);
@@ -702,13 +699,6 @@ var app = (function APPmodule(){
             /////////////////////////////////////////////////////
             /// scene 2
             /////////////////////////////////////////////////////            
-            
-            //////////////////////
-            //TEMPORARY VARIABLES!
-            //////////////////////
-            var countfoundHiro = 0;
-            var verifierEvt = 0;
-            var colorFactoryObj = 1.0;
             
             var sceneelements2 = {
               renderer: null,
@@ -896,26 +886,10 @@ var app = (function APPmodule(){
                   //NA
               },
               updateAR: function(){
-                  document.getElementById("entryscene2").style.width = "0";
-                  //emitter.unsubscribe('event:close-nav');
                   for (let i = 0; i < 100; i++) {
                    if (this.objects.smokeparticles[i].start === false) {
                      this.objects.smokeparticles[i].start = Math.random() > .2? false:true;
-                     //console.log(this.objects.smokeparticles[i].start);
-                     if (colorFactoryObj.r <1.0 && colorFactoryObj.r >= .75) {
-                        console.log('changing color smoke ', colorFactoryObj);
-                        this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0x626262);
-                     } else if (colorFactoryObj.r <.75 && colorFactoryObj.r >= .50) {
-                      //code
-                      this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0x989898);
-                     } else if (colorFactoryObj.r <.50 && colorFactoryObj.r >= .25) {
-                      //code
-                      this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0xbebebe);
-                     } else if (colorFactoryObj.r <.25) {
-                      //code
-                      this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0xededed);
-                     }
-                     
+                     console.log(this.objects.smokeparticles[i].start);
                    } else {
                      let s_a = this.objects.smokeparticles[i].particle._subScene;
                      s_a.position.y += .01;
@@ -929,51 +903,6 @@ var app = (function APPmodule(){
                    };
                  };                 
                 if ( this.arToolkitSource.ready !== false ) this.arToolkitContext.update( this.arToolkitSource.domElement );
-                if (this.arToolkitContext.arController !== null) {
-                  //console.log(Object.keys(this.arToolkitContext));
-                  //console.log(this.arToolkitContext);
-                  //console.log(Object.keys(this.arToolkitContext.arController));
-                  //console.log(this.arToolkitContext.arController.listeners);
-                  //this.arToolkitContext.arController.addEventListener('getMarker',(evt)=>{console.log(evt)})
-                  //console.log(this.arToolkitContext.arController.listeners.getMarker[0]);
-                  //console.log(this.arToolkitContext.arMarkerControls[0].object3d.visible);
-                  //sys.exit(0);
-                  //console.log(this.objects.markerRoot1.children[0].material.color.r);
-                  //var colorFactory = this.objects.markerRoot1.children[0].material.color;
-                  var zelf = this;
-                  if (this.arToolkitContext._arMarkersControls[4].object3d.visible) {
-                    //console.log('found ', this.arToolkitContext._arMarkersControls[4].object3d);
-                    countfoundHiro += 1;
-                    if (countfoundHiro > 20) { //approx. 20 frames
-                      document.getElementById("entryscene3").style.width = "100%";
-                      emitter.subscribe('event:greener', function(data){
-                        //console.log(data);
-                        //if (data.value) {
-                          verifierEvt += 1;
-                          //console.log(data.value, countfoundHiro, verifierEvt);
-                          //console.log(zelf.arToolkitContext._arMarkersControls[4].object3d.children[0].children[0].material);
-                          colorFactoryObj = zelf.arToolkitContext._arMarkersControls[4].object3d.children[0].children[0].material.color
-                          //if (this.objects.markerRoot1.children[0].material.color.r >= 0.001) {
-                          ////  //code
-                          //  this.objects.markerRoot1.children[0].material.color.r -= 0.001;
-                          //}
-                          //if (colorFactory.r >= 0.001) {
-                          ////  //code
-                          //  colorFactory.r -= 0.001;
-                          //}
-                          if (colorFactoryObj.r >= 0.0001) {
-                          //  //code
-                            colorFactoryObj.r -= 0.0001;
-                          }
-                          //return
-
-                        //}
-                      });
-                    }
-                  }
-                }
-                
-                //this.arToolkitContext.arController
                 compatibility.requestAnimationFrame(this.updateAR.bind(this));
                 this.renderer.render(scene, this.camera);                  
               },
@@ -1225,11 +1154,6 @@ var app = (function APPmodule(){
         window.closeNav = function(){
             document.getElementById("entryscene2").style.width = "0";
             emitter.emit('event:close-nav', {});
-        };
-        var countclks = 0;
-        window.greenerButton = function(){
-            countclks += 1;
-            emitter.emit('event:greener', {value:countclks});
         };
 
         //$("#intro_text1").delay(350).fadeOut(6000);

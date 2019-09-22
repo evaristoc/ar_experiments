@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>THREE.js + Poly: Smoking Chimney</title>
+   
+</head>
+
+<body>
+  
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/100/three.min.js'></script>
+    <script src="https://threejs.org/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://threejs.org/examples/js/loaders/MTLLoader.js"></script>
+    <!--<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>-->
+    <script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/js/controls/OrbitControls.js"></script>
+  <script>
+//const scene = new THREE.Scene()
+//const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 )
+//const renderer = new THREE.WebGLRenderer({ antialias: true})
+//renderer.setSize( window.innerWidth, window.innerHeight )
+//document.body.appendChild( renderer.domElement )
+//var mtlLoader = new THREE.MTLLoader();
+//mtlLoader.setPath( 'archive/' );
+//var url = "SM_Chimney_02.mtl";
+//mtlLoader.load( url, function( materials ) {
+//
+//    materials.preload();
+//
+//    var objLoader = new THREE.OBJLoader();
+//    objLoader.setMaterials( materials );
+//    objLoader.setPath( 'archive/' );
+//    objLoader.load( 'SM_Chimney_02.obj', function ( object ) {
+//
+//        object.position.y = - 95;
+//        scene.add( object );
+//
+//    });
+//
+//});
+
+// Set the scene size.
+const WIDTH = 800;
+const HEIGHT = 600;
+
+// Set some camera attributes.
+const VIEW_ANGLE = 45;
+const ASPECT = WIDTH / HEIGHT;
+const NEAR = 0.1;
+const FAR = 10000;
+
+// Get the DOM element to attach to
+const container =
+    document.querySelector('#container');
+
+// Create a WebGL renderer, camera
+// and a scene
+const renderer = new THREE.WebGLRenderer();
+const camera =
+    new THREE.PerspectiveCamera(
+        VIEW_ANGLE,
+        ASPECT,
+        NEAR,
+        FAR
+    );
+
+const scene = new THREE.Scene();
+
+ scene.add(new THREE.GridHelper(50, 1));
+
+// Add the camera to the scene.
+scene.add(camera);
+
+// Start the renderer.
+renderer.setSize(WIDTH, HEIGHT);
+
+
+// Attach the renderer-supplied
+// DOM element.
+var controls = new THREE.OrbitControls( camera, renderer.domElement );
+document.body.appendChild(renderer.domElement);
+
+//controls.update();
+
+//console.log(controls)
+
+// Set up the sphere vars
+const RADIUS = 50;
+const SEGMENTS = 16;
+const RINGS = 16;
+
+// create the sphere's material
+const sphereMaterial =
+  new THREE.MeshLambertMaterial(
+    {
+      color: 0xCC0000
+    });
+
+// Create a new mesh with
+// sphere geometry - we will cover
+// the sphereMaterial next!
+const sphere = new THREE.Mesh(
+
+  new THREE.BoxGeometry(
+    RADIUS,
+    SEGMENTS,
+    RINGS),
+
+  sphereMaterial);
+
+// Move the Sphere back in Z so we
+// can see it.
+sphere.position.z = -300;
+
+// Finally, add the sphere to the scene.
+scene.add(sphere);
+
+// create a point light
+const pointLight =
+  new THREE.PointLight(0xFFFFFF);
+
+// set its position
+pointLight.position.x = 10;
+pointLight.position.y = 50;
+pointLight.position.z = 130;
+
+// add to the scene
+scene.add(pointLight);
+var object;
+var textureLoader = new THREE.TextureLoader();
+var texture = textureLoader.load('./archive/PUSHILIN_factory.png');
+var mtlLoader = new THREE.MTLLoader();
+mtlLoader.setPath( 'archive/' );
+//var url = "SM_Chimney_02.mtl";
+var url = "PUSHILIN_factory.mtl";
+mtlLoader.load( url, function( materials ) {
+    materials.preload();
+
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials( materials );
+    objLoader.setPath( 'archive/' );
+    //objLoader.load( 'SM_Chimney_02.obj', function ( object ) {
+    objLoader.load( 'PUSHILIN_factory.obj', function ( obj ) {
+        object = obj;
+        object.position.x = 0;
+        object.position.y = 0;
+        object.position.z = -5;
+        //object.scale.z = 200;
+        
+        //https://stackoverflow.com/questions/39850083/three-js-objloader-texture
+            object.traverse(function (child) {   // aka setTexture
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture;
+                }
+            });
+        scene.add( object );
+        // Draw!
+        console.log(object);
+       //render();
+       //controls.addEventListener("change", render());
+       //console.log(controls);
+       //render();
+
+    });
+
+});
+
+var render = function(){console.log(111); renderer.render(scene, camera)}
+//renderer.render(scene, camera);
+function animate() {
+
+	requestAnimationFrame( animate );
+
+	// required if controls.enableDamping or controls.autoRotate are set to true
+	//controls.update();
+    //console.log(1111);
+
+	//render();
+
+}
+
+//animate();
+controls.addEventListener("change", render);
+render();
+  </script>
+
+
+
+
+</body>
+
+</html>

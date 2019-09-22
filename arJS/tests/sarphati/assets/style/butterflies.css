@@ -82,6 +82,48 @@
   height: 800px;
 }
 
+/* The side navigation menu */
+#entryscene3 {
+  height: 100%; /* 100% Full-height */
+  width: 0px; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  right: 0;
+  /*background-color: #111;*/ /* Black*/
+  background-color: transparent;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  display: inline-block;
+}
+
+#entryscene3-textwrapper{
+  display: block; 
+}
+
+/* The navigation menu links */
+#entryscene3 p {
+  display:inline-block;
+  padding: 8px 8px 8px 12px;
+  text-decoration: none;
+  font-size: 55px;
+  width: 75%;
+  line-height:60px;
+  /*color: #818181;*/
+  color: steelblue;
+  /*display: block;
+  transition: 0.3s;*/
+}
+
+/* The navigation menu links */
+#entryscene3 button {
+  display:inline-block;
+  padding: 8px 8px 8px 12px;
+  text-decoration: none;
+  color: steelblue;
+  font-size: 20px;
+}
 
 .intro h2 {
   font-family: "Times New Roman", Times, serif;

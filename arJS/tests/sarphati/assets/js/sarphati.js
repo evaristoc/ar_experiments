@@ -581,7 +581,7 @@ var app = (function APPmodule(){
               objects: {
                 butterflies : [],
                 
-                nbButterflies: 5,
+                nbButterflies: 75,
                 
                 bttfls_init : function(){
                     for(let i = 0; i < this.butterflies.length; i++){

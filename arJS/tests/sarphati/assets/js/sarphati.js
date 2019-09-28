@@ -347,10 +347,17 @@ var Butterfly = function () {
                         obj.traverse(function (child) {   // aka setTexture
                             if (child instanceof THREE.Mesh) {
                                 child.material.map = zelf._textureLoad;
+                                //var localPlane = new THREE.Plane( new THREE.Vector3( 0., 1., 0. ), 1.5 );
+                                //child.material.clippingPlanes = [localPlane];
                             }
                         });                         
                         obj.name = "factory1";
                         zelf._subScene.add(obj); //because it is async... :(
+                        var p = new Promise(function(resolve, reject){
+                            resolve(obj);
+                          });
+                        console.log(4444, obj);
+                        p.then((o)=>{zelf._Object = o;})
                         //console.error(zelf);
                         //zelf._subScene = obj;
                         //zelf._subScene = zelf._subScene(obj);
@@ -624,7 +631,7 @@ var app = (function APPmodule(){
                     //var p = $("#intro");
                     //p.delay(350).fadeOut(5000, function(){var p = $("#intro"); p.html("<p>HELLO</p>"); p.show(); p.fadeIn(6000);}); //generates a loop!!
                     //$("#intro").html("<p>HELLO</p>").fadeIn(15000);
-                    console.log($("#intro_text1").css("opacity"));
+                    //console.log($("#intro_text1").css("opacity"));
                     if (($("#intro_text1").css("opacity") - 1/800) <= 0) {
                       //code
                       $("#intro_text1").hide();
@@ -698,6 +705,148 @@ var app = (function APPmodule(){
               },
               
             };
+
+            /////////////////////////////////////////////////////
+            /// scene 3
+            /////////////////////////////////////////////////////            
+            
+            var sceneelements3 = {
+              renderer: null,
+              camera: null,
+              //cameraCtrl: null,
+              opacitybackground: 0.0,
+              arToolkitSource: null,
+              init: function(){
+                   
+                    },
+              initAR: function(){
+                          scene.remove(sceneelements2.objects.f._Object);
+                          scene.remove(sceneelements2.objects.markerRoot1);
+                          this.renderer = sceneelements1.renderer;
+                          this.renderer.clippingPlanes = [];
+                          this.camera = this.camera_init();
+                          this.camera.position.z = 35;
+                          this.arToolkitSource = sceneelements1.arToolkitSource;
+                          scene.remove(sceneelements2.camera);
+                          sceneelements2.arToolkitContext = null;
+                          this.camera = this.camera_init();
+                          scene.add(this.camera);
+                          cameraCtrl = new THREE.OrbitControls(this.camera);
+                          scene.add(this.camera);
+                          scene.add(this.lights_init.ambient());
+
+                          /*
+                          //TEST OBJECT
+                          let geometry1	= new THREE.CubeGeometry(1,1,1);
+                          let material1	= new THREE.MeshNormalMaterial({
+                              transparent: true,
+                              opacity: 0.5,
+                              side: THREE.DoubleSide
+                          }); 
+                          
+                          var mesh1 = new THREE.Mesh( geometry1, material1 );
+                          mesh1.position.y = 0.5;
+                          mesh1.rotation.y = Math.PI/4;
+                          scene.add(mesh1);
+                          */
+                          
+                          this.objects.bttfls_init();
+                          
+                          //document.body.appendChild(this.renderer.domElement);
+                          //var zelf = this;
+                          //var onResize = this.listeners_init.onResizeAR;
+                          //function intheeventlistenerhandler(){
+                          //    onResize(zelf);  
+                          //}                     
+                          //
+                          //this.arToolkitSource.init(function onReady(){
+                          //    intheeventlistenerhandler();
+                          //});
+                          //
+                          //// handle resize event
+                          //window.addEventListener('resize', intheeventlistenerhandler);      
+                    },
+              renderer_init: function(){
+                      },
+              camera_init: function(){
+                    var cam = new THREE.PerspectiveCamera(50, globalWidth / globalHeight, 0.1, 1000); //000
+                    cam.name = "perspectivecamerascene3"
+                    return cam;
+                      },
+              lights_init: {
+                          ambient: function(){
+                            var ambient = new THREE.AmbientLight( 0xcccccc, 1.5 );
+                            ambient.name = "ambientlight1scene3"
+                            return ambient;
+                          },
+                      },
+              cameraCtrls_init: {
+                          orbit: function(){
+                            var camera = this.camera;
+                            var orbit = new THREE.OrbitControls(camera);
+                            orbit.name = "orbitcontrolscene3"
+                            return orbit
+                            }
+                      },
+              listeners_init: {
+                onResize: function(){
+                    var camera = this.camera;
+                    camera.aspect = globalWidth / globalHeight;
+                    camera.updateProjectionMatrix();
+                    this.renderer.setSize(globalWidth , globalHeight);
+                },
+                onResizeAR: function(t){
+                },
+              },
+              objects: {
+                butterflies : [],
+                
+                nbButterflies: 50,
+                
+                bttfls_init : function(){
+                    for(let i = 0; i < this.butterflies.length; i++){
+                            scene.remove(this.butterflies[i].meshObj);
+                    };
+                    this.butterflies = [];
+                                   
+                     
+                    const nbButterflies = this.nbButterflies;
+                    
+                    function shuffle(_b){
+                        for (var i = 0; i < _b.length; i++) {
+                          _b[i].shuffleHELPER();
+                        };
+                    };
+                    
+                    for (var i = 0; i < nbButterflies; i++) {
+                      var b = new Butterfly();
+                      this.butterflies.push(b);
+                      b.meshObj.name = "butterfly"+i;
+                      scene.add(b.meshObj);
+                    };
+                   
+                    shuffle(this.butterflies);
+                    //console.log(this.butterflies);                  
+                }
+                
+              },
+              update: function(){
+              },
+              updateAR: function(){
+                    var zelf = this;
+                    cameraCtrl.update();
+                    TWEEN.update();
+                    if (this.objects.butterflies[0]) {
+                      for (var i = 0; i < this.objects.butterflies.length; i++) {
+                        this.objects.butterflies[i].move();
+                      };
+                    };
+                    compatibility.requestAnimationFrame(this.updateAR.bind(this));
+                    this.renderer.render(scene, this.camera);
+
+              },
+              
+            };
             
             /////////////////////////////////////////////////////
             /// scene 2
@@ -708,7 +857,8 @@ var app = (function APPmodule(){
             //////////////////////
             var countfoundHiro = 0;
             var verifierEvt = 0;
-            var colorFactoryObj = 1.0;
+            var colorFactoryObj = {};
+            colorFactoryObj.r = 1.0;
             
             var sceneelements2 = {
               renderer: null,
@@ -727,14 +877,14 @@ var app = (function APPmodule(){
                            * what is left is the arToolkitContext, markerscontrol and markerRoot obj, that should be also included in the update
                            * there are also some objects to be removed from scene, like the scene1's camera
                           */
-                          
+                         
                           this.arToolkitSource = sceneelements1.arToolkitSource;
                           this.renderer = sceneelements1.renderer;
                           scene.remove(sceneelements1.camera);
                           
                           this.camera = this.camera_init();
                           scene.add(this.camera);
-
+                          //console.log(this.camera);
                           /*
                           //TEST OBJECT
                           let geometry1	= new THREE.CubeGeometry(1,1,1);
@@ -749,6 +899,12 @@ var app = (function APPmodule(){
                           mesh1.rotation.y = Math.PI/4;
                           scene.add(mesh1);
                           */
+
+                          //// default normal of a plane is 0,0,1. Apply mesh rotation to it.
+                          //let clipPlane = new THREE.Plane().setFromNormalAndCoplanarPoint(
+                          //    new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,0) );
+                          //this.renderer.clippingPlanes = [clipPlane];
+                          //this.renderer.localClippingEnabled = true;
                           
                           ////////////////////////////////////////////////////////////
                           // setup arToolkitContext
@@ -806,6 +962,8 @@ var app = (function APPmodule(){
                           
                           this.objects.markerRoot1.name = "groupFactory";
                           scene.add(this.objects.markerRoot1);
+                          
+                          
                           ////////////////////////////////////////////////////////////
                           // setup Listeners
                           //I should redo this, currently not inheritance; needed to recall it because `this` is now for scene2
@@ -821,7 +979,8 @@ var app = (function APPmodule(){
                           });
                           
                           // handle resize event
-                          window.addEventListener('resize', intheeventlistenerhandler);                            
+                          window.addEventListener('resize', intheeventlistenerhandler);
+                          this.renderer.localClippingEnabled = true;
                     },
               renderer_init: function(){
                           //same as in scene1                      
@@ -853,6 +1012,7 @@ var app = (function APPmodule(){
                 markerRoot1: new THREE.Group(),
                 test: null,
                 smokeparticles: {},
+                f : null,
                 //factory_init: function(){
                 //          var f = new FactoryObj();
                 //          //console.error(f, f._subScene);
@@ -870,7 +1030,7 @@ var app = (function APPmodule(){
                 //          console.error(f, f._Object);
                 //      },
                factory_init: function(){
-                          var f = new FactoryObj(this.markerRoot1);
+                          this.f = new FactoryObj(this.markerRoot1);
                        },
                 particle_init: function(i){
                         var p = new Particle();
@@ -896,38 +1056,79 @@ var app = (function APPmodule(){
                   //NA
               },
               updateAR: function(){
+                
+                  //testing position factory
+                  if (this.objects.f._Object !== null) {
+                    //code
+                    console.log(5555, this.objects.f._Object.getWorldDirection());
+                  }
+                  
+                  /////
                   document.getElementById("entryscene2").style.width = "0";
                   //emitter.unsubscribe('event:close-nav');
-                  for (let i = 0; i < 100; i++) {
-                   if (this.objects.smokeparticles[i].start === false) {
-                     this.objects.smokeparticles[i].start = Math.random() > .2? false:true;
-                     //console.log(this.objects.smokeparticles[i].start);
-                     if (colorFactoryObj.r <1.0 && colorFactoryObj.r >= .75) {
-                        console.log('changing color smoke ', colorFactoryObj);
-                        this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0x626262);
-                     } else if (colorFactoryObj.r <.75 && colorFactoryObj.r >= .50) {
-                      //code
-                      this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0x989898);
-                     } else if (colorFactoryObj.r <.50 && colorFactoryObj.r >= .25) {
-                      //code
-                      this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0xbebebe);
-                     } else if (colorFactoryObj.r <.25) {
-                      //code
-                      this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0xededed);
-                     }
-                     
-                   } else {
-                     let s_a = this.objects.smokeparticles[i].particle._subScene;
-                     s_a.position.y += .01;
-                 
-                     if (s_a.position.y > 1.6){
-                         this.objects.markerRoot1.remove(s_a);
-                         var p = this.objects.particle_init(i);
-                         this.objects.smokeparticles[i] = {particle:null, start:false}
-                         this.objects.smokeparticles[i].particle = p;
+                  //console.log(3333, colorFactoryObj.r);
+                  if (colorFactoryObj.r > 0.001) {
+                    for (let i = 0; i < 100; i++) {
+                     if (this.objects.smokeparticles[i].start === false) {
+                       this.objects.smokeparticles[i].start = Math.random() > .2? false:true;
+                       //console.log(this.objects.smokeparticles[i].start);
+                       if (colorFactoryObj.r < 1.0 && colorFactoryObj.r >= .75) {
+                          //console.log('changing color smoke ', colorFactoryObj);
+                          this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0x626262);
+                          this.renderer.setClearAlpha(.75);
+                       } else if (colorFactoryObj.r < .75 && colorFactoryObj.r >= .50) {
+                        //code
+                        this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0x989898);
+                        this.renderer.setClearAlpha(.50);
+                       } else if (colorFactoryObj.r < .50 && colorFactoryObj.r >= .25) {
+                        //code
+                        this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0xbebebe);
+                        this.renderer.setClearAlpha(.25);
+                       } else if (colorFactoryObj.r > 0. && colorFactoryObj.r < .25) {
+                        //code
+                        this.objects.smokeparticles[i].particle._subScene.material.color.setHex(0xededed);
+                        this.renderer.setClearAlpha(.0);
+                       };
+                       
+                     } else {
+                       let s_a = this.objects.smokeparticles[i].particle._subScene;
+                       s_a.position.y += .01;
+                   
+                       if (s_a.position.y > 1.6){
+                           this.objects.markerRoot1.remove(s_a);
+                           var p = this.objects.particle_init(i);
+                           this.objects.smokeparticles[i] = {particle:null, start:false}
+                           this.objects.smokeparticles[i].particle = p;
+                       };
                      };
                    };
-                 };                 
+                } else {
+                   if (this.objects.f._Object != null) {
+                    //code
+                    this.objects.f._Object.position.y -= 0.01;
+                    //console.log(this.objects.f._Object.position.y);
+                    if (this.objects.f._Object.position.y < -3.) {
+                      document.getElementById("entryscene3").style.width = "0";
+
+                      this.objects.f._Object = null;
+                      sceneelements3.initAR();
+                      sceneelements3.updateAR();                      
+                    }
+                   }
+                   
+                   for (let i = 0; i < 100; i++) { 
+                       let s_a = this.objects.smokeparticles[i].particle._subScene;
+                       s_a.position.y += .01;
+                   
+                       if (s_a.position.y > 1.6){
+                           this.objects.markerRoot1.remove(s_a);
+                           //var p = this.objects.particle_init(i);
+                           //this.objects.smokeparticles[i] = {particle:null, start:false}
+                           //this.objects.smokeparticles[i].particle = p;
+                       };                
+                   };
+                   
+                };
                 if ( this.arToolkitSource.ready !== false ) this.arToolkitContext.update( this.arToolkitSource.domElement );
                 if (this.arToolkitContext.arController !== null) {
                   //console.log(Object.keys(this.arToolkitContext));
@@ -940,8 +1141,12 @@ var app = (function APPmodule(){
                   //sys.exit(0);
                   //console.log(this.objects.markerRoot1.children[0].material.color.r);
                   //var colorFactory = this.objects.markerRoot1.children[0].material.color;
+                  //console.log(1111, this.objects.f)
                   var zelf = this;
                   if (this.arToolkitContext._arMarkersControls[4].object3d.visible) {
+                  //this.renderer.clippingPlanes[0].setFromNormalAndCoplanarPoint(
+                  //    new THREE.Vector3(1,0,0).applyQuaternion(scene.getWorldQuaternion()),
+                  //    scene.getWorldPosition());
                     //console.log('found ', this.arToolkitContext._arMarkersControls[4].object3d);
                     countfoundHiro += 1;
                     if (countfoundHiro > 20) { //approx. 20 frames
@@ -980,6 +1185,7 @@ var app = (function APPmodule(){
               
             };
             
+
   
             function app_init(app_canvas, app_video, gl_w, gl_h) {
                 ////window scope variables and functions

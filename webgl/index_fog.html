@@ -1,0 +1,209 @@
+<head>
+    <script type="text/javascript" src="assets/twgl.js-master/dist/4.x/twgl-full.js"></script>
+    <style>
+body {
+  /* make the body fits our viewport */
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  /*background-color: #1d1e22;*/
+}
+
+#wrap-texture {
+  position: absolute;
+  /*display: flex;
+  justify-content: center;
+  align-items: center;*/
+  min-height: 100%;
+  margin-left:50px;
+  margin-top: 50px;
+  
+}
+
+canvas {
+  /* make the canvas wrapper fits the document */
+  /*position: absolute;*/
+  position:absolute;
+  width: 50vw;
+  height:100vh;
+  background:transparent;
+  opacity: .5;
+}
+
+.plane {
+  /* define the size of your plane */
+  position:absolute;
+  width:50vw;
+  height:100vh;
+  z-index: -1;
+  
+}
+
+.plane img {
+  /* hide the img element 
+  display: none;*/
+  width:100%;
+  height:100%;
+}
+
+    </style>
+</head>
+<div id="wrap-texture">
+  <!-- div that will hold our WebGL canvas -->
+  <canvas id="c"></canvas>
+  <!-- div used to create our plane -->
+ <div class="plane">
+
+    <!-- images that will be used as textures by our plane -->
+    <!-- <img data-sampler="texture0" id="texture0" src="https://i.ibb.co/M62KTFX/fog-image.jpg" crossorigin="anonymous" />-->
+    <!--<img data-sampler="texture1" id="texture0" src="https://i.ibb.co/7gH4HbB/map.jpg" crossorigin="anonymous" />-->
+    <img data-sampler="texture1" id="texture0" src="./assets/background-black-colors-952670.jpg"/>
+
+  </div>
+</div>
+
+
+
+<script id="vs" type="x-shader/x-vertex">
+  #ifdef GL_ES
+  precision mediump float;
+  #endif
+
+    attribute vec4 position;
+    
+    void main() {
+      gl_Position = position;
+    }
+</script>
+<script id="fs" type="x-shader/x-fragment">
+  //OBS: ALL THE ACTION IS HERE, IN THE FRAGMENT!
+  #ifdef GL_ES
+  precision mediump float;
+  #endif
+  
+  //E: some defines are not needed...
+  #define PI2 6.28318530718
+  #define PI 3.14159265359
+  #define S(a,b,n) smoothstep(a,b,n) 
+  #define NUM_OCTAVES 10
+
+  // get our varying variables
+    uniform vec2 resolution;
+    uniform float uTime;
+  
+    //E: function one:
+    //--- PSEUDO-random function; it targets the fractional part of the passed value; the trigonometric function will create a regularization by VALUE RANGE (all "random" passed values in a particular range will have a similar output)
+    //--- an empirical float value -> the fract of the multiplication of a big number with the sin of the dot of 2 vec2's, one st.xy and a small one;
+    //--- fract = "compute the fractional part of the argument", "For each component, returns x - floor(x), that is, repeats the value in the [0,1] range.
+    float rand (vec2 st) {
+        return fract(sin(dot(st.xy,
+                             vec2(12.9898,78.233)))*
+            43758.5453123);
+    }
+    
+    //E: function two:
+    //--- a noise function that get a vec2 and return a float
+    //--- variables are vec2's ip and u based on vec2 p
+    //--- those internal variables are used to calculate a float (res) using:
+    //------ the rand function above
+    //------ mix ("linearly interpolate between two (or more?) values"); see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/mix.xhtml
+    //--- that means that the noise is NOT random!
+    //--- it is +/- the interpolation of three points:
+    //------ the interpolation of rand(ip) and with rand ip + a unit X vector weighted on u.x
+    //------ the interpolation of rand ip + a unit Z vector and with rand ip + unit XZ vector weighted on u.x
+    //------ the interpolation of the resulting values from the two aforementioned interpolations, weighted on u.y
+    float noise(vec2 p){
+      vec2 ip = floor(p);
+      vec2 u = fract(p);
+      u = u*u*(3.0-2.0*u);
+
+      float res = mix( mix( rand( ip ), rand( ip+vec2(1.0,0.0) ), u.x ), mix( rand( ip+vec2(0.0,1.0) ), rand( ip+vec2(1.0,1.0) ),u.x ) , u.y );
+
+      return res*res;
+    }
+    
+    //E: function three:
+    //--- fbm might refers to Fractional Brownian Motion (eg. https://www.iquilezles.org/www/articles/morenoise/morenoise.htm)
+    //--- a function that get a vec2 x and return a float; the function will control the MOVEMENT of the COLOR (OJO: NOT vertices)
+    //--- it takes to local float variables (v,a) for a range and a vec2 of (100,100)
+    //--- then implement a 2-dim rotation matrix (mat2 rot)
+    //--- then for each NUM_OCTAVES (the BITS that would define a color!!)
+    //------ add noise over x `a` times and assign to `v`
+    //------ rotate the vector x
+    //------ reduce the parameter `a`
+    //--- return `v`
+    //--- see something GOOD about this at https://thebookofshaders.com/13/ (actually, the project was a COPY of an example in that book! :()
+    float fbm(vec2 x) {
+      float v = 0.0;
+      float a = 0.5;
+      vec2 shift = vec2(100);
+      // Rotate to reduce axial bias
+        mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+      for (int i = 0; i < NUM_OCTAVES; ++i) {
+        v += a * noise(x);
+        x = rot * x * 2.0 + shift;
+        a *= 0.5;
+      }
+      return v;
+    }
+  
+
+  void main() {
+    vec2 uv = gl_FragCoord.xy / resolution;
+    
+      
+    float motion = fbm(uv * 6.0 + vec2(uTime * -.5, uTime * -.5) );
+    
+    //E: final is in fact THE captured float value of implementing a fbm over the 2dim-coordinates plus the motion float
+    //--- it is apparently a rotational value
+    float final = fbm(uv * 6.0 + motion);
+    
+    //vec3 fog = (motion * vec3(71, 88, 144) / 255.0) / 2.0;
+    
+    vec3 fog = (final * vec3(71, 88, 144) / 255.0)*1.;
+    //vec3 fog = (final * vec3(144, 144, 144) / 255.0)*1.5;
+    
+    vec4 color = vec4(vec3(0), 1.0);
+
+    gl_FragColor = vec4(color.rgb + fog, color.a);
+  }
+</script>
+<script>
+window.onload = function() {
+  "use strict";
+  // pass the id of the div that will wrap the canvas to set up our WebGL context and append the canvas to our wrapper
+   const gl = document.getElementById("c").getContext("webgl");
+   
+   const programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
+
+    const arrays = {
+      position: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
+    };
+    const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
+   
+   
+  // if there's any error during init, we're going to catch it here
+  // OJO!
+
+  function render(time) {
+    twgl.resizeCanvasToDisplaySize(gl.canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    const uniforms = {
+      uTime: time * .0005,
+      resolution: [gl.canvas.width, gl.canvas.height],
+    };
+
+    gl.useProgram(programInfo.program);
+    twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+    twgl.setUniforms(programInfo, uniforms);
+    twgl.drawBufferInfo(gl, bufferInfo);
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+ 
+}
+</script>

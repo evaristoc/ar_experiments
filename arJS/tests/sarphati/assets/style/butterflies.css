@@ -125,6 +125,22 @@
   font-size: 20px;
 }
 
+
+/*to rotate a background image...= https://www.sitepoint.com/css3-transform-background-image/*/
+.intro h2:before {
+content: "";
+position: absolute;
+width: 30%;
+height: 170%;
+top: -80%;
+left: 5%;
+z-index: -1;
+/*color at https://www.w3schools.com/css/tryit.asp?filename=trycss3_color_hsla*/
+background: hsla(120,100%,75%,0.2) url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1158400/parallax-asset-5.png") 60% 50% no-repeat;
+-webkit-transform: rotate(90deg);
+transform: rotate(90deg);
+}
+
 .intro h2 {
   font-family: "Times New Roman", Times, serif;
   color: orange;

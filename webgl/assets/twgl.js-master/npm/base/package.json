@@ -1,0 +1,28 @@
+{
+  "name": "twgl-base.js",
+  "version": "4.11.4",
+  "description": "A Tiny WebGL helper library",
+  "main": "dist/4.x/twgl.js",
+  "types": "dist/4.x/twgl-full.d.ts",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/greggman/twgl.js.git"
+  },
+  "keywords": [
+    "WebGL",
+    "twgl"
+  ],
+  "author": "Greggman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/greggman/twgl.js/issues"
+  },
+  "homepage": "https://github.com/greggman/twgl.js",
+  "files": [
+    "dist/4.x/twgl.js",
+    "dist/4.x/twgl.js.map"
+  ],
+  "devDependencies": {},
+  "dependencies": {}
+}

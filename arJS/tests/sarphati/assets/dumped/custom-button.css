@@ -1,0 +1,67 @@
+	  /*
+	  https://codepen.io/rauldronca/pen/Pzrgzp
+	  converted using https://jsonformatter.org/scss-to-css
+	  */	  
+
+@import 'https://fonts.googleapis.com/css?family=Rubik+One';
+	   /*
+	   body, html {
+		   margin: 0;
+		   padding: 0;
+		   height: 100%;
+		   width: 100%;
+		   background: #e53935;
+		   background: linear-gradient(to left, #e53935, #e35d5b);
+	  }
+	  */
+
+	   #custom-button::before, #custom-button::after {
+		   position: absolute;
+		   content: '';
+		   transition: all 0.5s;
+	  }
+	   #custom-button {
+		   display: inline-block;
+		   padding: 20px 40px;
+		   color: white;
+		   position: absolute;
+		   top: 50%;
+		   left: 50%;
+		   transform: translate(-50%, -50%); /* up and left? yes: this is the content! */
+		   vertical-align: middle;
+		   font-family: 'Rubik One', sans-serif;
+		   text-decoration: none;
+		   font-size: 4vw;
+		   transition: all 0.5s;
+		   background-color: #3498db;
+	  }
+	   #custom-button::before {
+		   bottom: -15px;
+		   height: 15px;
+		   width: 100%;
+		   left: 8px;
+		   transform: skewX(45deg);
+		   background-color: #196090;
+	  }
+	   #custom-button::after {
+		   right: -15px;
+		   height: 100%;
+		   width: 15px;
+		   bottom: -8px;
+		   transform: skewY(45deg);
+		   background-color: #124364;
+	  }
+	   #custom-button:active {
+		   margin-left: 10px;
+		   margin-top: 10px;
+	  }
+	   #custom-button:active::before {
+		   bottom: -5px;
+		   height: 5px;
+		   left: 3px;
+	  }
+	   #custom-button:active::after {
+		   right: -5px;
+		   width: 5px;
+		   bottom: -3px;
+	  }

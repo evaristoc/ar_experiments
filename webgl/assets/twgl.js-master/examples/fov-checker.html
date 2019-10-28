@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+    <!--
+
+    @license twgl.js Copyright (c) 2015, Gregg Tavares All Rights Reserved.
+    Available via the MIT license.
+    see: http://github.com/greggman/twgl.js for details
+
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta property="og:title" content="TWGL.js - fov-checker" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="http://twgljs.org/examples/screenshots/fov-checker.png" />
+    <meta property="og:description" content="TWGL.js - fov-checker" />
+    <meta property="og:url" content="http://twgljs.org" />
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@greggman">
+    <meta name="twitter:creator" content="@greggman">
+    <meta name="twitter:domain" content="twgljs.org">
+    <meta name="twitter:title" content="TWGL.js - fov-checker">
+    <meta name="twitter:url" content="http://twgljs.org/examples/fov-checker.html">
+    <meta name="twitter:description" content="TWGL.js - fov-checker">
+    <meta name="twitter:image:src" content="http://twgljs.org/examples/screenshots/fov-checker.png">
+
+    <link href="/resources/images/twgljs-icon.png" rel="shortcut icon" type="image/png">
+
+    <title>twgl.js - fov checker</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+          margin: 0;
+          font-family: monospace;
+      }
+      canvas {
+          display: block;
+          width: 100vw;
+          height: 100vh;
+      }
+      #b {
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        text-align: center;
+        z-index: 2;
+        color: white;
+      }
+      a:visited, a:link, a:active {
+        color: white;
+      }
+      #u {
+        color: white;
+        position: absolute;
+        padding: 1em;
+        bottom: 20px;
+        left: 20px;
+        background-color: rgba(192, 192, 192, 0.5);
+        width: 30%;
+        min-width: 300px;
+        text-align: center;
+      }
+      #u input[type=range] {
+        width: 90%;
+      }
+      #u tr>td:first-child {
+        text-align: right;
+      }
+      #u tr>td:first-child+td {
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <div id="b"><a href="http://twgljs.org">twgl.js - fov checker</a></div>
+    <div id="u">
+       <input id="fov" type="range" min="1" max="179"></input>
+       <table>
+       <tr><td>    fov y: </td><td id="fovy"></td></tr>
+       <tr><td>    fov x: </td><td id="fovx"></td></tr>
+       <tr><td>bad fov x: </td><td id="badfovx"></td></tr>
+       <tr><td>    width: </td><td id="width"></td></tr>
+       <tr><td>   height: </td><td id="height"></td></tr>
+       <tr><td>   aspect: </td><td id="aspect"></td></tr>
+       </table>
+    </div>
+  </body>
+  <script id="vs" type="notjs">
+uniform mat4 u_viewProjection;
+uniform mat4 u_world;
+
+attribute vec4 a_position;
+
+void main() {
+  gl_Position = u_viewProjection * u_world * a_position;
+}
+  </script>
+  <script id="fs" type="notjs">
+precision mediump float;
+
+uniform vec4 u_color;
+
+void main() {
+    gl_FragColor = u_color;
+}
+  </script>
+  <script src="../dist/4.x/twgl-full.min.js"></script>
+  <script src="../3rdparty/chroma.min.js"></script>
+  <script>
+    "use strict";
+    const m4 = twgl.m4;
+    twgl.setDefaults({attribPrefix: "a_"});
+    const gl = document.querySelector("#c").getContext("webgl");
+    const programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
+
+    function createSphere(
+        gl,
+        radius,
+        subdivisionsAxis,
+        subdivisionsHeight,
+        hConnect,
+        vConnect,
+        startLatitudeInRadians,
+        endLatitudeInRadians,
+        startLongitudeInRadians,
+        endLongitudeInRadians) {
+
+      hConnect = hConnect === false ? false : true;
+      vConnect = vConnect === false ? false : true;
+
+      startLatitudeInRadians  = startLatitudeInRadians  || 0;
+      endLatitudeInRadians    = endLatitudeInRadians    || Math.PI;
+      startLongitudeInRadians = startLongitudeInRadians || 0;
+      endLongitudeInRadians   = endLongitudeInRadians   || Math.PI * 2;
+
+      const latRange = endLatitudeInRadians - startLatitudeInRadians;
+      const longRange = endLongitudeInRadians - startLongitudeInRadians;
+
+      // We are going to generate our sphere by iterating through its
+      // spherical coordinates and generating 2 lines for each quad on a
+      // ring of the sphere.
+      const numVertices = (subdivisionsAxis + 1) * (subdivisionsHeight + 1);
+      const positions = twgl.primitives.createAugmentedTypedArray(3, numVertices);
+      const normals   = twgl.primitives.createAugmentedTypedArray(3, numVertices);
+      const texCoords = twgl.primitives.createAugmentedTypedArray(2 , numVertices);
+
+      // Generate the individual vertices in our vertex buffer.
+      for (let y = 0; y <= subdivisionsHeight; y++) {
+        for (let x = 0; x <= subdivisionsAxis; x++) {
+          // Generate a vertex based on its spherical coordinates
+          const u = x / subdivisionsAxis;
+          const v = y / subdivisionsHeight;
+          const theta = startLongitudeInRadians + longRange * u;
+          const phi =   startLatitudeInRadians + latRange * v;
+          const sinTheta = Math.sin(theta);
+          const cosTheta = Math.cos(theta);
+          const sinPhi = Math.sin(phi);
+          const cosPhi = Math.cos(phi);
+          const ux = cosTheta * sinPhi;
+          const uy = cosPhi;
+          const uz = sinTheta * sinPhi;
+          positions.push(radius * ux, radius * uy, radius * uz);
+          normals.push(ux, uy, uz);
+          texCoords.push(1 - u, v);
+        }
+      }
+
+      const numVertsAround = subdivisionsAxis + 1;
+      const linesPerQuad = (hConnect ? 1 : 0) + (vConnect ? 1 : 0);
+      const indices = twgl.primitives.createAugmentedTypedArray(2, subdivisionsAxis * subdivisionsHeight * linesPerQuad, Uint16Array);
+      for (let x = 0; x < subdivisionsAxis; x++) {  // eslint-disable-line
+        for (let y = 0; y < subdivisionsHeight; y++) {  // eslint-disable-line
+          // Make hline of quad.
+          if (hConnect) {
+            indices.push(
+                (y + 0) * numVertsAround + x,
+                (y + 0) * numVertsAround + x + 1);
+          }
+
+          // Make vline of quad.
+          if (vConnect) {
+            indices.push(
+                (y + 1) * numVertsAround + x,
+                (y + 0) * numVertsAround + x);
+          }
+        }
+      }
+
+      return twgl.createBufferInfoFromArrays(gl, {
+        position: positions,
+        normal: normals,
+        texcoord: texCoords,
+        indices: indices,
+      });
+    }
+
+    function deg2Rad(d) {
+      return d * Math.PI / 180;
+    }
+
+    function rad2Deg(r) {
+      return r * 180 / Math.PI;
+    }
+
+    const radius = 10;
+    const a = Math.PI * 1.5;
+    const b = Math.PI * 0.5;
+    const c = 0.01;
+    const vMarksSphere = createSphere(gl, radius, 2, 180, true, false, 0, Math.PI, a - c, a + c);
+    const hMarksSphere = createSphere(gl, radius, 360, 2, false, true, b - c, b + c, 0, Math.PI * 2);
+    const highDetailSphere = createSphere(gl, radius, 36 * 2, 18 * 2);
+    const detailSphere = createSphere(gl, radius, 36, 18);
+    const v3rdsSphere = createSphere(gl, radius, 12, 36, false, true);
+    const h3rdsSphere = createSphere(gl, radius, 36, 6, true, false);
+    const vQuadSphere = createSphere(gl, radius, 4, 36, false, true);
+    const hQuadSphere = createSphere(gl, radius, 36, 2, true, false);
+
+    /**
+     *   0---1
+     *   |   |
+     *   2---3
+     *   |   |
+     *   4---5
+     */
+    const numberPositions = [
+      -1,  1,  1,  1,
+      -1,  0,  1,  0,
+      -1, -1,  1, -1,
+    ];
+
+    const numberIndices = [
+      [ 0, 1, 1, 5, 5, 4, 4, 0 ], // 0
+      [ 1, 5 ],  // 1
+      [ 0, 1, 1, 3, 3, 2, 2, 4, 4, 5 ], // 2
+      [ 0, 1, 1, 5, 5, 4, 2, 3 ],       // 3
+      [ 0, 2, 2, 3, 1, 5 ],             // 4
+      [ 1, 0, 0, 2, 2, 3, 3, 5, 5, 4 ], // 5
+      [ 1, 0, 0, 4, 4, 5, 5, 3, 3, 2 ], // 6
+      [ 0, 1, 1, 5 ],                   // 7
+      [ 0, 1, 1, 5, 5, 4, 4, 0, 2, 3 ], // 8
+      [ 3, 2, 2, 0, 0, 1, 1, 5 ],       // 9
+    ];
+
+    let total = 0;
+    const numberInfos = numberIndices.map(function(indices) {
+      const offset = total;
+      const count  = indices.length;
+      total += count;
+      return {
+        offset: offset * 2,
+        count: count,
+      };
+    });
+
+    const numberBufferInfo = twgl.createBufferInfoFromArrays(gl, {
+      position: { numComponents: 2, data: numberPositions },
+      indices:  { numComponents: 2, data: Array.prototype.concat.apply([], numberIndices) },
+    });
+
+    let fieldOfViewY = deg2Rad(30);
+    const viewProjection = m4.identity();
+
+    const drawObjects = [
+      { programInfo: programInfo,
+        bufferInfo: vMarksSphere,
+        type: gl.LINES,
+        uniforms: {
+          u_world: m4.identity(),
+          u_viewProjection: viewProjection,
+          u_color: [0.3, 0.3, 0.3, 1],
+        },
+      },
+      { programInfo: programInfo,
+        bufferInfo: hMarksSphere,
+        type: gl.LINES,
+        uniforms: {
+          u_world: m4.identity(),
+          u_viewProjection: viewProjection,
+          u_color: [0.3, 0.3, 0.3, 1],
+        },
+      },
+      { programInfo: programInfo,
+        bufferInfo: highDetailSphere,
+        type: gl.LINES,
+        uniforms: {
+          u_world: m4.identity(),
+          u_viewProjection: viewProjection,
+          u_color: [0.3, 0.3, 0.3, 1],
+        },
+      },
+      { programInfo: programInfo,
+        bufferInfo: detailSphere,
+        type: gl.LINES,
+        uniforms: {
+          u_world: m4.identity(),
+          u_viewProjection: viewProjection,
+          u_color: [0, 0, 1, 1],
+        },
+      },
+      { programInfo: programInfo,
+        bufferInfo: h3rdsSphere,
+        type: gl.LINES,
+        uniforms: {
+          u_world: m4.identity(),
+          u_viewProjection: viewProjection,
+          u_color: [0, 1, 0, 1],
+        },
+      },
+      { programInfo: programInfo,
+        bufferInfo: v3rdsSphere,
+        type: gl.LINES,
+        uniforms: {
+          u_world: m4.identity(),
+          u_viewProjection: viewProjection,
+          u_color: [0, 1, 0, 1],
+        },
+      },
+      { programInfo: programInfo,
+        bufferInfo: hQuadSphere,
+        type: gl.LINES,
+        uniforms: {
+          u_world: m4.identity(),
+          u_viewProjection: viewProjection,
+          u_color: [1, 0, 0, 1],
+        },
+      },
+      { programInfo: programInfo,
+        bufferInfo: vQuadSphere,
+        type: gl.LINES,
+        uniforms: {
+          u_world: m4.identity(),
+          u_viewProjection: viewProjection,
+          u_color: [1, 0, 0, 1],
+        },
+      },
+    ];
+
+    function addNumber(value, world) {
+      const str = value.toString();
+      const length = str.length;
+      const letterSize = 2.0;
+      const padding = 0.6;
+      const scale = [0.2, 0.2, 1];
+      const spacing = letterSize + padding;
+      const xOffset = (length - 1) * (spacing) * -0.5;
+      Array.prototype.forEach.call(str, function(digit, ndx) {
+        const mat = m4.copy(world);
+        m4.scale(mat, scale, mat);
+        m4.translate(mat, [xOffset + ndx * spacing, 0, 0], mat);
+        const digitNdx = parseInt(digit);
+        const numberInfo = numberInfos[digitNdx];
+        drawObjects.push({
+          programInfo: programInfo,
+          bufferInfo: numberBufferInfo,
+          type: gl.LINES,
+          offset: numberInfo.offset,
+          count: numberInfo.count,
+          uniforms: {
+            u_world: mat,
+            u_viewProjection: viewProjection,
+            u_color: [1, 1, 1, 1],
+          },
+        });
+      });
+    }
+
+    // Add numbers around sphere
+    for (let ii = -180; ii < 180; ii += 10) {
+      let world = m4.identity();
+      m4.rotateY(world, deg2Rad(ii), world);
+      m4.translate(world, [0, 0, -radius], world);
+      addNumber(Math.abs(ii), world);
+
+      world = m4.identity();
+      m4.rotateX(world, deg2Rad(ii), world);
+      m4.translate(world, [0, 0, -radius], world);
+      addNumber(Math.abs(ii), world);
+    }
+
+    function render() {
+      twgl.resizeCanvasToDisplaySize(gl.canvas);
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+      gl.clearColor(0, 0, 0, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+      gl.lineWidth(2);
+
+      const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+      const zNear  = 0.1;
+      const zFar   = 50;
+      m4.perspective(fieldOfViewY, aspect, zNear, zFar, viewProjection);
+      //m4.translate(matrix, [0, 0, -40], matrix);
+
+      twgl.drawObjectList(gl, drawObjects);
+
+    }
+
+    function createTextNodeInElement(id) {
+      const elem = document.getElementById(id);
+      const node = document.createTextNode("");
+      elem.appendChild(node);
+      return node;
+    }
+
+    function makeNodes(ids) {
+      const nodes = {};
+      ids.forEach(function(id) {
+        nodes[id] = createTextNodeInElement(id);
+      });
+      return nodes;
+    }
+
+    const rangeElem = document.getElementById("fov");
+    const nodes = makeNodes(["fovy", "fovx", "width", "height", "aspect", "badfovx"]);
+    rangeElem.value = 30;
+
+    function updateNodes() {
+      const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+      const fieldOfViewX = 2 * Math.atan(Math.tan(fieldOfViewY * 0.5) * aspect);
+      const badFieldOfViewX = fieldOfViewY * aspect;
+
+      nodes.fovy.nodeValue    = rad2Deg(fieldOfViewY).toFixed(2);
+      nodes.fovx.nodeValue    = rad2Deg(fieldOfViewX).toFixed(2);
+      nodes.badfovx.nodeValue = rad2Deg(badFieldOfViewX).toFixed(2);
+      nodes.width.nodeValue   = gl.canvas.clientWidth;
+      nodes.height.nodeValue  = gl.canvas.clientHeight;
+      nodes.aspect.nodeValue  = aspect.toFixed(3);
+    }
+    updateNodes();
+
+    function updateFOV() {
+      fieldOfViewY = deg2Rad(rangeElem.value);
+      updateNodes();
+      render();
+    }
+
+    rangeElem.addEventListener('input', updateFOV, false);
+    window.addEventListener('resize', updateFOV, false);
+
+    render();
+
+  </script>
+</html>
+
+
+
+
+

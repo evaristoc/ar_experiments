@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+    <!--
+
+    @license twgl.js Copyright (c) 2015, Gregg Tavares All Rights Reserved.
+    Available via the MIT license.
+    see: http://github.com/greggman/twgl.js for details
+
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta property="og:title" content="TWGL.js - dynamic-buffers" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="http://twgljs.org/examples/screenshots/dynamic-buffers.png" />
+    <meta property="og:description" content="TWGL.js - dynamic-buffers" />
+    <meta property="og:url" content="http://twgljs.org" />
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@greggman">
+    <meta name="twitter:creator" content="@greggman">
+    <meta name="twitter:domain" content="twgljs.org">
+    <meta name="twitter:title" content="TWGL.js - dynamic-buffers">
+    <meta name="twitter:url" content="http://twgljs.org/examples/dynamic-buffers.html">
+    <meta name="twitter:description" content="TWGL.js - dynamic-buffers">
+    <meta name="twitter:image:src" content="http://twgljs.org/examples/screenshots/dynamic-buffers.png">
+
+    <link href="/resources/images/twgljs-icon.png" rel="shortcut icon" type="image/png">
+
+    <title>twgl.js - dynamic-buffers</title>
+    <style>
+      body {
+          margin: 0;
+          font-family: monospace;
+      }
+      canvas {
+          display: block;
+          width: 100vw;
+          height: 100vh;
+      }
+      #b {
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        text-align: center;
+        z-index: 2;
+        color: white;
+      }
+      a:visited, a:link, a:active {
+        color: white;
+      }
+      audio {
+        display: none;
+      }
+      #click, #load {
+          font-family: sans-serif;
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: 2;
+          background-color: rgba(0,0,0,0.8);
+          width: 100%;
+          height: 100%;
+          display: flex;
+          display: -webkit-flex;
+          flex-flow: column;
+          -webkit-flex-flow: column;
+          justify-content: center;
+          align-content: center;
+          align-items: center;
+          -webkit-justify-content: center;
+          -webkit-align-content: center;
+          -webkit-align-items: center;
+          min-height: auto;
+      }
+      #click>div, #load>div {
+          font-size: 24pt;
+          color: white;
+          background-color: blue;
+          border-radius: 1em;
+          padding: 1em;
+      }
+      #load {
+          z-index: 3;
+      }
+      #load>div {
+          color: black;
+          background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <div id="b">
+       <div><a href="http://twgljs.org">twgl.js - dynamic-buffers</a></div>
+       <div>music: <a href="http://youtu.be/eUX39M_0MJ8">DOCTOR VOX - Level Up</a></div>
+    </div>
+    <div id="click">
+      <div>tap to play</div>
+    </div>
+    <div id="load">
+      <div>loading...</div>
+    </div>
+  </body>
+  <script id="vs" type="notjs">
+attribute float a_spread;
+attribute float a_height;
+
+varying vec4 v_color;
+
+vec3 hsv2rgb(vec3 c) {
+  c = vec3(c.x, clamp(c.yz, 0.0, 1.0));
+  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+void main() {
+  gl_Position = vec4(a_spread, a_height * 2.0 - 1.0, 0, 1);
+  v_color = vec4(hsv2rgb(vec3(a_spread * 0.5 + 0.5, a_height, 1)), 1);
+}
+  </script>
+  <script id="fs" type="notjs">
+precision mediump float;
+
+varying vec4 v_color;
+void main() {
+  gl_FragColor = v_color;
+}
+  </script>
+  <script src="../3rdparty/audiostreamsource.min.js"></script>
+  <script src="../dist/4.x/twgl-full.min.js"></script>
+  <script>
+    "use strict";
+
+    /* global audioStreamSource */
+
+    // There's really no good way to tell which browsers fail.
+    // Right now Safari doesn't expose AudioContext (it's still webkitAudioContext)
+    // so my hope is whenever they get around to actually supporting the 3+ year old
+    // standard that things will actually work.
+    const shittyBrowser = window.AudioContext === undefined && /iPhone|iPad|iPod/.test(navigator.userAgent);
+    const context = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = context.createAnalyser();
+
+    twgl.setDefaults({attribPrefix: "a_"});
+    const gl = document.querySelector("#c").getContext("webgl");
+    const programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
+
+    // If it's a shitty browser (like Safari) then we can't stream so we load
+    // a very lo-fi version of the song that has no frequences above 11.5k
+    const numPoints = analyser.frequencyBinCount * (shittyBrowser ? 0.25 : 1) | 0;
+    const spreadArray = new Float32Array(numPoints);
+    const heightArray = new Uint8Array(numPoints);
+    for (let ii = 0; ii < numPoints; ++ii) {
+      spreadArray[ii] = ii / numPoints * 2 - 1;  // make clipspace positions
+    }
+    const arrays = {
+      spread: { data: spreadArray, numComponents: 1 },
+      height: { data: heightArray, numComponents: 1, drawType: gl.DYNAMIC_DRAW },
+    };
+    const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
+
+    function render() {
+      twgl.resizeCanvasToDisplaySize(gl.canvas);
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+      gl.clearColor(0, 0, 0, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+
+      gl.lineWidth(2);
+
+      gl.useProgram(programInfo.program);
+
+      analyser.getByteFrequencyData(heightArray);
+      twgl.setAttribInfoBufferFromArray(gl, bufferInfo.attribs.a_height, heightArray);
+
+      twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+      twgl.drawBufferInfo(gl, bufferInfo, gl.LINE_STRIP);
+
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+
+    const clickElem = document.querySelector("#click");
+    const loadElem = document.querySelector("#load");
+
+    const streamSource = audioStreamSource.create({
+      context: context,
+      loop: true,
+    });
+
+    function startMusic() {
+      clickElem.style.display = "none";
+      streamSource.play();
+      context.resume().then(() => {
+        streamSource.play();
+        streamSource.getSource().connect(analyser);
+        analyser.connect(context.destination);
+      });
+    }
+
+    streamSource.on('error', function(e) {
+      console.error("audio error:", e);  // eslint-disable-line
+    });
+
+    streamSource.on('newSource', function(/* source */) {
+      loadElem.style.display = "none";
+      clickElem.addEventListener('click', startMusic);
+    });
+
+    streamSource.setSource(
+      'sounds/DOCTOR VOX - Level Up.mp3',
+      'sounds/DOCTOR VOX - Level Up - for shitty browsers.mp3'  // for shitty browsers like Safari on iOS
+    );
+  </script>
+</html>
+
+
+
+

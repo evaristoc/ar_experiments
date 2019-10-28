@@ -1,0 +1,80 @@
+{
+  "name": "twgl.js",
+  "version": "4.11.4",
+  "description": "A Tiny WebGL helper library",
+  "main": "dist/4.x/twgl-full.js",
+  "types": "dist/4.x/twgl-full.d.ts",
+  "scripts": {
+    "test": "npm run testjs && npm run testts",
+    "testjs": "node node_modules/mocha/bin/mocha --recursive 'test/src/js/*-harness.js'",
+    "testts": "tsc --project test/src/ts/",
+    "pre-push": "grunt eslint",
+    "lint": "grunt eslint",
+    "build": "grunt build",
+    "buildts": "grunt buildts",
+    "bumpminor": "grunt bumpminor",
+    "bumpmajor": "grunt bumpmajor",
+    "bumppatch": "grunt bumppatch",
+    "builddocs": "grunt docs",
+    "browserify": "grunt browserify",
+    "serve": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/greggman/twgl.js.git"
+  },
+  "keywords": [
+    "WebGL",
+    "twgl"
+  ],
+  "author": "Greggman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/greggman/twgl.js/issues"
+  },
+  "homepage": "https://github.com/greggman/twgl.js",
+  "files": [
+    "dist/4.x/twgl-full.js",
+    "dist/4.x/twgl.js",
+    "dist/4.x/twgl-full.d.ts",
+    "dist/4.x/twgl.d.ts"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.2.3",
+    "@types/node": "^10.12.18",
+    "@types/webgl2": "0.0.4",
+    "almond": "^0.3.3",
+    "babel-loader": "^8.0.5",
+    "eslint": "^5.12.0",
+    "eslint-plugin-google-camelcase": "0.0.2",
+    "eslint-plugin-html": "git+https://github.com/greggman/eslint-plugin-html.git#fix-space-eating",
+    "eslint-plugin-one-variable-per-var": "0.0.3",
+    "eslint-plugin-optional-comma-spacing": "0.0.4",
+    "eslint-plugin-require-trailing-comma": "0.0.1",
+    "esm": "^3.0.84",
+    "grunt": "^1.0.3",
+    "grunt-browserify": "^5.3.0",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-eslint": "^21.0.0",
+    "grunt-jsdoc": "^2.4.0",
+    "grunt-ts": "^6.0.0-beta.21",
+    "grunt-webpack": "^3.0.2",
+    "http-server": "^0.11.1",
+    "load-grunt-tasks": "^4.0.0",
+    "marked": "^0.6.0",
+    "minami": "^1.2.3",
+    "mocha": "^5.2.0",
+    "requirejs": "^2.3.5",
+    "semver": "^5.4.1",
+    "should": "^13.2.0",
+    "terser-webpack-plugin": "^1.2.1",
+    "tsd-jsdoc": "^2.1.2",
+    "typescript": "^3.2.2",
+    "webpack": "^4.28.4"
+  },
+  "dependencies": {}
+}

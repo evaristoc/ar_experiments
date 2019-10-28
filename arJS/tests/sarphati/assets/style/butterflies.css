@@ -82,6 +82,21 @@
   height: 800px;
 }
 
+.first-inner-div {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+}
+
+.down-arrow {
+ font-size: 40px !important;
+ color: black !important;
+}
+
 /* The side navigation menu */
 #entryscene3 {
   height: 100%; /* 100% Full-height */

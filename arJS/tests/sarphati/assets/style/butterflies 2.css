@@ -98,29 +98,25 @@
 }
 */
 
-
-.intro {
-  position: relative;
-  display: inline-block;
-}
-
-.intro img {
-  display: block;
-  transform: rotate(90deg) translate(-90%, -20%);
+/*to rotate a background image...= https://www.sitepoint.com/css3-transform-background-image/*/
+.intro h2:before {
+content: "";
+position: absolute;
+width: 30%;
+height: 170%;
+top: -80%;
+left: 5%;
+z-index: -1;
+/*color at https://www.w3schools.com/css/tryit.asp?filename=trycss3_color_hsla*/
+background: hsla(120,100%,75%,0.2) url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1158400/parallax-asset-5.png") 60% 50% no-repeat;
+-webkit-transform: rotate(90deg);
+transform: rotate(90deg);
 }
 
 .intro h2 {
-  position: absolute;
   font-family: "Times New Roman", Times, serif;
   color: orange;
-  top: 80%;
-  left: 0;
-  right: 0;
-  transform: translate(80%, -250%);
-  text-align: center;
-  text-shadow: 0 0 15px;
 }
-
 
 /* The side navigation menu */
 #entryscene3 {
@@ -186,11 +182,11 @@
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
-  /*.intro h2 { font-size:45px;}*/
+  .intro h2 { font-size:45px;}
 }
 
 @media screen and (max-width: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
-  /*.intro h2 { font-size:45px;}*/
+  .intro h2 { font-size:45px;}
 }

@@ -27,8 +27,7 @@
     <script type="text/javascript" src="../../../public/js/dat.gui.min.js"></script>
 	<script type="text/javascript" src="../../../public/js/bootstrap.min.js"></script>
 	<!-- styles -->
-	<!--<link rel="stylesheet" type="text/css" href="../../../public/style/bootstrap.min.css">--> <!-- Version 2.x !! -->
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../../../public/style/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/style/butterflies.css">
 	<style>
 	  /**/
@@ -101,40 +100,19 @@
 	 background: linear-gradient(to top, #1e5033 0%, #378357 6px);
 	 transition: all 0.078s ease-out;
 	 box-shadow: 0 1px 0 2px rgba(0, 0, 0, .3), 0 5px 2.4px rgba(0, 0, 0, .5), 0 10.8px 9px rgba(0, 0, 0, .2);
-}
-
-
-.first-inner-div {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-.first-inner-div h3 {
-    color: #fff !important;
-    font-size: 20px !important;
-}
-
-.down-arrow{
- /*font-size: 40px;
- color: black !important;*/
- width:35px;
- height:35px;
-}
+}	  
 	  
-/*https://codepen.io/w3core/pen/ZbJeXm*/
-@keyframes jump {
-	0%   {transform: translate(0,0);}
-	100% {transform: translate(0,-10%);}
-  }
-
-
-.jump {
-  transform-origin: 50% 50%;
-  animation: jump .7s linear alternate infinite;
-}
+	  /*https://codepen.io/w3core/pen/ZbJeXm*/
+	  @keyframes jump {
+		  0%   {transform: translate(0,0);}
+		  100% {transform: translate(0,-10%);}
+		}
+	  
+	  
+	  .jump {
+		transform-origin: 50% 50%;
+		animation: jump .7s linear alternate infinite;
+	  }
 	</style>
 </head>
 
@@ -149,14 +127,6 @@
 	  <div id="entryscene2-textwrapper">
 		<p>The air we flew in became darker and sad. We were <strong>disappearing!</strong> Follow the markers to save us!</p>
 		<a href="javascript:void(0)" onclick="closeNav()"><img src="assets/grph/output-onlinepngtools-butterfly.png"></a>
-		<div class="container first-inner-div">
-		  <h3>Start Scrolling</h3>
-		  <a href="#anchor">
-			<span class="glyphicon glyphicon-circle-arrow-down down-arrow"></span>
-			<!--<i class="icon-circle-arrow-down down-arrow"></i>
-			<a class="btn btn-small" href="#"><i class="icon-star"></i> Star</a>-->
-		  </a>  
-		</div>
 	  </div>
 	</div>
 	<div id="entryscene3" class="sidenav">
@@ -173,16 +143,12 @@
 		</div>
 	  </div>
 	</div>
-	</div>
 	<div id="addedtext">
-	  <div class="intro">
-		<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1158400/parallax-asset-5.png" alt="">
-		<div id="intro_text1">
-		  <h2>Once upon a time we, the <strong>Butterflies</strong>, were everywhere.</h2>
-		</div>
-		<div id="intro_text2" style="display:none;">
-		  <h2>However, something really bad began to happen...</h2>
-		</div>		
+	  <div id="intro_text1" class="intro">
+		<h2>Once upon a time we, the <strong>Butterflies</strong>, were everywhere.</h2>
+	  </div>
+		<div id="intro_text2" class="intro" style="display:none;">
+		<h2>However, something really bad began to happen...</h2>
 	  </div>
 	</div>
 </body>

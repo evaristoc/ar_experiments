@@ -20,12 +20,39 @@
   width: 70%; /* 0 width - change this with JavaScript */
 }
 
+/* intro section */
+
+
+.intro {
+  z-index: 1;
+  position: relative;
+  display: none;
+}
+
+.intro img {
+  display: block;
+  transform: rotate(90deg) translate(-90%, -20%);
+}
+
+.intro h2 {
+  position: absolute;
+  font-family: "Times New Roman", Times, serif;
+  color: orange;
+  top: 80%;
+  left: 0;
+  right: 0;
+  transform: translate(80%, -250%);
+  text-align: center;
+  text-shadow: 0 0 15px;
+}
+
+
 /* The side navigation menu */
 #entryscene2 {
   height: 100%; /* 100% Full-height */
   width: 0px; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Stay on top */
+  z-index: 2; /* Stay on top */
   top: 0; /* Stay at the top */
   right: 0;
   /*background-color: #111;*/ /* Black*/
@@ -97,29 +124,6 @@
  color: black !important;
 }
 */
-
-
-.intro {
-  position: relative;
-  display: inline-block;
-}
-
-.intro img {
-  display: block;
-  transform: rotate(90deg) translate(-90%, -20%);
-}
-
-.intro h2 {
-  position: absolute;
-  font-family: "Times New Roman", Times, serif;
-  color: orange;
-  top: 80%;
-  left: 0;
-  right: 0;
-  transform: translate(80%, -250%);
-  text-align: center;
-  text-shadow: 0 0 15px;
-}
 
 
 /* The side navigation menu */

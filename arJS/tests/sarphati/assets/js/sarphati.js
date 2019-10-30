@@ -469,6 +469,9 @@ var app = (function APPmodule(){
                     
                     },
               initAR: function(){
+                          //$("#intro_text2").hide();
+                          $(".intro").css("display","inline-block");
+                          $("#intro_text2").css("opacity", 0.0);
                           this.renderer = this.renderer_init();
                           this.camera = this.camera_init();
                           this.camera.position.z = 35;
@@ -635,8 +638,10 @@ var app = (function APPmodule(){
                     if (($("#intro_text1").css("opacity") - 1/800) <= 0) {
                       //code
                       $("#intro_text1").hide();
+                      $("#intro_text2").css("opacity", 1.0)
                     }else{
                       $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/800);
+                      $("#intro_text2").css("opacity", Number($("#intro_text2").css("opacity")) + 1/1000);
                     };
                     
                     cameraCtrl.update();
@@ -1439,7 +1444,7 @@ var app = (function APPmodule(){
         };
 
         //$("#intro_text1").delay(350).fadeOut(6000);
-        $("#intro_text2").delay(6500).fadeIn(3000);
+        //$("#intro_text2").delay(6500).fadeIn(3000);
         ////  /* Set the width of the side navigation to 0 */
         //window.closeNav = (function() {
         //    document.getElementById("entryscene2").style.width = "0";

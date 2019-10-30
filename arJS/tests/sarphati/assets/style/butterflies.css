@@ -187,10 +187,33 @@
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
   /*.intro h2 { font-size:45px;}*/
+  
+  .intro img{
+    transform: rotate(90deg) translate(-30%, -20%);
+  }
+  
+  .intro h2 {
+    top: 80%;
+    left: 0;
+    right: 0;
+    transform: translate(80%, -250%);
+  }
 }
 
 @media screen and (max-width: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
   /*.intro h2 { font-size:45px;}*/
+  
+  .intro img{
+    transform: rotate(90deg) translate(-30%, -20%);
+  }
+  
+  .intro h2 {
+    top: 80%;
+    left: 0;
+    right: 0;
+    transform: translate(80%, -250%);
+  }
+  
 }

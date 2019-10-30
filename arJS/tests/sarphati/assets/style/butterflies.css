@@ -198,9 +198,9 @@
   .sidenav a {font-size: 18px;}
   /*.intro h2 { font-size:45px;}*/
   
-  .intro img{
-    /*transform: translate(0%, -40%) rotate(90deg);*/
-  }
+  /*.intro img{
+    transform: translate(0%, -40%) rotate(90deg);
+  }*/
   
   .intro h2 {
     top: 2%;
@@ -215,9 +215,9 @@
   .sidenav a {font-size: 18px;}
   /*.intro h2 { font-size:45px;}*/
   
-  .intro img{
-    /*transform: translate(0%, -40%) rotate(90deg);*/
-  }
+  /*.intro img{
+    transform: translate(0%, -40%) rotate(90deg);
+  }*/
   
   .intro h2 {
     top: 2%;

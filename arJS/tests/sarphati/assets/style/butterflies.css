@@ -22,16 +22,22 @@
 
 /* intro section */
 
+#addtext {
+  
+}
 
 .intro {
   z-index: 1;
   position: relative;
+  text-align: center;
   display: none;
 }
 
 .intro img {
   display: block;
-  transform: rotate(90deg) translate(-90%, -20%);
+  /*transform: rotate(90deg) translate(-90%, -20%);*/
+  transform: rotate(90 deg);
+  
 }
 
 .intro h2 {

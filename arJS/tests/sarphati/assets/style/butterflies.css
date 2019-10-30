@@ -211,8 +211,9 @@
     top: 2%;
     left: 10%;
     right: 0;
-    font-size:3.5em;
-    /*transform: translate(20%, 0%);*/
+    font-size: 45px;
+    /*font-size:3.5em;
+    transform: translate(20%, 0%);*/
   }
 }
 
@@ -234,8 +235,9 @@
     top: 2%;
     left: 10%;
     right: 0;
-    font-size:3.5em;
-    /*transform: translate(20%, 0%);*/
+    font-size: 45px;
+    /*font-size:3.5em;
+    transform: translate(20%, 0%);*/
   }
   
 }

@@ -646,61 +646,91 @@ var app = (function APPmodule(){
                     
                     cameraCtrl.update();
                     TWEEN.update();
-                    //for (var i = 0; i < this.objects.butterflies.length; i++) {
-                    //  this.objects.butterflies[i].move();
-                    //};
-                    if (this.objects.butterflies[0]) {
-                      for (var i = 0; i < this.objects.butterflies.length; i++) {
-                        this.objects.butterflies[i].move();
-                      };
-                      if (Math.random() <= .05) {
-                        (function(_b){
-                          //the setTimeout must be into a closure because the MESH WILL BE IMMEDIATELY DELETED! In this way it is kept in memory
-                          //REMEMBER: setTimeout works correctly with CALLBACKS (also closures), so METHODS must be inside one
-                          setTimeout(function(){scene.remove(_b)},8500); //find a better transition...             
-                        }(this.objects.butterflies[0].meshObj));
-                        this.objects.butterflies.shift();
-                        this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
-                        this.opacitybackground += 1;  
-                      };
-                      //if (conf.move) {
-                      //  for (var i = 0; i < butterflies.length; i++) {
-                      //    butterflies[i].move();
-                      //  }
-                      //};
+                    for (var i = 0; i < this.objects.butterflies.length; i++) {
+                      this.objects.butterflies[i].move();
                     };
-                    if (this.objects.butterflies.length === 0) {
-                        //scene.remove(this.camera);
-                        //camera = new THREE.Camera();
-                        //scene.add(camera);
-                        //this.renderer.render(scene, this.camera);
-                        //$('#entryscene2').width(globalWidth);
-                        //$("#intro_text2").fadeOut(700);
-                        $("#addedtext").hide();
-                        $("#intro_text2").css("display", "none");
-                        $('#entryscene2').width("100%");
-                        $('#log').html("test width "+globalWidth);
+                    //if (this.objects.butterflies[0]) {
+                    //  for (var i = 0; i < this.objects.butterflies.length; i++) {
+                    //    this.objects.butterflies[i].move();
+                    //  };
+                    //  if (Math.random() <= .05) {
+                    //    (function(_b){
+                    //      //the setTimeout must be into a closure because the MESH WILL BE IMMEDIATELY DELETED! In this way it is kept in memory
+                    //      //REMEMBER: setTimeout works correctly with CALLBACKS (also closures), so METHODS must be inside one
+                    //      setTimeout(function(){scene.remove(_b)},8500); //find a better transition...             
+                    //    }(this.objects.butterflies[0].meshObj));
+                    //    this.objects.butterflies.shift();
+                    //    this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
+                    //    this.opacitybackground += 1;  
+                    //  };
+                    //  //if (conf.move) {
+                    //  //  for (var i = 0; i < butterflies.length; i++) {
+                    //  //    butterflies[i].move();
+                    //  //  }
+                    //  //};
+                    //};
+                    //if (this.objects.butterflies.length === 0) {
+                    if ($("#intro_text2").css("opacity") == 1.0) {
+                      //OBS: FIND A WAY TO RESET MOVE!
+                      //code
+                      //console.log(1111);
+                      THREE.CustomGrayScaleShader = { 
+ 
+                                  uniforms: { 
+                                    "tDiffuse": { type: "t", value: null }, 
+                                    "rPower":  { type: "f", value: 0.2126 }, 
+                                    "gPower":  { type: "f", value: 0.7152 }, 
+                                    "bPower":  { type: "f", value: 0.0722 } 
+                                  }, 
+                                 
+                                  vertexShader: [ 
+                                    "varying vec2 vUv;", 
+                                    "void main() {", 
+                                      "vUv = uv;", 
+                                      "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );", 
+                                    "}" 
+                                  ].join("n"), 
+                                 
+                                  fragmentShader: [ 
+                                 
+                                    "uniform float rPower;", 
+                                    "uniform float gPower;", 
+                                    "uniform float bPower;", 
+                                    "uniform sampler2D tDiffuse;", 
+                                 
+                                    "varying vec2 vUv;", 
+                                 
+                                    "void main() {", 
+                                      "vec4 texel = texture2D( tDiffuse, vUv );", 
+                                      "float gray = texel.r*rPower + texel.g*gPower + texel.b*bPower;", 
+                                      "gl_FragColor = vec4( vec3(gray), texel.w );", 
+                                    "}" 
+                                  ].join("n") 
+                                }; 
+                        
+                        //console.log(scene, zelf);
+                        
+                        var renderPass = new THREE.RenderPass(scene, zelf.camera); 
+                        var effectCopy = new THREE.ShaderPass(THREE.CopyShader); 
+                        effectCopy.renderToScreen = true; 
+                         
+                        var shaderPass = new THREE.ShaderPass(THREE.CustomGrayScaleShader); 
+                         
+                        var composer = new THREE.EffectComposer(zelf.renderer); //OJO changing my renderer completely!!!
+                        composer.addPass(renderPass); 
+                        composer.addPass(shaderPass); 
+                        composer.addPass(effectCopy);
+                        
+                        //shaderPass.enabled = controls.grayScale; 
+                        //shaderPass.uniforms.rPower.value = controls.rPower; 
+                        //shaderPass.uniforms.gPower.value = controls.gPower; 
+                        //shaderPass.uniforms.bPower.value = controls.bPower;
+                        
+                        //$("#addedtext").hide();
+                        //$("#intro_text2").css("display", "none");
+                        //$('#entryscene2').width("100%");
+                        //$('#log').html("test width "+globalWidth);
                 
-                        //// build markerControls
-                        //markerRoot1 = new THREE.Group();
-                        //scene.add(markerRoot1);
-                        //let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
-                        //    type: 'pattern', patternUrl: "../../arjs-resources/data/hiro.patt",
-                        //});
-                        //scene.add(markerRoot1);
-                        //// copy projection matrix to camera when initialization complete
-                        //factoryObj = new FactoryObj(markerRoot1);
-                        //smokeParticles = {};
-                        //for (let i=0;i < 100;i++){
-                        //  smokeParticles[i] = {particle:null, start:false}
-                        //  smokeParticles[i].particle = new Particle(markerRoot1);
-                        //}; 
-                        //arToolkitContext.init( function onCompleted(){
-                        //    camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
-                        //});
-                        //update2();
-                        //console.error(sceneelements2);
-                        //closeNav.bind(sceneelements2);
                 
                     }else{
                       compatibility.requestAnimationFrame(this.updateAR.bind(this));

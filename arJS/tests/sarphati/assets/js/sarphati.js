@@ -689,7 +689,7 @@ var app = (function APPmodule(){
                                       "vUv = uv;", 
                                       "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );", 
                                     "}" 
-                                  ].join("n"), 
+                                  ].join("\n"), 
                                  
                                   fragmentShader: [ 
                                  
@@ -705,7 +705,7 @@ var app = (function APPmodule(){
                                       "float gray = texel.r*rPower + texel.g*gPower + texel.b*bPower;", 
                                       "gl_FragColor = vec4( vec3(gray), texel.w );", 
                                     "}" 
-                                  ].join("n") 
+                                  ].join("\n") 
                                 }; 
                         
                         //console.log(scene, zelf);
@@ -721,6 +721,9 @@ var app = (function APPmodule(){
                         composer.addPass(shaderPass); 
                         composer.addPass(effectCopy);
                         
+                        composer.render();
+                        console.error(composer)
+
                         //shaderPass.enabled = controls.grayScale; 
                         //shaderPass.uniforms.rPower.value = controls.rPower; 
                         //shaderPass.uniforms.gPower.value = controls.gPower; 

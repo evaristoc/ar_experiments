@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Sarphati - story in AR.JS</title>
+	<!-- include jquery library -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!-- include threeJS libraies -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js'></script>
+  	<script src="https://s.cdpn.io/25480/OrbitControls.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/EffectComposer.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/RenderPass.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/ShaderPass.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/CopyShader.js"></script>
+	<!-- include miscelaneous -->
+    <script type="text/javascript" src="../../../public/js/compatibility.js"></script>
+    <script type="text/javascript" src="../../../public/js/stats.min.v17.js"></script>
+    <script type="text/javascript" src="../../../public/js/profiler.js"></script>
+    <script type="text/javascript" src="../../../public/js/dat.gui.min.js"></script>
+	<script type="text/javascript" src="../../../public/js/bootstrap.min.js"></script>
+	<!-- styles -->
+	<!--<link rel="stylesheet" type="text/css" href="../../../public/style/bootstrap.min.css">--> <!-- Version 2.x !! -->
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<style>
+	</style>
+</head>
+<body>
+    <canvas id="c"></canvas>
+    <script>
+        var width = window.innerWidth,
+            height = window.innerHeight;
+        
+        // Create a renderer and add it to the DOM.
+        const canvas = document.querySelector('#c');
+        const renderer = new THREE.WebGLRenderer({canvas});
+        renderer.setSize(width, height);
+        document.body.appendChild(renderer.domElement);
+        // Create the scene 
+        var scene = new THREE.Scene();
+        // Create a camera
+        var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
+        camera.position.z = 50;
+        
+        scene.add(camera);
+        
+        // Create a light, set its position, and add it to the scene.
+        var light = new THREE.PointLight(0xffffff);
+        light.position.set(-100,200,100);
+        scene.add(light);
+        
+        // Add OrbitControls so that we can pan around with the mouse.
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        
+        // Add axes
+        var axes = new THREE.AxisHelper(50);
+        scene.add( axes );
+        
+        var geometry = new THREE.BoxGeometry(5,5,5);
+        var cubeMaterial = new THREE.MeshNormalMaterial(); 
+        
+        var mesh = new THREE.Mesh( geometry, cubeMaterial );
+        scene.add( mesh );
+        
+        /////////////////////////////////////
+        /////////////////////////////////////
+        THREE.CustomGrayScaleShader = { 
+    
+            uniforms: { 
+              "tDiffuse": { type: "t", value: null }, 
+              "rPower":  { type: "f", value: 0.2126 }, 
+              "gPower":  { type: "f", value: 0.7152 }, 
+              "bPower":  { type: "f", value: 0.0722 } 
+            }, 
+           
+            vertexShader: [ 
+              "varying vec2 vUv;", 
+              "void main() {", 
+                "vUv = uv;", 
+                "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );", 
+              "}" 
+            ].join("\n"), 
+           
+            fragmentShader: [ 
+           
+              "uniform float rPower;", 
+              "uniform float gPower;", 
+              "uniform float bPower;", 
+              "uniform sampler2D tDiffuse;", 
+           
+              "varying vec2 vUv;", 
+           
+              "void main() {", 
+                "vec4 texel = texture2D( tDiffuse, vUv );", 
+                "float gray = texel.r*rPower + texel.g*gPower + texel.b*bPower;", 
+                "gl_FragColor = vec4( vec3(gray), texel.w );", 
+              "}"
+            ].join("\n") 
+          }; 
+    
+        //console.log(scene, zelf);
+        
+        var composer = new THREE.EffectComposer(renderer); //OJO changing my renderer completely!!!
+        var renderPass = new THREE.RenderPass(scene, camera); 
+        
+        var effectCopy = new THREE.ShaderPass(THREE.CopyShader); 
+        effectCopy.renderToScreen = true; 
+        var shaderPass = new THREE.ShaderPass(THREE.CustomGrayScaleShader); 
+        
+        
+        composer.addPass(renderPass); 
+        composer.addPass(shaderPass); 
+        composer.addPass(effectCopy);
+        
+        /////////////////////////////////////
+        /////////////////////////////////////
+
+        function resizeRendererToDisplaySize(renderer) {
+            const canvas = renderer.domElement;
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            const needResize = canvas.width !== width || canvas.height !== height;
+            if (needResize) {
+              renderer.setSize(width, height, false);
+            }
+            return needResize;
+      }
+
+
+        let then = 0;
+        function render(now) {
+            now *= 0.001;  // convert to seconds
+            const deltaTime = now - then;
+            then = now;
+           
+            if (resizeRendererToDisplaySize(renderer)) {
+              const canvas = renderer.domElement;
+              camera.aspect = canvas.clientWidth / canvas.clientHeight;
+              camera.updateProjectionMatrix();
+              composer.setSize(canvas.width, canvas.height); //E: tell composer to resize!
+            }
+            
+            const speed = .1;
+            const rot = now * speed;
+            mesh.rotation.x = rot;
+            mesh.rotation.y = rot;
+             
+            composer.render(deltaTime);
+             
+            requestAnimationFrame(render);
+        }        
+        
+        requestAnimationFrame(render);
+
+    
+    //composer.render();
+    //console.error(composer)
+    </script>
+</body>

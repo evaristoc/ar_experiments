@@ -282,8 +282,14 @@ var Butterfly = function () {
              key: 'rndHELPER',
              value: function rndHELPER(max, negative){
                 return negative ? Math.random() * 2 * max - max : Math.random() * max;
+              }
+             },
+            {
+             key: 'velocitySetter',
+             value: function velocityChange(newvel){
+               this.velocityLimit = newvel;
              }
-            }
+            },
       ]);
   
     //E: return the class!
@@ -453,6 +459,8 @@ var app = (function APPmodule(){
               //cameraCtrl: null,
               opacitybackground: 0.0,
               arToolkitSource: null,
+              shader: true,
+              composer: null,
               init: function(){
                           this.renderer = this.renderer_init();
                           this.camera = this.camera_init();
@@ -469,15 +477,9 @@ var app = (function APPmodule(){
                     
                     },
               initAR: function(){
-                          //$("#intro_text2").hide();
-                          $(".intro").css("display","inline-block");
-                          $("#intro_text2").css("opacity", 0.0);
-                          this.renderer = this.renderer_init();
-                          this.camera = this.camera_init();
-                          this.camera.position.z = 35;
-                          cameraCtrl = new THREE.OrbitControls(this.camera);
-                          scene.add(this.camera);
-                          scene.add(this.lights_init.ambient());
+                
+                          /*CHECKS*/
+                          //console.log(Butterfly);
 
                           /*
                           //TEST OBJECT
@@ -492,7 +494,20 @@ var app = (function APPmodule(){
                           mesh1.position.y = 0.5;
                           mesh1.rotation.y = Math.PI/4;
                           scene.add(mesh1);
-                          */
+                          */                          
+                          
+                          /**************/
+                          //$("#intro_text2").hide();
+                          $(".intro").css("display","inline-block");
+                          $("#intro_text2").css("opacity", 0.0);
+                          this.renderer = this.renderer_init();
+                          this.camera = this.camera_init();
+                          this.camera.position.z = 35;
+                          cameraCtrl = new THREE.OrbitControls(this.camera);
+                          scene.add(this.camera);
+                          scene.add(this.lights_init.ambient());
+
+
                           
                           this.objects.bttfls_init();
                           
@@ -642,6 +657,9 @@ var app = (function APPmodule(){
                     }else{
                       $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/800);
                       $("#intro_text2").css("opacity", Number($("#intro_text2").css("opacity")) + 1/1000);
+                      //this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
+                      this.opacitybackground += 1;
+                      this.renderer.setClearAlpha(this.opacitybackground/(80*this.objects.nbButterflies));
                     };
                     
                     cameraCtrl.update();
@@ -674,7 +692,9 @@ var app = (function APPmodule(){
                       //OBS: FIND A WAY TO RESET MOVE!
                       //code
                       //console.log(1111);
-                      THREE.CustomGrayScaleShader = { 
+                      if (this.shader) {
+                        //code
+                        THREE.CustomGrayScaleShader = { 
  
                                   uniforms: { 
                                     "tDiffuse": { type: "t", value: null }, 
@@ -716,23 +736,44 @@ var app = (function APPmodule(){
                          
                         var shaderPass = new THREE.ShaderPass(THREE.CustomGrayScaleShader); 
                          
-                        var composer = new THREE.EffectComposer(zelf.renderer); //OJO changing my renderer completely!!!
-                        composer.addPass(renderPass); 
-                        composer.addPass(shaderPass); 
-                        composer.addPass(effectCopy);
-                        
-                        composer.render();
-                        console.error(composer)
+                        this.composer = new THREE.EffectComposer(zelf.renderer); //OJO changing my renderer completely!!!
+                        this.composer.addPass(renderPass); 
+                        this.composer.addPass(shaderPass); 
+                        this.composer.addPass(effectCopy);
+                        this.shader = false;
+
+                      }
+                      
+                        compatibility.requestAnimationFrame(this.updateAR.bind(this));
+                        this.composer.render();
+                        //console.error(composer)
 
                         //shaderPass.enabled = controls.grayScale; 
                         //shaderPass.uniforms.rPower.value = controls.rPower; 
                         //shaderPass.uniforms.gPower.value = controls.gPower; 
                         //shaderPass.uniforms.bPower.value = controls.bPower;
-                        
-                        //$("#addedtext").hide();
-                        //$("#intro_text2").css("display", "none");
-                        //$('#entryscene2').width("100%");
-                        //$('#log').html("test width "+globalWidth);
+
+                      cameraCtrl.update();
+                      TWEEN.update();
+                      if (this.objects.butterflies[0]) {
+                        for (var i = 0; i < this.objects.butterflies.length; i++) {
+                          //console.log(this.objects.butterflies[i].velocityLimit);
+                          if (this.objects.butterflies[i].velocityLimit == 1.2) {
+                          //  //code
+                            this.objects.butterflies[i].velocitySetter(.7);
+                          };
+                          this.objects.butterflies[i].move();
+                        };
+                        if (Math.random() <= .15) {
+                          scene.remove(this.objects.butterflies[0].meshObj);
+                          this.objects.butterflies.shift();
+                        };
+                      } else {
+                        $("#intro_text2").css("display", "none");
+                        $('#entryscene2').width("100%");
+                        $('#log').html("test width "+globalWidth);                      
+                      };
+
                 
                 
                     }else{

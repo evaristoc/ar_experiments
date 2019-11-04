@@ -769,7 +769,8 @@ var app = (function APPmodule(){
                           this.objects.butterflies.shift();
                         };
                       } else {
-                        $("#intro_text2").css("display", "none");
+                        //$("#intro_text2").css("display", "none");
+                        $("#addedtext").css("display","none");
                         $('#entryscene2').width("100%");
                         $('#log').html("test width "+globalWidth);                      
                       };

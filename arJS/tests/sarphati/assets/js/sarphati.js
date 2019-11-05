@@ -760,11 +760,11 @@ var app = (function APPmodule(){
                           //console.log(this.objects.butterflies[i].velocityLimit);
                           if (this.objects.butterflies[i].velocityLimit == 1.2) {
                           //  //code
-                            this.objects.butterflies[i].velocitySetter(.7);
+                            this.objects.butterflies[i].velocitySetter(.4);
                           };
                           this.objects.butterflies[i].move();
                         };
-                        if (Math.random() <= .15) {
+                        if (Math.random() <= .1) {
                           scene.remove(this.objects.butterflies[0].meshObj);
                           this.objects.butterflies.shift();
                         };

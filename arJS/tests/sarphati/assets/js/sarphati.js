@@ -659,8 +659,8 @@ var app = (function APPmodule(){
                       $("#intro_text2").css("opacity", Number($("#intro_text2").css("opacity")) + 1/1000);
                       //this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
                       this.opacitybackground += 1;
-                      //this.renderer.setClearAlpha(this.opacitybackground/(80*this.objects.nbButterflies));
-                      this.renderer.setClearAlpha(1.0);
+                      this.renderer.setClearAlpha(this.opacitybackground/(80*this.objects.nbButterflies));
+                      //this.renderer.setClearAlpha(1.0);
                     };
                     
                     cameraCtrl.update();

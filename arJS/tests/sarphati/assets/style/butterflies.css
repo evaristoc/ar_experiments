@@ -12,6 +12,10 @@
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
+#entryscene1 a{
+  z-index: 3;
+}
+
 #entryscene1 img{
   display: block;
   margin-left: auto;

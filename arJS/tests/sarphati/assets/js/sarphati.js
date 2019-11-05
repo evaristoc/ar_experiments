@@ -313,7 +313,6 @@ var Butterfly = function () {
      this._textureLoader = new THREE.TextureLoader();
      this._textureLoad = this._textureLoader.load('./assets/PUSHILIN_factory.png');
      this._mtlLoader = new THREE.MTLLoader();
-     console.log(1111, Object.keys(this._mtlLoader));
      this._objLoader = new THREE.OBJLoader();
      this._mtlLoader.setPath( 'assets/' );
      this._objLoader.setPath( 'assets/' );
@@ -660,7 +659,8 @@ var app = (function APPmodule(){
                       $("#intro_text2").css("opacity", Number($("#intro_text2").css("opacity")) + 1/1000);
                       //this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
                       this.opacitybackground += 1;
-                      this.renderer.setClearAlpha(this.opacitybackground/(80*this.objects.nbButterflies));
+                      //this.renderer.setClearAlpha(this.opacitybackground/(80*this.objects.nbButterflies));
+                      this.renderer.setClearAlpha(1.0);
                     };
                     
                     cameraCtrl.update();

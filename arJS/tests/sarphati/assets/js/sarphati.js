@@ -313,6 +313,7 @@ var Butterfly = function () {
      this._textureLoader = new THREE.TextureLoader();
      this._textureLoad = this._textureLoader.load('./assets/PUSHILIN_factory.png');
      this._mtlLoader = new THREE.MTLLoader();
+     console.log(1111, Object.keys(this._mtlLoader));
      this._objLoader = new THREE.OBJLoader();
      this._mtlLoader.setPath( 'assets/' );
      this._objLoader.setPath( 'assets/' );
@@ -1509,7 +1510,7 @@ var app = (function APPmodule(){
         window.emitter = new CustomEventEmitter(); //it must be public or something that can travel between modules
         
         window.closeNav = function(){
-            document.getElementById("entryscene2").style.width = "0";
+            document.getElementById("entryscene2").style.width = "0px";
             emitter.emit('event:close-nav', {});
         };
         var countclks = 0;

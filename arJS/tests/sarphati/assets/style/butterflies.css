@@ -75,7 +75,7 @@
 
 
 /* The navigation menu links */
-#entryscene2 a {
+#entryscene2-textwrapper a {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
   font-size: 25px;
@@ -84,7 +84,7 @@
 }
 
 /* The navigation menu links */
-#entryscene2 p {
+#entryscene2-textwrapper p {
   display:inline-block;
   padding: 8px 8px 8px 12px;
   text-decoration: none;
@@ -97,7 +97,7 @@
   transition: 0.3s;*/
 }
 
-#entryscene2 img{
+#entryscene2-textwrapper > a  > img{
   display:block;
   -webkit-transform: scaleX(-1) rotateZ(25deg);
   transform: scaleX(-1) rotateZ(25deg);
@@ -110,7 +110,7 @@
 }
 
 /*width="700px" height="800px"*/
-#entryscene2 img.resize{
+#entryscene2-textwrapper > a  > img.resize{
   width: 700px;
   height: 800px;
 }

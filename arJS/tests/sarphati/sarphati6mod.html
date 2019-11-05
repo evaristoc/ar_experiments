@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Sarphati - story in AR.JS</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<!-- include three.js library -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js'></script>
+	<script type="text/javascript" src="../../../public/js/three_86/OBJLoader.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/MTLLoader.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/orbitcontrols.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/EffectComposer.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/RenderPass.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/ShaderPass.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/CopyShader.js"></script>
+	<!-- include tween.js -->
+  	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.3.0/Tween.min.js"></script>
+	<!-- include jsartookit -->
+	<script src="../../arjs-resources/jsartoolkit5/artoolkit.min.js"></script>
+	<script src="../../arjs-resources/jsartoolkit5/artoolkit.api.js"></script>
+	<!-- include threex.artoolkit -->
+	<script src="../../arjs-resources/threex/threex-artoolkitsource.js"></script>
+	<script src="../../arjs-resources/threex/threex-artoolkitcontext.js"></script>
+	<script src="../../arjs-resources/threex/threex-arbasecontrols.js"></script>
+	<script src="../../arjs-resources/threex/threex-armarkercontrols.js"></script>
+	<!-- include miscelaneous -->
+    <script type="text/javascript" src="../../../public/js/compatibility.js"></script>
+    <script type="text/javascript" src="../../../public/js/stats.min.v17.js"></script>
+    <script type="text/javascript" src="../../../public/js/profiler.js"></script>
+    <script type="text/javascript" src="../../../public/js/dat.gui.min.js"></script>
+	<script type="text/javascript" src="../../../public/js/bootstrap.min.js"></script>
+	<!-- styles -->
+	<link rel="stylesheet" type="text/css" href="../../../public/style/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/style/butterflies.css">
+</head>
+
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+	<script src="assets/js/sarphati6mod.js"></script>
+	
+	<div id="entryscene1" class="sidenav">
+	  <a href="javascript:void(0)" class="closebtn" onclick="closeEntryImg()" style="z-index:3">&times;</a>
+	  <div><img src="https://i.pinimg.com/originals/11/82/59/11825905d01ed4019758674917a84d8d.jpg"></img></div>
+	</div>
+
+	<div id="entryscene2" class="sidenav">
+		<!--<a href="javascript:void(0)" class="closebtn">&times;</a>-->
+		<div id="entryscene2-textwrapper">
+		  <p>The air we flew in became darker and sader. We were <strong>disappearing!</strong>. Follow markers to save us!</p>
+		  <a href="javascript:void(0)" onclick="closeNav()"><img src="assets/grph/output-onlinepngtools-butterfly.png"></a>
+		</div>
+	</div>
+
+
+	<div id="addedtext">
+	  <div id="intro_text1" class="intro">
+		<h2>Once upon a time we, the <strong>Butterflies</strong>, were everywhere.</h2>
+	  </div>
+		<div id="intro_text2" class="intro" style="display:none;">
+		<h2>However, something really bad began to happen...</h2>
+	  </div>
+	</div>
+
+	<!--<div id="entryscene3" class="sidenav">
+		<div id="entryscene3-textwrapper">
+			<p>You found it! Now make it greener pressing the button!</p>
+			<div class="container jump" style="text-align:center; color:steelblue;">
+				<div class="row">
+					<h1>.</h1>
+				</div>
+				<div class="row">
+					<a id="custom-button" href="#" onclick="greenerButton()">Make it Greener!</a>
+				</div>
+			</div>
+		</div>
+	</div>-->
+
+</body>
+</html>

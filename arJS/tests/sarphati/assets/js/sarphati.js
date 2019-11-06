@@ -353,8 +353,13 @@ var Butterfly = function () {
                         obj.traverse(function (child) {   // aka setTexture
                             if (child instanceof THREE.Mesh) {
                                 child.material.map = zelf._textureLoad;
-                                //var localPlane = new THREE.Plane( new THREE.Vector3( 0., 1., 0. ), 1.5 );
-                                //child.material.clippingPlanes = [localPlane];
+                                var localPlane = new THREE.Plane( new THREE.Vector3( zelf.to.x, zelf.to.y, 0. ), 0 );
+                                child.material.clippingPlanes = [localPlane];
+                                child.material.clipIntersection = {
+                                                            clipIntersection: true,
+                                                            planeConstant: 0,
+                                                            showHelpers: false
+                                                        };
                             }
                         });                         
                         obj.name = "factory1";
@@ -363,7 +368,9 @@ var Butterfly = function () {
                             resolve(obj);
                           });
                         console.log(4444, obj);
-                        p.then((o)=>{zelf._Object = o;})
+                        p.then((o)=>{
+                          zelf._Object = o;
+                          })
                         //console.error(zelf);
                         //zelf._subScene = obj;
                         //zelf._subScene = zelf._subScene(obj);
@@ -449,9 +456,9 @@ var app = (function APPmodule(){
             var cameraCtrl;
 
 
-            /////////////////////////////////////////////////////
-            /// scene 1
-            /////////////////////////////////////////////////////            
+  /////////////////////////////////////////////////////
+  /// scene 1
+  /////////////////////////////////////////////////////            
             
             var sceneelements1 = {
               renderer: null,
@@ -658,10 +665,15 @@ var app = (function APPmodule(){
                       $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/800);
                       $("#intro_text2").css("opacity", Number($("#intro_text2").css("opacity")) + 1/1000);
                       //this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
-                      this.opacitybackground += 1;
-                      this.renderer.setClearAlpha(this.opacitybackground/(10*this.objects.nbButterflies));
                       //this.renderer.setClearAlpha(.7);
                     };
+
+                    if (this.renderer.getClearAlpha() < .75) {
+                      //code
+                      this.opacitybackground += 1;
+                      this.renderer.setClearAlpha(this.opacitybackground/(20*this.objects.nbButterflies));
+                    }
+
                     
                     cameraCtrl.update();
                     TWEEN.update();
@@ -787,9 +799,9 @@ var app = (function APPmodule(){
               
             };
 
-            /////////////////////////////////////////////////////
-            /// scene 3
-            /////////////////////////////////////////////////////            
+  /////////////////////////////////////////////////////
+  /// scene 3
+  /////////////////////////////////////////////////////            
             
             var sceneelements3 = {
               renderer: null,
@@ -929,9 +941,9 @@ var app = (function APPmodule(){
               
             };
             
-            /////////////////////////////////////////////////////
-            /// scene 2
-            /////////////////////////////////////////////////////            
+  /////////////////////////////////////////////////////
+  /// scene 2
+  /////////////////////////////////////////////////////            
             
             //////////////////////
             //TEMPORARY VARIABLES!
@@ -961,7 +973,7 @@ var app = (function APPmodule(){
                          
                           this.arToolkitSource = sceneelements1.arToolkitSource;
                           this.renderer = sceneelements1.renderer;
-                          this.renderer.setClearAlpha(.5);
+                          this.renderer.setClearAlpha(.75);
                           scene.remove(sceneelements1.camera);
                           
                           this.camera = this.camera_init();
@@ -1002,11 +1014,11 @@ var app = (function APPmodule(){
                           this.arToolkitContext.init( function onCompleted(){
                             zelf.camera.projectionMatrix.copy(zelf.arToolkitContext.getProjectionMatrix());
                           });
-                          //var c = this.camera.projectionMatrix.copy;
-                          //var arcgpm = this.arToolkitContext.getProjectionMatrix;
-                          //this.arToolkitContext.init( function onCompleted(){
-                          //    c( arcgpm() );
-                          //});
+
+
+                          ////////////////////////////////////////////////////////////
+                          // setup MarkerControls
+                          ////////////////////////////////////////////////////////////	
                           
                           var patternArray = ["letterA", "letterB", "letterC", "letterD"];
                           var colorArray   = [0xff0000, 0xff8800, 0xffff00, 0x00cc00];
@@ -1024,9 +1036,7 @@ var app = (function APPmodule(){
                               this.objects.testcube_init(colorArray[i], markerRoot2);
 
                           };
-                          ////////////////////////////////////////////////////////////
-                          // setup MarkerControls
-                          ////////////////////////////////////////////////////////////	                          
+                          
                           var markerControls1 = new THREEx.ArMarkerControls(
                                                   this.arToolkitContext,
                                                   this.objects.markerRoot1,
@@ -1044,6 +1054,24 @@ var app = (function APPmodule(){
                           
                           this.objects.markerRoot1.name = "groupFactory";
                           scene.add(this.objects.markerRoot1);
+                          
+                          /////////////////////////////////////////
+                          // Clipping
+                          /////////////////////////////////////////
+                          
+                          //https://stackoverflow.com/questions/20495302/transparent-background-with-three-js
+                          
+                          
+                          //var params = {
+                          //    clipIntersection: true,
+                          //    planeConstant: 0,
+                          //    showHelpers: false
+                          //};
+
+                          var clippingPlane = new THREE.Plane( new THREE.Vector3( 1, 0, 0 ), 0 );
+                          
+                          //make local clipping true
+                          this.renderer.localClippingEnabled = true;
                           
                           
                           ////////////////////////////////////////////////////////////
@@ -1113,6 +1141,7 @@ var app = (function APPmodule(){
                 //      },
                factory_init: function(){
                           this.f = new FactoryObj(this.markerRoot1);
+                          //console.log(2222, Object.keys(this.f));
                        },
                 particle_init: function(i){
                         var p = new Particle();
@@ -1126,7 +1155,7 @@ var app = (function APPmodule(){
                                       new THREE.MeshBasicMaterial(
                                                   {
                                                     color:cubecolor,
-                                                    transparent:true,
+                                                    //transparent:true,
                                                     opacity:0.5
                                                   }) 
                                     );
@@ -1213,17 +1242,6 @@ var app = (function APPmodule(){
                 };
                 if ( this.arToolkitSource.ready !== false ) this.arToolkitContext.update( this.arToolkitSource.domElement );
                 if (this.arToolkitContext.arController !== null) {
-                  //console.log(Object.keys(this.arToolkitContext));
-                  //console.log(this.arToolkitContext);
-                  //console.log(Object.keys(this.arToolkitContext.arController));
-                  //console.log(this.arToolkitContext.arController.listeners);
-                  //this.arToolkitContext.arController.addEventListener('getMarker',(evt)=>{console.log(evt)})
-                  //console.log(this.arToolkitContext.arController.listeners.getMarker[0]);
-                  //console.log(this.arToolkitContext.arMarkerControls[0].object3d.visible);
-                  //sys.exit(0);
-                  //console.log(this.objects.markerRoot1.children[0].material.color.r);
-                  //var colorFactory = this.objects.markerRoot1.children[0].material.color;
-                  //console.log(1111, this.objects.f)
                   var zelf = this;
                   if (this.arToolkitContext._arMarkersControls[4].object3d.visible) {
                   //this.renderer.clippingPlanes[0].setFromNormalAndCoplanarPoint(

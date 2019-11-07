@@ -353,13 +353,13 @@ var Butterfly = function () {
                         obj.traverse(function (child) {   // aka setTexture
                             if (child instanceof THREE.Mesh) {
                                 child.material.map = zelf._textureLoad;
-                                var localPlane = new THREE.Plane( new THREE.Vector3( zelf.to.x, zelf.to.y, 0. ), 0 );
-                                child.material.clippingPlanes = [localPlane];
-                                child.material.clipIntersection = {
-                                                            clipIntersection: true,
-                                                            planeConstant: 0,
-                                                            showHelpers: false
-                                                        };
+                                //var localPlane = new THREE.Plane( new THREE.Vector3( zelf.to.x, zelf.to.y, 0. ), 0 );
+                                //child.material.clippingPlanes = [localPlane];
+                                //child.material.clipIntersection = {
+                                //                            clipIntersection: true,
+                                //                            planeConstant: 0,
+                                //                            showHelpers: false
+                                //                        };
                             }
                         });                         
                         obj.name = "factory1";
@@ -1059,6 +1059,20 @@ var app = (function APPmodule(){
                           // Clipping
                           /////////////////////////////////////////
                           
+                          //E: Ground
+                          //--- using https://codepen.io/atouine/pen/JJeqKE?editors=0010 as template
+                          var plane = new THREE.PlaneBufferGeometry( 3, 2, 1, 1 );
+                          var ground = new THREE.Mesh(
+                                  plane,
+                                  new THREE.MeshPhongMaterial( { color: 'brown', shininess: 150 } )
+                              );
+                          ground.rotation.x = - Math.PI / 2; // rotates X/Y to X/Z
+                          ground.position.y = -1.15;
+                          ground.position.z = -.5;
+                          ground.receiveShadow = true;
+                          this.objects.markerRoot1.add(ground);
+                          
+                          
                           //https://stackoverflow.com/questions/20495302/transparent-background-with-three-js
                           
                           
@@ -1068,10 +1082,10 @@ var app = (function APPmodule(){
                           //    showHelpers: false
                           //};
 
-                          var clippingPlane = new THREE.Plane( new THREE.Vector3( 1, 0, 0 ), 0 );
+                          //var clippingPlane = new THREE.Plane( new THREE.Vector3( 0, 0, 1 ), .5 );
                           
-                          //make local clipping true
-                          this.renderer.localClippingEnabled = true;
+                          ////make local clipping true
+                          //this.renderer.localClippingEnabled = true;
                           
                           
                           ////////////////////////////////////////////////////////////
@@ -1171,13 +1185,14 @@ var app = (function APPmodule(){
                   //testing position factory
                   if (this.objects.f._Object !== null) {
                     //code
-                    console.log(5555, this.objects.f._Object.getWorldDirection());
+                    //console.log(5555, this.objects.f._Object.getWorldDirection());
                   }
                   
+                 
                   /////
                   document.getElementById("entryscene2").style.width = "0";
                   //emitter.unsubscribe('event:close-nav');
-                  //console.log(3333, colorFactoryObj.r);
+                  console.log(3333, colorFactoryObj.r);
                   if (colorFactoryObj.r > 0.001) {
                     for (let i = 0; i < 100; i++) {
                      if (this.objects.smokeparticles[i].start === false) {
@@ -1256,8 +1271,10 @@ var app = (function APPmodule(){
                         //if (data.value) {
                           verifierEvt += 1;
                           //console.log(data.value, countfoundHiro, verifierEvt);
-                          //console.log(zelf.arToolkitContext._arMarkersControls[4].object3d.children[0].children[0].material);
-                          colorFactoryObj = zelf.arToolkitContext._arMarkersControls[4].object3d.children[0].children[0].material.color
+                          //console.log(6666, zelf.objects.f._Object);                         //console.log(zelf.arToolkitContext._arMarkersControls[4].object3d.children[0].children[0].material);
+                          //colorFactoryObj = zelf.arToolkitContext._arMarkersControls[4].object3d.children[0].children[0].material.color
+                          //console.log(zelf.objects.f._Object.children[0].material.color);
+                          colorFactoryObj = zelf.objects.f._Object.children[0].material.color;
                           //if (this.objects.markerRoot1.children[0].material.color.r >= 0.001) {
                           ////  //code
                           //  this.objects.markerRoot1.children[0].material.color.r -= 0.001;

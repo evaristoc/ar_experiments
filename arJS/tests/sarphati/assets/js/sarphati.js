@@ -322,6 +322,8 @@ var Butterfly = function () {
        y: -.5,
        z: -1.0
        };
+     //this.localCliping = new THREE.Plane( new THREE.Vector3( 1, 0, 0 ), 0 );
+     //this._subScene.add(this.localCliping);
 
      this.launch();
 
@@ -353,13 +355,16 @@ var Butterfly = function () {
                         obj.traverse(function (child) {   // aka setTexture
                             if (child instanceof THREE.Mesh) {
                                 child.material.map = zelf._textureLoad;
+                                ////E: for the local plane to work it must be enabled local clipping on renderer at init!
                                 //var localPlane = new THREE.Plane( new THREE.Vector3( zelf.to.x, zelf.to.y, 0. ), 0 );
+                                //var localPlane = new THREE.Plane(new THREE.Vector3(1,0,0),0);
                                 //child.material.clippingPlanes = [localPlane];
                                 //child.material.clipIntersection = {
                                 //                            clipIntersection: true,
                                 //                            planeConstant: 0,
                                 //                            showHelpers: false
                                 //                        };
+                                //child.material.clipShadows = true;
                             }
                         });                         
                         obj.name = "factory1";
@@ -367,7 +372,7 @@ var Butterfly = function () {
                         var p = new Promise(function(resolve, reject){
                             resolve(obj);
                           });
-                        console.log(4444, obj);
+                        //console.log(4444, obj);
                         p.then((o)=>{
                           zelf._Object = o;
                           })
@@ -1062,6 +1067,13 @@ var app = (function APPmodule(){
                           //E: Ground
                           //--- using https://codepen.io/atouine/pen/JJeqKE?editors=0010 as template
                           var plane = new THREE.PlaneBufferGeometry( 3, 2, 1, 1 );
+                          //var planeGlobalClip = new THREE.PlaneBufferGeometry( 3, 2, 1, 1 );
+                          var planeGlobalClip2 = new THREE.Plane( new THREE.Vector3(0, 1, 0), -1.15);
+                          //var planeGlobalClip = new THREE.PlaneBufferGeometry( 3, 2, 1, 1 );
+                          //console.log(planeGlobalClip);
+                          //planeGlobalClip.rotateX(- Math.PI / 2);
+                          //planeGlobalClip.translate(0,-1.15,-.5);
+                          
                           var ground = new THREE.Mesh(
                                   plane,
                                   new THREE.MeshPhongMaterial( { color: 'brown', shininess: 150 } )
@@ -1069,10 +1081,12 @@ var app = (function APPmodule(){
                           ground.rotation.x = - Math.PI / 2; // rotates X/Y to X/Z
                           ground.position.y = -1.15;
                           ground.position.z = -.5;
-                          ground.receiveShadow = true;
+                          //ground.receiveShadow = true;
                           this.objects.markerRoot1.add(ground);
-                          
-                          
+                          //this.renderer.shadowMap.enabled = true;
+                          this.renderer.clippingPlanes = [planeGlobalClip2]; //E: apparently only accepts PLANE primitive
+                          //this.objects.markerRoot1.add(planeGlobalClip);
+                          //console.log(1111, planeGloblalClip2, this.renderer.clippingPlanes);
                           //https://stackoverflow.com/questions/20495302/transparent-background-with-three-js
                           
                           
@@ -1082,10 +1096,10 @@ var app = (function APPmodule(){
                           //    showHelpers: false
                           //};
 
-                          //var clippingPlane = new THREE.Plane( new THREE.Vector3( 0, 0, 1 ), .5 );
+                          //var globalclippingPlane = new THREE.Plane( new THREE.Vector3( 0, 0, 1 ), .5 );
                           
-                          ////make local clipping true
-                          //this.renderer.localClippingEnabled = true;
+                         //make local clipping true
+                         this.renderer.localClippingEnabled = true;
                           
                           
                           ////////////////////////////////////////////////////////////
@@ -1192,7 +1206,7 @@ var app = (function APPmodule(){
                   /////
                   document.getElementById("entryscene2").style.width = "0";
                   //emitter.unsubscribe('event:close-nav');
-                  console.log(3333, colorFactoryObj.r);
+                  //console.log(3333, colorFactoryObj.r);
                   if (colorFactoryObj.r > 0.001) {
                     for (let i = 0; i < 100; i++) {
                      if (this.objects.smokeparticles[i].start === false) {
@@ -1232,10 +1246,10 @@ var app = (function APPmodule(){
                    if (this.objects.f._Object != null) {
                     //code
                     this.objects.f._Object.position.y -= 0.01;
+                    //this.objects.f.localCliping.constant += 0.01;
                     //console.log(this.objects.f._Object.position.y);
                     if (this.objects.f._Object.position.y < -3.) {
                       document.getElementById("entryscene3").style.width = "0";
-
                       this.objects.f._Object = null;
                       sceneelements3.initAR();
                       sceneelements3.updateAR();                      
@@ -1356,7 +1370,8 @@ var app = (function APPmodule(){
             };
             
             
-        return {app_init: app_init, tick: ()=>console.log('tick'), video: null};
+        return {app_init: app_init, tick: ()=> console.log('tick'), video: null};
+        
     }());
 
 

@@ -464,7 +464,7 @@ var app = (function APPmodule(){
   /////////////////////////////////////////////////////
   /// scene 1
   /////////////////////////////////////////////////////            
-            var changeAlpha = true;
+            
             var sceneelements1 = {
               renderer: null,
               camera: null,
@@ -662,25 +662,23 @@ var app = (function APPmodule(){
                     //p.delay(350).fadeOut(5000, function(){var p = $("#intro"); p.html("<p>HELLO</p>"); p.show(); p.fadeIn(6000);}); //generates a loop!!
                     //$("#intro").html("<p>HELLO</p>").fadeIn(15000);
                     //console.log($("#intro_text1").css("opacity"));
-                    if (changeAlpha) {
-                      if (($("#intro_text1").css("opacity") - 1/800) <= 0) {
-                        //code
-                        $("#intro_text1").hide();
-                        $("#intro_text2").css("opacity", 1.0);
-                        changeAlpha = false;
-                      }else{
-                        $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/800);
-                        $("#intro_text2").css("opacity", Number($("#intro_text2").css("opacity")) + 1/1000);
-                        //this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
-                        //this.renderer.setClearAlpha(.7);
-                      };
-  
-                      if (this.renderer.getClearAlpha() < .75) {
-                        //code
-                        this.opacitybackground += 1;
-                        this.renderer.setClearAlpha(this.opacitybackground/(20*this.objects.nbButterflies));
-                      };
+                    if (($("#intro_text1").css("opacity") - 1/800) <= 0) {
+                      //code
+                      $("#intro_text1").hide();
+                      $("#intro_text2").css("opacity", 1.0)
+                    }else{
+                      $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/800);
+                      $("#intro_text2").css("opacity", Number($("#intro_text2").css("opacity")) + 1/1000);
+                      //this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
+                      //this.renderer.setClearAlpha(.7);
                     };
+
+                    if (this.renderer.getClearAlpha() < .75) {
+                      //code
+                      this.opacitybackground += 1;
+                      this.renderer.setClearAlpha(this.opacitybackground/(20*this.objects.nbButterflies));
+                    }
+
                     
                     cameraCtrl.update();
                     TWEEN.update();
@@ -806,216 +804,6 @@ var app = (function APPmodule(){
               
             };
 
-
-  /////////////////////////////////////////////////////
-  /// scene 4
-  /////////////////////////////////////////////////////            
-            
-            var sceneelements4 = {
-              renderer: null,
-              camera: null,
-              //cameraCtrl: null,
-              opacitybackground: 0.0,
-              arToolkitSource: null,
-              shader: true,
-              composer: null,
-              init: function(){
-                          this.renderer = sceneelements1.renderer;
-                          this.camera = this.camera_init();
-                          this.camera.position.z = 5;
-                          cameraCtrl = new THREE.OrbitControls(this.camera);
-                          scene.add(this.camera);
-                          //sceneelements1.cameraCtrl = sceneelements1.cameraCtrls1_init.orbit.call(sceneelements1);
-                          
-                          scene.add(this.lights_init.ambient());
-                          this.objects.bttfls_init();
-                          
-                          document.body.appendChild(this.renderer.domElement);
-                          window.addEventListener('onresize', this.listeners_init.onResize.bind(this));
-                    
-                    },
-              initAR: function(){
-                
-                          /*CHECKS*/
-                          //console.log(Butterfly);
-
-                          /*
-                          //TEST OBJECT
-                          let geometry1	= new THREE.CubeGeometry(1,1,1);
-                          let material1	= new THREE.MeshNormalMaterial({
-                              transparent: true,
-                              opacity: 0.5,
-                              side: THREE.DoubleSide
-                          }); 
-                          
-                          var mesh1 = new THREE.Mesh( geometry1, material1 );
-                          mesh1.position.y = 0.5;
-                          mesh1.rotation.y = Math.PI/4;
-                          scene.add(mesh1);
-                          */                          
-                          
-                          /**************/
-                          //$("#intro_text2").hide();
-                          $(".intro").css("display","inline-block");
-                          $("#intro_text2").css("opacity", 0.0);
-                          this.renderer = this.renderer_init();
-                          this.camera = this.camera_init();
-                          this.camera.position.z = 35;
-                          cameraCtrl = new THREE.OrbitControls(this.camera);
-                          scene.add(this.camera);
-                          scene.add(this.lights_init.ambient());
-
-
-                          
-                          this.objects.bttfls_init();
-                          
-                          document.body.appendChild(this.renderer.domElement);
-                          //window.addEventListener('onresize', this.listeners_init.onResize.bind(this));
-                          ////E: a simple solution for onResize not look for the window scope from arToolkitSource.onResizeElement() method in onResize listener,
-                          //// needed a wrapper function, and to pass context as argument to onResize after context normalization (`var zelf = this`)
-                          ////https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
-                          ////console.error(this);
-                          ////onResize.bind(this); //trying binding `this` to onResize didn't work :(
-                          this.arToolkitSource = new THREEx.ArToolkitSource({ //arToolkitSource for camera search can be set as window
-                              sourceType : 'webcam',
-                          });
-                          var zelf = this;
-                          var onResize = this.listeners_init.onResizeAR;
-                          function intheeventlistenerhandler(){
-                              onResize(zelf);  
-                          }                     
-                          
-                          this.arToolkitSource.init(function onReady(){
-                              intheeventlistenerhandler();
-                          });
-                          
-                          // handle resize event
-                          window.addEventListener('resize', intheeventlistenerhandler);                    
-                    },
-              renderer_init: function(){
-                            var renderer = new THREE.WebGLRenderer({
-                                antialias : true,
-                                alpha: true
-                            });
-                            renderer.setPixelRatio( window.devicePixelRatio );
-                            renderer.setClearAlpha(0.0);
-                            renderer.setSize(globalWidth, globalHeight); //set CANVAS size
-                            renderer.domElement.style["display"]  = "block";
-                            renderer.domElement.style["position"] = "fixed";
-                            //renderer.domElement.style["width"]    = "100%";
-                            //renderer.domElement.style["height"]   = "100%";
-                            renderer.domElement.style["width"]    = globalWidth; //set RENDERING AREA size (not the same as canvas size!); it can overflow the canvas size.
-                            renderer.domElement.style["height"]   = globalHeight;
-                            renderer.domElement.style["top"] = '0px';
-                            renderer.domElement.style["left"] = '0px'; 
-                            return renderer;                        
-                      },
-              camera_init: function(){
-                    var cam = new THREE.PerspectiveCamera(50, globalWidth / globalHeight, 0.1, 1000);
-                    cam.name = "perspectivecamerascene1"
-                    return cam;
-                      },
-              lights_init: {
-                          ambient: function(){
-                            var ambient = new THREE.AmbientLight( 0xcccccc, 1.5 );
-                            ambient.name = "ambientlight1scene1"
-                            return ambient;
-                          },
-                      },
-              cameraCtrls_init: {
-                          orbit: function(){
-                            var camera = this.camera;
-                            var orbit = new THREE.OrbitControls(camera);
-                            orbit.name = "orbitcontrolscene1"
-                            return orbit
-                            }
-                      },
-              listeners_init: {
-                onResize: function(){
-                    var camera = this.camera;
-                    camera.aspect = globalWidth / globalHeight;
-                    camera.updateProjectionMatrix();
-                    this.renderer.setSize(globalWidth , globalHeight);
-                },
-                onResizeAR: function(t){
-                    //console.error(t);
-                    t.arToolkitSource.onResizeElement(); //this function involves a non-explicit while-loop that is hard to handle with `this`!!	
-                    t.arToolkitSource.copyElementSizeTo(t.renderer.domElement);
-                    if ( t.arToolkitContext !== undefined && t.arToolkitContext.arController !== null )
-                    {
-                        //console.log(t.arToolkitContext.arController);
-                        t.arToolkitSource.copyElementSizeTo(t.arToolkitContext.arController.canvas)	
-                    } else { // is this ok???
-                        var camera = t.camera;
-                        camera.aspect = globalWidth / globalHeight;
-                        camera.updateProjectionMatrix();
-                        //t.renderer.setSize(globalWidth , globalHeight);
-                    };
-
-                },
-              },
-              objects: {
-                butterflies : [],
-                
-                nbButterflies: 50,
-                
-                bttfls_init : function(){
-                    for(let i = 0; i < this.butterflies.length; i++){
-                            scene.remove(this.butterflies[i].meshObj);
-                    };
-                    this.butterflies = [];
-                                   
-                     
-                    const nbButterflies = this.nbButterflies;
-                    
-                    function shuffle(_b){
-                        for (var i = 0; i < _b.length; i++) {
-                          _b[i].shuffleHELPER();
-                        };
-                    };
-                    
-                    for (var i = 0; i < nbButterflies; i++) {
-                      var b = new Butterfly();
-                      this.butterflies.push(b);
-                      b.meshObj.name = "butterfly"+i;
-                      scene.add(b.meshObj);
-                    };
-                   
-                    shuffle(this.butterflies);
-                    //console.log(this.butterflies);                  
-                }
-                
-              },
-              update: function(){
-                    var zelf = this;
-                    //console.error(zelf.objects1.butterflies.length);
-                    //statsGlobal.begin();
-                    compatibility.requestAnimationFrame(this.update.bind(this));
-                    //this.cameraCtrl.update();
-                    cameraCtrl.update();
-                    TWEEN.update();
-                    for (var i = 0; i < this.objects.butterflies.length; i++) {
-                      this.objects.butterflies[i].move();
-                    };
-                    //statsGlobal.end();
-                    this.renderer.render(scene, this.camera);
-              },
-              updateAR: function(){
-                    var zelf = this;
-                   
-                    cameraCtrl.update();
-                    TWEEN.update();
-                    for (var i = 0; i < this.objects.butterflies.length; i++) {
-                      this.objects.butterflies[i].move();
-                    };
-                    compatibility.requestAnimationFrame(this.updateAR.bind(this));
-                    this.renderer.render(scene, this.camera);
-
-              },
-              
-            };
-
-
   /////////////////////////////////////////////////////
   /// scene 3
   /////////////////////////////////////////////////////            
@@ -1079,7 +867,7 @@ var app = (function APPmodule(){
               renderer_init: function(){
                       },
               camera_init: function(){
-                    var cam = new THREE.PerspectiveCamera(35, globalWidth / globalHeight , 0.1, 1000); //000
+                    var cam = new THREE.PerspectiveCamera(50, globalWidth / globalHeight, 0.1, 100); //000
                     cam.name = "perspectivecamerascene3"
                     return cam;
                       },
@@ -1158,9 +946,6 @@ var app = (function APPmodule(){
               
             };
             
-            
-
-            
   /////////////////////////////////////////////////////
   /// scene 2
   /////////////////////////////////////////////////////            
@@ -1193,6 +978,7 @@ var app = (function APPmodule(){
                          
                           this.arToolkitSource = sceneelements1.arToolkitSource;
                           this.renderer = sceneelements1.renderer;
+                          this.renderer.setClearAlpha(.75);
                           scene.remove(sceneelements1.camera);
                           
                           this.camera = this.camera_init();
@@ -1234,9 +1020,7 @@ var app = (function APPmodule(){
                             zelf.camera.projectionMatrix.copy(zelf.arToolkitContext.getProjectionMatrix());
                           });
 
-                          console.log(this.camera);
-                          
-                          
+
                           ////////////////////////////////////////////////////////////
                           // setup MarkerControls
                           ////////////////////////////////////////////////////////////	
@@ -1280,37 +1064,43 @@ var app = (function APPmodule(){
                           // Clipping
                           /////////////////////////////////////////
                           
-                          // the inside of the hole
-                          let geometry1	= new THREE.CubeGeometry(2,2,2);
-                          let loader = new THREE.TextureLoader();
-                          let texture = loader.load( 'assets/grph/tiles.jpg' );
-                          let material1	= new THREE.MeshLambertMaterial({
-                              transparent : true,
-                              map: texture,
-                              side: THREE.BackSide //E: this is KEY
-                          }); 
+                          //E: Ground
+                          //--- using https://codepen.io/atouine/pen/JJeqKE?editors=0010 as template
+                          var plane = new THREE.PlaneBufferGeometry( 3, 2, 1, 1 );
+                          //var planeGlobalClip = new THREE.PlaneBufferGeometry( 3, 2, 1, 1 );
+                          var planeGlobalClip2 = new THREE.Plane( new THREE.Vector3(0, 1, 0), -1.15);
+                          //var planeGlobalClip = new THREE.PlaneBufferGeometry( 3, 2, 1, 1 );
+                          //console.log(planeGlobalClip);
+                          //planeGlobalClip.rotateX(- Math.PI / 2);
+                          //planeGlobalClip.translate(0,-1.15,-.5);
                           
-                          mesh1 = new THREE.Mesh( geometry1, material1 );
-                          
-                          // the invisibility cloak (box with a hole)
-                          let geometry0 = new THREE.BoxGeometry(2,2,2);
-                          //geometry0.faces.splice(4, 2); // make hole by removing top two triangles
-                          
-                          let material0 = new THREE.MeshBasicMaterial({
-                              colorWrite: false
-                          });
-                          
-                          let mesh0 = new THREE.Mesh( geometry0, material0 );
-                          mesh0.scale.set(1,1,1).multiplyScalar(1.01);
-                          
-                          mesh1.position.y = -2.8;
-                          mesh0.position.y = -2.8;
-                          mesh1.position.z = -1.2;
-                          mesh0.position.z = -1.2;
+                          var ground = new THREE.Mesh(
+                                  plane,
+                                  new THREE.MeshPhongMaterial( { color: 'brown', shininess: 150 } )
+                              );
+                          ground.rotation.x = - Math.PI / 2; // rotates X/Y to X/Z
+                          ground.position.y = -1.15;
+                          ground.position.z = -.5;
+                          //ground.receiveShadow = true;
+                          this.objects.markerRoot1.add(ground);
+                          //this.renderer.shadowMap.enabled = true;
+                          this.renderer.clippingPlanes = [planeGlobalClip2]; //E: apparently only accepts PLANE primitive
+                          //this.objects.markerRoot1.add(planeGlobalClip);
+                          //console.log(1111, planeGloblalClip2, this.renderer.clippingPlanes);
+                          //https://stackoverflow.com/questions/20495302/transparent-background-with-three-js
                           
                           
-                          this.objects.markerRoot1.add( mesh0 );
-                          this.objects.markerRoot1.add( mesh1 );
+                          //var params = {
+                          //    clipIntersection: true,
+                          //    planeConstant: 0,
+                          //    showHelpers: false
+                          //};
+
+                          //var globalclippingPlane = new THREE.Plane( new THREE.Vector3( 0, 0, 1 ), .5 );
+                          
+                         //make local clipping true
+                         this.renderer.localClippingEnabled = true;
+                          
                           
                           ////////////////////////////////////////////////////////////
                           // setup Listeners
@@ -1410,7 +1200,6 @@ var app = (function APPmodule(){
                   if (this.objects.f._Object !== null) {
                     //code
                     //console.log(5555, this.objects.f._Object.getWorldDirection());
-                    console.log(5555, this.renderer.getClearAlpha());
                   }
                   
                  
@@ -1462,8 +1251,8 @@ var app = (function APPmodule(){
                     if (this.objects.f._Object.position.y < -3.) {
                       document.getElementById("entryscene3").style.width = "0";
                       this.objects.f._Object = null;
-                      sceneelements4.initAR();
-                      sceneelements4.updateAR();                      
+                      sceneelements3.initAR();
+                      sceneelements3.updateAR();                      
                     }
                    }
                    
@@ -1480,7 +1269,7 @@ var app = (function APPmodule(){
                    };
                    
                 };
-                if ( this.arToolkitSource.ready !== false) this.arToolkitContext.update( this.arToolkitSource.domElement );
+                if ( this.arToolkitSource.ready !== false ) this.arToolkitContext.update( this.arToolkitSource.domElement );
                 if (this.arToolkitContext.arController !== null) {
                   var zelf = this;
                   if (this.arToolkitContext._arMarkersControls[4].object3d.visible) {

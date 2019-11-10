@@ -355,6 +355,16 @@ var Butterfly = function () {
                         obj.traverse(function (child) {   // aka setTexture
                             if (child instanceof THREE.Mesh) {
                                 child.material.map = zelf._textureLoad;
+                                ////E: for the local plane to work it must be enabled local clipping on renderer at init!
+                                //var localPlane = new THREE.Plane( new THREE.Vector3( zelf.to.x, zelf.to.y, 0. ), 0 );
+                                //var localPlane = new THREE.Plane(new THREE.Vector3(1,0,0),0);
+                                //child.material.clippingPlanes = [localPlane];
+                                //child.material.clipIntersection = {
+                                //                            clipIntersection: true,
+                                //                            planeConstant: 0,
+                                //                            showHelpers: false
+                                //                        };
+                                //child.material.clipShadows = true;
                             }
                         });                         
                         obj.name = "factory1";
@@ -454,7 +464,7 @@ var app = (function APPmodule(){
   /////////////////////////////////////////////////////
   /// scene 1
   /////////////////////////////////////////////////////            
-            var changeAlpha = true;
+            
             var sceneelements1 = {
               renderer: null,
               camera: null,
@@ -543,323 +553,6 @@ var app = (function APPmodule(){
                             });
                             renderer.setPixelRatio( window.devicePixelRatio );
                             renderer.setClearAlpha(this.opacitybackground);
-                            renderer.setSize(globalWidth, globalHeight); //set CANVAS size
-                            renderer.domElement.style["display"]  = "block";
-                            renderer.domElement.style["position"] = "fixed";
-                            renderer.domElement.style["width"]    = globalWidth; //set RENDERING AREA size (not the same as canvas size!); it can overflow the canvas size.
-                            renderer.domElement.style["height"]   = globalHeight;
-                            renderer.domElement.style["top"] = '0px';
-                            renderer.domElement.style["left"] = '0px'; 
-                            return renderer;                        
-                      },
-              camera_init: function(){
-                    var cam = new THREE.PerspectiveCamera(50, globalWidth / globalHeight, 0.1, 1000);
-                    cam.name = "perspectivecamerascene1"
-                    return cam;
-                      },
-              lights_init: {
-                          ambient: function(){
-                            var ambient = new THREE.AmbientLight( 0xcccccc, 1.5 );
-                            ambient.name = "ambientlight1scene1"
-                            return ambient;
-                          },
-                      },
-              cameraCtrls_init: {
-                          orbit: function(){
-                            var camera = this.camera;
-                            var orbit = new THREE.OrbitControls(camera);
-                            orbit.name = "orbitcontrolscene1"
-                            return orbit
-                            }
-                      },
-              listeners_init: {
-                onResize: function(){
-                    var camera = this.camera;
-                    camera.aspect = globalWidth / globalHeight;
-                    camera.updateProjectionMatrix();
-                    this.renderer.setSize(globalWidth , globalHeight);
-                },
-                onResizeAR: function(t){
-                    //console.error(t);
-                    t.arToolkitSource.onResizeElement(); //this function involves a non-explicit while-loop that is hard to handle with `this`!!	
-                    t.arToolkitSource.copyElementSizeTo(t.renderer.domElement);
-                    if ( t.arToolkitContext !== undefined && t.arToolkitContext.arController !== null )
-                    {
-                        //console.log(t.arToolkitContext.arController);
-                        t.arToolkitSource.copyElementSizeTo(t.arToolkitContext.arController.canvas)	
-                    } else { // is this ok???
-                        var camera = t.camera;
-                        camera.aspect = globalWidth / globalHeight;
-                        camera.updateProjectionMatrix();
-                        //t.renderer.setSize(globalWidth , globalHeight);
-                    };
-
-                },
-              },
-              objects: {
-                butterflies : [],
-                
-                nbButterflies: 50,
-                
-                bttfls_init : function(){
-                    for(let i = 0; i < this.butterflies.length; i++){
-                            scene.remove(this.butterflies[i].meshObj);
-                    };
-                    this.butterflies = [];
-                                   
-                     
-                    const nbButterflies = this.nbButterflies;
-                    
-                    function shuffle(_b){
-                        for (var i = 0; i < _b.length; i++) {
-                          _b[i].shuffleHELPER();
-                        };
-                    };
-                    
-                    for (var i = 0; i < nbButterflies; i++) {
-                      var b = new Butterfly();
-                      this.butterflies.push(b);
-                      b.meshObj.name = "butterfly"+i;
-                      scene.add(b.meshObj);
-                    };
-                   
-                    shuffle(this.butterflies);
-                    //console.log(this.butterflies);                  
-                }
-                
-              },
-              update: function(){
-                    var zelf = this;
-                    //console.error(zelf.objects1.butterflies.length);
-                    //statsGlobal.begin();
-                    compatibility.requestAnimationFrame(this.update.bind(this));
-                    //this.cameraCtrl.update();
-                    cameraCtrl.update();
-                    TWEEN.update();
-                    for (var i = 0; i < this.objects.butterflies.length; i++) {
-                      this.objects.butterflies[i].move();
-                    };
-                    //statsGlobal.end();
-                    this.renderer.render(scene, this.camera);
-              },
-              updateAR: function(){
-                    var zelf = this;
-                    if (changeAlpha) {
-                      if (($("#intro_text1").css("opacity") - 1/800) <= 0) {
-                        //code
-                        $("#intro_text1").hide();
-                        $("#intro_text2").css("opacity", 1.0);
-                        changeAlpha = false;
-                      }else{
-                        $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/800);
-                        $("#intro_text2").css("opacity", Number($("#intro_text2").css("opacity")) + 1/1000);
-
-                      };
-  
-                      if (this.renderer.getClearAlpha() < .75) {
-                        //code
-                        this.opacitybackground += 1;
-                        this.renderer.setClearAlpha(this.opacitybackground/(20*this.objects.nbButterflies));
-                      };
-                    };
-                    
-                    cameraCtrl.update();
-                    TWEEN.update();
-                    for (var i = 0; i < this.objects.butterflies.length; i++) {
-                      this.objects.butterflies[i].move();
-                    };
-
-                    if ($("#intro_text2").css("opacity") == 1.0) {
-                      //OBS: FIND A WAY TO RESET MOVE!
-                      //code
-                      //console.log(1111);
-                      if (this.shader) {
-                        //code
-                        THREE.CustomGrayScaleShader = { 
- 
-                                  uniforms: { 
-                                    "tDiffuse": { type: "t", value: null }, 
-                                    "rPower":  { type: "f", value: 0.2126 }, 
-                                    "gPower":  { type: "f", value: 0.7152 }, 
-                                    "bPower":  { type: "f", value: 0.0722 } 
-                                  }, 
-                                 
-                                  vertexShader: [ 
-                                    "varying vec2 vUv;", 
-                                    "void main() {", 
-                                      "vUv = uv;", 
-                                      "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );", 
-                                    "}" 
-                                  ].join("\n"), 
-                                 
-                                  fragmentShader: [ 
-                                 
-                                    "uniform float rPower;", 
-                                    "uniform float gPower;", 
-                                    "uniform float bPower;", 
-                                    "uniform sampler2D tDiffuse;", 
-                                 
-                                    "varying vec2 vUv;", 
-                                 
-                                    "void main() {", 
-                                      "vec4 texel = texture2D( tDiffuse, vUv );", 
-                                      "float gray = texel.r*rPower + texel.g*gPower + texel.b*bPower;", 
-                                      "gl_FragColor = vec4( vec3(gray), texel.w );", 
-                                    "}" 
-                                  ].join("\n") 
-                                }; 
-                        
-                        //console.log(scene, zelf);
-                        
-                        var renderPass = new THREE.RenderPass(scene, zelf.camera); 
-                        var effectCopy = new THREE.ShaderPass(THREE.CopyShader); 
-                        effectCopy.renderToScreen = true; 
-                         
-                        var shaderPass = new THREE.ShaderPass(THREE.CustomGrayScaleShader); 
-                         
-                        this.composer = new THREE.EffectComposer(zelf.renderer); //OJO changing my renderer completely!!!
-                        this.composer.addPass(renderPass); 
-                        this.composer.addPass(shaderPass); 
-                        this.composer.addPass(effectCopy);
-                        this.shader = false;
-
-                      }
-                      
-                        compatibility.requestAnimationFrame(this.updateAR.bind(this));
-                        this.composer.render();
-                        //console.error(composer)
-
-                        //shaderPass.enabled = controls.grayScale; 
-                        //shaderPass.uniforms.rPower.value = controls.rPower; 
-                        //shaderPass.uniforms.gPower.value = controls.gPower; 
-                        //shaderPass.uniforms.bPower.value = controls.bPower;
-
-                      cameraCtrl.update();
-                      TWEEN.update();
-                      if (this.objects.butterflies[0]) {
-                        for (var i = 0; i < this.objects.butterflies.length; i++) {
-                          //console.log(this.objects.butterflies[i].velocityLimit);
-                          if (this.objects.butterflies[i].velocityLimit == 1.2) {
-                          //  //code
-                            this.objects.butterflies[i].velocitySetter(.4);
-                          };
-                          this.objects.butterflies[i].move();
-                        };
-                        if (Math.random() <= .1) {
-                          scene.remove(this.objects.butterflies[0].meshObj);
-                          this.objects.butterflies.shift();
-                        };
-                      } else {
-                        //$("#intro_text2").css("display", "none");
-                        $("#addedtext").css("display","none");
-                        $('#entryscene2').width("100%");
-                        $('#log').html("test width "+globalWidth);                      
-                      };
-
-                
-                
-                    }else{
-                      compatibility.requestAnimationFrame(this.updateAR.bind(this));
-                      this.renderer.render(scene, this.camera);
-                    };
-
-              },
-              
-            };
-
-
-  /////////////////////////////////////////////////////
-  /// scene 4
-  /////////////////////////////////////////////////////            
-            
-            var sceneelements4 = {
-              renderer: null,
-              camera: null,
-              //cameraCtrl: null,
-              opacitybackground: 0.0,
-              arToolkitSource: null,
-              shader: true,
-              composer: null,
-              init: function(){
-                          this.renderer = sceneelements1.renderer;
-                          this.camera = this.camera_init();
-                          this.camera.position.z = 5;
-                          cameraCtrl = new THREE.OrbitControls(this.camera);
-                          scene.add(this.camera);
-                          //sceneelements1.cameraCtrl = sceneelements1.cameraCtrls1_init.orbit.call(sceneelements1);
-                          
-                          scene.add(this.lights_init.ambient());
-                          this.objects.bttfls_init();
-                          
-                          document.body.appendChild(this.renderer.domElement);
-                          window.addEventListener('onresize', this.listeners_init.onResize.bind(this));
-                    
-                    },
-              initAR: function(){
-                
-                          /*CHECKS*/
-                          //console.log(Butterfly);
-
-                          /*
-                          //TEST OBJECT
-                          let geometry1	= new THREE.CubeGeometry(1,1,1);
-                          let material1	= new THREE.MeshNormalMaterial({
-                              transparent: true,
-                              opacity: 0.5,
-                              side: THREE.DoubleSide
-                          }); 
-                          
-                          var mesh1 = new THREE.Mesh( geometry1, material1 );
-                          mesh1.position.y = 0.5;
-                          mesh1.rotation.y = Math.PI/4;
-                          scene.add(mesh1);
-                          */                          
-                          
-                          /**************/
-                          //$("#intro_text2").hide();
-                          $(".intro").css("display","inline-block");
-                          $("#intro_text2").css("opacity", 0.0);
-                          this.renderer = this.renderer_init();
-                          this.camera = this.camera_init();
-                          this.camera.position.z = 35;
-                          cameraCtrl = new THREE.OrbitControls(this.camera);
-                          scene.add(this.camera);
-                          scene.add(this.lights_init.ambient());
-
-
-                          
-                          this.objects.bttfls_init();
-                          
-                          document.body.appendChild(this.renderer.domElement);
-                          //window.addEventListener('onresize', this.listeners_init.onResize.bind(this));
-                          ////E: a simple solution for onResize not look for the window scope from arToolkitSource.onResizeElement() method in onResize listener,
-                          //// needed a wrapper function, and to pass context as argument to onResize after context normalization (`var zelf = this`)
-                          ////https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
-                          ////console.error(this);
-                          ////onResize.bind(this); //trying binding `this` to onResize didn't work :(
-                          this.arToolkitSource = new THREEx.ArToolkitSource({ //arToolkitSource for camera search can be set as window
-                              sourceType : 'webcam',
-                          });
-                          var zelf = this;
-                          var onResize = this.listeners_init.onResizeAR;
-                          function intheeventlistenerhandler(){
-                              onResize(zelf);  
-                          }                     
-                          
-                          this.arToolkitSource.init(function onReady(){
-                              intheeventlistenerhandler();
-                          });
-                          
-                          // handle resize event
-                          window.addEventListener('resize', intheeventlistenerhandler);                    
-                    },
-              renderer_init: function(){
-                            var renderer = new THREE.WebGLRenderer({
-                                antialias : true,
-                                alpha: true
-                            });
-                            renderer.setPixelRatio( window.devicePixelRatio );
-                            renderer.setClearAlpha(0.0);
                             renderer.setSize(globalWidth, globalHeight); //set CANVAS size
                             renderer.domElement.style["display"]  = "block";
                             renderer.domElement.style["position"] = "fixed";
@@ -963,19 +656,153 @@ var app = (function APPmodule(){
               },
               updateAR: function(){
                     var zelf = this;
-                   
+                    //statsGlobal.update();
+                    
+                    //var p = $("#intro");
+                    //p.delay(350).fadeOut(5000, function(){var p = $("#intro"); p.html("<p>HELLO</p>"); p.show(); p.fadeIn(6000);}); //generates a loop!!
+                    //$("#intro").html("<p>HELLO</p>").fadeIn(15000);
+                    //console.log($("#intro_text1").css("opacity"));
+                    if (($("#intro_text1").css("opacity") - 1/800) <= 0) {
+                      //code
+                      $("#intro_text1").hide();
+                      $("#intro_text2").css("opacity", 1.0)
+                    }else{
+                      $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/800);
+                      $("#intro_text2").css("opacity", Number($("#intro_text2").css("opacity")) + 1/1000);
+                      //this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
+                      //this.renderer.setClearAlpha(.7);
+                    };
+
+                    if (this.renderer.getClearAlpha() < .75) {
+                      //code
+                      this.opacitybackground += 1;
+                      this.renderer.setClearAlpha(this.opacitybackground/(20*this.objects.nbButterflies));
+                    }
+
+                    
                     cameraCtrl.update();
                     TWEEN.update();
                     for (var i = 0; i < this.objects.butterflies.length; i++) {
                       this.objects.butterflies[i].move();
                     };
-                    compatibility.requestAnimationFrame(this.updateAR.bind(this));
-                    this.renderer.render(scene, this.camera);
+                    //if (this.objects.butterflies[0]) {
+                    //  for (var i = 0; i < this.objects.butterflies.length; i++) {
+                    //    this.objects.butterflies[i].move();
+                    //  };
+                    //  if (Math.random() <= .05) {
+                    //    (function(_b){
+                    //      //the setTimeout must be into a closure because the MESH WILL BE IMMEDIATELY DELETED! In this way it is kept in memory
+                    //      //REMEMBER: setTimeout works correctly with CALLBACKS (also closures), so METHODS must be inside one
+                    //      setTimeout(function(){scene.remove(_b)},8500); //find a better transition...             
+                    //    }(this.objects.butterflies[0].meshObj));
+                    //    this.objects.butterflies.shift();
+                    //    this.renderer.setClearAlpha(this.opacitybackground/(1.2*this.objects.nbButterflies));
+                    //    this.opacitybackground += 1;  
+                    //  };
+                    //  //if (conf.move) {
+                    //  //  for (var i = 0; i < butterflies.length; i++) {
+                    //  //    butterflies[i].move();
+                    //  //  }
+                    //  //};
+                    //};
+                    //if (this.objects.butterflies.length === 0) {
+                    if ($("#intro_text2").css("opacity") == 1.0) {
+                      //OBS: FIND A WAY TO RESET MOVE!
+                      //code
+                      //console.log(1111);
+                      if (this.shader) {
+                        //code
+                        THREE.CustomGrayScaleShader = { 
+ 
+                                  uniforms: { 
+                                    "tDiffuse": { type: "t", value: null }, 
+                                    "rPower":  { type: "f", value: 0.2126 }, 
+                                    "gPower":  { type: "f", value: 0.7152 }, 
+                                    "bPower":  { type: "f", value: 0.0722 } 
+                                  }, 
+                                 
+                                  vertexShader: [ 
+                                    "varying vec2 vUv;", 
+                                    "void main() {", 
+                                      "vUv = uv;", 
+                                      "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );", 
+                                    "}" 
+                                  ].join("\n"), 
+                                 
+                                  fragmentShader: [ 
+                                 
+                                    "uniform float rPower;", 
+                                    "uniform float gPower;", 
+                                    "uniform float bPower;", 
+                                    "uniform sampler2D tDiffuse;", 
+                                 
+                                    "varying vec2 vUv;", 
+                                 
+                                    "void main() {", 
+                                      "vec4 texel = texture2D( tDiffuse, vUv );", 
+                                      "float gray = texel.r*rPower + texel.g*gPower + texel.b*bPower;", 
+                                      "gl_FragColor = vec4( vec3(gray), texel.w );", 
+                                    "}" 
+                                  ].join("\n") 
+                                }; 
+                        
+                        //console.log(scene, zelf);
+                        
+                        var renderPass = new THREE.RenderPass(scene, zelf.camera); 
+                        var effectCopy = new THREE.ShaderPass(THREE.CopyShader); 
+                        effectCopy.renderToScreen = true; 
+                         
+                        var shaderPass = new THREE.ShaderPass(THREE.CustomGrayScaleShader); 
+                         
+                        this.composer = new THREE.EffectComposer(zelf.renderer); //OJO changing my renderer completely!!!
+                        this.composer.addPass(renderPass); 
+                        this.composer.addPass(shaderPass); 
+                        this.composer.addPass(effectCopy);
+                        this.shader = false;
+
+                      }
+                      
+                        compatibility.requestAnimationFrame(this.updateAR.bind(this));
+                        this.composer.render();
+                        //console.error(composer)
+
+                        //shaderPass.enabled = controls.grayScale; 
+                        //shaderPass.uniforms.rPower.value = controls.rPower; 
+                        //shaderPass.uniforms.gPower.value = controls.gPower; 
+                        //shaderPass.uniforms.bPower.value = controls.bPower;
+
+                      cameraCtrl.update();
+                      TWEEN.update();
+                      if (this.objects.butterflies[0]) {
+                        for (var i = 0; i < this.objects.butterflies.length; i++) {
+                          //console.log(this.objects.butterflies[i].velocityLimit);
+                          if (this.objects.butterflies[i].velocityLimit == 1.2) {
+                          //  //code
+                            this.objects.butterflies[i].velocitySetter(.4);
+                          };
+                          this.objects.butterflies[i].move();
+                        };
+                        if (Math.random() <= .1) {
+                          scene.remove(this.objects.butterflies[0].meshObj);
+                          this.objects.butterflies.shift();
+                        };
+                      } else {
+                        //$("#intro_text2").css("display", "none");
+                        $("#addedtext").css("display","none");
+                        $('#entryscene2').width("100%");
+                        $('#log').html("test width "+globalWidth);                      
+                      };
+
+                
+                
+                    }else{
+                      compatibility.requestAnimationFrame(this.updateAR.bind(this));
+                      this.renderer.render(scene, this.camera);
+                    };
 
               },
               
             };
-
 
   /////////////////////////////////////////////////////
   /// scene 3
@@ -1022,12 +849,25 @@ var app = (function APPmodule(){
                           */
                           
                           this.objects.bttfls_init();
-   
+                          
+                          //document.body.appendChild(this.renderer.domElement);
+                          //var zelf = this;
+                          //var onResize = this.listeners_init.onResizeAR;
+                          //function intheeventlistenerhandler(){
+                          //    onResize(zelf);  
+                          //}                     
+                          //
+                          //this.arToolkitSource.init(function onReady(){
+                          //    intheeventlistenerhandler();
+                          //});
+                          //
+                          //// handle resize event
+                          //window.addEventListener('resize', intheeventlistenerhandler);      
                     },
               renderer_init: function(){
                       },
               camera_init: function(){
-                    var cam = new THREE.PerspectiveCamera(35, globalWidth / globalHeight , 0.1, 1000); //000
+                    var cam = new THREE.PerspectiveCamera(50, globalWidth / globalHeight, 0.1, 100); //000
                     cam.name = "perspectivecamerascene3"
                     return cam;
                       },
@@ -1106,9 +946,6 @@ var app = (function APPmodule(){
               
             };
             
-            
-
-            
   /////////////////////////////////////////////////////
   /// scene 2
   /////////////////////////////////////////////////////            
@@ -1141,6 +978,7 @@ var app = (function APPmodule(){
                          
                           this.arToolkitSource = sceneelements1.arToolkitSource;
                           this.renderer = sceneelements1.renderer;
+                          this.renderer.setClearAlpha(.75);
                           scene.remove(sceneelements1.camera);
                           
                           this.camera = this.camera_init();
@@ -1161,6 +999,11 @@ var app = (function APPmodule(){
                           scene.add(mesh1);
                           */
 
+                          //// default normal of a plane is 0,0,1. Apply mesh rotation to it.
+                          //let clipPlane = new THREE.Plane().setFromNormalAndCoplanarPoint(
+                          //    new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,0) );
+                          //this.renderer.clippingPlanes = [clipPlane];
+                          //this.renderer.localClippingEnabled = true;
                           
                           ////////////////////////////////////////////////////////////
                           // setup arToolkitContext
@@ -1177,9 +1020,7 @@ var app = (function APPmodule(){
                             zelf.camera.projectionMatrix.copy(zelf.arToolkitContext.getProjectionMatrix());
                           });
 
-                          console.log(this.camera);
-                          
-                          
+
                           ////////////////////////////////////////////////////////////
                           // setup MarkerControls
                           ////////////////////////////////////////////////////////////	
@@ -1210,8 +1051,6 @@ var app = (function APPmodule(){
                                                   });
 
                           this.objects.factory_init();
-                          this.objects.clippinghole_init();
-                          
                           for (let i=0;i < 100;i++){
                             var p = this.objects.particle_init(i);
                             this.objects.smokeparticles[i] = {particle:null, start:false}
@@ -1221,7 +1060,47 @@ var app = (function APPmodule(){
                           this.objects.markerRoot1.name = "groupFactory";
                           scene.add(this.objects.markerRoot1);
                           
+                          /////////////////////////////////////////
+                          // Clipping
+                          /////////////////////////////////////////
+                          
+                          //E: Ground
+                          //--- using https://codepen.io/atouine/pen/JJeqKE?editors=0010 as template
+                          var plane = new THREE.PlaneBufferGeometry( 3, 2, 1, 1 );
+                          //var planeGlobalClip = new THREE.PlaneBufferGeometry( 3, 2, 1, 1 );
+                          var planeGlobalClip2 = new THREE.Plane( new THREE.Vector3(0, 1, 0), -1.15);
+                          //var planeGlobalClip = new THREE.PlaneBufferGeometry( 3, 2, 1, 1 );
+                          //console.log(planeGlobalClip);
+                          //planeGlobalClip.rotateX(- Math.PI / 2);
+                          //planeGlobalClip.translate(0,-1.15,-.5);
+                          
+                          var ground = new THREE.Mesh(
+                                  plane,
+                                  new THREE.MeshPhongMaterial( { color: 'brown', shininess: 150 } )
+                              );
+                          ground.rotation.x = - Math.PI / 2; // rotates X/Y to X/Z
+                          ground.position.y = -1.15;
+                          ground.position.z = -.5;
+                          //ground.receiveShadow = true;
+                          this.objects.markerRoot1.add(ground);
+                          //this.renderer.shadowMap.enabled = true;
+                          this.renderer.clippingPlanes = [planeGlobalClip2]; //E: apparently only accepts PLANE primitive
+                          //this.objects.markerRoot1.add(planeGlobalClip);
+                          //console.log(1111, planeGloblalClip2, this.renderer.clippingPlanes);
+                          //https://stackoverflow.com/questions/20495302/transparent-background-with-three-js
+                          
+                          
+                          //var params = {
+                          //    clipIntersection: true,
+                          //    planeConstant: 0,
+                          //    showHelpers: false
+                          //};
 
+                          //var globalclippingPlane = new THREE.Plane( new THREE.Vector3( 0, 0, 1 ), .5 );
+                          
+                         //make local clipping true
+                         this.renderer.localClippingEnabled = true;
+                          
                           
                           ////////////////////////////////////////////////////////////
                           // setup Listeners
@@ -1271,9 +1150,25 @@ var app = (function APPmodule(){
                 markerRoot1: new THREE.Group(),
                 test: null,
                 smokeparticles: {},
-                f : [],
+                f : null,
+                //factory_init: function(){
+                //          var f = new FactoryObj();
+                //          //console.error(f, f._subScene);
+                //          //f._subScene.name = "factory";
+                //          this.markerRoot1.add(f._subScene);
+                //      },
+                //factory_init: function(){
+                //          var f = new FactoryObj();
+                //          //console.error(f, f._subScene);
+                //          //f._subScene.name = "factory";
+                //          f._subScene.then(function(o){o.name = 'factory'; this.markerRoot1.add(o)}).catch(function(e){if(e===null){console.log('no factory object was built')};})
+                //      },
+                //factory_init: function(){
+                //          var f = new FactoryObj();
+                //          console.error(f, f._Object);
+                //      },
                factory_init: function(){
-                          this.f.push(new FactoryObj(this.markerRoot1));
+                          this.f = new FactoryObj(this.markerRoot1);
                           //console.log(2222, Object.keys(this.f));
                        },
                 particle_init: function(i){
@@ -1281,46 +1176,6 @@ var app = (function APPmodule(){
                         p._subScene.name = "smokeparticle"+i;
                         this.markerRoot1.add(p._subScene);
                         return p;
-                },
-                clippinghole_init: function(){
-                          /////////////////////////////////////////
-                          // Clipping
-                          /////////////////////////////////////////
-                          
-                          // the inside of the hole
-                          let geometry1	= new THREE.CubeGeometry(2,2,2);
-                          let loader = new THREE.TextureLoader();
-                          //let texture = loader.load( 'assets/grph/tiles.jpg' );
-                          let material1	= new THREE.MeshLambertMaterial({
-                              transparent : true,
-                              //map: texture,
-                              color: 'white',
-                              side: THREE.BackSide //E: this is KEY
-                          }); 
-                          
-                          mesh1 = new THREE.Mesh( geometry1, material1 );
-                          
-                          // the invisibility cloak (box with a hole)
-                          let geometry0 = new THREE.BoxGeometry(2,2,2);
-                          //geometry0.faces.splice(4, 2); // make hole by removing top two triangles
-                          
-                          let material0 = new THREE.MeshBasicMaterial({
-                              colorWrite: false
-                          });
-                          
-                          let mesh0 = new THREE.Mesh( geometry0, material0 );
-                          mesh0.scale.set(1,1,1).multiplyScalar(1.01);
-                          
-                          mesh1.position.y = -2.8;
-                          mesh0.position.y = -2.8;
-                          mesh1.position.z = -1.2;
-                          mesh0.position.z = -1.2;
-                          
-                          
-                          this.markerRoot1.add( mesh0 );
-                          this.markerRoot1.add( mesh1 );
-                          this.f.push(mesh0, mesh1);
-                
                 },
                 testcube_init: function(cubecolor, mr){
                               var mesh = new THREE.Mesh( 
@@ -1342,10 +1197,9 @@ var app = (function APPmodule(){
               updateAR: function(){
                 
                   //testing position factory
-                  if (this.objects.f[0]._Object !== null) {
+                  if (this.objects.f._Object !== null) {
                     //code
                     //console.log(5555, this.objects.f._Object.getWorldDirection());
-                    console.log(5555, this.renderer.getClearAlpha());
                   }
                   
                  
@@ -1389,30 +1243,16 @@ var app = (function APPmodule(){
                      };
                    };
                 } else {
-                   if (this.objects.f[0]._Object != null) {
+                   if (this.objects.f._Object != null) {
                     //code
-                    this.objects.f[0]._Object.position.y -= 0.01;
-                    if (this.objects.f[0]._Object.position.y < -3.) {
-                      this.objects.f[0]._Object = null;
-                      this.objects.f[1] = null;
-                      this.objects.f[2] = null;
-                      //scene.traverse(function(child){ //cleaning up a bit...
-                      //    if (child) {
-                      //      //code
-                      //      scene.remove(child);
-                      //    }
-                      //  });
-                      //console.log(scene);
-                      //https://stackoverflow.com/questions/29417374/threejs-remove-all-together-object-from-scene
-                      for(let i = scene.children.length - 1; i >= 0; i--){
-                        scene.remove(scene.children[i]);
-                      };
-                      //$('#entryscene3').width("0px");
-                      //document.getElementById("entryscene3").style.width = "0px";
-                      $("#entryscene3").css("display","none");
-                      $('#entryscene4').width("100%");
-                      sceneelements4.initAR();
-                      sceneelements4.updateAR();                      
+                    this.objects.f._Object.position.y -= 0.01;
+                    //this.objects.f.localCliping.constant += 0.01;
+                    //console.log(this.objects.f._Object.position.y);
+                    if (this.objects.f._Object.position.y < -3.) {
+                      document.getElementById("entryscene3").style.width = "0";
+                      this.objects.f._Object = null;
+                      sceneelements3.initAR();
+                      sceneelements3.updateAR();                      
                     }
                    }
                    
@@ -1429,7 +1269,7 @@ var app = (function APPmodule(){
                    };
                    
                 };
-                if ( this.arToolkitSource.ready !== false) this.arToolkitContext.update( this.arToolkitSource.domElement );
+                if ( this.arToolkitSource.ready !== false ) this.arToolkitContext.update( this.arToolkitSource.domElement );
                 if (this.arToolkitContext.arController !== null) {
                   var zelf = this;
                   if (this.arToolkitContext._arMarkersControls[4].object3d.visible) {
@@ -1448,7 +1288,7 @@ var app = (function APPmodule(){
                           //console.log(6666, zelf.objects.f._Object);                         //console.log(zelf.arToolkitContext._arMarkersControls[4].object3d.children[0].children[0].material);
                           //colorFactoryObj = zelf.arToolkitContext._arMarkersControls[4].object3d.children[0].children[0].material.color
                           //console.log(zelf.objects.f._Object.children[0].material.color);
-                          colorFactoryObj = zelf.objects.f[0]._Object.children[0].material.color;
+                          colorFactoryObj = zelf.objects.f._Object.children[0].material.color;
                           //if (this.objects.markerRoot1.children[0].material.color.r >= 0.001) {
                           ////  //code
                           //  this.objects.markerRoot1.children[0].material.color.r -= 0.001;

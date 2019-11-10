@@ -180,6 +180,27 @@
 }
 
 
+/* The side navigation menu */
+#entryscene4 {
+  height: 100%; /* 100% Full-height */
+  width: 0px; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Stay on top */
+  top: 0; /* Stay at the top */
+  right: 0;
+  /*background-color: #111;*/ /* Black*/
+  background-color: transparent;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  display: inline-block;
+}
+
+#entryscene4-textwrapper{
+  display: block; 
+}
+
+
 /* When you mouse over the navigation links, change their color 
 .sidenav a:hover {
   color: #f1f1f1;

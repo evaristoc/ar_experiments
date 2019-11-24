@@ -1,0 +1,135 @@
+/*:focus {outline:none;border:1px solid red}*/
+
+#scene4html {
+	width: 0%; /* 0 width - change this with JavaScript */
+	background-color: transparent;
+	display: inline-block;
+}
+
+#scene4html #section1in4{
+	/*background-image: url("https://farm6.static.flickr.com/5580/14194185064_549896148e_b.jpg");*/
+	background-color: transparent;
+}
+
+#scene4html .section--content {
+	position: relative;
+	height: 100vh;
+	width: 100vw;
+	background-color: transparent;
+	font-size: 2.5rem;
+}
+
+#scene4html #section1in4--content p{
+	border-style: solid;
+}
+
+#scene4-interact{
+	position: absolute;
+	top: 75%;
+	left: 50%;
+	background-color:yellow;
+	transform: translate(-50%, -50%); /* up and left? yes: this is the content! */
+
+}
+
+
+.custom-btn1 { /* an anchor */
+	position: relative;
+	display: block;
+	z-index: 3;
+	top:0rem;
+	right: 0rem;
+	background-color: olive;
+	height: 7rem;
+	width: 9.5rem;
+	border-radius:15% 15% 50% 50%;
+	border: 2px solid peru;
+	border-top: 4px;
+	transform: rotateX(35deg);
+}
+
+.custom-btn1::before { /* an anchor */
+	display: block; /* or block */
+	position: absolute;
+	content:"PUSH";
+	z-index: 4;
+	/*margin-left: .5rem;
+	margin-bottom: 1.5rem;*/
+	box-sizing: border-box;
+	font-family: Helvetica, Arial, Sans-Serif;
+	font-size: 1.3em;
+	line-height: 4.5em;
+	text-decoration: none;
+	color:black;
+	font-weight: bold;
+	text-align: center;
+	cursor: pointer;
+	padding: 0 0.25rem;
+	/*height: 6.5rem;
+	width: auto;
+	border-radius: .5rem;
+	*/
+	height: 10rem;
+	width: 10rem;
+	border-radius: 50%;
+	border: solid lightgreen;
+	transform: translate(-11%, -70%) rotateX(40deg);
+	background-color:chartreuse;
+	/*position: relative;*/
+	transition: all 0.1s ease-out;	
+}
+
+
+.custom-btn1:hover:before{
+	background-color:olivedrab;
+	color:lightgray;
+}
+
+.custom-btn1:active:before{
+	/*background-color:olivedrab;*/
+	padding: 10px; /* lucky strike ! a nice bouncing effect */
+	transform: translate(-11%,-65%) rotateX(40deg);
+}
+
+/*https://stackoverflow.com/questions/2943548/how-to-reset-remove-chromes-input-highlighting-focus-border*/
+.custom-btn1:focus{
+	outline:none;
+}
+
+#section1in4--zdog-canvas {
+	/*background-color: transparent;*/
+	background-color:#908efc;
+	cursor: move;
+	/*margin-top: 0%;
+	margin-left: -20%;*/
+	margin-top: 66%;
+	margin-left: -30%;
+}
+
+.btn-reset {
+	background-color: #000;
+	border: 0;
+	color: #fff;
+	cursor: pointer;
+	font-family: 'Press Start 2P', cursive;
+	font-size: 0.7rem;
+	letter-spacing: 0.15rem;
+	outline: none;
+	padding: 0.7rem 0.7rem 0.7rem (0.7rem * 1.25);
+	text-transform: uppercase;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.btn-reset:focus {
+	color: #e89e21;
+}
+
+/*https://codepen.io/w3core/pen/ZbJeXm*/
+@keyframes jump {
+	0%   {transform: translate(0,0);}
+	100% {transform: translate(0,-10%);}
+  }
+.jump {
+  transform-origin: 50% 50%;
+  animation: jump .7s linear alternate infinite;
+}

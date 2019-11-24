@@ -24,7 +24,7 @@
 
 #section3--content__paragraph1{
 	opacity: 0;
-	animation-name: paragraphs_opacity;
+	/*animation-name: paragraphs_opacity;*/
 	animation-duration: 7s;
 	animation-direction:both;
 	animation-timing-function: ease-in-out;
@@ -32,7 +32,7 @@
 
 #section3--content__paragraph2{
 	opacity: 0;
-	animation-name: paragraphs_opacity;
+	/*animation-name: paragraphs_opacity;*/
 	animation-duration: 7s;
 	animation-delay: 4s;
 	animation-direction:both;
@@ -40,7 +40,7 @@
 }
 
 #section3--content__paragraph3{
-	animation-name: paragraphs_opacity2;
+	/*animation-name: paragraphs_opacity2;*/
 	animation-duration: 3s;
 	animation-delay: 11s;
 	animation-fill-mode: both;
@@ -58,7 +58,7 @@
 	100% {opacity: 1;}
 }
 
-.zdog-canvas {
+#section1in3--zdog-canvas {
 	background-color: transparent;
 	cursor: move;
 	margin-top: 66%;

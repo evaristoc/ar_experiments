@@ -1,0 +1,32 @@
+#scene1html {
+  padding-top: 1.5rem;
+  width: 100%; /* 0 width - change this with JavaScript */
+  background-color: #111; /* Black*/
+}
+
+#scene1html #scene1--closebtn__a{
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  right: 2.5rem;
+  margin-left: 5rem;
+  font-size: 3.6rem;
+}
+
+#scene1html #scene1--img__img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 70%; /* 100% Full-height of parent */
+  width: 70%;
+}
+
+@media screen and (min-width: 750px) {
+  #scene1html{
+	padding-top: 6rem; /* Place content 60px from the top */
+  }
+  
+  #scene1html #scene1--closebtn__a{
+	  font-size: 1.8rem;
+	}
+}

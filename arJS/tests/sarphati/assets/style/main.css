@@ -1,0 +1,62 @@
+html{
+	font-size: 10px;
+	margin: 0px;
+	padding: 0px;
+}
+
+body{
+	margin : 0rem; 
+	overflow: hidden; 
+	/*font-family: Monospace;
+	font-family: "Times New Roman", Times, serif;*/
+	font-family: 'Indie Flower', cursive;
+	/*E: trick: declare color AND shadow in parent and change color in child in order to have an effect of a different shadow color*/
+	color: orange;
+	text-shadow: 0 0 1.5rem;
+}
+
+.scenehtml{
+	height: 100%;
+	position:fixed;
+	z-index: 2;
+	top:0;
+	right:0;
+	overflow-x: hidden;
+	transition: 0.5s;
+}
+
+.parallax{
+	width: 100vw;
+	height:100vh;
+	background-color:#ffffff;
+	background-size: cover;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.section--content{
+	color:#fff;
+	font-size: 2.5rem;
+}
+
+.section--content__paragraph{
+	margin: 0px;
+}
+
+
+/*
+Reminder about SIZE UNITS:
+//SIZE-BASED (affect the size of the target directly, independently of content font size)
+-- percentage looks to parent layout WIDTH or font; not a unit!
+-- vh, vw are the current view
+//FONT-BASED (powerful way to make responsiveness of layout based on font-size of the content!)
+-- em will check PARENT for FONTS and it is similar to percentage in that sense, but will check at CURRENT COMPUTED FONT-SIZE value for SIZES
+-- rem will check root cascaded value 
+---- (be careful with browser defaults!)
+
+OBS:
+-- all above are converted to pixels at the end
+-- I can declare a non-default font-size by giving it to html element; otherwise, default is usually 16px for large screens
+-- check inherintance cascade! will affect percentage and rem
+*/

@@ -452,7 +452,7 @@ var app = (function APPmodule(){
 
 
   /////////////////////////////////////////////////////
-  /// scene2html: initialization of the AR.js / THREE.js; display of messages and butterflies
+  /// scene 1
   /////////////////////////////////////////////////////            
             var changeAlpha = true;
             var sceneelements1 = {
@@ -500,8 +500,8 @@ var app = (function APPmodule(){
                           
                           /**************/
                           //$("#intro_text2").hide();
-                          $("#scene2html").css("display","inline-block");
-                          $("#section1in2--content2").css("opacity", 0.0);
+                          $(".intro").css("display","inline-block");
+                          $("#intro_text2").css("opacity", 0.0);
                           this.renderer = this.renderer_init();
                           this.camera = this.camera_init();
                           this.camera.position.z = 35;
@@ -645,14 +645,14 @@ var app = (function APPmodule(){
               updateAR: function(){
                     var zelf = this;
                     if (changeAlpha) {
-                      if (($("#section1in2--content1").css("opacity") - 1/800) <= 0) {
+                      if (($("#intro_text1").css("opacity") - 1/800) <= 0) {
                         //code
-                        $("#section1in2--content1").hide();
-                        $("#section1in2--content2").css("opacity", 1.0);
+                        $("#intro_text1").hide();
+                        $("#intro_text2").css("opacity", 1.0);
                         changeAlpha = false;
                       }else{
-                        $("#section1in2--content1").css("opacity", $("#section1in2--content1").css("opacity") - 1/800);
-                        $("#section1in2--content2").css("opacity", Number($("#section1in2--content2").css("opacity")) + 1/1000);
+                        $("#intro_text1").css("opacity", $("#intro_text1").css("opacity") - 1/800);
+                        $("#intro_text2").css("opacity", Number($("#intro_text2").css("opacity")) + 1/1000);
 
                       };
   
@@ -669,7 +669,7 @@ var app = (function APPmodule(){
                       this.objects.butterflies[i].move();
                     };
 
-                    if ($("#section1in2--content2").css("opacity") == 1.0) {
+                    if ($("#intro_text2").css("opacity") == 1.0) {
                       //OBS: FIND A WAY TO RESET MOVE!
                       //code
                       //console.log(1111);
@@ -751,8 +751,9 @@ var app = (function APPmodule(){
                         };
                       } else {
                         //$("#intro_text2").css("display", "none");
-                        $("#scene2html").css("display","none");
-                        $('#scene3html').width("100%");                    
+                        $("#addedtext").css("display","none");
+                        $('#entryscene2').width("100%");
+                        $('#log').html("test width "+globalWidth);                      
                       };
 
                 
@@ -768,7 +769,7 @@ var app = (function APPmodule(){
 
 
   /////////////////////////////////////////////////////
-  /// scene 4: END (butterflies flying everywhere)
+  /// scene 4
   /////////////////////////////////////////////////////            
             
             var sceneelements4 = {
@@ -795,14 +796,7 @@ var app = (function APPmodule(){
                     
                     },
               initAR: function(){
-
-                          scene.remove(sceneelements2.objects.f._Object);
-                          scene.remove(sceneelements2.objects.markerRoot1);
-                          this.renderer = sceneelements1.renderer;
-                          this.arToolkitSource = sceneelements1.arToolkitSource;
-                          scene.remove(sceneelements2.camera);
-                          //sceneelements2.arToolkitContext = null;
- 
+                
                           /*CHECKS*/
                           //console.log(Butterfly);
 
@@ -823,8 +817,8 @@ var app = (function APPmodule(){
                           
                           /**************/
                           //$("#intro_text2").hide();
-                          $("#entryscene4").css("display","inline-block");
-                          $("#section1in2--content2").css("opacity", 0.0);
+                          $(".intro").css("display","inline-block");
+                          $("#intro_text2").css("opacity", 0.0);
                           this.renderer = this.renderer_init();
                           this.camera = this.camera_init();
                           this.camera.position.z = 35;
@@ -836,28 +830,28 @@ var app = (function APPmodule(){
                           
                           this.objects.bttfls_init();
                           
-                          //document.body.appendChild(this.renderer.domElement);
-                          ////window.addEventListener('onresize', this.listeners_init.onResize.bind(this));
-                          //////E: a simple solution for onResize not look for the window scope from arToolkitSource.onResizeElement() method in onResize listener,
-                          ////// needed a wrapper function, and to pass context as argument to onResize after context normalization (`var zelf = this`)
-                          //////https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
-                          //////console.error(this);
-                          //////onResize.bind(this); //trying binding `this` to onResize didn't work :(
-                          //this.arToolkitSource = new THREEx.ArToolkitSource({ //arToolkitSource for camera search can be set as window
-                          //    sourceType : 'webcam',
-                          //});
-                          //var zelf = this;
-                          //var onResize = this.listeners_init.onResizeAR;
-                          //function intheeventlistenerhandler(){
-                          //    onResize(zelf);  
-                          //}                     
-                          //
-                          //this.arToolkitSource.init(function onReady(){
-                          //    intheeventlistenerhandler();
-                          //});
-                          //
-                          //// handle resize event
-                          //window.addEventListener('resize', intheeventlistenerhandler);                    
+                          document.body.appendChild(this.renderer.domElement);
+                          //window.addEventListener('onresize', this.listeners_init.onResize.bind(this));
+                          ////E: a simple solution for onResize not look for the window scope from arToolkitSource.onResizeElement() method in onResize listener,
+                          //// needed a wrapper function, and to pass context as argument to onResize after context normalization (`var zelf = this`)
+                          ////https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
+                          ////console.error(this);
+                          ////onResize.bind(this); //trying binding `this` to onResize didn't work :(
+                          this.arToolkitSource = new THREEx.ArToolkitSource({ //arToolkitSource for camera search can be set as window
+                              sourceType : 'webcam',
+                          });
+                          var zelf = this;
+                          var onResize = this.listeners_init.onResizeAR;
+                          function intheeventlistenerhandler(){
+                              onResize(zelf);  
+                          }                     
+                          
+                          this.arToolkitSource.init(function onReady(){
+                              intheeventlistenerhandler();
+                          });
+                          
+                          // handle resize event
+                          window.addEventListener('resize', intheeventlistenerhandler);                    
                     },
               renderer_init: function(){
                             var renderer = new THREE.WebGLRenderer({
@@ -1116,7 +1110,7 @@ var app = (function APPmodule(){
 
             
   /////////////////////////////////////////////////////
-  /// sceneelements2 = scene4html: AR.js section: finding markers; burying factory; calls sceneelements4
+  /// scene 2
   /////////////////////////////////////////////////////            
             
             //////////////////////
@@ -1356,7 +1350,7 @@ var app = (function APPmodule(){
                   
                  
                   /////
-                  document.getElementById("scene3html").style.width = "0";
+                  document.getElementById("entryscene2").style.width = "0";
                   //emitter.unsubscribe('event:close-nav');
                   //console.log(3333, colorFactoryObj.r);
                   if (colorFactoryObj.r > 0.001) {
@@ -1718,7 +1712,7 @@ var app = (function APPmodule(){
         window.closeEntryImg = (function() {
             //document.getElementById("mySidenav2").style.width = "0";
             // Removes an element from the document
-            var element = document.getElementById("scene1html");
+            var element = document.getElementById("entryscene1");
             element.parentNode.removeChild(element);
             this.canvas_init();
             this.arjsvideo_init();
@@ -1727,7 +1721,7 @@ var app = (function APPmodule(){
         window.emitter = new CustomEventEmitter(); //it must be public or something that can travel between modules
         
         window.closeNav = function(){
-            document.getElementById("scene2html").style.width = "0px";
+            document.getElementById("entryscene2").style.width = "0px";
             emitter.emit('event:close-nav', {});
         };
         var countclks = 0;

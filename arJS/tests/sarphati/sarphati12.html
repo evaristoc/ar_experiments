@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Sarphati - story in AR.JS</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<!-- include three.js library -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js'></script>
+	<script type="text/javascript" src="../../../public/js/three_86/OBJLoader.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/MTLLoader.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/orbitcontrols.js"></script>
+	<!-- include tween.js -->
+  	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.3.0/Tween.min.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/EffectComposer.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/RenderPass.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/ShaderPass.js"></script>
+	<script type="text/javascript" src="../../../public/js/three_86/shadersANDpostprocessing/CopyShader.js"></script>
+	<!-- include jsartookit -->
+	<script src="../../arjs-resources/jsartoolkit5/artoolkit.min.js"></script>
+	<script src="../../arjs-resources/jsartoolkit5/artoolkit.api.js"></script>
+	<!-- include threex.artoolkit -->
+	<script src="../../arjs-resources/threex/threex-artoolkitsource.js"></script>
+	<script src="../../arjs-resources/threex/threex-artoolkitcontext.js"></script>
+	<script src="../../arjs-resources/threex/threex-arbasecontrols.js"></script>
+	<script src="../../arjs-resources/threex/threex-armarkercontrols.js"></script>
+	<!-- include miscelaneous -->
+    <script type="text/javascript" src="../../../public/js/compatibility.js"></script>
+    <script type="text/javascript" src="../../../public/js/stats.min.v17.js"></script>
+    <script type="text/javascript" src="../../../public/js/profiler.js"></script>
+    <script type="text/javascript" src="../../../public/js/dat.gui.min.js"></script>
+	<script type="text/javascript" src="../../../public/js/bootstrap.min.js"></script>
+	<!-- styles -->
+	<!--<link rel="stylesheet" type="text/css" href="../../../public/style/bootstrap.min.css">--> <!-- Version 2.x !! -->
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/style/butterflies.css">
+	<style>
+	  /**/
+	  /*
+	  https://codepen.io/alexzaworski/pen/LEWRxm?editors=1100
+	  converted using https://jsonformatter.org/scss-to-css
+	  */
+	  
+
+ .container {
+	 margin: auto;
+}
+ #custom-button {
+	 cursor: pointer;
+	 margin-left: 5px;
+	 margin-bottom: 15px;
+	 /**/
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%); /* up and left? yes: this is the content! */
+	vertical-align: middle;
+	 /**/	
+	 text-shadow: 0 -2px 0 #4a8a65, 0 1px 1px #c2dece;
+	 box-sizing: border-box;
+	 font-size: 2em;
+	 font-family: Helvetica, Arial, Sans-Serif;
+	 text-decoration: none;
+	 font-weight: bold;
+	 color: #5ea97d;
+	 height: 65px;
+	 line-height: 65px;
+	 padding: 0 32.5px;
+	 display: inline-block;
+	 width: auto;
+	 background: linear-gradient(to bottom, #9ceabd 0%, #9ddab6 26%, #7fbb98 100%);
+	 border-radius: 5px;
+	 border-top: 1px solid #c8e2d3;
+	 border-bottom: 1px solid #c2dece;
+	 top: 0;
+	 transition: all 0.06s ease-out;
+	 /*position: relative;*/
+}
+ #custom-button:visited {
+	 color: #5ea97d;
+}
+ #custom-button:hover {
+	 background: linear-gradient(to bottom, #baf1d1 0%, #b7e4ca 26%, #96c7ab 100%);
+}
+ #custom-button:active {
+	 top: 6px;
+	 text-shadow: 0 -2px 0 #7fbb98, 0 1px 1px #c2dece, 0 0 4px white;
+	 color: #fff;
+}
+ #custom-button:active:before {
+	 top: 0;
+	 box-shadow: 0 3px 3px rgba(0, 0, 0, .7), 0 3px 9px rgba(0, 0, 0, .2);
+}
+ #custom-button:before {
+	 display: inline-block;
+	 content: '';
+	 position: absolute;
+	 left: 0;
+	 right: 0;
+	 z-index: -1;
+	 top: 6px;
+	 border-radius: 5px;
+	 height: 65px;
+	 background: linear-gradient(to top, #1e5033 0%, #378357 6px);
+	 transition: all 0.078s ease-out;
+	 box-shadow: 0 1px 0 2px rgba(0, 0, 0, .3), 0 5px 2.4px rgba(0, 0, 0, .5), 0 10.8px 9px rgba(0, 0, 0, .2);
+}
+
+
+.first-inner-div {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.first-inner-div h3 {
+    color: #fff !important;
+    font-size: 20px !important;
+}
+
+.down-arrow{
+ /*font-size: 40px;
+ color: black !important;*/
+ width:35px;
+ height:35px;
+}
+	  
+/*https://codepen.io/w3core/pen/ZbJeXm*/
+@keyframes jump {
+	0%   {transform: translate(0,0);}
+	100% {transform: translate(0,-10%);}
+  }
+
+
+.jump {
+  transform-origin: 50% 50%;
+  animation: jump .7s linear alternate infinite;
+}
+	</style>
+</head>
+
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+	<script src="assets/js/sarphati.js"></script>
+	
+	<div id="entryscene1" class="sidenav">
+	  <div id="versioncontrol" style="position:absolute; color:white;"><p>zo 10 nov 2019 1046</p></div>
+	  <a href="javascript:void(0)" class="closebtn" onclick="closeEntryImg()">&times;</a>
+	  <div><img src="https://i.pinimg.com/originals/11/82/59/11825905d01ed4019758674917a84d8d.jpg"></img></div>
+	</div>
+
+	
+	<div id="entryscene2" class="sidenav">
+	  <!--<a href="javascript:void(0)" class="closebtn">&times;</a>-->
+	  <div id="entryscene2-textwrapper">
+		<p>The air we flew in became darker and sad. We were <strong>disappearing!</strong> Follow the markers to save us!</p>
+		<a href="javascript:void(0)" onclick="closeNav()">
+		  <img src="assets/grph/output-onlinepngtools-butterfly.png">
+		</a>
+		<!--<div class="container first-inner-div">
+		  <h3>Scroll down</h3>
+			<a href="#anchor">
+			  <span class="glyphicon glyphicon-circle-arrow-down down-arrow"></span>
+			</a>
+		</div>-->
+	  </div>
+	</div>  
+
+	<div id="addedtext" class="container-fluid" >
+	  <div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 intro">
+		  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1158400/parallax-asset-5.png" alt="">
+		  <div id="intro_text1">
+			<h2>Once upon a time we, the <strong>Butterflies</strong>, were everywhere.</h2>
+		  </div>
+		  <div id="intro_text2">
+			<h2>However, something really bad began to happen...</h2>
+		  </div>		
+		</div>
+	  </div>
+	</div>
+
+
+	<div id="entryscene3">
+	  <!--<a href="javascript:void(0)" class="closebtn">&times;</a>-->
+	  <div id="entryscene3-textwrapper">
+		<p>You found it! Now make it greener pressing the button!</p>
+		<div class="container jump" style="text-align:center; color:steelblue;">
+		  <div class="row">
+			<h1>.</h1>
+		  </div>
+		  <div class="row">
+			<!--<button onclick="greenerButton()">GREENER</button>-->
+			<a id="custom-button" href="#" onclick="greenerButton()">Make it Greener!</a>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	
+	<div id="entryscene4">
+	  <!--<a href="javascript:void(0)" class="closebtn">&times;</a>-->
+	  <div id="entryscene4-textwrapper">
+		<p>You did it! We are back!</p>
+		<h1>The End</h1>
+	  </div>
+	</div>
+	
+
+</body>
+</html>
+

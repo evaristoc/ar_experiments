@@ -1,0 +1,84 @@
+/* The side navigation menu */
+
+#scene3html {
+	width: 0px; /* 0 width - change this with JavaScript */
+	background-color: transparent;
+	display: inline-block;
+}
+
+#scene3html #section1in3{
+	background-image: url("https://farm6.static.flickr.com/5580/14194185064_549896148e_b.jpg");
+}
+
+#scene3html .section--content {
+	position: relative;
+	height: 100vh;
+	width: 100vw;
+	background-color: transparent;
+	font-size: 2.5rem;
+}
+
+#scene3html .section--content p{
+	position: absolute;
+}
+
+#section3--content__paragraph1{
+	opacity: 0;
+	animation-name: paragraphs_opacity;
+	animation-duration: 7s;
+	animation-direction:both;
+	animation-timing-function: ease-in-out;
+}
+
+#section3--content__paragraph2{
+	opacity: 0;
+	animation-name: paragraphs_opacity;
+	animation-duration: 7s;
+	animation-delay: 4s;
+	animation-direction:both;
+	animation-timing-function: ease-in-out;
+}
+
+#section3--content__paragraph3{
+	animation-name: paragraphs_opacity2;
+	animation-duration: 3s;
+	animation-delay: 11s;
+	animation-fill-mode: both;
+	animation-timing-function: linear;
+}
+
+@keyframes paragraphs_opacity{
+	0% {opacity: 0;}
+	50% {opacity: 1;}
+	100% {opacity: 0;}
+}
+
+@keyframes paragraphs_opacity2{
+	0% {opacity: 0;}
+	100% {opacity: 1;}
+}
+
+.zdog-canvas {
+	background-color: transparent;
+	cursor: move;
+	margin-top: 66%;
+	margin-left: -30%;
+}
+
+.btn-reset {
+	background-color: #000;
+	border: 0;
+	color: #fff;
+	cursor: pointer;
+	font-family: 'Press Start 2P', cursive;
+	font-size: 0.7rem;
+	letter-spacing: 0.15rem;
+	outline: none;
+	padding: 0.7rem 0.7rem 0.7rem (0.7rem * 1.25);
+	text-transform: uppercase;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.btn-reset:focus {
+	color: #e89e21;
+}

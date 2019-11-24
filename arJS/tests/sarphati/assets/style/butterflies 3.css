@@ -1,0 +1,270 @@
+/* The side navigation menu */
+#entryscene1 {
+  height: 100%; /* 100% Full-height */
+  width: 100%; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Stay on top */
+  top: 0; /* Stay at the top */
+  right: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+#entryscene1 a{
+  z-index: 3;
+}
+
+#entryscene1 img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 70%; /* 100% Full-height */
+  width: 70%; /* 0 width - change this with JavaScript */
+}
+
+/* intro section */
+
+#addedtext {
+  
+}
+
+.intro {
+  z-index: 3;
+  position: relative;
+  text-align: center;
+  display: none;
+}
+
+.intro img {
+  display: block;
+  /*transform: rotate(90deg) translate(-90%, -20%);*/
+  transform: translate(0%, -40%) rotate(90deg);
+  
+}
+
+.intro h2 {
+  position: absolute;
+  font-family: "Times New Roman", Times, serif;
+  color: orange;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform: translate(0%, -20%);
+  text-align: center;
+  text-shadow: 0 0 15px;
+}
+
+
+/* The side navigation menu */
+#entryscene2 {
+  height: 100%; /* 100% Full-height */
+  width: 0px; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Stay on top */
+  top: 0; /* Stay at the top */
+  right: 0;
+  /*background-color: #111;*/ /* Black*/
+  background-color: transparent;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  display: inline-block;
+}
+
+#entryscene2-textwrapper{
+  display: block; 
+}
+
+
+/* The navigation menu links */
+#entryscene2-textwrapper a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  display: block;
+  transition: 0.3s;
+}
+
+/* The navigation menu links */
+#entryscene2-textwrapper p {
+  display:inline-block;
+  padding: 8px 8px 8px 12px;
+  text-decoration: none;
+  font-size: 55px;
+  width: 75%;
+  line-height:60px;
+  /*color: #818181;*/
+  color: orange;
+  /*display: block;
+  transition: 0.3s;*/
+}
+
+#entryscene2-textwrapper > a  > img{
+  display:block;
+  -webkit-transform: scaleX(-1) rotateZ(25deg);
+  transform: scaleX(-1) rotateZ(25deg);
+  margin-top: -150px;
+  margin-right: -150px;
+  float:right;
+  /*margin-right: -355px;
+  margin-top: 15px;
+  float:right;*/
+}
+
+/*width="700px" height="800px"*/
+#entryscene2-textwrapper > a  > img.resize{
+  width: 700px;
+  height: 800px;
+}
+/*
+.first-inner-div {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+}
+
+.down-arrow {
+ font-size: 40px !important;
+ color: black !important;
+}
+*/
+
+
+/* The side navigation menu */
+#entryscene3 {
+  height: 100%; /* 100% Full-height */
+  width: 0px; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  right: 0;
+  /*background-color: #111;*/ /* Black*/
+  background-color: transparent;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  display: inline-block;
+}
+
+#entryscene3-textwrapper{
+  display: block; 
+}
+
+/* The navigation menu links */
+#entryscene3 p {
+  display:inline-block;
+  padding: 8px 8px 8px 12px;
+  text-decoration: none;
+  font-size: 55px;
+  width: 75%;
+  line-height:60px;
+  /*color: #818181;*/
+  color: steelblue;
+  /*display: block;
+  transition: 0.3s;*/
+}
+
+/* The navigation menu links */
+#entryscene3 button {
+  display:inline-block;
+  padding: 8px 8px 8px 12px;
+  text-decoration: none;
+  color: steelblue;
+  font-size: 20px;
+}
+
+
+/* The side navigation menu */
+#entryscene4 {
+  height: 100%; /* 100% Full-height */
+  width: 0px; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Stay on top */
+  top: 0; /* Stay at the top */
+  right: 0;
+  /*background-color: #111;*/ /* Black*/
+  background-color: transparent;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  display: inline-block;
+}
+
+#entryscene4-textwrapper{
+  display: block; 
+}
+
+
+/* When you mouse over the navigation links, change their color 
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+*/
+
+/* Position and style the close button (top right corner) */
+/* .sidenav .closebtn {*/
+.closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+  /*.intro h2 { font-size:45px;}*/
+  
+  /*.intro img{
+    transform: translate(0%, -40%) rotate(90deg);
+  }*/
+  
+  .intro img{
+    width: 100%;
+    height: auto;
+  }
+  
+  .intro h2 {
+    top: 4.5%;
+    /*left: 15.5%;*/
+    left: 22%;
+    right: 0;
+    font-size: 40px;
+    /*font-size:3.5em;
+    transform: translate(20%, 0%);*/
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+  /*.intro h2 { font-size:45px;}*/
+  
+  /*.intro img{
+    transform: translate(0%, -40%) rotate(90deg);
+  }*/
+  
+  .intro img{
+    width: 100%;
+    height: auto;
+  }
+  
+  .intro h2 {
+    top: 4.5%;
+    /*left: 15.5%;*/
+    left: 22%;
+    right: 0;
+    font-size: 40px;
+    /*font-size:3.5em;
+    transform: translate(20%, 0%);*/
+  }
+  
+}

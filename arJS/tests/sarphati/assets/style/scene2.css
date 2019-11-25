@@ -2,27 +2,34 @@
 
 #scene2html {
   display: none;
-  z-index: 2;
-  position: relative;
   text-align: center;
-  display: none;
+  width: 100vw;
+  height:100vh;
 }
 
-#scene2html #section1in2--img__img{
+#section1in2{
+  position: relative;
+  text-align: center;
+}
+
+
+#section1in2 #section1in2--img #section1in2--img__img{
   width: 100%;
+  max-width: 250px;
   height: auto;
   display: block;
   /*transform: rotate(90deg) translate(-90%, -20%);*/
   transform: translate(0%, -40%) rotate(90deg);
 }
 
-#scene2html .section--content {
+#section1in2 .section--content {
   position: absolute;
-  color: orange;
+  z-index:3;
+  max-width: 250px;
   top: 4.5%;
   left: 22%;
   transform: translate(0%, -20%);
   text-align: center;
   text-shadow: 0 0 15px;
-  font-size: 1.3em;
+  font-size: 2rem;
 }

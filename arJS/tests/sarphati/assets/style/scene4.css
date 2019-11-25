@@ -97,13 +97,12 @@
 }
 
 #section1in4--zdog-canvas {
-	/*background-color: transparent;*/
-	background-color:#908efc;
+	background-color: transparent;
 	cursor: move;
-	/*margin-top: 0%;
-	margin-left: -20%;*/
-	margin-top: 66%;
-	margin-left: -30%;
+	margin-top: 0%;
+	margin-left: -20%;
+	/*margin-top: 66%;
+	margin-left: -30%;*/
 }
 
 .btn-reset {

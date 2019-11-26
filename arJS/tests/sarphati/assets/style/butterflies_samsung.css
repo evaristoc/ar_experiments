@@ -118,6 +118,15 @@
   width: 700px;
   height: 800px;
 }
+
+
+#section1in3--zdog-canvas {
+	background-color: transparent;
+	cursor: move;
+	margin-top: 3%;
+	margin-left: -15%;
+}
+
 /*
 .first-inner-div {
     position: absolute;
@@ -141,7 +150,7 @@
   height: 100%; /* 100% Full-height */
   width: 0px; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Stay on top */
+  z-index: 2; /* Stay on top */
   top: 0; /* Stay at the top */
   right: 0;
   /*background-color: #111;*/ /* Black*/
@@ -153,15 +162,17 @@
 }
 
 #entryscene3-textwrapper{
-  display: block; 
+  display: block;
+  font-size: 55px;
+  color: steelblue;
+  
 }
 
 /* The navigation menu links */
-#entryscene3 p {
+#entryscene3--textwrapper p {
   display:inline-block;
   padding: 8px 8px 8px 12px;
   text-decoration: none;
-  font-size: 55px;
   width: 75%;
   line-height:60px;
   /*color: #818181;*/
@@ -180,11 +191,13 @@
 }
 
 
-#section1in3--zdog-canvas {
+#section1in4--zdog-canvas {
 	background-color: transparent;
 	cursor: move;
-	margin-top: 3%;
-	margin-left: -15%;
+	margin-top: 0%;
+	margin-left: -20%;
+	/*margin-top: 66%;
+	margin-left: -30%;*/
 }
 
 
@@ -207,16 +220,6 @@
 #entryscene4-textwrapper{
   display: block; 
 }
-
-#section1in4--zdog-canvas {
-	background-color: transparent;
-	cursor: move;
-	margin-top: 0%;
-	margin-left: -20%;
-	/*margin-top: 66%;
-	margin-left: -30%;*/
-}
-
 
 /* When you mouse over the navigation links, change their color 
 .sidenav a:hover {

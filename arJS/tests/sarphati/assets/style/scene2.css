@@ -1,35 +1,75 @@
-/*check...*/
-
 #scene2html {
   display: none;
-  text-align: center;
-  width: 100vw;
-  height:100vh;
 }
 
-#section1in2{
+#scene2html #section1in2 {
   position: relative;
-  text-align: center;
-}
-
-
-#section1in2 #section1in2--img #section1in2--img__img{
+  margin: 10px 0px;
   width: 100%;
-  max-width: 250px;
-  height: auto;
-  display: block;
-  /*transform: rotate(90deg) translate(-90%, -20%);*/
-  transform: translate(0%, -40%) rotate(90deg);
+  height: 30%;
 }
 
-#section1in2 .section--content {
+#scene2html #section1in2--img {
+	position:absolute;
+	top:0;
+	left:0;
+}
+
+#scene2html #section1in2--img__img {
+	width: 150px; /*better to fix the image size in this case */
+	height: auto;
+	margin-top: -19rem;
+	transform: rotate(90deg);
+  
+}
+
+#scene2html .section--content {
   position: absolute;
-  z-index:3;
-  max-width: 250px;
-  top: 4.5%;
-  left: 22%;
+  top: 1rem;
+  left: 1.5rem;
+  right: 0;
+  font-size:1.3em;
+  width:250px;
   transform: translate(0%, -20%);
   text-align: center;
-  text-shadow: 0 0 15px;
-  font-size: 2rem;
+  z-index:3;
+}
+
+/*TODO: Media Query*/
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  
+  .intro img{
+    width: 100%;
+    height: auto;
+  }
+  
+  .intro h2 {
+    top: 4.5%;
+    /*left: 15.5%;*/
+    left: 22%;
+    right: 0;
+    font-size: 40px;
+    /*font-size:3.5em;
+    transform: translate(20%, 0%);*/
+  }
+}
+
+@media screen and (max-width: 450px) {
+  
+  .intro img{
+    width: 100%;
+    height: auto;
+  }
+  
+  .intro h2 {
+    top: 4.5%;
+    /*left: 15.5%;*/
+    left: 22%;
+    right: 0;
+    font-size: 40px;
+    /*font-size:3.5em;
+    transform: translate(20%, 0%);*/
+  }
+  
 }

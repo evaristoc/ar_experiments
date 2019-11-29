@@ -11,7 +11,7 @@ THREE.DeviceOrientationControls = function( object ) {
 
 	this.object = object;
     //E: based on https://w3c.github.io/deviceorientation/, the matrix "YXZ" represents the rotational frame of those axes, IN THAT ORDER (relevant)
-    // the rotational data is device compass heading - preliminary information
+    // the rotational data is DEVICE COMPASS HEADING - preliminary information
 	this.object.rotation.reorder( "YXZ" );
 
 	this.enabled = true;

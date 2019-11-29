@@ -5,7 +5,10 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="user-scalable=no, initial-scale=1">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <!--<script src='../../../public/js/three_86/three.js-r86--master/build/three.min.js'></script>-->
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js'></script>
+        <script src="https://threejs.org/examples/js/loaders/OBJLoader.js"></script>
+        <script src="https://threejs.org/examples/js/loaders/MTLLoader.js"></script>
         <script type="text/javascript" src="../../../public/js/compatibility.js"></script>
         <script type="text/javascript" src="../../../public/js/stats.min.v17.js"></script>
         <script type="text/javascript" src="../../../public/js/profiler.js"></script>
@@ -103,6 +106,13 @@
 			document.body.appendChild( renderer.domElement );
 			document.body.appendChild( statsGlobal.domElement );
 			
+			var axesHelper = new THREE.AxisHelper( 50 );
+			//scene.add( axesHelper );
+			
+			//grid xz
+			var gridXZ = new THREE.GridHelper(10, 1);
+			scene.add(gridXZ);
+			
 			// ------------------------------------------------
 			// FUN STARTS HERE
 			// ------------------------------------------------
@@ -119,8 +129,29 @@
 			var cube = new THREE.Mesh( geometry, material );
 			
 			// Add cube to Scene
-			scene.add( cube );
+			//scene.add( cube );
 			
+			
+			var geometry = new THREE.BoxGeometry( 3, 3, 3);
+			var material = new THREE.MeshBasicMaterial( {
+												color: "red",
+												//side: THREE.BackSide,
+												} );
+			var cube_north = new THREE.Mesh( geometry, material );
+			scene.add( cube_north );
+			//negavitve z == north (argonJS)
+			cube_north.position.z = -7;
+			
+			//public/js/three_86/three.js-r86--master/*
+			geometry = new THREE.BoxGeometry( 3, 3, 3);
+			material = new THREE.MeshBasicMaterial( {
+												color: "blue",
+												//side: THREE.BackSide,
+												} );
+			var cube_east = new THREE.Mesh( geometry, material );
+			scene.add( cube_east );
+			//positive x == East (argonJS)
+			cube_east.position.x = 7;
 			
 			//--------------------------------------------------
 			// CAMERA & CONTROLS
@@ -133,8 +164,8 @@
 			  statsGlobal.begin();
 			  requestAnimationFrame( render );
 			
-			  cube.rotation.x += 0.01;
-			  cube.rotation.y += 0.01;
+			  //cube.rotation.x += 0.01;
+			  //cube.rotation.y += 0.01;
 			
 			  // Render the scene
 			  renderer.render(scene, camera);

@@ -43,6 +43,7 @@ Thumbs.db
 */image*
 */src
 */*-master
+**/*-master/*
 
 # opencvJS implementation
 #########################

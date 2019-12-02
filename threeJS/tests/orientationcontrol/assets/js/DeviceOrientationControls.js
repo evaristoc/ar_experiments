@@ -23,7 +23,6 @@ THREE.DeviceOrientationControls = function( object ) {
 	this.alpha = 0;
 	this.alphaOffsetAngle = 0;
 
-    //E: https://en.wikipedia.org/wiki/Quaternion
 	var onDeviceOrientationChangeEvent = function( event ) {
 
 		scope.deviceOrientation = event;
@@ -44,7 +43,7 @@ THREE.DeviceOrientationControls = function( object ) {
     // The transformation is Eulerian, but they are Tait-Bryan because the first and third axes are perpendicular (actually all are)
     // The treatment of the rotations is with QUATERNIONS (https://en.wikipedia.org/wiki/Quaternion)
     // the reason is that it is more simple to operate with quaternions for rotation calcuation that with rotation matrices
-    // additionally, working with Euler angles may lead to a sort of "local minimum" solution named "gymbal lock"
+    // additionally, working with Euler angles may lead to a sort of "local minimum" solution (??) named "gymbal lock"
     // the Euler transformation used here is likely based on the following: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
     var setObjectQuaternion = function() {
 
@@ -52,6 +51,7 @@ THREE.DeviceOrientationControls = function( object ) {
 
 		var euler = new THREE.Euler();
 
+        //E: https://en.wikipedia.org/wiki/Quaternion
 		var q0 = new THREE.Quaternion();
 
 		var q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis
@@ -95,7 +95,8 @@ THREE.DeviceOrientationControls = function( object ) {
 		if ( scope.enabled === false ) return;
         
         //E: why an offset angle for Z? probably to do with this: https://www.reddit.com/r/threejs/comments/6x5ub8/augmented_reality_controls/?
-		var alpha = scope.deviceOrientation.alpha ? THREE.Math.degToRad( scope.deviceOrientation.alpha ) + this.alphaOffsetAngle : 0; // Z
+		//E: alphaOffsetAngle could be also the heading absolute?
+        var alpha = scope.deviceOrientation.alpha ? THREE.Math.degToRad( scope.deviceOrientation.alpha ) + this.alphaOffsetAngle : 0; // Z
 		var beta = scope.deviceOrientation.beta ? THREE.Math.degToRad( scope.deviceOrientation.beta ) : 0; // X'
 		var gamma = scope.deviceOrientation.gamma ? THREE.Math.degToRad( scope.deviceOrientation.gamma ) : 0; // Y''
 		var orient = scope.screenOrientation ? THREE.Math.degToRad( scope.screenOrientation ) : 0; // O

@@ -1,4 +1,4 @@
-*References:
+### References:
 * https://threejs.org/examples/misc_controls_deviceorientation.html
 * https://www.learnthreejs.com/device-orientation-gyroscope-controls-tutorial/
 * https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Using_device_orientation_with_3D_transforms
@@ -17,6 +17,6 @@
 * https://www.sitepoint.com/how-to-build-vr-on-the-web-today/
 * https://www.reddit.com/r/threejs/comments/6x5ub8/augmented_reality_controls/
 
-*Others...
+### Others...
 * https://www.sitepoint.com/learn-zdog/
 

@@ -135,7 +135,7 @@
           if (position.coords.heading) {
             //code
             heading = kf.filter(position.coords.heading);
-            $("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css('transform',String(heading))
+            $("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css('transform',String(Math.round(heading)) + 'deg')
           }else{
             heading = position.coords.heading;
           }

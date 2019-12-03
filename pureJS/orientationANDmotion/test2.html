@@ -53,6 +53,10 @@
       var demohtml = document.getElementById("demo");
       var resulthtml = document.getElementById('result');
       
+      var kf = new KalmanFilter({R: 15, Q: 3});
+      
+
+      
       const url = '//router.project-osrm.org/nearest/v1/driving/';
       //const coord = {
       //	lon: 4.9004,
@@ -123,6 +127,8 @@
           let heading = "no data";
           if (position.coords.heading) {
             //code
+            heading = kf.filter(position.coords.heading);
+          }else{
             heading = position.coords.heading
           }
           console.log(lat,lng);

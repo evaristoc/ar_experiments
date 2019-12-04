@@ -36,12 +36,6 @@
           flex: 1;
           background: #f0f0f0;
       }
-      
-      img[src^='http://www.google.com/mapfiles/arrow.png?i=']{
-        opacity: 0.8;
-        /*transform: rotate(180deg);*/
-      }
-      
     </style>
   </head>
   <body>
@@ -54,15 +48,10 @@
     </main>
 
     <!--<script src="script.js"></script>-->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqYfXdCyKhpJQI9WZ0-jyJ_S5NSLkqZz8&callback=init"></script>
     <script>
       var demohtml = document.getElementById("demo");
       var resulthtml = document.getElementById('result');
-      
-      var kf = new KalmanFilter({R: 15, Q: 3});
-      
-
       
       const url = '//router.project-osrm.org/nearest/v1/driving/';
       //const coord = {
@@ -93,7 +82,7 @@
             center: initialPosition,
             zoom: 15
           });
-          marker = new google.maps.Marker({ map: map, position: initialPosition, icon: 'http://www.google.com/mapfiles/arrow.png?i=0' });
+          marker = new google.maps.Marker({ map, position: initialPosition });
         
         
         }
@@ -134,11 +123,8 @@
           let heading = "no data";
           if (position.coords.heading) {
             //code
-            heading = kf.filter(position.coords.heading);
-            //$("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css('transform',String(Math.round(heading)) + 'deg')
+            heading = position.coords.heading
             $("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css({'transform': 'rotate('+String(180-Math.round(heading))+'deg)'});
-          }else{
-            heading = position.coords.heading;
           }
           console.log(lat,lng);
           marker.setPosition({lat,lng});

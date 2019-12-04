@@ -82,7 +82,10 @@
             center: initialPosition,
             zoom: 15
           });
-          marker = new google.maps.Marker({ map, position: initialPosition });
+          marker = new google.maps.Marker({
+            map: map,
+            position: initialPosition,
+            icon: 'http://www.google.com/mapfiles/arrow.png?i=0' });
         
         
         }

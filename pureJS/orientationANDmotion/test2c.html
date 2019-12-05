@@ -69,7 +69,7 @@
       var devheading = "no data";
       var alpha, beta, gamma, absolute = "no reading yet";
       
-
+      var output = document.querySelector('.output');
       
       const url = '//router.project-osrm.org/nearest/v1/driving/';
       //const coord = {
@@ -137,7 +137,7 @@
           output.innerHTML  = "beta : " + beta + "\n";
           output.innerHTML += "gamma: " + gamma + "\n";
           output.innerHTML += "alpha: " + alpha + "\n";
-          output.innerHTML += "absolute: " + alpha + "\n";
+          output.innerHTML += "absolute: " + absolute + "\n";
           //if (event.webkitCompassHeading !== undefined) {
           //    if (event.webkitCompassAccuracy < 50) {
           //        devheading = event.webkitCompassHeading;

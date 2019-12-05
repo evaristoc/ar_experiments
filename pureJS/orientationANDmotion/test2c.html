@@ -161,7 +161,6 @@
           }
         }
         
-        deviceOrientation();
         
         if (navigator.geolocation) {
           navigator.geolocation.watchPosition(
@@ -189,6 +188,7 @@
           }else{
             coordheading = position.coords.heading;
           }
+          deviceOrientation();
           //console.log(lat,lng);
           marker.setPosition({lat,lng});
           map.panTo({ lat, lng });

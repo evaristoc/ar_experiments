@@ -46,6 +46,7 @@
   </head>
   <body>
     <main class="container">
+      <pre class="output"></pre>
       <p>Click the button to get your coordinates.</p>
       <button onclick="getLocation()">Try It</button>
       <p id="demo"></p>
@@ -107,6 +108,9 @@
         
         }
 
+
+
+
       
       function deviceOrientation() {
         //code
@@ -115,37 +119,43 @@
         } else if ('ondeviceorientation' in window) {
             devorienteventName = 'deviceorientation'
         } else {
-            var devorienteventName = ''
+            devorienteventName = ''
             console.error('Compass not supported');
             alert('Compass not supported');
         };
-        
-        function handler(event){
-            alpha = event.alpha;
-            beta = event.beta;
-            gamma = event.gamma;
-            absolute = event.absolute? event.absolute:"undefined?";
-            //if (event.webkitCompassHeading !== undefined) {
-            //    if (event.webkitCompassAccuracy < 50) {
-            //        devheading = event.webkitCompassHeading;
-            //    } else {
-            //        console.warn('webkitCompassAccuracy is event.webkitCompassAccuracy');
-            //    }
-            //} else if (event.alpha !== null) {
-            //    if (event.absolute === true || event.absolute === undefined) {
-            //        devheading = this._computeCompassHeading(event.alpha, event.beta, event.gamma);
-            //    } else {
-            //        console.warn('event.absolute === false');
-            //    }
-            //} else {
-            //    console.warn('event.alpha === null');
-            //}          
-        }
-        
-        window.addEventListener(devorienteventName, handler);
-        
+
+        return devorienteventName;
         
       }
+
+      function handler(event){
+          alpha = event.alpha; //z
+          beta = event.beta; //x
+          gamma = event.gamma; //y
+          absolute = event.absolute? event.absolute:"undefined?";
+          
+          output.innerHTML  = "beta : " + beta + "\n";
+          output.innerHTML += "gamma: " + gamma + "\n";
+          output.innerHTML += "alpha: " + alpha + "\n";
+          output.innerHTML += "absolute: " + alpha + "\n";
+          //if (event.webkitCompassHeading !== undefined) {
+          //    if (event.webkitCompassAccuracy < 50) {
+          //        devheading = event.webkitCompassHeading;
+          //    } else {
+          //        console.warn('webkitCompassAccuracy is event.webkitCompassAccuracy');
+          //    }
+          //} else if (event.alpha !== null) {
+          //    if (event.absolute === true || event.absolute === undefined) {
+          //        devheading = this._computeCompassHeading(event.alpha, event.beta, event.gamma);
+          //    } else {
+          //        console.warn('event.absolute === false');
+          //    }
+          //} else {
+          //    console.warn('event.alpha === null');
+          //}          
+      }
+      
+      window.addEventListener(deviceOrientation, handler);
       
       function getLocation() {
         
@@ -188,11 +198,12 @@
           }else{
             coordheading = position.coords.heading;
           }
-          deviceOrientation();
+        
           //console.log(lat,lng);
           marker.setPosition({lat,lng});
           map.panTo({ lat, lng });
-          demohtml.innerHTML = "Latitude: " + String(lat) + "<br>Longitude: " + String(lng) + "<br>Heading: " + String(180-Math.round(coordheading)) + "<br>DevOrient: " + devorienteventName + ", Alpha: "+alpha+", Beta: "+beta+", Gamma: "+gamma+", Absolute: "+absolute;
+          demohtml.innerHTML = "Latitude: " + String(lat) + "<br>Longitude: " + String(lng) + "<br>Heading: " + String(180-Math.round(coordheading));
+          //+ "<br>DevOrient: " + devorienteventName + ", Alpha: "+alpha+", Beta: "+beta+", Gamma: "+gamma+", Absolute: "+absolute;
           fetch(url + lng + ',' + lat + '?number=1').then(function(response) { 
               return response.json();
             }).then(function(json) {

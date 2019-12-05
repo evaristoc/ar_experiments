@@ -36,6 +36,12 @@
           flex: 1;
           background: #f0f0f0;
       }
+      
+      img[src^='http://www.google.com/mapfiles/arrow.png?i=']{
+        opacity: 0.8;
+        /*transform: rotate(180deg);*/
+      }
+      
     </style>
   </head>
   <body>
@@ -53,6 +59,16 @@
     <script>
       var demohtml = document.getElementById("demo");
       var resulthtml = document.getElementById('result');
+      
+      var kf = new KalmanFilter({R: 15, Q: 3});
+      
+      //POTENTIAL HIDDEN VARIABLES
+      var devorienteventName = '';
+      var coordheading = "no data";
+      var devheading = "no data";
+      var alpha, beta, gamma, absolute = "no reading yet";
+      
+
       
       const url = '//router.project-osrm.org/nearest/v1/driving/';
       //const coord = {
@@ -91,6 +107,46 @@
         
         }
 
+      
+      function deviceOrientation() {
+        //code
+        if ('ondeviceorientationabsolute' in window) {
+            devorienteventName = 'ondeviceorientationabsolute';
+        } else if ('ondeviceorientation' in window) {
+            devorienteventName = 'deviceorientation'
+        } else {
+            var devorienteventName = ''
+            console.error('Compass not supported');
+            alert('Compass not supported');
+        };
+        
+        function handler(event){
+            alpha = event.alpha;
+            beta = event.beta;
+            gamma = event.gamma;
+            absolute = event.absolute? event.absolute:"undefined?";
+            //if (event.webkitCompassHeading !== undefined) {
+            //    if (event.webkitCompassAccuracy < 50) {
+            //        devheading = event.webkitCompassHeading;
+            //    } else {
+            //        console.warn('webkitCompassAccuracy is event.webkitCompassAccuracy');
+            //    }
+            //} else if (event.alpha !== null) {
+            //    if (event.absolute === true || event.absolute === undefined) {
+            //        devheading = this._computeCompassHeading(event.alpha, event.beta, event.gamma);
+            //    } else {
+            //        console.warn('event.absolute === false');
+            //    }
+            //} else {
+            //    console.warn('event.alpha === null');
+            //}          
+        }
+        
+        window.addEventListener(devorienteventName, handler);
+        
+        
+      }
+      
       function getLocation() {
         
         // Get proper error message based on the code.
@@ -105,6 +161,7 @@
           }
         }
         
+        deviceOrientation();
         
         if (navigator.geolocation) {
           navigator.geolocation.watchPosition(
@@ -124,16 +181,18 @@
       function showPosition(position) {
           let lat = Number(position.coords.latitude.toFixed(5));
           let lng = Number(position.coords.longitude.toFixed(5));
-          let heading = "no data";
           if (position.coords.heading) {
             //code
-            heading = position.coords.heading
-            $("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css({'transform': 'rotate('+String(180-Math.round(heading))+'deg)'});
+            coordheading = kf.filter(position.coords.heading);
+            //$("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css('transform',String(Math.round(heading)) + 'deg')
+            $("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css({'transform': 'rotate('+String(180-Math.round(coordheading))+'deg)'});
+          }else{
+            coordheading = position.coords.heading;
           }
           //console.log(lat,lng);
           marker.setPosition({lat,lng});
           map.panTo({ lat, lng });
-          demohtml.innerHTML = "Latitude: " + String(lat) + "<br>Longitude: " + String(lng) + "<br>Heading: " + String(180-Math.round(heading));
+          demohtml.innerHTML = "Latitude: " + String(lat) + "<br>Longitude: " + String(lng) + "<br>Heading: " + String(180-Math.round(coordheading)) + "<br>DevOrient: " + devorienteventName + ", Alpha: "+alpha+", Beta: "+beta+", Gamma: "+gamma+", Absolute: "+absolute;
           fetch(url + lng + ',' + lat + '?number=1').then(function(response) { 
               return response.json();
             }).then(function(json) {

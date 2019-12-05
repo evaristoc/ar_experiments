@@ -143,10 +143,10 @@
           }else{
             heading = position.coords.heading;
           }
-          console.log(lat,lng);
+          //console.log(lat,lng);
           marker.setPosition({lat,lng});
           map.panTo({ lat, lng });
-          demohtml.innerHTML = "Latitude: " + String(lat) + "<br>Longitude: " + String(lng) + "<br>Heading: " + String(heading);
+          demohtml.innerHTML = "Latitude: " + String(lat) + "<br>Longitude: " + String(lng) + "<br>Heading: " + String(180-Math.round(heading));
           fetch(url + lng + ',' + lat + '?number=1').then(function(response) { 
               return response.json();
             }).then(function(json) {

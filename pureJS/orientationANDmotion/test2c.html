@@ -45,7 +45,10 @@
     </style>
   </head>
   <body>
-    <div class="output" style="width:300px; height:150px;background-color:lightgray;"></div>
+    <div class="output" style="width:300px; height:150px;background-color:lightgray;">
+      <pre id="data1"></pre>
+      <pre id="data2"></pre>
+    </div>
     <main class="container">
       <p>Click the button to get your coordinates.</p>
       <button onclick="getLocation()">Try It</button>
@@ -69,7 +72,8 @@
       var devheading = "no data";
       var alpha, beta, gamma, absolute = "no reading yet";
       
-      var output = document.querySelector('.output');
+      var output1 = document.querySelector('#data1');
+      var output2 = document.querySelector('#data2');
       
       const url = '//router.project-osrm.org/nearest/v1/driving/';
       //const coord = {
@@ -138,10 +142,10 @@
           var gamma = event.gamma; //y
           var absolute = event.absolute? event.absolute:"undefined?";
           
-          output.innerHTML  = "beta : " + Math.round(beta) + "; ";
-          output.innerHTML += "gamma: " + Math.round(gamma) + "; ";
-          output.innerHTML += "alpha: " + Math.round(alpha) + "; ";
-          output.innerHTML += "absolute: " + absolute + "\n";
+          output1.innerHTML  = "beta : " + Math.round(beta) + "; ";
+          output1.innerHTML += "gamma: " + Math.round(gamma) + "; ";
+          output1.innerHTML += "alpha: " + Math.round(alpha) + "; ";
+          output1.innerHTML += "absolute: " + absolute + "\n";
           
           //alert(alpha+ ' ' +beta+ ' ' +gamma);
           
@@ -170,10 +174,10 @@
           var gamma = event.gamma; //y
           var absolute = event.absolute? event.absolute:"undefined?";
           
-          output.innerHTML  += "beta_a : " + Math.round(beta) + "; ";
-          output.innerHTML += "gamma_a: " + Math.round(gamma) + "; ";
-          output.innerHTML += "alpha_a: " + Math.round(alpha) + "; ";
-          output.innerHTML += "absolute_a: " + absolute + "\n";
+          output2.innerHTML  += "beta_a : " + Math.round(beta) + "; ";
+          output2.innerHTML += "gamma_a: " + Math.round(gamma) + "; ";
+          output2.innerHTML += "alpha_a: " + Math.round(alpha) + "; ";
+          output2.innerHTML += "absolute_a: " + absolute + "\n";
           
           //alert(alpha+ ' ' +beta+ ' ' +gamma);
           

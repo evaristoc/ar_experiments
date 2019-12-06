@@ -129,21 +129,53 @@
         //return devorienteventName;
         
       }
-
+      
       function handler(event){
-          console.log(222);
+          //console.log(222);
           
           var alpha = event.alpha; //z
           var beta = event.beta; //x
           var gamma = event.gamma; //y
           var absolute = event.absolute? event.absolute:"undefined?";
           
-          output.innerHTML  = "beta : " + beta + "\n";
-          output.innerHTML += "gamma: " + gamma + "\n";
-          output.innerHTML += "alpha: " + alpha + "\n";
+          output.innerHTML  = "beta : " + Math.round(beta) + "; ";
+          output.innerHTML += "gamma: " + Math.round(gamma) + "; ";
+          output.innerHTML += "alpha: " + Math.round(alpha) + "; ";
           output.innerHTML += "absolute: " + absolute + "\n";
           
-          alert(alpha+ ' ' +beta+ ' ' +gamma);
+          //alert(alpha+ ' ' +beta+ ' ' +gamma);
+          
+          //if (event.webkitCompassHeading !== undefined) {
+          //    if (event.webkitCompassAccuracy < 50) {
+          //        devheading = event.webkitCompassHeading;
+          //    } else {
+          //        console.warn('webkitCompassAccuracy is event.webkitCompassAccuracy');
+          //    }
+          //} else if (event.alpha !== null) {
+          //    if (event.absolute === true || event.absolute === undefined) {
+          //        devheading = this._computeCompassHeading(event.alpha, event.beta, event.gamma);
+          //    } else {
+          //        console.warn('event.absolute === false');
+          //    }
+          //} else {
+          //    console.warn('event.alpha === null');
+          //}          
+      }
+
+      function handler_absolute(event){
+          //console.log(222);
+          
+          var alpha = event.alpha; //z
+          var beta = event.beta; //x
+          var gamma = event.gamma; //y
+          var absolute = event.absolute? event.absolute:"undefined?";
+          
+          output.innerHTML  = "beta_a : " + Math.round(beta) + "; ";
+          output.innerHTML += "gamma_a: " + Math.round(gamma) + "; ";
+          output.innerHTML += "alpha_a: " + Math.round(alpha) + "; ";
+          output.innerHTML += "absolute_a: " + absolute + "\n";
+          
+          //alert(alpha+ ' ' +beta+ ' ' +gamma);
           
           //if (event.webkitCompassHeading !== undefined) {
           //    if (event.webkitCompassAccuracy < 50) {
@@ -173,8 +205,9 @@
         //    console.error('Compass not supported');
         //    alert('Compass not supported');
         //};
-        deviceOrientation();
-        window.addEventListener(devorienteventName, handler, false);
+        //deviceOrientation();
+        window.addEventListener('deviceorientation', handler, false);
+        window.addEventListener('deviceorientationabsolute', handler_absolute, false);
         });
       
       

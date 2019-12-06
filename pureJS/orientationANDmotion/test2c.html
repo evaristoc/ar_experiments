@@ -117,7 +117,7 @@
         if ('ondeviceorientationabsolute' in window) {
             devorienteventName = 'ondeviceorientationabsolute';
             alert(devorienteventName);
-        } else if ('ondeviceorientation' in window) {
+        } if ('ondeviceorientation' in window) {
             devorienteventName = 'deviceorientation';
             alert(devorienteventName);
         } else {

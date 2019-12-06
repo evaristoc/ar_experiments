@@ -115,7 +115,7 @@
       function deviceOrientation() {
         //code
         if ('ondeviceorientationabsolute' in window) {
-            devorienteventName = 'ondeviceorientationabsolute';
+            devorienteventName = 'deviceorientationabsolute';
             alert(devorienteventName);
         } if ('ondeviceorientation' in window) {
             devorienteventName = 'deviceorientation';
@@ -131,6 +131,7 @@
       }
 
       function handler(event){
+          console.log(222);
           
           var alpha = event.alpha; //z
           var beta = event.beta; //x
@@ -162,7 +163,19 @@
       }
       
       //deviceOrientation();
-      $(document).ready(function(){window.addEventListener('ondeviceorientation', handler, false);});
+      $(document).ready(function(){
+        //console.log(111);
+        //if ('ondeviceorientation' in window) {
+        //    devorienteventName = 'deviceorientation';
+        //    alert(devorienteventName);
+        //} else {
+        //    devorienteventName = '';
+        //    console.error('Compass not supported');
+        //    alert('Compass not supported');
+        //};
+        deviceOrientation();
+        window.addEventListener(devorienteventName, handler, false);
+        });
       
       
       function getLocation() {

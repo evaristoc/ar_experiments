@@ -45,8 +45,8 @@
     </style>
   </head>
   <body>
+    <div class="output" style="width:300px; height:150px;background-color:lightgray;"></div>
     <main class="container">
-      <pre class="output"></pre>
       <p>Click the button to get your coordinates.</p>
       <button onclick="getLocation()">Try It</button>
       <p id="demo"></p>
@@ -56,7 +56,7 @@
 
     <!--<script src="script.js"></script>-->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqYfXdCyKhpJQI9WZ0-jyJ_S5NSLkqZz8&callback=init"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqYfXdCyKhpJQI9WZ0-jyJ_S5NSLkqZz8&callback=initMap"></script>
     <script>
       var demohtml = document.getElementById("demo");
       var resulthtml = document.getElementById('result');
@@ -92,7 +92,7 @@
       let map;
       let marker;
       
-      function init() {
+      function initMap() {
           const initialPosition = { lat: 59.325, lng: 18.069 };
        
           map = new google.maps.Map(document.getElementById('map'), {
@@ -132,10 +132,10 @@
 
       function handler(event){
           
-          alpha = event.alpha; //z
-          beta = event.beta; //x
-          gamma = event.gamma; //y
-          absolute = event.absolute? event.absolute:"undefined?";
+          var alpha = event.alpha; //z
+          var beta = event.beta; //x
+          var gamma = event.gamma; //y
+          var absolute = event.absolute? event.absolute:"undefined?";
           
           output.innerHTML  = "beta : " + beta + "\n";
           output.innerHTML += "gamma: " + gamma + "\n";
@@ -161,9 +161,9 @@
           //}          
       }
       
-      deviceOrientation();
+      //deviceOrientation();
+      $(document).ready(function(){window.addEventListener('ondeviceorientation', handler, false);});
       
-      window.addEventListener('ondeviceorientation', handler, false);
       
       function getLocation() {
         

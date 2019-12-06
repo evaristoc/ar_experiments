@@ -131,6 +131,7 @@
       }
 
       function handler(event){
+          
           alpha = event.alpha; //z
           beta = event.beta; //x
           gamma = event.gamma; //y
@@ -140,6 +141,9 @@
           output.innerHTML += "gamma: " + gamma + "\n";
           output.innerHTML += "alpha: " + alpha + "\n";
           output.innerHTML += "absolute: " + absolute + "\n";
+          
+          alert(alpha+ ' ' +beta+ ' ' +gamma);
+          
           //if (event.webkitCompassHeading !== undefined) {
           //    if (event.webkitCompassAccuracy < 50) {
           //        devheading = event.webkitCompassHeading;
@@ -159,7 +163,7 @@
       
       var e = deviceOrientation();
       
-      window.addEventListener(e, handler);
+      window.addEventListener(e, handler, false);
       
       function getLocation() {
         

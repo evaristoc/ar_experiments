@@ -126,7 +126,7 @@
             alert('Compass not supported');
         };
 
-        return devorienteventName;
+        //return devorienteventName;
         
       }
 
@@ -161,9 +161,9 @@
           //}          
       }
       
-      var e = deviceOrientation();
+      deviceOrientation();
       
-      window.addEventListener(e, handler, false);
+      window.addEventListener('ondeviceorientationabsolute', handler, false);
       
       function getLocation() {
         

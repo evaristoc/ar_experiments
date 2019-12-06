@@ -116,10 +116,12 @@
         //code
         if ('ondeviceorientationabsolute' in window) {
             devorienteventName = 'ondeviceorientationabsolute';
+            alert(devorienteventName);
         } else if ('ondeviceorientation' in window) {
-            devorienteventName = 'deviceorientation'
+            devorienteventName = 'deviceorientation';
+            alert(devorienteventName);
         } else {
-            devorienteventName = ''
+            devorienteventName = '';
             console.error('Compass not supported');
             alert('Compass not supported');
         };
@@ -154,6 +156,8 @@
           //    console.warn('event.alpha === null');
           //}          
       }
+      
+      deviceOrientation();
       
       window.addEventListener(deviceOrientation, handler);
       

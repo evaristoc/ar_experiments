@@ -162,9 +162,10 @@
           //E: OJO! I have to transform quaternions into matrices again for every rotation
           //console.log(q.conjugate().toMatrix());
           //console.log(q.conjugate().toMatrix4());
-          Math.round( ( num + Number.EPSILON ) * 100 ) / 100
-          output2.innerHTML = "rotation matrix: "+q.conjugate().toMatrix().map(function(num){Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
-          output3.innerHTML = "homogeneous rotation matrix: "+q.conjugate().toMatrix4().map(function(num){Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
+          //E: ROUNDING FUNCTION DISCUSSION - RELEVANT! : https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
+          //E: Implementing ONE of the many possible solutions, with low precision
+          output2.innerHTML = "rotation matrix: "+q.conjugate().toMatrix().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
+          output3.innerHTML = "homogeneous rotation matrix: "+q.conjugate().toMatrix4().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
           
           arrow.style.transform = "matrix3d(" + q.conjugate().toMatrix() + ")";
        

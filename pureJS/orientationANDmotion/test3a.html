@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>🌏 Google Maps Geolocation Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/kalmanjs@1.1.0/lib/kalman.min.js"></script>
+    <!--<link rel="stylesheet" href="styles.css">-->
+    <style>
+      html {
+          font-family: sans-serif;
+          line-height: 1.15;
+          height: 100%;
+      }
+      
+      body {
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+          font-size: 1rem;
+          font-weight: 400;
+          line-height: 1.5;
+          color: #1a1a1a;
+          text-align: left;
+          height: 100%;
+          background-color: #fff;
+      }
+      
+      .container {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+      }
+      
+      .map {
+          flex: 1;
+          background: #f0f0f0;
+      }
+      
+      img[src^='http://www.google.com/mapfiles/arrow.png?i=']{
+        opacity: 0.8;
+        /*transform: rotate(180deg);*/
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div class="output" style="width:300px; height:150px;background-color:lightgray;">
+      <pre id="data1"></pre>
+      <pre id="data2"></pre>
+      <pre id="arrow" style="font-size:40px;">&uarr;</pre> 
+    </div>
+    <main class="container">
+      <p>Click the button to get your coordinates.</p>
+      <button onclick="getLocation()">Try It</button>
+      <p id="demo"></p>
+      <p id='result'></p>
+      <div id="map" class="map"></div>
+    </main>
+
+    <!--<script src="script.js"></script>-->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqYfXdCyKhpJQI9WZ0-jyJ_S5NSLkqZz8&callback=initMap"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/quaternion@1.1.0/quaternion.min.js"></script>
+    <script>
+      var demohtml = document.getElementById("demo");
+      var resulthtml = document.getElementById('result');
+      
+      var kf = new KalmanFilter({R: 15, Q: 3});
+      
+      //POTENTIAL HIDDEN VARIABLES
+      var devorienteventName = '';
+      var coordheading = "no data";
+      var devheading = "no data";
+      var alpha, beta, gamma, absolute = "no reading yet";
+      
+      var output1 = document.querySelector('#data1');
+      var output2 = document.querySelector('#data2');
+      var arrow = document.querySelector('#arrow');
+      
+      const url = '//router.project-osrm.org/nearest/v1/driving/';
+      //const coord = {
+      //	lon: 4.9004,
+      //  lat: 52.3531
+      //};
+      
+      //fetch(url + coord.lon + ',' + coord.lat).then(function(response) { 
+      //  return response.json();
+      //}).then(function(json) {
+      //  if (json.code === 'Ok') {
+      //  	console.info(json);
+      //    document.getElementById('result').innerHTML =
+      //    	json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
+      //  }else{
+      //  console.log(json);
+      //  }
+      //});
+      
+      let map;
+      let marker;
+      
+      function initMap() {
+          const initialPosition = { lat: 59.325, lng: 18.069 };
+       
+          map = new google.maps.Map(document.getElementById('map'), {
+            //center: { lat: 59.325, lng: 18.069 },
+            center: initialPosition,
+            zoom: 15
+          });
+          marker = new google.maps.Marker({
+            map: map,
+            position: initialPosition,
+            icon: 'http://www.google.com/mapfiles/arrow.png?i=0' });
+        
+        
+        }
+
+
+
+
+      
+      function deviceOrientation() {
+        //code
+        if ('ondeviceorientationabsolute' in window) {
+            devorienteventName = 'deviceorientationabsolute';
+            alert(devorienteventName);
+        }else if ('ondeviceorientation' in window) {
+            devorienteventName = 'deviceorientation';
+            alert(devorienteventName);
+        } else {
+            devorienteventName = '';
+            console.error('Compass not supported');
+            alert('Compass not supported');
+        };
+
+        //return devorienteventName;
+        
+      }
+      
+
+      function handler_absolute_q(event){
+          //console.log(222);
+          
+          var alpha = event.alpha; //z
+          var beta = event.beta; //x
+          var gamma = event.gamma; //y
+          var absolute = event.absolute? event.absolute:"undefined?";
+          
+          output2.innerHTML  = "beta_a : " + Math.round(beta) + "; ";
+          output2.innerHTML += "gamma_a: " + Math.round(gamma) + "; ";
+          output2.innerHTML += "alpha_a: " + Math.round(alpha) + "; ";
+          output2.innerHTML += "absolute_a: " + absolute + "\n";
+          
+          var rad = Math.PI/180;
+          
+          // Update the rotation object
+          var q = Quaternion.fromEuler(alpha * rad, beta * rad, gamma * rad, 'ZXY'); //E: set order of the rotation! RELEVANT!
+        
+          // Set the CSS style to the element you want to rotate
+          //E: OJO! I have to transform quaternions into matrices again for every rotation
+          arrow.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";
+       
+      }
+      
+      $(document).ready(function(){
+        //console.log(111);
+        deviceOrientation();
+        window.addEventListener(devorienteventName, handler_absolute_q, true);
+        });
+      
+      
+      function getLocation() {
+        
+        // Get proper error message based on the code.
+        const getPositionErrorMessage = code => {
+          switch (code) {
+            case 1:
+              return 'Permission denied.';
+            case 2:
+              return 'Position unavailable.';
+            case 3:
+              return 'Timeout reached.';
+          }
+        }
+        
+        
+        if (navigator.geolocation) {
+          navigator.geolocation.watchPosition(
+                                              showPosition,
+                                              (err)=>{resulthtml.innerHTML = err.code},
+                                              //(err)=>{resulthtml.innerHTML = `Error (${err.code}): ${getPositionErrorMessage(err.code)}`},
+                                              {enableHighAccuracy: true,
+                                              timeout: 1000,
+                                              maximumAge:4000}
+                                            );
+        } else { 
+          demohtml.innerHTML = "Geolocation is not supported by this browser.";
+        }
+        //setInterval(getLocation,10000)
+      }
+      
+      function showPosition(position) {
+          let lat = Number(position.coords.latitude.toFixed(5));
+          let lng = Number(position.coords.longitude.toFixed(5));
+          if (position.coords.heading) {
+            //code
+            coordheading = kf.filter(position.coords.heading);
+            //$("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css('transform',String(Math.round(heading)) + 'deg')
+            $("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css({'transform': 'rotate('+String(180-Math.round(coordheading))+'deg)'});
+          }else{
+            coordheading = position.coords.heading;
+          }
+        
+          //console.log(lat,lng);
+          marker.setPosition({lat,lng});
+          map.panTo({ lat, lng });
+          demohtml.innerHTML = "Latitude: " + String(lat) + "<br>Longitude: " + String(lng) + "<br>Heading: " + String(180-Math.round(coordheading));
+          //+ "<br>DevOrient: " + devorienteventName + ", Alpha: "+alpha+", Beta: "+beta+", Gamma: "+gamma+", Absolute: "+absolute;
+          fetch(url + lng + ',' + lat + '?number=1').then(function(response) { 
+              return response.json();
+            }).then(function(json) {
+              if (json.code === 'Ok') {
+                console.info(json);
+                resulthtml.innerHTML =
+                    'Is this your current location? ' + json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
+              }else{
+              console.log(json);
+              resulthtml.innerHTML = "We couldn't get any result back from the API";
+              }
+            });
+      }
+     
+
+        //references:
+        //-- https://bagja.net/blog/track-user-location-google-maps.html
+        
+    </script>  
+  </body>
+</html>

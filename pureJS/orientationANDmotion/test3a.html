@@ -154,7 +154,7 @@
           var rad = Math.PI/180;
           
           // Update the rotation object
-          var q = Quaternion.fromEuler(alpha * rad, beta * rad, gamma * rad, 'ZXY'); //E: set order of the rotation! RELEVANT!
+          var q = Quaternion.fromEuler(alpha * rad, gamma * rad, beta * rad, 'YXZ'); //E: set order of the rotation! RELEVANT!
         
           // Set the CSS style to the element you want to rotate
           //E: OJO! I have to transform quaternions into matrices again for every rotation

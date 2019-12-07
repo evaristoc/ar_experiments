@@ -167,7 +167,7 @@
           output2.innerHTML = "rotation matrix: "+q.conjugate().toMatrix().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
           output3.innerHTML = "homogeneous rotation matrix: "+q.conjugate().toMatrix4().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
           
-          arrow.style.transform = "matrix3d(" + q.conjugate().toMatrix() + ")";
+          arrow.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";
        
       }
       

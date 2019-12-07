@@ -158,7 +158,7 @@
         
           // Set the CSS style to the element you want to rotate
           //E: OJO! I have to transform quaternions into matrices again for every rotation
-          arrow.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";
+          arrow.style.transform = "matrix3d(" + q.conjugate().toMatrix() + ")";
        
       }
       

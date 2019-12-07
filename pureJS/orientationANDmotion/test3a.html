@@ -210,7 +210,8 @@
           q1.mul(q0);
           q1.mul( Quaternion.fromAxisAngle( [0,0,1], - window.orientation ) ); // adjust for screen orientation
           output3.innerHTML += "\nthreeJS formula: "+q1+"; orient: "+ window.orientation;
-          arrow.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";
+          //arrow.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";
+          arrow.style.transform = "matrix3d(" + q1.conjugate().toMatrix4() + ")";
        
       }
       

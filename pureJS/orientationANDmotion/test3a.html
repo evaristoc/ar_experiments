@@ -42,14 +42,26 @@
         /*transform: rotate(180deg);*/
       }
       
+      #compass{
+        transform:rotate(-90deg);
+        max-width:20%;
+        height:auto;
+        object-fit: contain;
+        transform-origin:left center;
+        position:absolute;
+        top:70px;
+        left:100px;
+      }
+      
     </style>
   </head>
   <body>
-    <div class="output" style="width:300px; height:150px;background-color:lightgray;">
+    <div class="output" style="width:300px; height:150px;background-color:lightgray; position:relative;">
       <pre id="data1"></pre>
       <pre id="data2"></pre>
       <pre id="data3"></pre>
-      <pre id="arrow" style="font-size:40px;transform-origin:bottom center">&uarr;</pre> 
+      <!--<pre id="arrow" style="font-size:40px;transform-origin:bottom center">&uarr;</pre>-->
+      <img id="compass" src="https://carlisletheacarlisletheatre.org/images/arrow-png-2.png">
     </div>
     <main class="container">
       <p>Click the button to get your coordinates.</p>
@@ -78,7 +90,7 @@
       var output1 = document.querySelector('#data1');
       var output2 = document.querySelector('#data2');
       var output3 = document.querySelector('#data3');
-      var arrow = document.querySelector('#arrow');
+      var compass = document.querySelector('#compass');
       
       const url = '//router.project-osrm.org/nearest/v1/driving/';
       //const coord = {
@@ -211,7 +223,7 @@
           q1.mul( Quaternion.fromAxisAngle( [0,0,1], - window.orientation ) ); // adjust for screen orientation
           output3.innerHTML += "\nthreeJS formula: "+q1+"; orient: "+ window.orientation;
           //arrow.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";
-          arrow.style.transform = "matrix3d(" + q1.conjugate().toMatrix4() + ")";
+          compass.style.transform = "matrix3d(" + q1.conjugate().toMatrix4() + ")";
        
       }
       
@@ -230,8 +242,10 @@
           
           var rad = Math.PI/180;
           
-
-          arrow.style.transform =
+          //alpha = beta = gamma = 60.;
+          
+          
+          compass.style.transform =
               "rotateZ(" + ( alpha - 180 ) + "deg) " +
               "rotateX(" + beta + "deg) " +
               "rotateY(" + ( -gamma ) + "deg)";

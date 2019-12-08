@@ -76,10 +76,10 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqYfXdCyKhpJQI9WZ0-jyJ_S5NSLkqZz8&callback=initMap"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/quaternion@1.1.0/quaternion.min.js"></script>
     <script>
-      var demohtml = document.getElementById("demo");
-      var resulthtml = document.getElementById('result');
-      
-      var kf = new KalmanFilter({R: 15, Q: 3});
+      //var demohtml = document.getElementById("demo");
+      //var resulthtml = document.getElementById('result');
+      //
+      //var kf = new KalmanFilter({R: 15, Q: 3});
       
       //POTENTIAL HIDDEN VARIABLES
       var devorienteventName = '';
@@ -110,24 +110,24 @@
       //  }
       //});
       
-      let map;
-      let marker;
-      
-      function initMap() {
-          const initialPosition = { lat: 59.325, lng: 18.069 };
-       
-          map = new google.maps.Map(document.getElementById('map'), {
-            //center: { lat: 59.325, lng: 18.069 },
-            center: initialPosition,
-            zoom: 15
-          });
-          marker = new google.maps.Marker({
-            map: map,
-            position: initialPosition,
-            icon: 'http://www.google.com/mapfiles/arrow.png?i=0' });
-        
-        
-        }
+      //let map;
+      //let marker;
+      //
+      //function initMap() {
+      //    const initialPosition = { lat: 59.325, lng: 18.069 };
+      // 
+      //    map = new google.maps.Map(document.getElementById('map'), {
+      //      //center: { lat: 59.325, lng: 18.069 },
+      //      center: initialPosition,
+      //      zoom: 15
+      //    });
+      //    marker = new google.maps.Marker({
+      //      map: map,
+      //      position: initialPosition,
+      //      icon: 'http://www.google.com/mapfiles/arrow.png?i=0' });
+      //  
+      //  
+      //  }
 
 
 
@@ -137,19 +137,19 @@
         //code
         if ('ondeviceorientationabsolute' in window) {
             devorienteventName = 'deviceorientationabsolute';
-            alert(devorienteventName);
+            //alert(devorienteventName);
         }else if ('ondeviceorientation' in window) {
             devorienteventName = 'deviceorientation';
-            alert(devorienteventName);
+            //alert(devorienteventName);
         } else {
             devorienteventName = '';
             console.error('Compass not supported');
-            alert('Compass not supported');
+            //alert('Compass not supported');
         };
 
         if ('onorientation' in window || 'orientation' in window) {
           //code
-           alert('orientation');
+           //alert('orientation');
         }
         //return devorienteventName;
         
@@ -257,34 +257,34 @@
           
           //alpha = beta = gamma = 60.;
           
-          //https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Using_device_orientation_with_3D_transforms
-          compass.style.transform =
-              "rotateZ(" + ( alpha - 180 ) + "deg) " +
-              "rotateX(" + beta + "deg) " +
-              "rotateY(" + ( -gamma ) + "deg)";
-          
-         
-          //E: world
-          compass.style.transform =
-                "rotateY(" + ( -gamma ) + "deg)" +
-                "rotateX(" + beta + "deg) " +
-                "rotateZ(" + - ( alpha - 180 ) + "deg) ";
-                
-          compass.style.transform = //E: because it is already in the wrong position...
-                "rotateY(" + ( -gamma + 90 ) + "deg)" +
-                "rotateX(" + beta + "deg) " +
-                "rotateZ(" + - ( alpha - 90 ) + "deg) ";
-          
-          //E: object
-          compass.style.transform =
-              "rotateZ(" + ( alpha - 270 ) + "deg) " +
-              "rotateX(" + beta + "deg) " +
-              "rotateY(" + ( -gamma ) + "deg)";
+          ////https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Using_device_orientation_with_3D_transforms
+          //compass.style.transform =
+          //    "rotateZ(" + ( alpha - 180 ) + "deg) " +
+          //    "rotateX(" + beta + "deg) " +
+          //    "rotateY(" + ( -gamma ) + "deg)";
+          //
+          //
+          ////E: world
+          //compass.style.transform =
+          //      "rotateY(" + ( -gamma ) + "deg)" +
+          //      "rotateX(" + beta + "deg) " +
+          //      "rotateZ(" + - ( alpha - 180 ) + "deg) ";
+          //      
+          //compass.style.transform = //E: because it is already in the wrong position...
+          //      "rotateY(" + ( -gamma + 90 ) + "deg)" +
+          //      "rotateX(" + beta + "deg) " +
+          //      "rotateZ(" + - ( alpha - 90 ) + "deg) ";
+          //
+          ////E: object
+          //compass.style.transform =
+          //    "rotateZ(" + ( alpha - 270 ) + "deg) " +
+          //    "rotateX(" + beta + "deg) " +
+          //    "rotateY(" + ( -gamma ) + "deg)";
               
           //E: object
           compass.style.transform =
               //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
-              "rotateZ(" + ( alpha - 90 ) + "deg) " + //E: invert if you want the object to point to you?
+              "rotateZ(" + 90  + "deg) " + //E: invert if you want the object to point to you?
               "rotateX(" + (-beta) + "deg)" +
               "rotateY(" + ( gamma ) + "deg)"
               
@@ -299,66 +299,66 @@
         });
       
       
-      function getLocation() {
-        
-        // Get proper error message based on the code.
-        const getPositionErrorMessage = code => {
-          switch (code) {
-            case 1:
-              return 'Permission denied.';
-            case 2:
-              return 'Position unavailable.';
-            case 3:
-              return 'Timeout reached.';
-          }
-        }
-        
-        
-        if (navigator.geolocation) {
-          navigator.geolocation.watchPosition(
-                                              showPosition,
-                                              (err)=>{resulthtml.innerHTML = err.code},
-                                              //(err)=>{resulthtml.innerHTML = `Error (${err.code}): ${getPositionErrorMessage(err.code)}`},
-                                              {enableHighAccuracy: true,
-                                              timeout: 1000,
-                                              maximumAge:4000}
-                                            );
-        } else { 
-          demohtml.innerHTML = "Geolocation is not supported by this browser.";
-        }
-        //setInterval(getLocation,10000)
-      }
-      
-      function showPosition(position) {
-          let lat = Number(position.coords.latitude.toFixed(5));
-          let lng = Number(position.coords.longitude.toFixed(5));
-          if (position.coords.heading) {
-            //code
-            coordheading = kf.filter(position.coords.heading);
-            //$("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css('transform',String(Math.round(heading)) + 'deg')
-            $("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css({'transform': 'rotate('+String(180-Math.round(coordheading))+'deg)'});
-          }else{
-            coordheading = position.coords.heading;
-          }
-        
-          //console.log(lat,lng);
-          marker.setPosition({lat,lng});
-          map.panTo({ lat, lng });
-          demohtml.innerHTML = "Latitude: " + String(lat) + "<br>Longitude: " + String(lng) + "<br>Heading: " + String(180-Math.round(coordheading));
-          //+ "<br>DevOrient: " + devorienteventName + ", Alpha: "+alpha+", Beta: "+beta+", Gamma: "+gamma+", Absolute: "+absolute;
-          fetch(url + lng + ',' + lat + '?number=1').then(function(response) { 
-              return response.json();
-            }).then(function(json) {
-              if (json.code === 'Ok') {
-                console.info(json);
-                resulthtml.innerHTML =
-                    'Is this your current location? ' + json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
-              }else{
-              console.log(json);
-              resulthtml.innerHTML = "We couldn't get any result back from the API";
-              }
-            });
-      }
+      //function getLocation() {
+      //  
+      //  // Get proper error message based on the code.
+      //  const getPositionErrorMessage = code => {
+      //    switch (code) {
+      //      case 1:
+      //        return 'Permission denied.';
+      //      case 2:
+      //        return 'Position unavailable.';
+      //      case 3:
+      //        return 'Timeout reached.';
+      //    }
+      //  }
+      //  
+      //  
+      //  if (navigator.geolocation) {
+      //    navigator.geolocation.watchPosition(
+      //                                        showPosition,
+      //                                        (err)=>{resulthtml.innerHTML = err.code},
+      //                                        //(err)=>{resulthtml.innerHTML = `Error (${err.code}): ${getPositionErrorMessage(err.code)}`},
+      //                                        {enableHighAccuracy: true,
+      //                                        timeout: 1000,
+      //                                        maximumAge:4000}
+      //                                      );
+      //  } else { 
+      //    demohtml.innerHTML = "Geolocation is not supported by this browser.";
+      //  }
+      //  //setInterval(getLocation,10000)
+      //}
+      //
+      //function showPosition(position) {
+      //    let lat = Number(position.coords.latitude.toFixed(5));
+      //    let lng = Number(position.coords.longitude.toFixed(5));
+      //    if (position.coords.heading) {
+      //      //code
+      //      coordheading = kf.filter(position.coords.heading);
+      //      //$("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css('transform',String(Math.round(heading)) + 'deg')
+      //      $("[src^='http://www.google.com/mapfiles/arrow.png?i=']").css({'transform': 'rotate('+String(180-Math.round(coordheading))+'deg)'});
+      //    }else{
+      //      coordheading = position.coords.heading;
+      //    }
+      //  
+      //    //console.log(lat,lng);
+      //    marker.setPosition({lat,lng});
+      //    map.panTo({ lat, lng });
+      //    demohtml.innerHTML = "Latitude: " + String(lat) + "<br>Longitude: " + String(lng) + "<br>Heading: " + String(180-Math.round(coordheading));
+      //    //+ "<br>DevOrient: " + devorienteventName + ", Alpha: "+alpha+", Beta: "+beta+", Gamma: "+gamma+", Absolute: "+absolute;
+      //    fetch(url + lng + ',' + lat + '?number=1').then(function(response) { 
+      //        return response.json();
+      //      }).then(function(json) {
+      //        if (json.code === 'Ok') {
+      //          console.info(json);
+      //          resulthtml.innerHTML =
+      //              'Is this your current location? ' + json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
+      //        }else{
+      //        console.log(json);
+      //        resulthtml.innerHTML = "We couldn't get any result back from the API";
+      //        }
+      //      });
+      //}
      
 
         //references:

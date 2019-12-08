@@ -283,7 +283,8 @@
               
           //E: object
           compass.style.transform =
-              "rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
+              //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
+              "rotateZ(" + ( alpha + 90 ) + "deg) " + //E: invert if you want the object to point to you?
               "rotateX(" + (-beta) + "deg)" +
               "rotateY(" + ( gamma ) + "deg)"
               

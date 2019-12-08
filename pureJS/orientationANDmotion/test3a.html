@@ -304,7 +304,7 @@
           //    "rotateY(" + ( -gamma ) + "deg)";
               
           //E: object
-          console.log(alpha,beta,gamma);
+          //console.log(alpha,beta,gamma);
           //compass.style.transform =
           //    //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
           //    "rotateZ(" + "60."  + "deg) " + //E: invert if you want the object to point to you?
@@ -316,7 +316,7 @@
           }
           compass.style.transform =
               //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
-              "rotateZ(" + (alpha + (alpha>180?90:-90))  + "deg) " + //E: invert if you want the object to point to you?
+              "rotateZ(" + (alpha + ((beta>90)||(beta<0)?180:-90))  + "deg) " + //E: invert if you want the object to point to you?
               "rotateX(" + -beta + "deg)" +
               "rotateY(" + gamma + "deg)";              
        

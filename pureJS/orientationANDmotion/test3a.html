@@ -244,11 +244,16 @@
           
           //alpha = beta = gamma = 60.;
           
-          
+          //https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Using_device_orientation_with_3D_transforms
           compass.style.transform =
               "rotateZ(" + ( alpha - 180 ) + "deg) " +
               "rotateX(" + beta + "deg) " +
               "rotateY(" + ( -gamma ) + "deg)";
+          
+          compass.style.transform =
+                "rotateY(" + ( -gamma ) + "deg)" +
+                "rotateX(" + beta + "deg) " +
+                "rotateZ(" + - ( alpha - 180 ) + "deg) ";
        
       }
       

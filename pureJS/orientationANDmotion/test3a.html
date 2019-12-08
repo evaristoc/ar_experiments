@@ -215,10 +215,34 @@
        
       }
       
+     function handler_absolute(event){
+          //console.log(222);
+          
+          var alpha = event.alpha; //z
+          var beta = event.beta; //x
+          var gamma = event.gamma; //y
+          var absolute = event.absolute? event.absolute:"undefined?";
+          
+          output1.innerHTML  = "beta_a : " + Math.round(beta) + "; ";
+          output1.innerHTML += "gamma_a: " + Math.round(gamma) + "; ";
+          output1.innerHTML += "alpha_a: " + Math.round(alpha) + "; ";
+          output1.innerHTML += "absolute_a: " + absolute + "\n";
+          
+          var rad = Math.PI/180;
+          
+
+          arrow.style.transform =
+              "rotateZ(" + ( alpha - 180 ) + "deg) " +
+              "rotateX(" + beta + "deg) " +
+              "rotateY(" + ( -gamma ) + "deg)";
+       
+      }
+      
+      
       $(document).ready(function(){
         //console.log(111);
         deviceOrientation();
-        window.addEventListener(devorienteventName, handler_absolute_q, true);
+        window.addEventListener(devorienteventName, handler_absolute, true);
         });
       
       

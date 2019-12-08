@@ -210,8 +210,19 @@
           //E: Implementing ONE of the many possible solutions, with low precision
           var q = Quaternion.fromEuler(alpha * rad, gamma * rad, beta * rad, 'YXZ'); //E: set order of the rotation! RELEVANT!
 
-          output2.innerHTML = "rotation matrix: "+q.conjugate().toMatrix().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
-          output3.innerHTML = "homogeneous rotation matrix: \n"+q.conjugate().toMatrix4().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100}).map(function(v,i){return v + ((i==3)||(i==7)||(i==11))?'\n':' ' });
+          //output2.innerHTML = "rotation matrix: "+q.conjugate().toMatrix().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
+          var hommatrix = q.conjugate().toMatrix4().map(function(num,i){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100})
+          output3.innerHTML = "homogeneous rotation matrix: \n";
+          for (let j = 0; j < hommatrix.length; j++) {
+            //code
+            output3.innerHTML += hommatrix[j];
+            if (j+1%4==0) {
+              //code
+              output3.innerHTML += '\n';
+            }else{
+              output3.innerHTML += ' ';
+            }
+          }
           //E: init
           var q0 = Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis; E: CAMERA!
           
@@ -221,7 +232,7 @@
           q1.mul(q0);
           q1.mul(q0);
           q1.mul( Quaternion.fromAxisAngle( [0,0,1], - window.orientation ) ); // adjust for screen orientation
-          output3.innerHTML += "\nthreeJS formula: "+q1+"; orient: "+ window.orientation;
+          //output3.innerHTML += "\nthreeJS formula: "+q1+"; orient: "+ window.orientation;
           
           //E: Asigning matrix to 2d object
           compass.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";

@@ -43,7 +43,7 @@
       }
       
       #compass{
-        transform:rotate(-90deg);
+        /*transform:rotate(-90deg);*/
         max-width:20%;
         height:auto;
         object-fit: contain;
@@ -252,8 +252,15 @@
               "rotateX(" + beta + "deg) " +
               "rotateY(" + ( -gamma ) + "deg)";
           
+         
+          
           compass.style.transform =
                 "rotateY(" + ( -gamma ) + "deg)" +
+                "rotateX(" + beta + "deg) " +
+                "rotateZ(" + - ( alpha - 180 ) + "deg) ";
+                
+          compass.style.transform = //E: because it is already in the wrong position...
+                "rotateY(" + ( -gamma + 90 ) + "deg)" +
                 "rotateX(" + beta + "deg) " +
                 "rotateZ(" + - ( alpha - 180 ) + "deg) ";
        

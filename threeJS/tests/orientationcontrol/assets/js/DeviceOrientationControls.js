@@ -58,7 +58,7 @@ THREE.DeviceOrientationControls = function( object ) {
 
 		return function( quaternion, alpha, beta, gamma, orient ) { // a closure...
 
-			euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us //<---- E: RELEVANT!!
+			euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us (inverted) //<---- E: RELEVANT!!
 
 			quaternion.setFromEuler( euler ); // orient the device
 

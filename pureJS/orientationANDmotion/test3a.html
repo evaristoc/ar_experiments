@@ -73,7 +73,7 @@
 
     <!--<script src="script.js"></script>-->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqYfXdCyKhpJQI9WZ0-jyJ_S5NSLkqZz8&callback=initMap"></script>
+    <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqYfXdCyKhpJQI9WZ0-jyJ_S5NSLkqZz8&callback=initMap"></script>-->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/quaternion@1.1.0/quaternion.min.js"></script>
     <script>
       //var demohtml = document.getElementById("demo");
@@ -92,7 +92,7 @@
       var output3 = document.querySelector('#data3');
       var compass = document.querySelector('#compass');
       
-      const url = '//router.project-osrm.org/nearest/v1/driving/';
+     // const url = '//router.project-osrm.org/nearest/v1/driving/';
       //const coord = {
       //	lon: 4.9004,
       //  lat: 52.3531
@@ -255,6 +255,28 @@
           
           var rad = Math.PI/180;
           
+          // Set the CSS style to the element you want to rotate
+          //E: OJO! I have to transform quaternions into matrices again for every rotation
+          //console.log(q.conjugate().toMatrix());
+          //console.log(q.conjugate().toMatrix4());
+          //E: ROUNDING FUNCTION DISCUSSION - RELEVANT! : https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
+          //E: Implementing ONE of the many possible solutions, with low precision
+          var q = Quaternion.fromEuler((alpha - 90) * rad, gamma * rad, beta * rad, 'YXZ'); //E: set order of the rotation! RELEVANT!
+
+          //output2.innerHTML = "rotation matrix: "+q.conjugate().toMatrix().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
+          var hommatrix = q.conjugate().toMatrix4().map(function(num,i){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100})
+          output3.innerHTML = "homogeneous rotation matrix: \n";
+          for (let j = 0; j < hommatrix.length; j++) {
+            //code
+            output3.innerHTML += hommatrix[j];
+            if ((j+1)%4==0) {
+              //code
+              output3.innerHTML += '\n';
+            }else{
+              output3.innerHTML += ' ';
+            }
+          }
+          
           //alpha = beta = gamma = 60.;
           
           ////https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Using_device_orientation_with_3D_transforms
@@ -282,12 +304,21 @@
           //    "rotateY(" + ( -gamma ) + "deg)";
               
           //E: object
+          console.log(alpha,beta,gamma);
+          //compass.style.transform =
+          //    //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
+          //    "rotateZ(" + "60."  + "deg) " + //E: invert if you want the object to point to you?
+          //    "rotateX(" + (-beta ) + "deg)" +
+          //    "rotateY(" + ( gamma ) + "deg)";
+          if (!alpha||!beta||!gamma) {
+            //code
+            alpha = beta = gamma = 0;
+          }
           compass.style.transform =
               //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
-              "rotateZ(" + 90  + "deg) " + //E: invert if you want the object to point to you?
-              "rotateX(" + (-beta) + "deg)" +
-              "rotateY(" + ( gamma ) + "deg)"
-              
+              "rotateZ(" + (alpha - 90)  + "deg) " + //E: invert if you want the object to point to you?
+              "rotateX(" + -beta + "deg)" +
+              "rotateY(" + gamma + "deg)";              
        
       }
       
@@ -295,7 +326,7 @@
       $(document).ready(function(){
         //console.log(111);
         deviceOrientation();
-        window.addEventListener(devorienteventName, handler_absolute_q, true);
+        window.addEventListener(devorienteventName, handler_absolute, true);
         });
       
       

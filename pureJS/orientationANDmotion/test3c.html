@@ -42,7 +42,7 @@
         /*transform: rotate(180deg);*/
       }
       
-      #compass{
+      .compass{
         /*transform:rotate(-90deg);*/
         max-width:20%;
         height:auto;
@@ -61,7 +61,8 @@
       <pre id="data2"></pre>
       <pre id="data3"></pre>
       <!--<pre id="arrow" style="font-size:40px;transform-origin:bottom center">&uarr;</pre>-->
-      <img id="compass" src="https://carlisletheacarlisletheatre.org/images/arrow-png-2.png">
+      <img class="compass" id="compass1" src="https://carlisletheacarlisletheatre.org/images/arrow-png-2.png">
+      <img class="compass" id="compass2" src="https://carlisletheacarlisletheatre.org/images/arrow-png-1.png">
     </div>
     <!--<main class="container">
       <p>Click the button to get your coordinates.</p>
@@ -90,7 +91,8 @@
       var output1 = document.querySelector('#data1');
       var output2 = document.querySelector('#data2');
       var output3 = document.querySelector('#data3');
-      var compass = document.querySelector('#compass');
+      var compass1 = document.querySelector('#compass1');
+      var compass2 = document.querySelector('#compass2');
       
      // const url = '//router.project-osrm.org/nearest/v1/driving/';
       //const coord = {
@@ -364,8 +366,8 @@
             //code
             alpha = beta = gamma = 0;
           }
-          compass.style.transform =
-             "rotateZ(" + (alpha -90)  + "deg) " +
+          compass1.style.transform =
+             "rotateZ(" + (alpha - 90)  + "deg) " +
               //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
              // "rotateZ(" + (alpha + ((beta>90)||(beta<0)?180:-90))  + "deg) " + //E: invert if you want the object to point to you?
               "rotateX(" + -beta + "deg)" +
@@ -400,6 +402,14 @@
         // Convert radians to degrees
         compassHeading *= 180 / Math.PI;
         output1.innerHTML += "compass heading: "+Math.round(compassHeading);
+        
+        compass2.style.transform =
+             "rotateZ(" + (compassHeading)  + "deg) " +
+              //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
+             // "rotateZ(" + (alpha + ((beta>90)||(beta<0)?180:-90))  + "deg) " + //E: invert if you want the object to point to you?
+              "rotateX(" + -beta + "deg)" +
+              "rotateY(" + gamma + "deg)";
+   
        
       }
       

@@ -63,13 +63,13 @@
       <!--<pre id="arrow" style="font-size:40px;transform-origin:bottom center">&uarr;</pre>-->
       <img id="compass" src="https://carlisletheacarlisletheatre.org/images/arrow-png-2.png">
     </div>
-    <main class="container">
+    <!--<main class="container">
       <p>Click the button to get your coordinates.</p>
       <button onclick="getLocation()">Try It</button>
       <p id="demo"></p>
       <p id='result'></p>
       <div id="map" class="map"></div>
-    </main>
+    </main>-->
 
     <!--<script src="script.js"></script>-->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
@@ -272,7 +272,7 @@
               
           //E: object
           compass.style.transform =
-              "rotateZ(" + ( alpha - 90 ) + "deg) " +
+              "rotateZ(" + ( alpha - alpha < 90? 90:-90 ) + "deg) " +
               "rotateX(" + (-beta) + "deg)" +
               "rotateY(" + ( gamma ) + "deg)"
               

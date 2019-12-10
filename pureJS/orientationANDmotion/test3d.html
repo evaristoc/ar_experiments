@@ -157,176 +157,9 @@
         
       }
       
-
-      //function handler_absolute_q(event){
-      //    //console.log(222);
-      //    
-      //    var alpha = event.alpha; //z
-      //    var beta = event.beta; //x
-      //    var gamma = event.gamma; //y
-      //    var absolute = event.absolute? event.absolute:"undefined?";
-      //    
-      //    output1.innerHTML  = "beta_a : " + Math.round(beta) + "; ";
-      //    output1.innerHTML += "gamma_a: " + Math.round(gamma) + "; ";
-      //    output1.innerHTML += "alpha_a: " + Math.round(alpha) + "; ";
-      //    output1.innerHTML += "absolute_a: " + absolute + "\n";
-      //    
-      //    var rad = Math.PI/180;
-      //    
-      //    // Update the rotation object
-      //    var q = Quaternion.fromEuler(alpha * rad, gamma * rad, beta * rad, 'YXZ'); //E: set order of the rotation! RELEVANT!
-      //  
-      //    // Set the CSS style to the element you want to rotate
-      //    //E: OJO! I have to transform quaternions into matrices again for every rotation
-      //    //console.log(q.conjugate().toMatrix());
-      //    //console.log(q.conjugate().toMatrix4());
-      //    //E: ROUNDING FUNCTION DISCUSSION - RELEVANT! : https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
-      //    //E: Implementing ONE of the many possible solutions, with low precision
-      //    output2.innerHTML = "rotation matrix: "+q.conjugate().toMatrix().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
-      //    output3.innerHTML = "homogeneous rotation matrix: "+q.conjugate().toMatrix4().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
-      //    
-      //    arrow.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";
-      // 
-      //}
+    
       
-      function handler_absolute_q(event){
-          //console.log(222);
-          
-          var alpha = event.alpha; //z
-          var beta = event.beta; //x
-          var gamma = event.gamma; //y
-          var absolute = event.absolute? event.absolute:"undefined?";
-          
-          output1.innerHTML  = "beta_a (x): " + Math.round(beta) + ";\n";
-          output1.innerHTML += "gamma_a (y): " + Math.round(gamma) + ";\n";
-          output1.innerHTML += "alpha_a (z): " + Math.round(alpha) + ";\n";
-          output1.innerHTML += "absolute_a: " + absolute + "\n";
-          
-          var rad = Math.PI/180;
-          
-          // Set the CSS style to the element you want to rotate
-          //E: OJO! I have to transform quaternions into matrices again for every rotation
-          //console.log(q.conjugate().toMatrix());
-          //console.log(q.conjugate().toMatrix4());
-          //E: ROUNDING FUNCTION DISCUSSION - RELEVANT! : https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
-          //E: Implementing ONE of the many possible solutions, with low precision
-          var q = Quaternion.fromEuler(alpha * rad, gamma * rad, beta * rad, 'YXZ'); //E: set order of the rotation! RELEVANT!
-
-          //output2.innerHTML = "rotation matrix: "+q.conjugate().toMatrix().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
-          var hommatrix = q.conjugate().toMatrix4().map(function(num,i){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100})
-          output3.innerHTML = "homogeneous rotation matrix: \n";
-          for (let j = 0; j < hommatrix.length; j++) {
-            //code
-            output3.innerHTML += hommatrix[j];
-            if ((j+1)%4==0) {
-              //code
-              output3.innerHTML += '\n';
-            }else{
-              output3.innerHTML += ' ';
-            }
-          }
-          //E: init
-          var q0 = Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis; E: CAMERA!
-          
-          // Update the rotation object
-          var q1 = Quaternion.fromEuler(alpha * rad, gamma * rad, beta * rad, 'YXZ'); //E: set order of the rotation! RELEVANT!
-          
-          q1.mul(q0);
-          //q1.mul(q0);
-          q1.mul( Quaternion.fromAxisAngle( [0,0,1], - window.orientation ) ); // adjust for screen orientation
-          //output3.innerHTML += "\nthreeJS formula: "+q1+"; orient: "+ window.orientation;
-          
-          //E: Asigning matrix to 2d object
-          //compass.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";
-          //compass.style.transform = "matrix3d(" + q1.conjugate().toMatrix4() + ")";
-          compass2.style.transform = "matrix3d(" + hommatrix + ")";
-       
-      }
-      
-     function handler_absolute(event){
-          //console.log(222);
-          
-          var alpha = event.alpha; //z
-          var beta = event.beta; //x
-          var gamma = event.gamma; //y
-          var absolute = event.absolute? event.absolute:"undefined?";
-          
-          output1.innerHTML  = "beta_a : " + Math.round(beta) + ";\n";
-          output1.innerHTML += "gamma_a: " + Math.round(gamma) + ";\n";
-          output1.innerHTML += "alpha_a: " + Math.round(alpha) + ";\n";
-          output1.innerHTML += "absolute_a: " + absolute + "\n";
-          
-          var rad = Math.PI/180;
-          
-          // Set the CSS style to the element you want to rotate
-          //E: OJO! I have to transform quaternions into matrices again for every rotation
-          //console.log(q.conjugate().toMatrix());
-          //console.log(q.conjugate().toMatrix4());
-          //E: ROUNDING FUNCTION DISCUSSION - RELEVANT! : https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
-          //E: Implementing ONE of the many possible solutions, with low precision
-          var q = Quaternion.fromEuler((alpha - 90) * rad, gamma * rad, beta * rad, 'YXZ'); //E: set order of the rotation! RELEVANT!
-
-          //output2.innerHTML = "rotation matrix: "+q.conjugate().toMatrix().map(function(num){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100});
-          var hommatrix = q.conjugate().toMatrix4().map(function(num,i){return Math.round( ( num + Number.EPSILON ) * 100 ) / 100})
-          output3.innerHTML = "homogeneous rotation matrix: \n";
-          for (let j = 0; j < hommatrix.length; j++) {
-            //code
-            output3.innerHTML += hommatrix[j];
-            if ((j+1)%4==0) {
-              //code
-              output3.innerHTML += '\n';
-            }else{
-              output3.innerHTML += ' ';
-            }
-          }
-          
-          //alpha = beta = gamma = 60.;
-          
-          ////https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Using_device_orientation_with_3D_transforms
-          //compass.style.transform =
-          //    "rotateZ(" + ( alpha - 180 ) + "deg) " +
-          //    "rotateX(" + beta + "deg) " +
-          //    "rotateY(" + ( -gamma ) + "deg)";
-          //
-          //
-          ////E: world
-          //compass.style.transform =
-          //      "rotateY(" + ( -gamma ) + "deg)" +
-          //      "rotateX(" + beta + "deg) " +
-          //      "rotateZ(" + - ( alpha - 180 ) + "deg) ";
-          //      
-          //compass.style.transform = //E: because it is already in the wrong position...
-          //      "rotateY(" + ( -gamma + 90 ) + "deg)" +
-          //      "rotateX(" + beta + "deg) " +
-          //      "rotateZ(" + - ( alpha - 90 ) + "deg) ";
-          //
-          ////E: object
-          //compass.style.transform =
-          //    "rotateZ(" + ( alpha - 270 ) + "deg) " +
-          //    "rotateX(" + beta + "deg) " +
-          //    "rotateY(" + ( -gamma ) + "deg)";
-              
-          //E: object
-          //console.log(alpha,beta,gamma);
-          //compass.style.transform =
-          //    //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
-          //    "rotateZ(" + "60."  + "deg) " + //E: invert if you want the object to point to you?
-          //    "rotateX(" + (-beta ) + "deg)" +
-          //    "rotateY(" + ( gamma ) + "deg)";
-          if (!alpha||!beta||!gamma) {
-            //code
-            alpha = beta = gamma = 0;
-          }
-          compass.style.transform =
-              //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
-              "rotateZ(" + (alpha + ((beta>90)||(beta<0)?180:-90))  + "deg) " + //E: invert if you want the object to point to you?
-              "rotateX(" + -beta + "deg)" +
-              "rotateY(" + gamma + "deg)";              
-       
-      }
-      
-      
-     function handler_absolute_heading(event){
+     function handler_absolute_q(event){
           //console.log(222);
           
           var alpha = event.alpha; //z
@@ -373,43 +206,9 @@
              // "rotateZ(" + (alpha + ((beta>90)||(beta<0)?180:-90))  + "deg) " + //E: invert if you want the object to point to you?
               "rotateX(" + -beta + "deg)" +
               "rotateY(" + gamma + "deg)";
-              
-        // Convert degrees to radians
-        var alphaRad = alpha * rad; //E rotation around Z
-        var betaRad = beta * rad;   //E: rotation around Y
-        var gammaRad = gamma * rad; //E: rotation around X
 
-        // Calculate equation components
-        var cA = Math.cos(alphaRad);
-        var sA = Math.sin(alphaRad);
-        var sB = Math.sin(betaRad);
-        var cG = Math.cos(gammaRad);
-        var sG = Math.sin(gammaRad);
-
-        // Calculate A, B, C rotation components
-        var rA = - cA * sG - sA * sB * cG;
-        var rB = - sA * sG + cA * sB * cG;
-
-        // Calculate compass heading
-        var compassHeading = Math.atan(rA / rB);
-
-        // Convert from half unit circle to whole unit circle
-        if (rB < 0) {
-            compassHeading += Math.PI;
-        } else if (rA < 0) {
-            compassHeading += 2 * Math.PI;
-        }
-
-        // Convert radians to degrees
-        compassHeading *= 180 / Math.PI;
-        output1.innerHTML += "compass heading: "+Math.round(compassHeading);
         
-        compass2.style.transform =
-             "rotateZ(" + (compassHeading)  + "deg) " +
-              //"rotateZ(" + ( alpha - (alpha >= 0? 180:-180) ) + "deg) " + //E: invert if you want the object to point to you?
-             // "rotateZ(" + (alpha + ((beta>90)||(beta<0)?180:-90))  + "deg) " + //E: invert if you want the object to point to you?
-              "rotateX(" + -beta + "deg)" +
-              "rotateY(" + gamma + "deg)";
+          compass2.style.transform = "matrix3d(" + hommatrix + ")";
    
        
       }
@@ -418,7 +217,6 @@
       $(document).ready(function(){
         //console.log(111);
         deviceOrientation();
-        window.addEventListener(devorienteventName, handler_absolute, true);
         window.addEventListener(devorienteventName, handler_absolute_q, true);
         });
       

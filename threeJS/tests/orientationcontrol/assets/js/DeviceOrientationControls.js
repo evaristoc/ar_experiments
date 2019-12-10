@@ -54,7 +54,7 @@ THREE.DeviceOrientationControls = function( object ) {
     //E: A couple of important references about how this implementation should be handled:
     //E: -- we are rotating from World to Object (https://www.scienceforums.net/topic/63577-global-and-local-3d-rotation/)
     //E: -- the position of the quaternions matters, being the first one THE FUNCTION (in this case the rotating transform) and the second THE TARGET (https://youtu.be/d4EgbgTm0Bg?t=1177)
-    
+    //E: BE AWARE of the numerous ways to express rotation, their pros and cons (eg. https://en.wikipedia.org/wiki/Category:Rotation_in_three_dimensions), as well as types, etc
     var setObjectQuaternion = function() {
 
 		var zee = new THREE.Vector3( 0, 0, 1 );

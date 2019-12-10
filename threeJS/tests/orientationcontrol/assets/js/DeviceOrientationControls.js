@@ -3,6 +3,8 @@
  * @author WestLangley / http://github.com/WestLangley
  *
  * W3C Device Orientation control (http://w3c.github.io/deviceorientation/spec-source-orientation.html)
+ *
+ *E: It somehow corresponds to the Example 12 of the W3C Device Orientation Control reference
  */
 
 THREE.DeviceOrientationControls = function( object ) {
@@ -45,6 +47,14 @@ THREE.DeviceOrientationControls = function( object ) {
     // the reason is that it is more simple to operate with quaternions for rotation calcuation that with rotation matrices
     // additionally, working with Euler angles may lead to a sort of "local minimum" solution (??) named "gymbal lock"
     // the Euler transformation used here is likely based on the following: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+ 	//E: here is where the quaternions are handled:
+	//E: -- from Euler angles to quaternions give CURRENT USER (device) expected POSE respect to North
+	//E: -- we rotate a CAMERA facing to Z- of device the angle of the POSE (first multiplication)
+	//E: -- similarly, we rotate a vector parallel to the Z+-axis of the device angled equal ORIENT-, as much as our current POSE
+    //E: A couple of important references about how this implementation should be handled:
+    //E: -- we are rotating from World to Object (https://www.scienceforums.net/topic/63577-global-and-local-3d-rotation/)
+    //E: -- the position of the quaternions matters, being the first one THE FUNCTION (in this case the rotating transform) and the second THE TARGET (https://youtu.be/d4EgbgTm0Bg?t=1177)
+    
     var setObjectQuaternion = function() {
 
 		var zee = new THREE.Vector3( 0, 0, 1 );

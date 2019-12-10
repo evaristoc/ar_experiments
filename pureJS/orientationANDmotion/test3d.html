@@ -237,8 +237,9 @@
           //output3.innerHTML += "\nthreeJS formula: "+q1+"; orient: "+ window.orientation;
           
           //E: Asigning matrix to 2d object
-          compass.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";
+          //compass.style.transform = "matrix3d(" + q.conjugate().toMatrix4() + ")";
           //compass.style.transform = "matrix3d(" + q1.conjugate().toMatrix4() + ")";
+          compass2.style.transform = "matrix3d(" + hommatrix + ")";
        
       }
       
@@ -417,7 +418,8 @@
       $(document).ready(function(){
         //console.log(111);
         deviceOrientation();
-        window.addEventListener(devorienteventName, handler_absolute_heading, true);
+        window.addEventListener(devorienteventName, handler_absolute, true);
+        window.addEventListener(devorienteventName, handler_absolute_q, true);
         });
       
       

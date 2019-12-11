@@ -1,6 +1,6 @@
 const loadPlaces = function (coords) {
     // COMMENT FOLLOWING LINE IF YOU WANT TO USE STATIC DATA AND ADD COORDINATES IN THE FOLLOWING 'PLACES' ARRAY
-    const method = 'api';
+    //const method = 'api';
 
     const PLACES = [
         {
@@ -10,6 +10,16 @@ const loadPlaces = function (coords) {
                 lng: 0, // add here longitude if using static data
             }
         },
+    
+    {name:'Stadhouderskade 84',location:{lng:4.8937512,lat:52.3579159}},
+{name:'Van Ostadestraat 318',location:{lng:4.9005937,lat:52.3535972}},
+{name:'Van Ostadestraat 9',location:{lng:4.8852473,lat:52.3516922}},
+{name:'Van Ostadestraat 391',location:{lng:4.9042466,lat:52.3545299}},
+{name:'Van Ostadestraat 55',location:{lng:4.8894377,lat:52.3518622}},
+{name:'Dusarstraat 31',location:{lng:4.8894046,lat:52.3517817}},
+{name:'Van Ostadestraat 456',location:{lng:4.9042454,lat:52.3545294}},
+{name:'Van Ostadestraat 233B',location:{lng:4.8987005,lat:52.3532503}},
+   
     ];
 
     if (method === 'api') {

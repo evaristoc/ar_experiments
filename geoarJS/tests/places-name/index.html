@@ -17,7 +17,8 @@
 <script src="./places.js"></script>
 
 <body style='margin: 0; overflow: hidden;'>
-    <a-scene
+    <div style="z-index:100;color:orange;"><h4>SOMETHING</h4></div>
+	<a-scene
         cursor='rayOrigin: mouse; fuse: true; fuseTimeout: 0;'
         raycaster="objects: [gps-entity-place];"
         vr-mode-ui="enabled: false"
@@ -26,6 +27,5 @@
 
         <a-camera gps-camera="minDistance: 40;" rotation-reader>
 		</a-camera>
-		<div><h4>SOMETHING</h4></div>
 	</a-scene>
 </body>

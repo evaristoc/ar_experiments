@@ -1,0 +1,76 @@
+    /*using this to make htlm elements overlay video https://stackoverflow.com/questions/16823636/overlaying-a-div-on-top-of-html-5-video*/
+
+    
+    #outerContainer{
+        /*float:left;*/
+    }
+    
+    #videostream{
+        position: relative;
+        background-color: #333;
+    }
+    
+    
+    #video-overlay {
+        position: absolute;
+        /*background-color: rgba(0, 0, 0, 0.46);*/
+        z-index: 2;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+      }
+    
+
+    .containers{
+      /*width: 100%;*/
+      min-width:350px;
+      max-width: 550px;
+      /*height: auto;*/
+      min-height:350px;
+      max-height:550px;        
+      overflow: hidden;
+      border-radius: 7px;
+      touch-action: none;
+    }
+
+    #container {
+      /*background-color: #333;*/
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: center;
+      position:relative;
+    }
+    
+    #my-gui-container {
+      position: absolute;
+      top: 0px;
+      right: 5px;
+      z-index: 10;
+    }
+    
+    #item {
+      width: 100px;
+      height: auto;
+      background-color: rgb(245, 230, 99);
+      border: 10px solid rgba(136, 136, 136, .5);
+      /*border-radius: 50%;*/
+      touch-action: none;
+      user-select: none;
+    }
+    
+    #item img{
+        width:100%;
+        height:auto;
+    }
+    
+    
+    #item:active {
+      background-color: rgba(168, 218, 220, 1.00);
+    }
+    #item:hover {
+      cursor: pointer;
+      border-width: 20px;
+    }

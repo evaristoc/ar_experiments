@@ -1,0 +1,44 @@
+!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, WebVR! • A-Frame</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+  </head>
+  <body>
+    <a-scene background="color: #FAFAFA">
+        <a-assets>
+         <img id="my-image" src="assets/grph/46462438_1572546156223211_4054682576076406784_o.jpg">
+    </a-assets>
+        <!-- Using the asset management system. https://aframe.io/docs/1.0.0/primitives/a-image.html; https://www.youtube.com/watch?v=3ze6nF_QB-8 -->
+      <a-image position="0 2 -3" src="#my-image" rotation="0 0 0"></a-image>
+    </a-scene>
+  <script>
+    //var w = document.querySelector("a-image").getAttribute('geometry').width;
+    var imgw;
+    var gui = new dat.GUI();
+    /* Resizing function */
+    var reSizingItem = function(){
+     this.rs = 1.0;
+    }
+    
+    /* Re-sizing control */
+    var s = gui.addFolder('Size');
+    var sItem = new reSizingItem();
+     //console.log(sItem);
+    var w = s.add(sItem,'rs',.1,10, .5);
+    w.onChange(function(v){
+      if (!imgw) {
+        //code
+        imgw = document.querySelector("a-image").getAttribute('geometry').width;
+      }
+      document.querySelector("a-image").setAttribute('geometry',{width:imgw*v});
+      imgw = document.querySelector("a-image").getAttribute('geometry').width/v;
+      })   
+    
+  </script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, WebVR! • A-Frame</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <script src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene background="color: #FAFAFA">
+        <a-assets>
+         <img id="my-image" src="assets/grph/46462438_1572546156223211_4054682576076406784_o.jpg">
+    </a-assets>
+        <!-- Using the asset management system. https://aframe.io/docs/1.0.0/primitives/a-image.html; https://www.youtube.com/watch?v=3ze6nF_QB-8 -->
+      <a-image position="0 0 -3" src="#my-image" rotation="0 -45 0"></a-image>
+        <!-- Basic plane with image texture: https://aframe.io/docs/0.5.0/primitives/a-plane.html -->
+        <a-plane color="#CCC" height="20" width="20"></a-plane>
+        <!-- Textured plane parallel to ground. -->
+        <a-plane src="#my-image" position="0 0 -4" height="4" width="4" rotation="0 0 0"></a-plane>
+      <!--<a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" shadow></a-box>
+      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E" shadow></a-sphere>
+      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" shadow></a-cylinder>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" shadow></a-plane>-->
+    </a-scene>
+  </body>
+</html>

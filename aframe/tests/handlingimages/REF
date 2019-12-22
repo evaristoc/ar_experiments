@@ -1,0 +1,11 @@
+ 	<!-- include jsartookit -->
+	<script src="../../../public/js/arjs-resources/jsartoolkit5/artoolkit.min.js"></script>
+	<script src="../../../public/js/arjs-resources/jsartoolkit5/artoolkit.api.js"></script>
+	<!-- include threex.artoolkit -->
+	<script src="../../../public/js/arjs-resources/threex/threex-artoolkitsource.js"></script>
+	<script src="../../../public/js/arjs-resources/threex/threex-artoolkitcontext.js"></script>
+    <script src="../../../public/js/arjs-resources/js/ar.js"></script>
+ <script src='../../../public/js/arjs-resources/js/aframe-ar.min.js'></script>
+     <script>
+        THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
+    </script>

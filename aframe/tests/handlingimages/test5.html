@@ -100,7 +100,8 @@ Other References:
       </a-assets>
      <!-- take the camera out of example and add a camera as part of the scene so you can rotate around and still drag --> 
     <a-entity
-                wasd-controls 
+                wasd-controls
+                touch-controls
                 position="0 1 1"
                 capture-mouse
                 raycaster="objects: .img" cursor="rayOrigin:mouse"
@@ -111,7 +112,7 @@ Other References:
                              colliderEndEventProperty: clearedEls;">
       </a-entity>
       <a-entity class="img" mixin="img" position="0 2 -3" src="#my-image" rotation="0 0 0" movement-controls></a-entity>
-     <a-camera look-controls-enabled=true rotation-reader></a-camera>
+     <a-camera look-controls-enabled=true></a-camera>
       <!--
       <a-sky color="lightblue"></a-sky>
       <a-link href="../portals.html" title="Other Examples"

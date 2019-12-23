@@ -45,7 +45,7 @@
 		</style>
 	</head>
 	<body>
-
+	    <div id='log'></div>
 		<div id="container"></div>
 		<video id='video' style="position:absolute; z-index:-1000;"></video>
 		<!--<div id="info">
@@ -214,8 +214,9 @@ render();
     function onDocumentTouchStart(event) {
 
         //E: 1. Make a vector of the current mouse click position, normalized (proportions)
-        var vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
-        //console.log('projected vector', vector)
+        //var vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
+        var vector = new THREE.Vector3((event.touches[0].pageX / window.innerWidth) * 2 - 1, -(event.touches[0].pageY / window.innerHeight) * 2 + 1, 0.5);
+		//console.log('projected vector', vector)
         
         //E: 2. unproject (from scene data to World data) the vector coordinates based on CAMERA POSITION as AXIS
         vector = vector.unproject(camera);

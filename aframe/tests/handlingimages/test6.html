@@ -1,0 +1,117 @@
+<!--
+REFERENCES:
+example from superhands (https://github.com/wmurphyrd/aframe-super-hands-component (https://wmurphyrd.github.io/aframe-super-hands-component/examples/)
+--- https://wmurphyrd.github.io/aframe-super-hands-component/examples/mouse/index-mouse.html
+--- https://github.com/wmurphyrd/aframe-super-hands-component/blob/master/examples/mouse/index-mouse.html
+--- https://wmurphyrd.github.io/aframe-super-hands-component/examples/portals.html; https://github.com/wmurphyrd/aframe-super-hands-component/blob/master/examples/portals.html
+
+Other References:
+--- Github issue discussion about another previous option, drag-click-component, where a regular poster suggested to choose superhands over a the less maintained aframe-click-drag-component (https://github.com/jesstelford/aframe-click-drag-component/issues/17)
+--- issues around aframe-click-drag-component in SO
+   --- https://stackoverflow.com/questions/39939318/a-frame-vr-how-to-drag-and-drop-assets-elements-insight-a-picture/39949162#39949162
+   --- https://stackoverflow.com/questions/52888886/drop-and-drag-object-in-a-frame
+--- aframe-click-drag-component site https://jesstelford.github.io/aframe-click-drag-component/ and master main https://github.com/jesstelford/aframe-click-drag-component/blob/master/src/index.js
+--- https://www.npmjs.com/package/aframe-click-drag-component
+--- understanding click and drag events in a-frame: https://aframe.io/docs/1.0.0/introduction/interactions-and-controllers.html
+   --- super-hands as advisable component for handling interactivity: https://aframe.io/docs/1.0.0/introduction/interactions-and-controllers.html#super-hands-component
+-->
+<head>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+  <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
+  <script src="https://unpkg.com/super-hands@3.0.0/dist/super-hands.min.js"></script>
+  <script src="https://unpkg.com/aframe-event-set-component@^4.0.0/dist/aframe-event-set-component.min.js"></script>
+ 
+    <!--<script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script>
+ <script>
+  AFRAME.registerComponent('color-randomizer', {
+      play: function() {
+        this.el.addEventListener('drag-drop', function(evt) {
+          evt.detail.dropped.setAttribute('material', 'color',
+            '#'+(Math.random()*0xFFFFFF<<0).toString(16))
+           // notify super-hands that the gesture was accepted
+          evt.preventDefault()
+        })
+      }
+    })
+ </script>-->
+    <script>
+        const WIDTH = window.innerWidth;
+        const HEIGHT = window.innerHeight;
+
+        const width = Math.round(60 * WIDTH / HEIGHT);
+        const height = 60;
+        
+        
+        AFRAME.registerComponent('myvideo-track',{
+            init: function(){
+            const sceneEl = this.el; //E: this is aframe
+        
+            const video = document.createElement('video');
+            sceneEl.insertAdjacentElement('beforebegin', video);
+        
+            this.video = video;
+        
+            if (navigator.mediaDevices) {
+              navigator.mediaDevices
+                .getUserMedia({
+                  audio: false,
+                  video: { width: WIDTH, height: HEIGHT },
+                })
+                .then((stream) => {
+                  const video = document.querySelector('video');
+                  video.srcObject = stream;
+                  video.onloadedmetadata = function() {
+                    video.play();
+                  };
+                })
+                .catch((err) => {
+                  console.log("The following error occurred: " + err.name);
+                });
+            }
+            }
+        });
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+</head>
+
+<body>
+    <!--<a-scene environment="preset: default; shadow: true" avatar-recorder
+             touch-to-click-converter>-->
+    <a-scene
+           myvideo-track
+           touch-to-click-converter
+           vr-mode-ui="enabled:false"
+           keyboard-shortcuts="enterVR:false;resetSensor:false"
+             >
+      <a-assets>
+        <a-mixin id="img"
+                 geometry="primitive: plane"
+                 material="src: assets/grph/46462438_1572546156223211_4054682576076406784_o.jpg"
+                 hoverable grabbable stretchable draggable droppable
+                 shadow
+                 event-set__dragdrop="_event: drag-drop; material.opacity: 1"
+                 event-set__hoveron="_event: hover-start; material.opacity: 0.7; transparent: true"
+                 event-set__hoveroff="_event: hover-end; material.opacity: 1; transparent: false"
+                 event-set__dragon="_event: dragover-start; material.wireframe: true"
+                 event-set__dragoff="_event: dragover-end; material.wireframe: false">
+        </a-mixin>
+        <img id="my-image" src="assets/grph/46462438_1572546156223211_4054682576076406784_o.jpg">
+      </a-assets>
+     <!-- take the camera out of example and add a camera as part of the scene so you can rotate around and still drag --> 
+      <a-entity id="target" class="img" mixin="img" position="0 2 -3" src="#my-image" rotation="0 0 0"></a-entity>
+     <a-camera look-controls-enabled=true></a-camera>
+      <!--
+      <a-sky color="lightblue"></a-sky>
+      <a-link href="../portals.html" title="Other Examples"
+              image="#portals-preview"
+              onmouseover="this.setAttribute('link', {highlighted: true})"
+              onmouseout="this.setAttribute('link', {highlighted: false})"
+              position = "0 1.6 0.7" rotation="0 0 0" scale="0.25 0.25 0.25">
+      </a-link>-->
+    </a-scene>
+    <script>
+    </script>
+</body>
+

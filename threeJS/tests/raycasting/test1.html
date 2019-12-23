@@ -108,6 +108,7 @@
 			document.body.appendChild( statsGlobal.domElement );
 
 			document.addEventListener('mousedown', onDocumentMouseDown, false);
+			document.addEventListener('touchstart', onDocumentTouchStart, false);
 			document.addEventListener('mousemove', onDocumentMouseMove, false);    
 
 			
@@ -207,6 +208,37 @@ render();
             intersects[0].object.material.opacity = 0.1;
         }
     }
+	
+	
+	    //E: both functions, onDocumentMouseDown and onDocumentMouseMove, were added as event listeners (lines around 15-30)
+    function onDocumentTouchStart(event) {
+
+        //E: 1. Make a vector of the current mouse click position, normalized (proportions)
+        var vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
+        //console.log('projected vector', vector)
+        
+        //E: 2. unproject (from scene data to World data) the vector coordinates based on CAMERA POSITION as AXIS
+        vector = vector.unproject(camera);
+        //console.log('unprojected vector', vector)
+
+        //E: 3.
+        /*E: in the book
+         *Next, we create THREE.Raycaster. With THREE.Raycaster, we can cast rays into our scene.
+         *In this case, we emit a ray from the position of the camera (camera.position) to the position
+         *we clicked on in the scene.
+         */
+        var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+        
+        //E: 4. raycaster can detect the intersection between the ray and the object; here will point ONLY to the objects 
+        var intersects = raycaster.intersectObjects([cube_north]);
+
+        if (intersects.length > 0) {
+            console.log(intersects[0]); //E: provides information about the selected object, uv, faces detected, distance and vector
+            intersects[0].object.material.transparent = true;
+            intersects[0].object.material.opacity = 0.1;
+        }
+    }
+	
 
     function onDocumentMouseMove(event) {
         if (controls.showRay) {

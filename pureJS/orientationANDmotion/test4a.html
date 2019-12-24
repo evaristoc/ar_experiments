@@ -143,7 +143,7 @@
           //var sinAlpha = Math.sin((alpha - 90));
           //Math.sin((alpha - 90)*Math.PI/180);
           //if ( !(Math.sin((alpha - 90)*Math.PI/180) < 0.03489949670250097 ) ) {
-          if ( (Math.sin((alpha - 90)*Math.PI/180) < 0.08715574274765817 ) ) {
+          if ( (Math.abs(Math.sin((alpha - 90)*Math.PI/180)) < 0.08715574274765817 ) ) {
             //code
             body.style.borderTopColor = 'green'
           }else{

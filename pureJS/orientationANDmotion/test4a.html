@@ -63,7 +63,6 @@
       <pre id="data3"></pre>
       <!--<pre id="arrow" style="font-size:40px;transform-origin:bottom center">&uarr;</pre>-->
       <img class="compass" id="compass1" src="https://carlisletheacarlisletheatre.org/images/arrow-png-2.png">
-      <img class="compass" id="compass2" src="https://carlisletheacarlisletheatre.org/images/arrow-png-1.png">
     </div>
 
     <!--<script src="script.js"></script>-->
@@ -88,7 +87,7 @@
       var compass1 = document.querySelector('#compass1');
       var compass2 = document.querySelector('#compass2');
       var body = document.querySelector('body');
-      
+      console.log(body.style['borderColor']);
      
       function deviceOrientation() {
         //code
@@ -140,7 +139,9 @@
               "rotateX(" + -beta + "deg)" +
               "rotateY(" + gamma + "deg)";
 
-          if (((alpha-90) > -2)&&((alpha-90) < 2)) {
+          //console.log(body.style['border-top-color']);
+          var sinAlpha = Math.sin((alpha - 90));
+          if ( !(Math.abs(sinAlpha) < .98 ) ) {
             //code
             body.style.borderTopColor = 'green'
           }else{

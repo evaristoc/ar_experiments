@@ -140,8 +140,9 @@
               "rotateY(" + gamma + "deg)";
 
           //console.log(body.style['border-top-color']);
-          var sinAlpha = Math.sin((alpha - 90));
-          if ( !(Math.abs(sinAlpha) < .98 ) ) {
+          //var sinAlpha = Math.sin((alpha - 90));
+          //Math.sin((alpha - 90)*Math.PI/180);
+          if ( !(Math.sin((alpha - 90)*Math.PI/180) < 0.03489949670250097 ) ) {
             //code
             body.style.borderTopColor = 'green'
           }else{

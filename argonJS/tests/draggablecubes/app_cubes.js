@@ -565,6 +565,7 @@ function handleSelection() {
         // console.log("touch DEVICE _value quat=" + (object.entity.orientation as any)._value)
         // console.log("------");
         if (!isCrosshair) {
+            //E: current progress!! https://github.com/mrdoob/three.js/issues/13704
             var worldLoc = user.localToWorld(tempPos.copy(SELECTED.position));
             plane.setFromNormalAndCoplanarPoint(camera.getWorldDirection(plane.normal), worldLoc);
             if (raycaster.ray.intersectPlane(plane, intersection)) {

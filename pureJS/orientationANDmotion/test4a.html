@@ -67,8 +67,9 @@
 
     <!--<script src="script.js"></script>-->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqYfXdCyKhpJQI9WZ0-jyJ_S5NSLkqZz8&callback=initMap"></script>-->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/quaternion@1.1.0/quaternion.min.js"></script>
+    <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqYfXdCyKhpJQI9WZ0-jyJ_S5NSLkqZz8&callback=initMap"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/quaternion@1.1.0/quaternion.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/chroma-js@2.1.0/chroma.min.js"></script>
     <script>
       //var demohtml = document.getElementById("demo");
       //var resulthtml = document.getElementById('result');
@@ -88,6 +89,17 @@
       var compass2 = document.querySelector('#compass2');
       var body = document.querySelector('body');
       console.log(body.style['borderColor']);
+      
+      //colors: chroma.js
+      //others: http://google.github.io/palette.js/
+      /*reference:
+       *https://www.w3schools.com/colors/colors_gradient.asp
+       *https://stackoverflow.com/questions/32470555/javascript-algorithm-function-to-generate-rgb-values-for-a-color-along-the-visib
+       *https://css-tricks.com/converting-color-spaces-in-javascript/
+       *palette generators
+      */
+      var cscale = chroma.scale(['#000','#fafa6e']).mode('lch').colors(8)
+      console.log(cscale)
      
       function deviceOrientation() {
         //code

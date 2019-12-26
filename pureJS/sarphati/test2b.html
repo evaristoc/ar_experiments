@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" 
+        content="width=device-width, 
+        initial-scale=1.0, 
+        user-scalable=no" />
+  <title>aframe + drag css</title>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!--<script src="https://kit.fontawesome.com/64c27ff1e1.js" crossorigin="anonymous"></script>-->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.1/css/all.css">
+  <link rel="stylesheet" type="text/css" href="./assets/style/main2b.css">
+</head>
+
+<body>
+
+
+   <div id="outerContainer" >
+    <video id="videostream" class="containers" type="video/webm"></video>
+    <div id="video-overlay" class="containers">
+        <div id="mySidenav" class="sidenav">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="#">About</a>
+          <a href="#">Services</a>
+          <a href="#">Clients</a>
+          <a href="#">Contact</a>
+        </div>
+        <span id="openmenu" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+        <!--<div style="position:relative; bottom:0; left:0;">
+          <div id="no-capture-button" class="capture-button"><i class="fas fa-times" style="font-size:35px;"></i></div>
+        </div>-->
+        <button id="capture-button">
+          <i id="yes-camera" class="fas fa-camera-retro" style="font-size:30px"></i>
+          <i id="no-camera" class="fas fa-times" style="font-size:35px;"></i>
+           <!--<span class="fa-stack fa-2x" style="background:MistyRose; height:35px; width:40px;">
+            <i id="yes-camera" class="fas fa-camera-retro fa-stack-2x" style="font-size:30px; color:lightblue;"></i>
+            <i id="no-camera" class="fas fa-times fa-stack-1x fa-inverse" style="font-size:35px; color:tomato"></i>
+          </span>-->
+        </button>
+        <div id="container" class="containers">
+          <div id="my-gui-container"></div>
+          <div id="item">
+            <img src="./assets/grph/46462438_1572546156223211_4054682576076406784_o.jpg" class="w3-round" alt="Norway">
+          </div>
+        </div>
+       </div>
+  </div>
+  <script type="text/javascript" src="./assets/js/main2b.js"></script>
+</body>
+
+</html>

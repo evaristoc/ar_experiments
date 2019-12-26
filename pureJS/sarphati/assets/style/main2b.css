@@ -85,12 +85,18 @@
     }
     
   #no-camera, #no-camera::before{
-    height:35px;
+    height:15px;
   }
  
    #no-camera{
     display:none;
   }
+  
+  #no-camera::before{
+    color:tomato;
+    margin-left:-40px;
+  }
+  
    /* 
   #no-camera::before{
     display:none;

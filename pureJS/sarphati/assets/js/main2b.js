@@ -10,6 +10,8 @@
     var xOffset = 0;
     var yOffset = 0;
     
+    var videoplay=false;
+    
     //no auto-place; see css: https://jsfiddle.net/2pha/zka4qkt2/
     var gui = new dat.GUI({ autoPlace: false });
     var customContainer = document.getElementById('my-gui-container');
@@ -111,9 +113,18 @@
     var captureVideoButton = document.querySelector('#capture-button');
     
     captureVideoButton.onclick = function() {
-        video.play();
-        //document.getElementById('capture-button').remove();
-        document.getElementById('no-camera').style.display = 'inline-block';
+        if (videoplay === false) {
+          //code
+          video.play();
+          //document.getElementById('capture-button').remove();
+          document.getElementById('no-camera').style.display = 'inline-block';
+          videoplay = true;
+        }else{
+          video.pause();
+          document.getElementById('no-camera').style.display = 'none';
+          videoplay = false;
+        }
+
         /*read...
          *https://stackoverflow.com/questions/5041494/selecting-and-manipulating-css-pseudo-elements-such-as-before-and-after-usin
          *https://fontawesome.com/how-to-use/on-the-web/styling/layering

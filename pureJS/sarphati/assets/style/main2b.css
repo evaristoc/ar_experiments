@@ -84,12 +84,17 @@
         z-index: 1;
     }
     
-  #no-camera, #no-camera::before{
-    height:15px;
-  }
+  i { vertical-align: middle; }
+  
  
    #no-camera{
     display:none;
+  }
+  
+  
+/*
+  #no-camera, #no-camera::before{
+    height:15px;
   }
   
   #no-camera::before{
@@ -97,7 +102,7 @@
     margin-left:-40px;
   }
   
-   /* 
+  
   #no-camera::before{
     display:none;
   }

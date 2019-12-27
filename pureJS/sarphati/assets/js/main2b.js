@@ -117,18 +117,37 @@
           //code
           video.play();
           //document.getElementById('capture-button').remove();
+          document.getElementById('yes-camera').style.display = 'none';
           document.getElementById('no-camera').style.display = 'inline-block';
           videoplay = true;
         }else{
           video.pause();
           document.getElementById('no-camera').style.display = 'none';
+          document.getElementById('yes-camera').style.display = 'inline-block';
           videoplay = false;
         }
 
         /*read...
-         *https://stackoverflow.com/questions/5041494/selecting-and-manipulating-css-pseudo-elements-such-as-before-and-after-usin
-         *https://fontawesome.com/how-to-use/on-the-web/styling/layering
-         *https://fontawesome.com/how-to-use/on-the-web/styling/stacking-icons
+         *for videos:
+         *--- https://stackoverflow.com/questions/28140147/turn-off-webcam-camera-after-using-getusermedia
+         * icons:
+         * --- https://www.w3schools.com/icons/icons_reference.asp
+         *for handling pseudo-elements and fontawesome stacking:
+         *--- https://stackoverflow.com/questions/45857133/how-to-stack-fontawesome-icons
+         *--- https://stackoverflow.com/questions/5041494/selecting-and-manipulating-css-pseudo-elements-such-as-before-and-after-usin
+         *--- https://stackoverflow.com/questions/20353907/how-to-stack-overlap-more-than-2-icons-in-font-awesome
+         *--- https://fontawesome.com/how-to-use/on-the-web/styling/layering
+         *--- https://fontawesome.com/how-to-use/on-the-web/styling/stacking-icons
+         *--- https://codepen.io/EeKay/pen/JYrGZg
+         *--- https://jsfiddle.net/MrPolywhirl/25bfvxgo/
+         * fontawesome resizing:
+         * --- https://fontawesome.com/how-to-use/on-the-web/styling/sizing-icons
+         *bootstrap icons:
+         *--- https://mdbootstrap.com/docs/jquery/content/icons-usage/
+         *fontawesome and d3js:
+         *--- https://stackoverflow.com/questions/18416749/adding-fontawesome-icons-to-a-d3-graph/19385042#19385042
+         * multiple backgrounds:
+         * --- https://www.w3schools.com/css/css3_backgrounds.asp
          */
     };
     

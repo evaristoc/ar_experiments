@@ -120,8 +120,8 @@ remainingBlocks.setAttribute('style', "color:brown; position:fixed; right:10px; 
 remainingBlocks.innerHTML = `${blks} blocks remaining`;
 
 // center of Spheres
-var geometry = new THREE.SphereGeometry(3);
-var material = new THREE.MeshBasicMaterial({ color: 'orange' })
+var geometry = new THREE.SphereGeometry(3, 32, 16);
+var material = new THREE.MeshBasicMaterial({ color: 'paleblue' })
 // Shader
 var customMaterial = new THREE.ShaderMaterial( 
 	{
@@ -131,9 +131,9 @@ var customMaterial = new THREE.ShaderMaterial(
 			"p":   { type: "f", value: .5 },
 			glowColor: { 
                 type: "c",
-                //value: new THREE.Color(0xffff00)
+                value: new THREE.Color(0xffff00)
                 //value: new THREE.Color('')
-                value: new THREE.Color(0xffe800)
+                //value: new THREE.Color(0xffe800)
                 //value: 'yellow'
             },
 			viewVector: { type: "v3", value: camera.position }
@@ -234,7 +234,7 @@ function transformHELPER( targets, shader_params, duration ) {
         var moonGlow = object.children[0];
         (function(shader_params,moonGlow, duration, i){
             new TWEEN.Tween( shader_params )
-              .to( {intensity_c: .7, intensity_p: 1.1, scale: 2.05}, Math.random() * duration + duration )
+              .to( {intensity_c: 1., intensity_p: .1, scale: 1.5}, 3000 )
               .easing(TWEEN.Easing.Quadratic.InOut)
               .repeat(Infinity)
               .yoyo(true)

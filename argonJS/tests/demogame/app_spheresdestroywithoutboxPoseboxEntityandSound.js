@@ -80,7 +80,7 @@ var touchID; // which touch caused the selection?
 //var boxInit = false;
 //var geoLocked = false;
 
-var blks = 10;
+var blks = 6;
 
 var sounds_srcs = ['358232_j_s_song.ogg', 'merel_vogelbescherming.mp3', 'Project_Utopia.ogg'];
 var sounds = [];
@@ -121,7 +121,7 @@ remainingBlocks.innerHTML = `${blks} blocks remaining`;
 
 // center of Spheres
 var geometry = new THREE.SphereGeometry(3);
-var material = new THREE.MeshBasicMaterial({ color: 'black' })
+var material = new THREE.MeshBasicMaterial({ color: 'orange' })
 // Shader
 var customMaterial = new THREE.ShaderMaterial( 
 	{
@@ -130,10 +130,12 @@ var customMaterial = new THREE.ShaderMaterial(
 			"c":   { type: "f", value: 1.0 },
 			"p":   { type: "f", value: .5 },
 			glowColor: { 
-    type: "c",
-    //value: new THREE.Color(0xffff00)
-    value: new THREE.Color('')
-   },
+                type: "c",
+                //value: new THREE.Color(0xffff00)
+                //value: new THREE.Color('')
+                value: new THREE.Color(0xffe800)
+                //value: 'yellow'
+            },
 			viewVector: { type: "v3", value: camera.position }
 		},
 		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
@@ -176,8 +178,8 @@ for (var i = 0; i < blks; i++) {
   });
 
 spherePosHELPER();
-
-transformHELPER( targets, 1000 );
+var shader_params = {intensity_c: .5, intensity_p: 1., scale: 1. };
+transformHELPER( targets, shader_params, 1000 );
 
 /******************
  * HELPERS
@@ -208,22 +210,85 @@ function  spherePosHELPER(){
       }
 }
 
-function transformHELPER( targets, duration ) {
-  TWEEN.removeAll();
+function transformHELPER( targets, shader_params, duration ) {
+    
+    TWEEN.removeAll();
     for ( var i = 0; i < objects.length; i ++ ) {
-      if (move[i] === false) {
-        continue
-      }
-      var object = objects[ i ];
-      var target = targets[ i ];
+        if (move[i] === false) {
+          continue
+        }
+        var object = objects[ i ];
+        var target = targets[ i ];
+        var scale = shader_params.scale[ i ];
+        
       var pos = new TWEEN.Tween( object.position )
         .to( { x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration )
         .start();
-      var rot = new TWEEN.Tween(object.rotation)
-          .to({ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration)
-          .start();
-      var c = pos.chain(rot)
-      tweenfunc = c;
+        
+        //var rot = new TWEEN.Tween(object.rotation)
+        //    .to({ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration)
+        //    .start();
+        //
+        //var c = pos.chain(rot)
+        //console.log('glow_', object.children[0].material.uniforms);
+        var moonGlow = object.children[0];
+        (function(shader_params,moonGlow, duration, i){
+            new TWEEN.Tween( shader_params )
+              .to( {intensity_c: .7, intensity_p: 1.1, scale: 2.05}, Math.random() * duration + duration )
+              .easing(TWEEN.Easing.Quadratic.InOut)
+              .repeat(Infinity)
+              .yoyo(true)
+              .onUpdate(function(o){
+                    moonGlow.material.uniforms["c"].value = shader_params.intensity_c;
+                    moonGlow.material.uniforms["p"].value = shader_params.intensity_p;
+                    moonGlow.scale.x = shader_params.scale;
+                    moonGlow.scale.y = shader_params.scale;
+                    moonGlow.scale.z = shader_params.scale;
+                  //console.log(i, object.scale.x);
+              })
+              .start()       
+        })(shader_params,moonGlow, duration, i)
+
+        //
+        //
+        //  var glo_c = new TWEEN.Tween( glowsph.material.uniforms["c"] )
+        //      .to( {value: shader_params.intensity_c}, 600 )
+        //      .easing(TWEEN.Easing.Quadratic.InOut)
+        //      .repeat(Infinity)
+        //      .yoyo(true)
+        //      .start()
+        //      
+        //  var glo_p = new TWEEN.Tween( glowsph.material.uniforms["p"] )
+        //      .to( {value: shader_params.intensity_p}, 600 )
+        //      .easing(TWEEN.Easing.Quadratic.InOut)
+        //      .repeat(Infinity)
+        //      .yoyo(true)
+        //      .start()
+      
+      //var glowing = new TWEEN.Tween(shader_params)
+      //        .to({intensity_c: 1., intensity_p: 2.1, scale: 2.05}, 600)
+      //        .easing(TWEEN.Easing.Quadratic.InOut)
+      //        .repeat(Infinity)
+      //        .yoyo(true)
+      //        .onUpdate(function(o){
+      //        //console.log('o',o);
+      //       console.log('moonGlow.scale', moonGlow.scale)
+      //         //moonGlow.material.uniforms["c"].value = o;
+      //         moonGlow.material.uniforms["c"].value = shader_params.intensity_c;
+      //         //moonGlow.material.uniforms["p"].value = parameters.intensity_p;
+      //       //console.log(parameters.scale);
+      //         //moonGlow.scale({x:parameters.scale, y:parameters.scale, z:parameters.scale});
+      //       //console.log(moonGlow.scale);
+      //       //moonGlow.geometry.scale = new THREE.Vector3(0,0,0);
+      //       //moonGlow.scale.multiplyScalar(1.3)
+      //       moonGlow.scale.x = shader_params.scale;
+      //       moonGlow.scale.y = shader_params.scale;
+      //       moonGlow.scale.z = shader_params.scale;
+      //      })
+      
+      //var c = pos.chain(glowing);
+        //var c = glowing;
+        //tweenfunc = c;
     }
 
     new TWEEN.Tween( this )
@@ -551,7 +616,8 @@ app.updateEvent.addEventListener(function (frame) {
     frameCounter += 1
     if (frameCounter > 45) {
         spherePosHELPER();
-        transformHELPER(targets, 3000);
+        var shader_params = { intensity_c: .5, intensity_p: 1., scale: 1. };
+        transformHELPER(targets, shader_params, 3000);
         frameCounter = 0;
     }
     

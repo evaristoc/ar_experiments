@@ -121,7 +121,7 @@ remainingBlocks.innerHTML = `${blks} blocks remaining`;
 
 // center of Spheres
 var geometry = new THREE.SphereGeometry(3, 32, 16);
-var material = new THREE.MeshBasicMaterial({ color: 'paleblue' })
+var material = new THREE.MeshBasicMaterial({ color: 'steelblue' })
 // Shader
 var customMaterial = new THREE.ShaderMaterial( 
 	{
@@ -234,7 +234,7 @@ function transformHELPER( targets, shader_params, duration ) {
         var moonGlow = object.children[0];
         (function(shader_params,moonGlow, duration, i){
             new TWEEN.Tween( shader_params )
-              .to( {intensity_c: 1., intensity_p: .1, scale: 1.5}, 3000 )
+              .to( {intensity_c: 1., intensity_p: .1, scale: 1.9}, 3000 )
               .easing(TWEEN.Easing.Quadratic.InOut)
               .repeat(Infinity)
               .yoyo(true)

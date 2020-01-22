@@ -47,6 +47,15 @@
 
 ### Some game permutations
 
+#### Blind Guide
+Using the phones by guide blinded users across some areas of the park by following sounds of animals that should live in certain sectors of the park 
+
+#### A guided visit to sections of the park
+In order to associated to natural elements and the concept of the park, the guide could be focused on birds and vegetation (habitats)
+In might include games, likely simple humorous games, for fun and interactivity
+Targeted to individual visitors
+It could be combined eventually with the OudSarphati project, or give a different perspective 
+
 #### Sound hunting without previous recognition
 Nice as challenge; location not required; webcam not required, probably an virtual scene is better; can start from any location using current settings but could be configurated according to geolocation; can be individualist but also in group, even collaboratory
 

@@ -1,25 +1,27 @@
-const loadPlaces = function (coords) {
+const loadPlaces = function(coords) {
     // COMMENT FOLLOWING LINE IF YOU WANT TO USE STATIC DATA AND ADD COORDINATES IN THE FOLLOWING 'PLACES' ARRAY
     //const method = 'api';
     const method = '';
-    const PLACES = [
-        {
+    const PLACES = [{
             name: "Your place name",
             location: {
                 lat: 0, // add here latitude if using static data
                 lng: 0, // add here longitude if using static data
             }
         },
-    
-{name:'Stadhouderskade 84',location:{lng:4.8937512,lat:52.3579159}},
-{name:'Van Ostadestraat 318',location:{lng:4.9005937,lat:52.3535972}},
-{name:'Van Ostadestraat 9',location:{lng:4.8852473,lat:52.3516922}},
-{name:'Van Ostadestraat 391',location:{lng:4.9042466,lat:52.3545299}},
-{name:'Van Ostadestraat 55',location:{lng:4.8894377,lat:52.3518622}},
-{name:'Dusarstraat 31',location:{lng:4.8894046,lat:52.3517817}},
-{name:'Van Ostadestraat 456',location:{lng:4.9042454,lat:52.3545294}},
-{name:'Van Ostadestraat 233B',location:{lng:4.8987005,lat:52.3532503}},
-   
+
+        { name: 'Stadhouderskade 84', location: { lng: 4.8937512, lat: 52.3579159 } },
+        { name: 'Van Ostadestraat 318', location: { lng: 4.9005937, lat: 52.3535972 } },
+        { name: 'Van Ostadestraat 9', location: { lng: 4.8852473, lat: 52.3516922 } },
+        { name: 'Van Ostadestraat 391', location: { lng: 4.9042466, lat: 52.3545299 } },
+        { name: 'Van Ostadestraat 55', location: { lng: 4.8894377, lat: 52.3518622 } },
+        { name: 'Dusarstraat 31', location: { lng: 4.8894046, lat: 52.3517817 } },
+        { name: 'Van Ostadestraat 456', location: { lng: 4.9042454, lat: 52.3545294 } },
+        { name: 'Van Ostadestraat 233B', location: { lng: 4.8987005, lat: 52.3532503 } },
+        { name: 'eenden brug', location: { lng: 4.89563833460727, lat: 52.35376951237272 } },
+        { name: 'fontain west', location: { lng: 4.8944980883887865, lat: 52.353854703624876 } },
+        { name: 'groen gemaal', location: { lng: 4.894542453075587, lat: 52.35413807144246 } },
+        { name: 'fontain oost', location: { lng: 4.895212986252432, lat: 52.35405275125957 } },
     ];
 
     if (method === 'api') {
@@ -32,10 +34,10 @@ const loadPlaces = function (coords) {
 // getting places from REST APIs
 function loadPlaceFromAPIs(position) {
     const params = {
-        radius: 300,    // search places not farther than this value (in meters)
+        radius: 300, // search places not farther than this value (in meters)
         clientId: 'HZIJGI4COHQ4AI45QXKCDFJWFJ1SFHYDFCCWKPIJDWHLVQVZ',
         clientSecret: 'QWT2HBMQ1LUC4BYQHZWO2UQNEEANJENUIMYBG4JH32AC1OGA',
-        version: '20300101',    // foursquare versioning, required but unuseful for this demo
+        version: '20300101', // foursquare versioning, required but unuseful for this demo
     };
 
     // CORS Proxy to avoid CORS problems
@@ -50,7 +52,7 @@ function loadPlaceFromAPIs(position) {
         &client_secret=${params.clientSecret}
         &limit=15
         &v=${params.version}`;
-    
+
     return fetch(endpoint)
         .then((res) => {
             return res.json()
@@ -68,36 +70,35 @@ window.onload = () => {
     const scene = document.querySelector('a-scene');
 
     // first get current user location
-    return navigator.geolocation.getCurrentPosition(function (position) {
+    return navigator.geolocation.getCurrentPosition(function(position) {
 
-        // than use it to load from remote APIs (E: Foursquare) some places nearby
-        // E: in this case, Foursquare will fetch for 15 places (config at endpoint) around 300meters radius (initial config)
-        loadPlaces(position.coords)
-            .then((places) => {
-                places.forEach((place) => {
-                    const latitude = place.location.lat;
-                    const longitude = place.location.lng;
+            // than use it to load from remote APIs (E: Foursquare) some places nearby
+            // E: in this case, Foursquare will fetch for 15 places (config at endpoint) around 300meters radius (initial config)
+            loadPlaces(position.coords)
+                .then((places) => {
+                    places.forEach((place) => {
+                        const latitude = place.location.lat;
+                        const longitude = place.location.lng;
 
-                    // add place name
-                    // E: this is the a-frame part
-                    const text = document.createElement('a-link');
-                    text.setAttribute('href', 'http://www.example.com/');
-                    text.setAttribute('title', place.name);
-                    
-                    //E: the following, gps-entity-place, is a custom component
-                    text.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-                    text.setAttribute('scale', '20 20 20');
+                        // add place name
+                        // E: this is the a-frame part
+                        const text = document.createElement('a-link');
+                        text.setAttribute('href', 'http://www.example.com/');
+                        text.setAttribute('title', place.name);
 
-                    text.addEventListener('loaded', () => {
-                        window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
+                        //E: the following, gps-entity-place, is a custom component
+                        text.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+                        text.setAttribute('scale', '20 20 20');
+
+                        text.addEventListener('loaded', () => {
+                            window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
+                        });
+
+                        scene.appendChild(text);
                     });
-
-                    scene.appendChild(text);
-                });
-            })
-    },
-        (err) => console.error('Error in retrieving position', err),
-        {
+                })
+        },
+        (err) => console.error('Error in retrieving position', err), {
             enableHighAccuracy: true,
             maximumAge: 0,
             timeout: 27000,

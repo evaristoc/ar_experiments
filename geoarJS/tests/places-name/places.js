@@ -18,10 +18,10 @@ const loadPlaces = function(coords) {
         { name: 'Dusarstraat 31', location: { lng: 4.8894046, lat: 52.3517817 } },
         { name: 'Van Ostadestraat 456', location: { lng: 4.9042454, lat: 52.3545294 } },
         { name: 'Van Ostadestraat 233B', location: { lng: 4.8987005, lat: 52.3532503 } },
-        { name: 'eenden brug', location: { lng: 4.89563833460727, lat: 52.35376951237272 } },
-        { name: 'fontain west', location: { lng: 4.8944980883887865, lat: 52.353854703624876 } },
-        { name: 'groen gemaal', location: { lng: 4.894542453075587, lat: 52.35413807144246 } },
-        { name: 'fontain oost', location: { lng: 4.895212986252432, lat: 52.35405275125957 } },
+        { name: 'Eenden Brug', location: { lng: 4.89563833, lat: 52.35376951 } },
+        { name: 'Fontain West', location: { lng: 4.89449809, lat: 52.35385470 } },
+        { name: 'Groen Gemaal', location: { lng: 4.89454245, lat: 52.3541381 } },
+        { name: 'Fontain Oost', location: { lng: 4.89521298, lat: 52.3540528 } },
     ];
 
     if (method === 'api') {

@@ -1,0 +1,209 @@
+<html>
+
+<head>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+    <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+    <!--<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js'></script>-->
+
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+
+<body>
+    <div id='map' style='width: 400px; height: 300px;'></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZWMtY2NzIiwiYSI6ImNrNW9mYzBtcDBpM3YzdW1vMXJ4azF5bzEifQ.HT1MlKSXTtxe66QHN0Hslw';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [4.896411, 52.354200], //lng,lat
+            zoom: 16,
+        });
+
+        //sport area
+        // var marker1 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.8978588137181305, 52.354334229271544]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        var point1 = turf.point([4.8978588137181305, 52.354334229271544]);
+        var point2 = turf.point([4.897183151714557, 52.354206463090634])
+
+
+        // var buffered = turf.buffer(point, .01, {
+        //     units: 'miles'
+        // });
+
+        var testdata = {
+            type: 'FeatureCollection',
+            features: [{
+                    type: 'Feature',
+                    properties: {
+                        Name: 'testpoint1',
+                        Address: 'sarphati'
+                    },
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [4.8978588137181305, 52.354334229271544]
+                    }
+                }, {
+                    type: 'Feature',
+                    properties: {
+                        Name: 'testpoint2',
+                        Address: 'sarphati'
+                    },
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [4.897183151714557, 52.354206463090634]
+                    }
+                },
+
+            ]
+        }
+
+        console.log(turf, map.addSource);
+
+        map.on('load', function() {
+            map.addLayer({
+                id: 'hospitals',
+                type: 'symbol',
+                source: {
+                    type: 'geojson',
+                    data: testdata
+                },
+                layout: {
+                    'icon-image': 'hospital-15',
+                    'icon-allow-overlap': true
+                },
+                paint: {}
+            });
+
+            map.addSource('nearest-hospital', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: []
+                }
+            });
+
+            var buffered1 = turf.buffer(point1, .005, {
+                units: 'miles'
+            });
+
+            var buffered2 = turf.buffer(point2, .005, {
+                units: 'miles'
+            });
+
+            map.getSource('nearest-hospital').setData({
+                type: 'FeatureCollection',
+                features: [buffered1, buffered2]
+            });
+
+            map.addLayer({
+                id: 'nearest-hospital',
+                type: 'circle',
+                source: 'nearest-hospital',
+                paint: {
+                    'circle-radius': 15,
+                    'circle-color': '#486DE0'
+                }
+            }, 'hospitals');
+
+            var point1test = turf.point([4.8978588137181305, 52.354334229271544]);
+            var point2test = turf.point([4.897183151714557, 52.354206463090634]);
+
+            console.log(turf.inside(point1test, buffered1), turf.inside(point2test, buffered1));
+
+        })
+
+        // var radius = .5;
+        // var options = {
+        //     steps: 10,
+        //     units: 'kilometers',
+        //     properties: {
+        //         foo: 'bar'
+        //     }
+        // };
+        // var circle = turf.circle(point, radius, options);
+
+        // map.addSource('bdata', {
+        //     type: 'geojson',
+        //     data: {
+        //         type: 'FeatureCollection',
+        //         features: []
+        //     }
+        // });
+
+        // map.getSource('bdata').setData({
+        //     type: 'FeatureCollection',
+        //     features: [
+        //         circle
+        //     ]
+        // })
+
+        // //entry heimanspad
+        // var marker2 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.897183151714557, 52.354206463090634]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //zuid ingaan
+        // var marker3 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.896136718601042, 52.35379922811471]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //duck brug
+        // var marker4 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.89563833460727, 52.35376951237272]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //fontain west
+        // var marker5 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.8944980883887865, 52.353854703624876]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //groen gemaal
+        // var marker6 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.894542453075587, 52.35413807144246]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //monument noord
+        // var marker7 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.895244283327884, 52.354629659383036]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //fontain oost
+        // var marker8 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.895212986252432, 52.35405275125957]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //boom (noord ingaan)
+        // var marker9 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.895940144641372, 52.35471084864573]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //monument zuid
+        // var marker10 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.895920122392454, 52.35427032453891]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //park noord
+        // var marker11 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.896490477783573, 52.35486844640735]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //barbicue
+        // var marker12 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.896649414127523, 52.35453326483538]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //barbicue
+        // var marker13 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.896649414127523, 52.35453326483538]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+
+        // //kiss brug
+        // var marker14 = new mapboxgl.Marker() // initialize a new marker
+        //     .setLngLat([4.897890778372661, 52.35511833353648]) // Marker [lng, lat] coordinates
+        //     .addTo(map); // Add the marker to the map
+    </script>
+</body>
+
+</html>

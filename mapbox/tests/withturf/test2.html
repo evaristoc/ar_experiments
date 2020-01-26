@@ -29,6 +29,7 @@
         
         video {
             display: none;
+            position: absolute;
             top: 0;
             bottom: 0;
         }
@@ -42,11 +43,12 @@
     <!--<div id='map' style='width: 400px; height: 300px;'></div>-->
     <div id="map"></div>
     <video>
+      <source src="https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4">
       Your browser does not support the video tag.
     </video>
     <script>
         document.querySelector('#modified').innerHTML = document.lastModified;
-        var video = document.getElementsByTagName("VIDEO");
+        var video = document.getElementsByTagName("video");
         //video.src = 'http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4';
         //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
         video.width = 320;
@@ -174,8 +176,8 @@
                         document.getElementById("log").innerText = 'NO';
                         if ((mapcontainer.style.display === 'none') && (i == bufferedpoints.length)) {
                             document.getElementById("log").innerText = document.getElementById("log").innerText + '; map should become visible\n i= ' + i;
+                            video.pause();
                             video.style.display = 'none';
-                            //video.pause();
                             //video.src = ''
                             mapcontainer.style.display = 'block';
 
@@ -191,7 +193,7 @@
                             mapcontainer.style.display = 'none';
                             video.style.display = 'block';
                             //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
-                            //video.autoplay();
+                            video.play();
                             break
                         }
                     }

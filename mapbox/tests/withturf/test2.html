@@ -40,16 +40,16 @@
         //OBS: bad hack to avoid panning/zooming animation after geolocation - bounding
         //https://docs.mapbox.com/mapbox-gl-js/example/restrict-bounds/
         var bounds = [
-            [4.89309186509297, 52.35304276456908], // Southwest coordinates
-            [4.899434121998411, 52.356047257263384] // Northeast coordinates
+            [4.8998296, 52.353003], // Southwest coordinates
+            [4.9014542, 52.3542364] // Northeast coordinates
         ]
 
         mapboxgl.accessToken = 'pk.eyJ1IjoiZWMtY2NzIiwiYSI6ImNrNW9mYzBtcDBpM3YzdW1vMXJ4azF5bzEifQ.HT1MlKSXTtxe66QHN0Hslw';
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [4.896411, 52.354200], //lng,lat
-            zoom: 16,
+            center: [4.9002671, 52.3535058], //lng,lat
+            zoom: 17,
             maxBounds: bounds
         });
 
@@ -65,119 +65,11 @@
             features: [{
                     type: 'Feature',
                     properties: {
-                        Name: 'sport area',
+                        Name: 'test van ostade',
                     },
                     geometry: {
                         type: 'Point',
-                        coordinates: [4.8978588137181305, 52.354334229271544]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'heimanspad west',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.897183151714557, 52.354206463090634]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'zuid ingaan',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.896136718601042, 52.35379922811471]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'lies visser brug',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.89563833460727, 52.35376951237272]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'gg fontein west',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.8944980883887865, 52.353854703624876]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'groen gemaal',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.894542453075587, 52.35413807144246]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'sarphatimonument noord',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.895244283327884, 52.354629659383036]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'gg fontain oost',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.895212986252432, 52.35405275125957]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'noord ingaan',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.895940144641372, 52.35471084864573]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'sarphatimonument zuid',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.895920122392454, 52.35427032453891]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'terraplane',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.896490477783573, 52.35486844640735]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'barbecue huis',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.896649414127523, 52.35453326483538]
-                    }
-                }, {
-                    type: 'Feature',
-                    properties: {
-                        Name: 'liefdesbruggetje',
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [4.897890778372661, 52.35511833353648]
+                        coordinates: [4.9002671, 52.3535058]
                     }
                 },
 
@@ -218,7 +110,7 @@
             for (let i = 0; i < flokslocation.features.length; i++) {
                 let coords = flokslocation.features[i].geometry.coordinates;
                 let point = turf.point(coords)
-                let bufferedpoint = turf.buffer(point, 0.01, {
+                let bufferedpoint = turf.buffer(point, 0.001, {
                     units: "kilometers"
                 });
                 bufferedpoints.push(bufferedpoint);

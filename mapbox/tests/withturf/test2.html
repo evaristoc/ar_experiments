@@ -161,6 +161,7 @@
                     if (inflok === false) {
                         document.getElementById("log").innerText = 'NO';
                         if ((mapcontainer.style.display === 'none') && (i == bufferedpoints.length)) {
+                            document.getElementById("log").innerText = document.getElementById("log").innerText + '; map not visible\n i= ' + i;
                             video.style.display = 'none';
                             video.pause();
                             video.src = ''
@@ -174,6 +175,7 @@
                     } else {
                         document.getElementById("log").innerText = 'YES';
                         if (mapcontainer.style.display != 'none') {
+                            document.getElementById("log").innerText = document.getElementById("log").innerText + '; map visible'
                             mapcontainer.style.display = 'none';
                             video.style.display = 'block';
                             video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';

@@ -172,9 +172,9 @@
                         document.getElementById("log").innerText = 'NO';
                         if ((mapcontainer.style.display === 'none') && (i == bufferedpoints.length)) {
                             document.getElementById("log").innerText = document.getElementById("log").innerText + '; map should become visible\n i= ' + i;
-                            video.style.display = 'none';
-                            video.pause();
-                            video.src = ''
+                            //video.style.display = 'none';
+                            //video.pause();
+                            //video.src = ''
                             mapcontainer.style.display = 'block';
 
                         }
@@ -187,10 +187,10 @@
                         if (mapcontainer.style.display != 'none') {
                             document.getElementById("log").innerText = document.getElementById("log").innerText + '; map should go and video visible'
                             mapcontainer.style.display = 'none';
-                            video.style.display = 'block';
-                            video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
-                            video.autoplay();
-                            break
+                            //video.style.display = 'block';
+                            //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
+                            //video.autoplay();
+                            //break
                         }
                     }
                 }

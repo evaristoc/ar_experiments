@@ -12,6 +12,14 @@
             padding: 0;
         }
         
+        .log {
+            z-index: 1;
+            position: absolute;
+            margin-left: 15px;
+            font-size: 2rem;
+            color: orange;
+        }
+        
         #map {
             position: absolute;
             top: 0;
@@ -26,7 +34,8 @@
 </head>
 
 <body>
-    <div id="log" style="z-index:1; position:absolute; margin-top:10px; margin-left:15px; font-size:2rem;color:orange;">NO</div>
+    <div id="modified" class="log" style="margin-top: 10px;"></div>
+    <div id="log" class="log" style="margin-top: 25px;">NO</div>
 
     <!--<div id='map' style='width: 400px; height: 300px;'></div>-->
     <div id="map"></div>
@@ -34,6 +43,7 @@
       Your browser does not support the video tag.
     </video>
     <script>
+        document.querySelector('#modified').innerHTML = document.lastModified;
         var video = document.getElementsByTagName("VIDEO");
         //video.src = 'http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4';
         //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';

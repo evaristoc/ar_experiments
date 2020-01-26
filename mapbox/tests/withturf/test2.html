@@ -160,44 +160,44 @@
                 //     myWorker.postMessage([point, bufferedpoints, turf.inside]);
                 //     console.log('Message posted to worker');
                 // };
-                var inflok;
-                for (let i = 0; i <= bufferedpoints.length; i++) {
+                var inflok = false;
+                for (let i = 0; i < bufferedpoints.length; i++) {
                     //just check i up to the last index of the list and change inflok accordingly; if extra index set inflok to false 
                     if (i < bufferedpoints.length) {
                         inflok = turf.inside(point, bufferedpoints[i]);
-                    } else {
-                        inflok = false;
-                    };
-                    //if inflok is false
-                    //and then the mapcontainer is not visible and we visited all valid indices,
-                    //set video to no display and display the map;
-                    //if still false but display sorted, get the next index
-                    if (inflok === false) {
-                        document.getElementById("log").innerText = 'NO';
-                        if ((mapcontainer.style.display === 'none') && (i == bufferedpoints.length)) {
-                            document.getElementById("log").innerText = document.getElementById("log").innerText + '; map should become visible\n i= ' + i;
-                            video.pause();
-                            video.style.display = 'none';
-                            //video.src = ''
-                            mapcontainer.style.display = 'block';
-
-                        }
-                        //inflok is true
-                        //if then the map is displayed
-                        //get rid of it and display the video instead
-                        //OBS: a nice case for video: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Video_and_audio_APIs
-                    } else {
-                        document.getElementById("log").innerText = 'YES';
-                        if (mapcontainer.style.display != 'none') {
-                            document.getElementById("log").innerText = document.getElementById("log").innerText + '; map should go and video visible'
-                            mapcontainer.style.display = 'none';
-                            video.style.display = 'block';
-                            //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
-                            video.play();
-                            break
+                        if (inflok) {
+                            break;
                         }
                     }
                 }
+                //if inflok is false
+                //and then the mapcontainer is not visible and we visited all valid indices,
+                //set video to no display and display the map;
+                //if still false but display sorted, get the next index
+                if (inflok === false) {
+                    //document.getElementById("log").innerText = 'NO';
+                    if (video.style.display != 'none') { //if none, I assume video is showing
+                        document.getElementById("log").innerText = 'inflok FALSE; I should see only map';
+                        //video.src = ''
+                        mapcontainer.style.display = 'block';
+                        video.pause();
+                        video.style.display = 'none';
+                    }
+                    //inflok is true
+                    //if then the map is displayed
+                    //get rid of it and display the video instead
+                    //OBS: a nice case for video: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Video_and_audio_APIs
+                } else {
+                    //document.getElementById("log").innerText = 'YES';
+                    if (mapcontainer.style.display != 'none') {
+                        document.getElementById("log").innerText = 'inflok TRUE; I should see video'
+                        video.style.display = 'block';
+                        //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
+                        video.play();
+                        mapcontainer.style.display = 'none';
+                    }
+                }
+
             })
         })
 

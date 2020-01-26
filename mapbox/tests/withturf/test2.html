@@ -35,13 +35,19 @@
     </video>
     <script>
         var video = document.getElementsByTagName("VIDEO");
+        //video.src = 'http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4';
+        //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
+        video.width = 320;
+        video.height = 240;
+        video.type = "video/mp4";
         var mapcontainer = document.getElementById('map');
 
         //OBS: bad hack to avoid panning/zooming animation after geolocation - bounding
         //https://docs.mapbox.com/mapbox-gl-js/example/restrict-bounds/
         var bounds = [
             [4.8998296, 52.353003], // Southwest coordinates
-            [4.900905, 52.3538737] // Northeast coordinates
+            //[4.900905, 52.3538737] // Northeast coordinates
+            [4.9011985, 52.3540768]
         ]
 
         mapboxgl.accessToken = 'pk.eyJ1IjoiZWMtY2NzIiwiYSI6ImNrNW9mYzBtcDBpM3YzdW1vMXJ4azF5bzEifQ.HT1MlKSXTtxe66QHN0Hslw';
@@ -50,7 +56,7 @@
             style: 'mapbox://styles/mapbox/streets-v11',
             //center: [4.9002671, 52.3535058], //lng,lat
             center: [4.900652, 52.353571],
-            zoom: 30,
+            zoom: 25,
             maxBounds: bounds
         });
 
@@ -152,33 +158,31 @@
                     //and then the mapcontainer is not visible and we visited all valid indices,
                     //set video to no display and display the map;
                     //if still false but display sorted, get the next index
-                    if (!inflok) {
+                    if (inflok === false) {
                         document.getElementById("log").innerText = 'NO';
                         if ((mapcontainer.style.display === 'none') && (i == bufferedpoints.length)) {
                             video.style.display = 'none';
-                            mapcontainer.style.display = 'block';
                             video.pause();
                             video.src = ''
+                            mapcontainer.style.display = 'block';
+
                         }
                         //inflok is true
                         //if then the map is displayed
                         //get rid of it and display the video instead
+                        //OBS: a nice case for video: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Video_and_audio_APIs
                     } else {
                         document.getElementById("log").innerText = 'YES';
                         if (mapcontainer.style.display != 'none') {
                             mapcontainer.style.display = 'none';
                             video.style.display = 'block';
-                            video.src = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
-                            video.play();
+                            video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
+                            video.autoplay();
+                            break
                         }
-                        break
                     }
                 }
             })
-
-
-
-
         })
 
         var popup = new mapboxgl.Popup();

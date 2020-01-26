@@ -35,7 +35,7 @@
 
 <body>
     <div id="modified" class="log" style="margin-top: 10px;"></div>
-    <div id="log" class="log" style="margin-top: 25px;">NO</div>
+    <div id="log" class="log" style="margin-top: 45px;">NO</div>
 
     <!--<div id='map' style='width: 400px; height: 300px;'></div>-->
     <div id="map"></div>
@@ -171,7 +171,7 @@
                     if (inflok === false) {
                         document.getElementById("log").innerText = 'NO';
                         if ((mapcontainer.style.display === 'none') && (i == bufferedpoints.length)) {
-                            document.getElementById("log").innerText = document.getElementById("log").innerText + '; map not visible\n i= ' + i;
+                            document.getElementById("log").innerText = document.getElementById("log").innerText + '; map should become visible\n i= ' + i;
                             video.style.display = 'none';
                             video.pause();
                             video.src = ''
@@ -185,7 +185,7 @@
                     } else {
                         document.getElementById("log").innerText = 'YES';
                         if (mapcontainer.style.display != 'none') {
-                            document.getElementById("log").innerText = document.getElementById("log").innerText + '; map visible'
+                            document.getElementById("log").innerText = document.getElementById("log").innerText + '; map should go and video visible'
                             mapcontainer.style.display = 'none';
                             video.style.display = 'block';
                             video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';

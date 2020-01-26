@@ -180,6 +180,7 @@
                         document.getElementById("log").innerText = 'inflok FALSE; I should see only map';
                         //video.src = ''
                         mapcontainer.style.display = 'block';
+                        let video = document.getElementsByTagName("video");
                         video.pause();
                         video.style.display = 'none';
                     }
@@ -190,6 +191,7 @@
                 } else {
                     //document.getElementById("log").innerText = 'YES';
                     if (mapcontainer.style.display != 'none') {
+                        let video = document.getElementsByTagName("video");
                         video.style.display = 'block';
                         document.getElementById("log").innerText = 'inflok TRUE; I should see video';
                         //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';

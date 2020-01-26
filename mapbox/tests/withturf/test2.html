@@ -132,7 +132,7 @@
             for (let i = 0; i < flokslocation.features.length; i++) {
                 let coords = flokslocation.features[i].geometry.coordinates;
                 let point = turf.point(coords)
-                let bufferedpoint = turf.buffer(point, 0.01, {
+                let bufferedpoint = turf.buffer(point, 0.025, {
                     units: "kilometers"
                 });
                 bufferedpoints.push(bufferedpoint);

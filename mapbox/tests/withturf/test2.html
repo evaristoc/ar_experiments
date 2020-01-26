@@ -48,7 +48,8 @@
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [4.9002671, 52.3535058], //lng,lat
+            //center: [4.9002671, 52.3535058], //lng,lat
+            center: [4.900652, 52.353571],
             zoom: 30,
             maxBounds: bounds
         });
@@ -69,7 +70,8 @@
                     },
                     geometry: {
                         type: 'Point',
-                        coordinates: [4.9002671, 52.3535058]
+                        //coordinates: [4.9002671, 52.3535058]
+                        coordinates: [4.900652, 52.353571]
                     }
                 },
 
@@ -110,7 +112,7 @@
             for (let i = 0; i < flokslocation.features.length; i++) {
                 let coords = flokslocation.features[i].geometry.coordinates;
                 let point = turf.point(coords)
-                let bufferedpoint = turf.buffer(point, 0.001, {
+                let bufferedpoint = turf.buffer(point, 0.01, {
                     units: "kilometers"
                 });
                 bufferedpoints.push(bufferedpoint);

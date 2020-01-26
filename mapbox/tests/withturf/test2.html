@@ -17,7 +17,7 @@
             position: absolute;
             margin-left: 15px;
             font-size: 2rem;
-            color: orange;
+            /*color: orange;*/
         }
         
         #map {
@@ -32,6 +32,10 @@
             position: absolute;
             top: 0;
             bottom: 0;
+        }
+        
+        .mapboxgl-ctrl-geolocate {
+            transform: scale(3);
         }
     </style>
 </head>
@@ -193,7 +197,7 @@
                     if (mapcontainer.style.display != 'none') {
                         let video = document.getElementsByTagName("video");
                         video.style.display = 'block';
-                        document.getElementById("log").innerText = 'inflok TRUE; I should see video';
+                        document.getElementById("log").innerText = 'inflok TRUE; I should see video\n' + video;
                         //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
                         video.play();
                         mapcontainer.style.display = 'none';

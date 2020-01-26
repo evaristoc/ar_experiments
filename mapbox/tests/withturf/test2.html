@@ -46,18 +46,23 @@
 
     <!--<div id='map' style='width: 400px; height: 300px;'></div>-->
     <div id="map"></div>
-    <video>
+    <video id="video">
       <source src="https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4">
       Your browser does not support the video tag.
     </video>
     <script>
         document.querySelector('#modified').innerHTML = document.lastModified;
-        var video = document.getElementsByTagName("video");
+
+        //https://developer.mozilla.org/en-US/docs/Web/Guide/Audio_and_video_delivery/Video_player_styling_basics
+        //var video = document.getElementsByTagName("video");
+        var video = document.getElementById("video");
         //video.src = 'http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4';
         //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
         video.width = 320;
         video.height = 240;
         video.type = "video/mp4";
+        //video.style.display = "block";
+        //console.log(video);
         var mapcontainer = document.getElementById('map');
 
         //OBS: bad hack to avoid panning/zooming animation after geolocation - bounding
@@ -136,7 +141,7 @@
             for (let i = 0; i < flokslocation.features.length; i++) {
                 let coords = flokslocation.features[i].geometry.coordinates;
                 let point = turf.point(coords)
-                let bufferedpoint = turf.buffer(point, 0.025, {
+                let bufferedpoint = turf.buffer(point, 0.015, {
                     units: "kilometers"
                 });
                 bufferedpoints.push(bufferedpoint);
@@ -183,10 +188,10 @@
                     if (video.style.display != 'none') { //if none, I assume video is showing
                         document.getElementById("log").innerText = 'inflok FALSE; I should see only map';
                         //video.src = ''
-                        mapcontainer.style.display = 'block';
+                        //mapcontainer.style.display = 'block';
                         //let video = document.getElementsByTagName("video");
-                        //video.pause();
-                        //video.style.display = 'none';
+                        video.pause();
+                        video.style.display = 'none';
                     }
                     //inflok is true
                     //if then the map is displayed
@@ -195,12 +200,12 @@
                 } else {
                     //document.getElementById("log").innerText = 'YES';
                     if (mapcontainer.style.display != 'none') {
-                        let video = document.getElementsByTagName("video");
-                        //video.style.display = 'block';
-                        document.getElementById("log").innerText = 'inflok TRUE; I should see video\n' + video;
+                        //let video = document.getElementsByTagName("video");
+                        document.getElementById("log").innerText = 'inflok TRUE; I should see video';
+                        video.style.display = 'block';
                         //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
-                        //video.play();
-                        mapcontainer.style.display = 'none';
+                        video.play();
+                        //mapcontainer.style.display = 'none';
                     }
                 }
 

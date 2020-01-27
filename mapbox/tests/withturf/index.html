@@ -12,6 +12,14 @@
             padding: 0;
         }
         
+        .log {
+            z-index: 1;
+            position: absolute;
+            margin-left: 15px;
+            font-size: 2rem;
+            /*color: orange;*/
+        }
+        
         #map {
             position: absolute;
             top: 0;
@@ -21,20 +29,34 @@
         
         video {
             display: none;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+        }
+        
+        .mapboxgl-ctrl-geolocate {
+            transform: scale(3);
         }
     </style>
 </head>
 
 <body>
-    <div id="log" style="z-index:1; position:absolute; margin-top:10px; margin-left:15px; font-size:2rem;color:orange;">NO</div>
-
+    <div id="modified" class="log" style="margin-top: 10px;"></div>
+    <div id="log" class="log" style="margin-top: 45px;">NO</div>
     <!--<div id='map' style='width: 400px; height: 300px;'></div>-->
     <div id="map"></div>
     <video>
       Your browser does not support the video tag.
     </video>
     <script>
-        var video = document.getElementsByTagName("VIDEO");
+        document.querySelector('#modified').innerHTML = document.lastModified;
+        //var video = document.getElementsByTagName("video");
+        var video = document.getElementById("video");
+        video.width = 320;
+        video.height = 240;
+        video.type = "video/mp4";
+
+
         var mapcontainer = document.getElementById('map');
 
         //OBS: bad hack to avoid panning/zooming animation after geolocation - bounding
@@ -184,8 +206,6 @@
             ]
         }
 
-        //console.log(turf, map.addSource);
-
         map.on('load', function() {
 
             map.addControl(
@@ -241,49 +261,32 @@
 
             me.on('geolocate', function(e) {
                 let point = turf.point([e.coords.longitude, e.coords.latitude]);
-                // if (window.Worker) {
-                //     const myWorker = new Worker("worker.js");
-                //     myWorker.postMessage([point, bufferedpoints, turf.inside]);
-                //     console.log('Message posted to worker');
-                // };
-                var inflok;
-                for (let i = 0; i <= bufferedpoints.length; i++) {
+                var inflok = false;
+                for (let i = 0; i < bufferedpoints.length; i++) {
                     //just check i up to the last index of the list and change inflok accordingly; if extra index set inflok to false 
                     if (i < bufferedpoints.length) {
                         inflok = turf.inside(point, bufferedpoints[i]);
-                    } else {
-                        inflok = false;
+                        if (inflok) {
+                            break;
+                        }
                     }
-                    //if inflok is false
-                    //and then the mapcontainer is not visible and we visited all valid indices,
-                    //set video to no display and display the map;
-                    //if still false but display sorted, get the next index
-                    if (!inflok) {
-                        document.getElementById("log").innerText = 'NO';
-                        if ((mapcontainer.style.display === 'none') && (i == bufferedpoints.length)) {
-                            video.style.display = 'none';
-                            mapcontainer.style.display = 'block';
-                            video.pause();
-                            video.src = ''
-                        }
-                        //inflok is true
-                        //if then the map is displayed
-                        //get rid of it and display the video instead
-                    } else {
-                        document.getElementById("log").innerText = 'YES';
-                        if (mapcontainer.style.display != 'none') {
-                            mapcontainer.style.display = 'none';
-                            video.style.display = 'block';
-                            video.src = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
-                            video.play();
-                        }
-                        break
+                }
+                //if inflok is false
+                if (inflok === false) {
+                    if (video.style.display != 'none') { //if none, I assume video is showing
+                        document.getElementById("log").innerText = 'inflok FALSE; I should see only map';
+                        video.pause();
+                        video.style.display = 'none';
+                    }
+                    //inflok is true
+                } else {
+                    if (mapcontainer.style.display != 'none') {
+                        document.getElementById("log").innerText = 'inflok TRUE; I should see video';
+                        video.style.display = 'block';
+                        video.play();
                     }
                 }
             })
-
-
-
 
         })
 
@@ -308,24 +311,6 @@
             map.getCanvas().style.cursor = features.length ? 'pointer' : '';
 
         });
-
-
-        // var buffered1 = turf.buffer(point1, .005, {
-        //   units: 'miles'
-        // });
-
-        // var buffered2 = turf.buffer(point2, .005, {
-        //   units: 'miles'
-        // });
-
-
-
-
-
-        // var point1test = turf.point([4.8978588137181305, 52.354334229271544]);
-        // var point2test = turf.point([4.897183151714557, 52.354206463090634]);
-
-        // console.log(turf.inside(point1test, buffered1), turf.inside(point2test, buffered1));
     </script>
 </body>
 

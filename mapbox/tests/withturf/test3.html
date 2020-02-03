@@ -27,7 +27,7 @@
             width: 100%;
         }
         
-        video {
+        iframe {
             display: none;
             position: absolute;
             top: 0;
@@ -46,10 +46,7 @@
 
     <!--<div id='map' style='width: 400px; height: 300px;'></div>-->
     <div id="map"></div>
-    <video id="video">
-      <source src="https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4">
-      Your browser does not support the video tag.
-    </video>
+    <iframe id="video" src="https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1"></iframe>
     <script>
         document.querySelector('#modified').innerHTML = document.lastModified;
 
@@ -60,7 +57,7 @@
         //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
         video.width = 320;
         video.height = 240;
-        video.type = "video/mp4";
+        // video.type = "video/mp4";
         //video.style.display = "block";
         //console.log(video);
         var mapcontainer = document.getElementById('map');
@@ -190,7 +187,7 @@
                         //video.src = ''
                         //mapcontainer.style.display = 'block';
                         //let video = document.getElementsByTagName("video");
-                        video.pause();
+                        //video.pause();
                         video.style.display = 'none';
                     }
                     //inflok is true
@@ -204,7 +201,7 @@
                         document.getElementById("log").innerText = 'inflok TRUE; I should see video';
                         video.style.display = 'block';
                         //video.src = 'https://mdn.github.io/learning-area/javascript/apis/video-audio/finished/video/sintel-short.mp4';
-                        video.play();
+                        //video.play();
                         //mapcontainer.style.display = 'none';
                     }
                 }

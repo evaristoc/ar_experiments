@@ -42,7 +42,7 @@
 
 <body>
     <div id="modified" class="log" style="margin-top: 10px;"></div>
-    <div id="log" class="log" style="margin-top: 45px;">NO</div>
+    <div id="log" class="log" style="margin-top: 45px;">NO GEOLOCATION</div>
 
     <!--<div id='map' style='width: 400px; height: 300px;'></div>-->
     <div id="map"></div>
@@ -76,8 +76,9 @@
             style: 'mapbox://styles/mapbox/streets-v11',
             //center: [4.9002671, 52.3535058], //lng,lat
             center: [4.900652, 52.353571],
-            zoom: 25,
-            maxBounds: bounds
+            //zoom: 25,
+            zoom: 15,
+            //maxBounds: bounds
         });
 
         var me = new mapboxgl.GeolocateControl({
@@ -159,7 +160,24 @@
                 }
             }, 'flokslocation');
 
-            me.on('geolocate', function(e) {
+
+            // me.on('trackuserlocationstart', function(e) {
+            //     console.log('start', e);
+            //     //video.style.display = 'none';
+            //     document.getElementById("log").innerText = "GEOLOCATION";
+
+            // });
+
+            // me.on('trackuserlocationend', function(e) {
+            //     console.log('end', e);
+            //     video.style.display = 'none';
+            //     document.getElementById("log").innerText = "NO GEOLOCATION";
+            // });
+
+            var gloc = me.on('geolocate', function(e) {
+
+                console.log('geolocate', e);
+
                 let point = turf.point([e.coords.longitude, e.coords.latitude]);
                 // if (window.Worker) {
                 //     const myWorker = new Worker("worker.js");
@@ -206,8 +224,19 @@
                     }
                 }
 
-            })
-        })
+            });
+
+            // setInterval(function() {
+            //     console.log('gloc', gloc);
+            // }, 1000);
+
+            me.on('trackuserlocationend', function(e) {
+                console.log('end', gloc._watchState);
+                //video.style.display = 'none';
+                //document.getElementById("log").innerText = "NO GEOLOCATION";
+            });
+
+        });
 
         var popup = new mapboxgl.Popup();
 

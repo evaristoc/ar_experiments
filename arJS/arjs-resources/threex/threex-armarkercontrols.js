@@ -97,16 +97,28 @@ ARjs.MarkerControls.prototype.dispose = function(){
  * of things. it is done here.
  */
 ARjs.MarkerControls.prototype.updateWithModelViewMatrix = function(modelViewMatrix){
-	var markerObject3D = this.object3d;
+	var markerObject3D = this.object3d; //this is, in principle, the CAMERA! (it can be other object, by the way...)
+	
+	//var testmarkergeometry = new THREE.PlaneGeometry(1.3+0.25,1.85+0.25, 1, 8);
+	//var testmarkermaterial = new THREE.MeshBasicMaterial({
+	//	color: 'black',
+	//	transparent : false,
+	//	//opacity: 0.5,
+	//	//side: THREE.DoubleSide
+	//});
+	
+	//var testmarkermesh = new THREE.Mesh( testmarkergeometry, testmarkermaterial );
+	
+	//markerObject3D.add(testmarkermesh);
 
 	// mark object as visible
 	markerObject3D.visible = true
 
 	if( this.context.parameters.trackingBackend === 'artoolkit' ){
 		// apply context._axisTransformMatrix - change artoolkit axis to match usual webgl one
+		//E: translation of coordinates from artoolkit into renderer system ones
 		var tmpMatrix = new THREE.Matrix4().copy(this.context._artoolkitProjectionAxisTransformMatrix)
 		tmpMatrix.multiply(modelViewMatrix)
-
 		modelViewMatrix.copy(tmpMatrix)
 	}else if( this.context.parameters.trackingBackend === 'aruco' ){
 		// ...
@@ -124,8 +136,10 @@ ARjs.MarkerControls.prototype.updateWithModelViewMatrix = function(modelViewMatr
 
 	// change markerObject3D.matrix based on parameters.changeMatrixMode
 	if( this.parameters.changeMatrixMode === 'modelViewMatrix' ){
+		//modelViewMatrix == the center of reference is in the viewer
 		markerObject3D.matrix.copy(modelViewMatrix)
 	}else if( this.parameters.changeMatrixMode === 'cameraTransformMatrix' ){
+		//cameraTransform Matrix = the center of reference is in the marker
 		markerObject3D.matrix.getInverse( modelViewMatrix )
 	}else {
 		console.assert(false)
@@ -133,6 +147,8 @@ ARjs.MarkerControls.prototype.updateWithModelViewMatrix = function(modelViewMatr
 
 	// decompose - the matrix into .position, .quaternion, .scale
 	markerObject3D.matrix.decompose(markerObject3D.position, markerObject3D.quaternion, markerObject3D.scale)
+
+	//console.log("camera position (from inside armarkercontrol): ", markerObject3D.position);
 
 	// dispatchEvent
 	this.dispatchEvent( { type: 'markerFound' } );

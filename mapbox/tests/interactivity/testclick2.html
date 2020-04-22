@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .log {
+            z-index: 1;
+            position: absolute;
+            margin-left: 15px;
+            font-size: 2rem;
+            /*color: orange;*/
+        }
+        
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="modified" class="log" style="margin-top: 10px;"></div>
+    <div id="log" class="log" style="margin-top: 45px;"></div>
+    <div id="map"></div>
+    <script>
+        document.querySelector('#modified').innerHTML = document.lastModified;
+
+        var mapcontainer = document.getElementById('map');
+
+        //OBS: bad hack to avoid panning/zooming animation after geolocation - bounding
+        //https://docs.mapbox.com/mapbox-gl-js/example/restrict-bounds/
+        var bounds = [
+            [4.8998296, 52.353003], // Southwest coordinates
+            //[4.900905, 52.3538737] // Northeast coordinates
+            [4.9011985, 52.3540768]
+        ]
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZWMtY2NzIiwiYSI6ImNrNW9mYzBtcDBpM3YzdW1vMXJ4azF5bzEifQ.HT1MlKSXTtxe66QHN0Hslw';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v8',
+            //center: [4.9002671, 52.3535058], //lng,lat
+            center: [4.900652, 52.353571],
+            //zoom: 25,
+            zoom: 15,
+            //maxBounds: bounds,
+            interactive: true,
+        });
+    </script>
+</body>
+
+</html>

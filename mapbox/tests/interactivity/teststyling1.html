@@ -1,0 +1,131 @@
+<html>
+
+<head>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.40.1/mapbox-gl.css' rel='stylesheet' />
+    <!--<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.40.1/mapbox-gl.js'></script>-->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic21pY2tpZSIsImEiOiJjaWtiM2JkdW0wMDJudnRseTY0NWdrbjFnIn0.WxGYL18BJjWUiNIu-r3MSA';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v8',
+            //center: [-96, 37.8],
+            center: [-77.03238901390978, 38.913188059745586],
+            zoom: 15,
+            interactive: true
+        });
+
+        var popup = new mapboxgl.Popup({
+                closeOnClick: false
+            })
+            .setLngLat([-77.03238901390978, 38.913188059745586])
+            .setHTML('<h1>Hello World!</h1>')
+            .addTo(map);
+
+        map.on('load', function(e) {
+            map.addSource('markers', {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [{
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-77.03238901390978, 38.913188059745586]
+                            },
+                            "properties": {
+                                "modelId": 1,
+                            },
+                        },
+                        // {
+                        //     "type": "Feature",
+                        //     "geometry": {
+                        //         "type": "Point",
+                        //         "coordinates": [-122.414, 37.776]
+                        //     },
+                        //     "properties": {
+                        //         "modelId": 2,
+                        //     },
+                        // }
+                    ]
+                }
+            });
+            map.addLayer({
+                "id": "circles1",
+                "source": "markers",
+                "type": "circle",
+                "paint": {
+                    "circle-radius": 10,
+                    "circle-color": "#007cbf",
+                    "circle-opacity": 0.5,
+                    "circle-stroke-width": 0,
+                },
+                "filter": ["==", "modelId", 1],
+            });
+            // map.addLayer({
+            //     "id": "circles2",
+            //     "source": "markers",
+            //     "type": "circle",
+            //     "paint": {
+            //         "circle-radius": 20,
+            //         "circle-opacity": 0,
+            //         "circle-stroke-width": 1,
+            //         "circle-stroke-color": "#00bf7c",
+            //         "circle-stroke-opacity": 1,
+            //     },
+            //     "filter": ["==", "modelId", 2],
+            // });
+
+            // When a click event occurs on a feature in the states layer, open a popup at the
+            // location of the click, with description HTML from its properties.
+            map.on('click', 'circles1', function(e) {
+                //console.log('e', e.lngLat.lat, this);
+                // new mapboxgl.Popup()
+                //     //.setLngLat([e.lngLat.lng, e.lngLat.lat])
+                //     .setLngLat([-77.03238901390978, 38.913188059745586])
+                //     //.setHTML(e.features[0].properties.name)
+                //     .addTo(this);
+
+                var popup = new mapboxgl.Popup({
+                        closeOnClick: false
+                    })
+                    //.setLngLat([-77.03238901390978, 38.913188059745586])
+                    .setLngLat(e.lngLat)
+                    .setHTML('<h1>Hello World!</h1>')
+                    .addTo(map);
+            });
+
+            // Change the cursor to a pointer when the mouse is over the states layer.
+            map.on('mouseenter', 'circles1', function() {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', 'circles1', function() {
+                map.getCanvas().style.cursor = '';
+            });
+
+        });
+    </script>
+</body>
+
+</html>

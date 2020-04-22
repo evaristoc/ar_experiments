@@ -289,9 +289,13 @@
 			/*COLLECTING VALUES*/
 			//console.log("camera position: ", camera.position);
 			document.getElementById('p1').innerHTML = "x: "+String(camera.position.x).slice(0,4) + "; y: "+String(camera.position.y).slice(0,4) + "; z: "+String(camera.position.z).slice(0,4)
-			averaging.x.push(camera.position.x);
-			averaging.y.push(camera.position.y);
-			averaging.z.push(camera.position.z);
+			if (Math.abs(camera.position.x) <= 20 & Math.abs(camera.position.y) <= 20  & Math.abs(camera.position.z) <= 20 ) {
+			  //code
+			  averaging.x.push(camera.position.x);
+			  averaging.y.push(camera.position.y);
+			  averaging.z.push(camera.position.z);
+			}
+
 			if (averaging.x.length > averaging.max ) {
 				//code
 				averaging.x.shift(0);

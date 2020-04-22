@@ -409,7 +409,7 @@
 		  //code
 		  //document.getElementById("dino").setAttribute('position',{x:0.0, y: -averaging.z.reduce((a,b)=>{return a+b})/averaging.max, z: -averaging.y.reduce((a,b)=>{return a+b})/averaging.max/10})
 		  //with the mobiel, z webar == z/10 ar.js; y webar = y/10 ar.js
-		  document.getElementById("dino").setAttribute('position',{x:0.0, z: averaging.z.reduce((a,b)=>{return a+b})/averaging.max/10, y: averaging.y.reduce((a,b)=>{return a+b})/averaging.max/20})
+		  document.getElementById("dino").setAttribute('position',{x:0.0, y: averaging.y.reduce((a,b)=>{return a+b})/averaging.max/20, z: averaging.z.reduce((a,b)=>{return a+b})/averaging.max/9})
 		}
 		
 	</script>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<!-- include three.js library -->
+	<script src='../../arjs-resources/js/three.js'></script>
+	<!-- ar.js -->
+	<script src="../../arjs-resources/js/ar.js"></script>
+	<!--<script>THREEx.ArToolkitContext.baseURL = '../'</script>-->
+	
+	<!-- include threex.artoolkit -->
+	<script src="../../arjs-resources/threex/threex-artoolkitsource.js"></script>
+	<script src="../../arjs-resources/threex/threex-artoolkitcontext.js"></script>
+	<script src="../../arjs-resources/threex/threex-arbasecontrols.js"></script>
+	<script src="../../arjs-resources/threex/threex-armarkercontrols.js"></script>
+
+    <script>
+      // WebXR requires HTTPS, so the site doesn't work if someone manually enters
+      // the URL and ends up using HTTP. To work around this, force redirect from
+      // http to https for non-localhost addresses.
+      if (window.location.protocol == "http:" &&
+          window.location.hostname != "localhost" && 
+          window.location.hostname != "127.0.0.1" &&
+          window.location.hostname != "[::1]") {
+        window.location = window.location.href.replace('http:', 'https:');        
+      }
+    </script>    
+    
+    <!-- import the webpage's javascript files -->
+    <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-extras@3.3.0/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+
+    <script>
+      // Define a few custom components useful for AR mode. While these are somewhat reusable,
+      // I recommend checking if there are officially supported alternatives before copying
+      // these into new projects.
+    
+      // See also https://github.com/aframevr/aframe/pull/4356
+      AFRAME.registerComponent('hide-in-ar-mode', {
+        // Set this object invisible while in AR mode.
+        init: function () {
+          this.el.sceneEl.addEventListener('enter-vr', (ev) => {
+            this.wasVisible = this.el.getAttribute('visible');
+            if (this.el.sceneEl.is('ar-mode')) {
+              this.el.setAttribute('visible', false);
+            }
+          });
+          this.el.sceneEl.addEventListener('exit-vr', (ev) => {
+            if (this.wasVisible) this.el.setAttribute('visible', true);
+          });
+        }
+      });
+      
+      AFRAME.registerComponent('ar-shadows', {
+        // Swap an object's material to a transparent shadows-only material while
+        // in AR mode. Intended for use with a ground plane. The object is also
+        // set visible while in AR mode, this is useful if it's hidden in other
+        // modes due to them using a 3D environment.
+        schema: {
+          opacity: {default: 0.3}
+        },
+        init: function () {
+          this.el.sceneEl.addEventListener('enter-vr', (ev) => {
+            this.wasVisible = this.el.getAttribute('visible');
+            if (this.el.sceneEl.is('ar-mode')) {
+              this.savedMaterial = this.el.object3D.children[0].material;
+              this.el.object3D.children[0].material = new THREE.ShadowMaterial();
+              this.el.object3D.children[0].material.opacity = this.data.opacity;
+              this.el.setAttribute('visible', true);
+            }
+          });
+          this.el.sceneEl.addEventListener('exit-vr', (ev) => {
+            if (this.savedMaterial) {
+              this.el.object3D.children[0].material = this.savedMaterial;
+              this.savedMaterial = null;
+            }
+            if (!this.wasVisible) this.el.setAttribute('visible', false);
+          });
+        }
+      });    
+  </script>
+  <style>
+	video{
+		/*width: 320px !important;
+		height: 240px !important;*/
+	}
+	#ascene {
+		display:none;
+		/*height: 300px;
+		width: 600px;*/
+	}
+  </style>
+
+</meta>
+
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+	<!-- LOG AREA -->
+	<div id="log" style="background-color:orange; color:white; font-weight: bold; width:200px; z-index:100;">
+		<p id="p1"></p>
+		<p id="p2"></p>
+	</div>
+	<!-- AR.JS SECTION -->
+	<div id="arjs" style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
+		<a href="https://github.com/jeromeetienne/AR.js/" target="_blank">AR.js</a> - three.js camera transform
+		<br/>
+		<!--Contact me any time at <a href='https://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>-->
+	</div>
+	<!-- WEBAR SECTION -->
+	<div id="ascene">
+		<a-scene>
+		  <a-assets timeout="30000">
+			<!-- Model source: https://sketchfab.com/3d-models/spinosaurus-2135501583704537907645bf723685e7
+				 Model author: https://sketchfab.com/VapTor
+				 Model license: CC Attribution -->
+			<a-asset-item id="spinosaurus" src="https://cdn.glitch.com/324a5290-5aa7-4efc-92d6-ae0736433b12%2Fspinosaurus.glb" response-type="arraybuffer"></a-asset-item>
+		  </a-assets>
+		  
+		  <!--<a-camera position="-3.7 -8 .22"></a-camera>-->
+		  <!--<a-camera position="-.7 1.2 1"></a-camera>-->
+		  <a-camera position="0.0 0.0 0.0"></a-camera>
+		  
+		  <!-- Environment for 2D and VR viewing. It's auto-hidden in AR mode. -->
+		  <a-entity environment="preset: forest; lighting: none; shadow: none; lightPosition: 0 2.15 0"
+					hide-in-ar-mode></a-entity>
+		  
+		  <!--<a-box id="testbox" color="tomato" depth="1" height="1" width="1" position="-1 0 -3"></a-box>-->
+		  <!-- apparently: position of the image is x == x of control; y == z of control; z == -y of control -->
+		  <!--<a-box id="testbox" color="tomato" depth="1" height="1" width="1" position="2.7 .8 -.3" animation-mixer></a-box>-->
+		  <!-- It seems to be a change in coordinates:
+				-- the center is my camera (0,0,0)
+				-- therefore, x == 0 (or a value that would center the image to the marker)
+				-- y of WebAR == -z of AR.js
+				-- z of WebAR == -y/10 of AR.js
+		  -->
+		  <a-entity id="dino" position="0 0 0" scale=".1 .1 .1">
+			<a-entity position="0 1.15 0" rotation="0 55 0"
+					  gltf-model="#spinosaurus"
+					  animation-mixer
+					  shadow="cast: true; receive: false">
+			</a-entity>
+			<a-box id="testbox" color="tomato" depth="1" height="1" width="1" position="0 0 0" animation-mixer>
+			</a-box>
+		  </a-entity>
+		  <a-entity light="type: ambient; intensity: 0.5;"></a-entity>
+		  <a-light type="directional"
+			 light="castShadow: true;
+					shadowMapHeight: 1024;
+					shadowMapWidth: 1024;
+					shadowCameraLeft: -7;
+					shadowCameraRight: 5;
+					shadowCameraBottom: -5;
+					shadowCameraTop: 5;"
+			 id="light"
+			 target="testbox"
+			 position="-5 3 1.5"></a-light>
+		 </a-scene>
+		<div id="text">
+		  <h1>A-Frame Spinosaurus for VR/AR</h1>
+		
+		  <p>
+			Model: <a href="https://sketchfab.com/3d-models/spinosaurus-2135501583704537907645bf723685e7">Spinosaurus</a> by 
+			<a href="https://sketchfab.com/VapTor">Vaptor-Studio</a>.
+		  </p>
+		  <p>
+			Size: <button id="btn_full">Full</button>
+			<button id="btn_half">1/2</button>
+			<button id="btn_quarter">1/4</button>
+		  </p>
+		  
+		  <p>
+			To try WebXR's experimental AR mode, use an <a href="https://developers.google.com/ar/discover/supported-devices">ARCore-compatible</a> 
+			Android phone with Chrome v79+ and enable <b>WebXR AR Module</b> in chrome://flags.
+		  </p>
+		  
+		  <p>
+			Powered by <a href="https://aframe.io/blog/aframe-v1.0.0/">A-Frame v1.0.0</a>.
+		  </p>
+		</div>
+	</div>
+    <script>
+      function setSize(scale) {
+        document.getElementById('dino').setAttribute('scale', {x: scale, y: scale, z: scale});
+      }
+      document.getElementById('btn_full').onclick = setSize.bind(this, 1);
+      document.getElementById('btn_half').onclick = setSize.bind(this, 0.5);
+      document.getElementById('btn_quarter').onclick = setSize.bind(this, 0.25);
+    </script>
+	
+	
+	
+	<script>
+		//////////////////////////////////////////////////////////////////////////////////
+		//		Init ARJS!!
+		//////////////////////////////////////////////////////////////////////////////////
+	
+		// init renderer
+		var renderer	= new THREE.WebGLRenderer({
+			antialias: true,
+			alpha: true
+		});
+		renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+		renderer.setSize( 640, 480 );
+		//renderer.setSize( 320, 240 );
+		renderer.domElement.style.position = 'absolute'
+		renderer.domElement.style.top = '0px'
+		renderer.domElement.style.left = '0px'
+		document.getElementById("arjs").appendChild( renderer.domElement );
+	
+		// array of functions for the rendering loop
+		var onRenderFcts= [];
+	
+		// init scene and camera
+		var scene	= new THREE.Scene();
+	
+		//////////////////////////////////////////////////////////////////////////////////
+		//		Initialize a basic camera
+		//////////////////////////////////////////////////////////////////////////////////
+	
+		// Create a camera
+		var camera = new THREE.Camera();
+		scene.add(camera);
+	
+		////////////////////////////////////////////////////////////////////////////////
+		//          handle arToolkitSource
+		////////////////////////////////////////////////////////////////////////////////
+	
+		var arToolkitSource = new THREEx.ArToolkitSource({
+			// to read from the webcam
+			sourceType : 'webcam',
+	
+			// // to read from an image
+			// sourceType : 'image',
+			// sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/images/img.jpg',
+	
+			// to read from a video
+			// sourceType : 'video',
+			// sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/videos/headtracking.mp4',
+		})
+	
+		arToolkitSource.init(function onReady(){
+			// open a the dev console
+			//console.log("arController", arToolkitContext.arController);
+			setTimeout(() => {
+				onResize()
+			}, 2000);
+		})
+		
+		console.log("arToolkitSource", arToolkitSource);
+	
+		// handle resize
+		window.addEventListener('resize', function(){
+			onResize()
+		})
+	
+		function onResize(){
+			arToolkitSource.onResizeElement()
+			arToolkitSource.copyElementSizeTo(renderer.domElement)
+			if( arToolkitContext.arController !== null ){
+				arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas)
+			}
+		}
+		////////////////////////////////////////////////////////////////////////////////
+		//          initialize arToolkitContext
+		////////////////////////////////////////////////////////////////////////////////
+	
+	
+		// create atToolkitContext
+		var arToolkitContext = new THREEx.ArToolkitContext({
+			cameraParametersUrl: THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
+			detectionMode: 'mono',
+		})
+		// initialize it
+		arToolkitContext.init(function onCompleted(){
+			// copy projection matrix to camera
+			camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+		})
+	
+		var averaging = {x:[],y:[],z:[], max:50};
+		var countfoundHiro = 0;
+		
+		// update artoolkit on every frame
+		onRenderFcts.push(function(){
+			
+			
+			if( arToolkitSource.ready === false ){
+				//document.getElementsByTagName('video').hidden = "false";
+				return
+			}
+			
+			/*COLLECTING VALUES*/
+			//console.log("camera position: ", camera.position);
+			document.getElementById('p1').innerHTML = "x: "+String(camera.position.x).slice(0,4) + "; y: "+String(camera.position.y).slice(0,4) + "; z: "+String(camera.position.z).slice(0,4)
+			if (Math.abs(camera.position.x) <= 20 & Math.abs(camera.position.y) <= 20  & Math.abs(camera.position.z) <= 20 ) {
+			  //code
+			  averaging.x.push(camera.position.x);
+			  averaging.y.push(camera.position.y);
+			  averaging.z.push(camera.position.z);
+			}
+
+			if (averaging.x.length > averaging.max ) {
+				//code
+				averaging.x.shift(0);
+			};
+			if (averaging.y.length > averaging.max ) {
+				//code
+				averaging.y.shift(0);
+			};
+			if (averaging.z.length > averaging.max ) {
+				//code
+				averaging.z.shift(0);
+			}
+			
+			document.getElementById('p2').innerHTML = "ave-x: "+String(averaging.x.reduce((a,b)=>{return a+b})/averaging.max).slice(0,4) + "; ave-y: "+String(averaging.y.reduce((a,b)=>{return a+b})/averaging.max).slice(0,4) + "; ave-z: "+String(averaging.z.reduce((a,b)=>{return a+b})/averaging.max).slice(0,4)+ " - (sample size: "+averaging.max+")"
+
+			//console.log(document.getElementsByTagName('video').hidden = true);
+			//document.getElementById('arjs').hidden = true;
+			//console.log(document.getElementById("dino"));
+			//document.getElementById('ascene').style.display = "block";
+			//document.getElementById("dino").setAttribute('position',{x:0.0, y: -averaging.z.reduce((a,b)=>{return a+b})/averaging.max, z: -averaging.y.reduce((a,b)=>{return a+b})/averaging.max/10})
+			
+			//arToolkitSource.domElement.hidden = true;
+			//console.log(arToolkitSource.domElement.hidden);
+			//console.log(mesh);
+			//console.log(mesh.visible);
+			//console.log(arToolkitContext._arMarkersControls);
+			//console.log(arToolkitContext._arMarkersControls[0].object3d.visible);
+			if (arToolkitContext._arMarkersControls[0].object3d.visible) {
+			  //code
+			  countfoundHiro += 1;
+			  if (countfoundHiro > 200) {
+				//code
+				document.getElementById('ascene').style.display = "block";
+				arToolkitSource.domElement.hidden = true;
+				newScene(averaging);
+				arToolkitSource.ready = false;
+			  }
+			}else{
+			  countfoundHiro = 0;
+			}
+			
+			arToolkitContext.update( arToolkitSource.domElement )
+	
+			// update scene.visible if the marker is seen
+			scene.visible = camera.visible
+		})
+	
+		////////////////////////////////////////////////////////////////////////////////
+		//          Create a ArMarkerControls
+		////////////////////////////////////////////////////////////////////////////////
+	
+		// init controls for camera
+		var markerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
+			type : 'pattern',
+			patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.hiro',
+			// patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji',
+			// as we controls the camera, set changeMatrixMode: 'cameraTransformMatrix'
+			changeMatrixMode: 'cameraTransformMatrix'
+			//changeMatrixMode: 'modelViewMatrix'
+		})
+		// as we do changeMatrixMode: 'cameraTransformMatrix', start with invisible scene
+		//scene.visible = false
+	
+		//////////////////////////////////////////////////////////////////////////////////
+		//		add an object in the scene
+		//////////////////////////////////////////////////////////////////////////////////
+	
+		// add a torus knot
+		var geometry	= new THREE.CubeGeometry(1,1,1);
+		var material	= new THREE.MeshNormalMaterial({
+			transparent : true,
+			opacity: 0.5,
+			side: THREE.DoubleSide
+		});
+		var mesh	= new THREE.Mesh( geometry, material );
+		//mesh.position.z	= geometry.parameters.height/2
+		mesh.position.z = 0.0;
+		scene.add( mesh );
+	
+		var geometry	= new THREE.TorusKnotGeometry(0.3,0.1,64,16);
+		var material	= new THREE.MeshNormalMaterial();
+		var mesh	= new THREE.Mesh( geometry, material );
+		mesh.position.z	= 0.5
+		//scene.add( mesh );
+	
+		onRenderFcts.push(function(delta){
+			mesh.rotation.x += Math.PI*delta
+		})
+	
+		//////////////////////////////////////////////////////////////////////////////////
+		//		render the whole thing on the page
+		//////////////////////////////////////////////////////////////////////////////////
+	
+		// render the scene
+		onRenderFcts.push(function(){
+			renderer.render( scene, camera );
+		})
+	
+		// run the rendering loop
+		var lastTimeMsec= null
+		requestAnimationFrame(function animate(nowMsec){
+			// keep looping
+			requestAnimationFrame( animate );
+			// measure time
+			lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
+			var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
+			lastTimeMsec	= nowMsec
+			// call each update function
+			onRenderFcts.forEach(function(onRenderFct){
+				onRenderFct(deltaMsec/1000, nowMsec/1000)
+			})
+		})
+		
+		function newScene(averaging) {
+		  //code
+		  //document.getElementById("dino").setAttribute('position',{x:0.0, y: -averaging.z.reduce((a,b)=>{return a+b})/averaging.max, z: -averaging.y.reduce((a,b)=>{return a+b})/averaging.max/10})
+		  //with the mobiel, z webar == z/10 ar.js; y webar = y/10 ar.js
+		  document.getElementById("dino").setAttribute('position',{x:0.0, y: averaging.y.reduce((a,b)=>{return a+b})/averaging.max/20, z: averaging.z.reduce((a,b)=>{return a+b})/averaging.max/9})
+		}
+		
+	</script>
+</body>

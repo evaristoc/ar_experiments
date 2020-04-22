@@ -408,7 +408,7 @@
 		function newScene(averaging) {
 		  //code
 		  //document.getElementById("dino").setAttribute('position',{x:0.0, y: -averaging.z.reduce((a,b)=>{return a+b})/averaging.max, z: -averaging.y.reduce((a,b)=>{return a+b})/averaging.max/10})
-		  document.getElementById("dino").setAttribute('position',{x:0.0, z: -averaging.z.reduce((a,b)=>{return a+b})/averaging.max, y: averaging.y.reduce((a,b)=>{return a+b})/averaging.max/10})
+		  document.getElementById("dino").setAttribute('position',{x:0.0, z: averaging.z.reduce((a,b)=>{return a+b})/averaging.max, y: averaging.y.reduce((a,b)=>{return a+b})/averaging.max/10})
 		}
 		
 	</script>

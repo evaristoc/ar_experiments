@@ -275,6 +275,8 @@
 		})
 	
 		var averaging = {x:[],y:[],z:[], max:50};
+		var countfoundHiro = 0;
+		
 		// update artoolkit on every frame
 		onRenderFcts.push(function(){
 			
@@ -308,13 +310,33 @@
 			//console.log(document.getElementsByTagName('video').hidden = true);
 			//document.getElementById('arjs').hidden = true;
 			//console.log(document.getElementById("dino"));
-			document.getElementById('ascene').style.display = "block";
-			document.getElementById("dino").setAttribute('position',{x:0.0, y: -averaging.z.reduce((a,b)=>{return a+b})/averaging.max, z: -averaging.y.reduce((a,b)=>{return a+b})/averaging.max/10})
+			//document.getElementById('ascene').style.display = "block";
+			//document.getElementById("dino").setAttribute('position',{x:0.0, y: -averaging.z.reduce((a,b)=>{return a+b})/averaging.max, z: -averaging.y.reduce((a,b)=>{return a+b})/averaging.max/10})
+			
+			//arToolkitSource.domElement.hidden = true;
+			//console.log(arToolkitSource.domElement.hidden);
+			//console.log(mesh);
+			//console.log(mesh.visible);
+			//console.log(arToolkitContext._arMarkersControls);
+			//console.log(arToolkitContext._arMarkersControls[0].object3d.visible);
+			if (arToolkitContext._arMarkersControls[0].object3d.visible) {
+			  //code
+			  countfoundHiro += 1;
+			  if (countfoundHiro > 200) {
+				//code
+				document.getElementById('ascene').style.display = "block";
+				arToolkitSource.domElement.hidden = true;
+				newScene(averaging);
+				arToolkitSource.ready = false;
+			  }
+			}else{
+			  countfoundHiro = 0;
+			}
 			
 			arToolkitContext.update( arToolkitSource.domElement )
 	
 			// update scene.visible if the marker is seen
-			//scene.visible = camera.visible
+			scene.visible = camera.visible
 		})
 	
 		////////////////////////////////////////////////////////////////////////////////
@@ -383,8 +405,10 @@
 			})
 		})
 		
-		function newScene(){
-			
+		function newScene(averaging) {
+		  //code
+		  document.getElementById("dino").setAttribute('position',{x:0.0, y: -averaging.z.reduce((a,b)=>{return a+b})/averaging.max, z: -averaging.y.reduce((a,b)=>{return a+b})/averaging.max/10})
 		}
+		
 	</script>
 </body>

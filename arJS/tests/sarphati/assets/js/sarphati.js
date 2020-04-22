@@ -1811,361 +1811,362 @@ var app = (function APPmodule(){
                     //console.log('found ', this.arToolkitContext._arMarkersControls[4].object3d);
                     countfoundHiro += 1;
                     if (countfoundHiro > 20) { //approx. 20 frames
+                      
                       if (!opened_scene4html) {
-                          ////////////////////////////////////////////////////////////
-                          // running ZDOG animation
-                          ////////////////////////////////////////////////////////////	
-                          
-
-                          
-                          //illoElem = document.querySelector("#section1in4--zdog-canvas");
-                          //illo.element = illoElem;
-                          
-                          
-                          //CANVAS 1. Parameter initialization
-var illoElem = document.querySelector('#section1in4--zdog-canvas');
-const illoSize = 230;
-const minWindowSize = Math.min(window.innerWidth, window.innerHeight);
-const zoomSize = (minWindowSize / illoSize);
-const zoom = (zoomSize < 1) ? zoomSize : Math.floor(zoomSize);
-
-//ZDOG 1. Initialize animation parameters (eg. rotation)
-const sceneStartRotation = { x: 0.25, y: 0.2};
-const TAU = Zdog.TAU; // == 2*Pi
-let isSpinning = true;
-const c_01 = '#e89e21';
-const c_02 = '#b52f24';
-const c_03 = '#fffffd';
-const c_04 = '#713b39';
-const c_05 = '#fae3d9';
-
-
-//CANVAS 2. Parameter initialization (cont)
-illoElem.setAttribute('width', (illoSize * zoom) + 20);
-illoElem.setAttribute('height', (illoSize * zoom) - 20);
-
-
-//ZDOG 2. Instance of ZDOG - affects CANVAS; global configuration (includes zooming, dragging and rotation)
-var illo = new Zdog.Illustration( {
-	element: illoElem,
- rotate: sceneStartRotation,
-	zoom: zoom/1.5,
-	dragRotate: true,
-	onDragStart: function() {
-		isSpinning = false;
-	},
-	onDragEnd: function() {
-		isSpinning = true;
-	},
-});
-
-//ZDOG 3. Instantiation of a GROUP using an anchor (An VOID item that can be added to another item, and have other items added to it.)
-const shroom = new Zdog.Anchor({
-	addTo: illo,
-	rotate: { x: TAU/4.4, z: -TAU/20 },
-});
-
-//ZDOG 4. Instantion of parts of the figure, each added to a PARENT shape
-const cap = new Zdog.Hemisphere({
-	addTo: shroom,
-	diameter: 160,
-	stroke: 10,
-	color: c_01,
-	backface: c_04,
-});
-
-// Let's draw the schroom's gills as well
-new Zdog.Ellipse({
-	addTo: shroom,
-	diameter: 160,
-	stroke: 10,
-	color: c_04,
-	fill: true,
-});
-
-const stem = new Zdog.Cylinder({
-	addTo: shroom,
-	diameter: 80,
-	length: 100,
-	stroke: false,
-	color: c_03,
-	translate: { z: -50 },
-	backface: c_04,
-});
-
-const scalesZ = (cap.diameter / 2);
-const scalesAnchor = new Zdog.Anchor({
-	addTo: cap,
-	translate: { z: scalesZ },
-});
-const aTop = new Zdog.Hemisphere({
-	addTo: scalesAnchor,
- diameter: 15,
- stroke: 10,
-	color: c_02,
-	translate: { z: 5 },
-	/*backface: c_02,*/
-});
-
-const aScale = new Zdog.Ellipse({
-	addTo: scalesAnchor,
- diameter: 30,
- stroke: 10,
-	color: c_02,
-	translate: { z: 5 },
-	backface: c_02
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: (scalesZ / 1.3), 
-		y: 40,
-		z: (scalesZ / -1.8) 
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: -75, 
-		y: -10,
-		z: (scalesZ / -1.7) 
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		y: 73,
-		z: (scalesZ / -2)
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: (scalesZ / -2.7),
-		y: (scalesZ / -1.1), 
-		z: (scalesZ / -1.3) 
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: (scalesZ / -1.8),
-		y: (scalesZ * 0.75),
-		z: (scalesZ / -1.5) 
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: (scalesZ / 1.8),
-		y: (scalesZ * -0.75),
-		z: (scalesZ / -1.7) 
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: 53,
-		y: -10,
-		z: -20
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: -34,
-		y: -40,
-		z: -15
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: -40,
-		y: 20,
-		z: -10
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: 30,
-		y: 30,
-		z: -8
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: 80,
-		z: -60
-	},
-});
-aScale.copy({
- diameter: 4,
- stroke: 10,
-	translate: { 
-		x: 10,
-		y: -50,
-		z: -17
-	},
-});
-
-	//eye
-	var left_eye = new Zdog.Ellipse({
-		addTo: scalesAnchor,
-		width: 5,
-		height: 20,		
-		fill: true,
-		color: 'black',
-		translate: {x: 9, y: 65, z: -30},
-  rotate: {x: Math.PI/1.4}
-	});
-
-	var right_eye = new Zdog.Ellipse({
-		addTo: scalesAnchor,
-		width: 5,
-		height: 20,		
-		fill: true,
-		color: 'black',
-		translate: {x: -9, y: 65, z: -30},
-  rotate: {x: Math.PI/1.4}
-	});
-
-	//eyebrow
-	var eyebrow = new Zdog.Ellipse({
-		addTo: scalesAnchor,
-		diameter: 6,
-		quarters: 2,
-		color: 'black',
-		translate: {x: -9, y: 50, z: -15},
-		rotate: {z: -TAU/4, x: -Math.PI/2},
-		stroke: 1.5
-	});
-
-	eyebrow.copy({
-		translate: {x: 9, y: 50, z: -15},
-  //rotate: {y:3*Math.PI/4, z: TAU/5, x: Math.PI/4}
-	});
-
-	//mouth
-	var mouth = new Zdog.Ellipse({
-		addTo: scalesAnchor,
-		diameter: 40,
-		quarters: 2,
-		closed: true,
-		fill: true,
-		color: 'brown',
-		translate: {y: 80, z: -50},
-		rotate: { z: TAU/4, x: -Math.PI/2.3 },
-        //translate: {y: 80, z: -70},
-		//rotate: { x: Math.PI/1.8, z: TAU/4 },
-		backface: false,
-  backface:'brown',
-	});
-    
-//const aScale2 = new Zdog.Shape({
-//	addTo: scalesAnchor,
-//	stroke: 12,
-//	color: 'blue',
-//	translate: { z: 5 },
-//	backface: c_02,
-//});
-
-//aScale2.copy({
-//	stroke: 22,
-//	translate: { 
-//		x: 10,
-//		y: 30,
-//		z: -70
-//	},
-//});
-
-	// ---- GSAP ---- //
- //GSAP 1. instantiation and global configuration
-const tlEyes = new TimelineMax({repeat: -1, repeatDelay: 2});
-
-//GSAP 2. local (object-specific) initialization
-const animationObject = {
- LeftEyeHeight: 20,
- RightEyeHeight: 20
-};
-
-//GSAP 3. local (object-specific) animation (start-end)
-tlEyes.to(animationObject, .1, {
-		LeftEyeHeight: .1,
-		RightEyeHeight: .1
-	})
-	.to(animationObject, .1,{
-		LeftEyeHeight: 20,
-		RightEyeHeight: 20
-	})
-	.to(animationObject, .1, {
-		LeftEyeHeight: .1,
-		RightEyeHeight: .1
-	})
-	.to(animationObject, .1,{
-		LeftEyeHeight: 20,
-		RightEyeHeight: 20
-	})
-
- //ZDOG ANIMATION SECTION
- //ZDOG 5. public variable declaration (eg. time)
- let t = 0;
-
-function render_zdog2(){
-
-  
-  //GSAP
-  //GSAP 4. value assigned to object (!) 
-		left_eye.height = animationObject.LeftEyeHeight; 
-		right_eye.height = animationObject.RightEyeHeight;
-		
-  //GSAP 5. canvas update
-  left_eye.updatePath();
-  right_eye.updatePath();
-
-
-  //if set to spin...
-  if (isSpinning) {
-   //ZDOG 6. update time variable
-   t += 1/240;
-   
-   //ZDOG 7. estimate parameters based on time (in this case, rotation)
-   const theta = Zdog.easeInOut(t % 1) * TAU;
-   
-   //ZDOG 8. interpolation (trigonometric one)
-   illo.rotate.y = (Math.cos(theta) / -3);
-   //console.log(111);
-	 }  
-    
-  
-  //ZDOG 9. re-rendering of the whole figure
-		illo.updateRenderGraph(); 
-}
-
-var tlMaster;
-    
-    
-                          ////GSAP 6. Master instantiation for onUpdate
-                          tlMaster = new TimelineMax({onUpdate: render_zdog2});
-                        
-                          ////GSAP 7. add animation instance to Master instance
-                          tlMaster.add(tlEyes);
-                         
-                          document.getElementById("scene4html").style.width = "100%";
-                          opened_scene4html = true;                         
+                                    ////////////////////////////////////////////////////////////
+                                    // running ZDOG animation
+                                    ////////////////////////////////////////////////////////////	
+                                    
+          
+                                    
+                                    //illoElem = document.querySelector("#section1in4--zdog-canvas");
+                                    //illo.element = illoElem;
+                                    
+                                    
+                                    //CANVAS 1. Parameter initialization
+                                    var illoElem = document.querySelector('#section1in4--zdog-canvas');
+                                    const illoSize = 230;
+                                    const minWindowSize = Math.min(window.innerWidth, window.innerHeight);
+                                    const zoomSize = (minWindowSize / illoSize);
+                                    const zoom = (zoomSize < 1) ? zoomSize : Math.floor(zoomSize);
+                                    
+                                    //ZDOG 1. Initialize animation parameters (eg. rotation)
+                                    const sceneStartRotation = { x: 0.25, y: 0.2};
+                                    const TAU = Zdog.TAU; // == 2*Pi
+                                    let isSpinning = true;
+                                    const c_01 = '#e89e21';
+                                    const c_02 = '#b52f24';
+                                    const c_03 = '#fffffd';
+                                    const c_04 = '#713b39';
+                                    const c_05 = '#fae3d9';
+                                    
+                                    
+                                    //CANVAS 2. Parameter initialization (cont)
+                                    illoElem.setAttribute('width', (illoSize * zoom) + 20);
+                                    illoElem.setAttribute('height', (illoSize * zoom) - 20);
+                                    
+                                    
+                                    //ZDOG 2. Instance of ZDOG - affects CANVAS; global configuration (includes zooming, dragging and rotation)
+                                    var illo = new Zdog.Illustration( {
+                                                      element: illoElem,
+                                                      rotate: sceneStartRotation,
+                                                      zoom: zoom/1.5,
+                                                      dragRotate: true,
+                                                      onDragStart: function() {
+                                                          isSpinning = false;
+                                                      },
+                                                      onDragEnd: function() {
+                                                          isSpinning = true;
+                                                      },
+                                                  });
+                                                  
+                                    //ZDOG 3. Instantiation of a GROUP using an anchor (An VOID item that can be added to another item, and have other items added to it.)
+                                    const shroom = new Zdog.Anchor({
+                                        addTo: illo,
+                                        rotate: { x: TAU/4.4, z: -TAU/20 },
+                                    });
+                                                  
+                                    //ZDOG 4. Instantion of parts of the figure, each added to a PARENT shape
+                                    const cap = new Zdog.Hemisphere({
+                                        addTo: shroom,
+                                        diameter: 160,
+                                        stroke: 10,
+                                        color: c_01,
+                                        backface: c_04,
+                                    });
+                                                  
+                                    // Let's draw the schroom's gills as well
+                                    new Zdog.Ellipse({
+                                        addTo: shroom,
+                                        diameter: 160,
+                                        stroke: 10,
+                                        color: c_04,
+                                        fill: true,
+                                    });
+                                    
+                                    const stem = new Zdog.Cylinder({
+                                        addTo: shroom,
+                                        diameter: 80,
+                                        length: 100,
+                                        stroke: false,
+                                        color: c_03,
+                                        translate: { z: -50 },
+                                        backface: c_04,
+                                    });
+                                    
+                                    const scalesZ = (cap.diameter / 2);
+                                    const scalesAnchor = new Zdog.Anchor({
+                                        addTo: cap,
+                                        translate: { z: scalesZ },
+                                    });
+                                    const aTop = new Zdog.Hemisphere({
+                                        addTo: scalesAnchor,
+                                     diameter: 15,
+                                     stroke: 10,
+                                        color: c_02,
+                                        translate: { z: 5 },
+                                        /*backface: c_02,*/
+                                    });
+                                    
+                                    const aScale = new Zdog.Ellipse({
+                                        addTo: scalesAnchor,
+                                     diameter: 30,
+                                     stroke: 10,
+                                        color: c_02,
+                                        translate: { z: 5 },
+                                        backface: c_02
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: (scalesZ / 1.3), 
+                                            y: 40,
+                                            z: (scalesZ / -1.8) 
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: -75, 
+                                            y: -10,
+                                            z: (scalesZ / -1.7) 
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            y: 73,
+                                            z: (scalesZ / -2)
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: (scalesZ / -2.7),
+                                            y: (scalesZ / -1.1), 
+                                            z: (scalesZ / -1.3) 
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: (scalesZ / -1.8),
+                                            y: (scalesZ * 0.75),
+                                            z: (scalesZ / -1.5) 
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: (scalesZ / 1.8),
+                                            y: (scalesZ * -0.75),
+                                            z: (scalesZ / -1.7) 
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: 53,
+                                            y: -10,
+                                            z: -20
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: -34,
+                                            y: -40,
+                                            z: -15
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: -40,
+                                            y: 20,
+                                            z: -10
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: 30,
+                                            y: 30,
+                                            z: -8
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: 80,
+                                            z: -60
+                                        },
+                                    });
+                                    aScale.copy({
+                                     diameter: 4,
+                                     stroke: 10,
+                                        translate: { 
+                                            x: 10,
+                                            y: -50,
+                                            z: -17
+                                        },
+                                    });
+                                                  
+                                    //eye
+                                    var left_eye = new Zdog.Ellipse({
+                                        addTo: scalesAnchor,
+                                        width: 5,
+                                        height: 20,		
+                                        fill: true,
+                                        color: 'black',
+                                        translate: {x: 9, y: 65, z: -30},
+                                  rotate: {x: Math.PI/1.4}
+                                    });
+                                
+                                    var right_eye = new Zdog.Ellipse({
+                                        addTo: scalesAnchor,
+                                        width: 5,
+                                        height: 20,		
+                                        fill: true,
+                                        color: 'black',
+                                        translate: {x: -9, y: 65, z: -30},
+                                  rotate: {x: Math.PI/1.4}
+                                    });
+                                
+                                    //eyebrow
+                                    var eyebrow = new Zdog.Ellipse({
+                                        addTo: scalesAnchor,
+                                        diameter: 6,
+                                        quarters: 2,
+                                        color: 'black',
+                                        translate: {x: -9, y: 50, z: -15},
+                                        rotate: {z: -TAU/4, x: -Math.PI/2},
+                                        stroke: 1.5
+                                    });
+                                
+                                    eyebrow.copy({
+                                        translate: {x: 9, y: 50, z: -15},
+                                  //rotate: {y:3*Math.PI/4, z: TAU/5, x: Math.PI/4}
+                                    });
+                                
+                                    //mouth
+                                    var mouth = new Zdog.Ellipse({
+                                        addTo: scalesAnchor,
+                                        diameter: 40,
+                                        quarters: 2,
+                                        closed: true,
+                                        fill: true,
+                                        color: 'brown',
+                                        translate: {y: 80, z: -50},
+                                        rotate: { z: TAU/4, x: -Math.PI/2.3 },
+                                        //translate: {y: 80, z: -70},
+                                        //rotate: { x: Math.PI/1.8, z: TAU/4 },
+                                        backface: false,
+                                  backface:'brown',
+                                    });
+                                      
+                                  //const aScale2 = new Zdog.Shape({
+                                  //	addTo: scalesAnchor,
+                                  //	stroke: 12,
+                                  //	color: 'blue',
+                                  //	translate: { z: 5 },
+                                  //	backface: c_02,
+                                  //});
+                                  
+                                  //aScale2.copy({
+                                  //	stroke: 22,
+                                  //	translate: { 
+                                  //		x: 10,
+                                  //		y: 30,
+                                  //		z: -70
+                                  //	},
+                                  //});
+                                  
+                                      // ---- GSAP ---- //
+                                   //GSAP 1. instantiation and global configuration
+                                  const tlEyes = new TimelineMax({repeat: -1, repeatDelay: 2});
+                                  
+                                  //GSAP 2. local (object-specific) initialization
+                                  const animationObject = {
+                                   LeftEyeHeight: 20,
+                                   RightEyeHeight: 20
+                                  };
+                                                    
+                                  //GSAP 3. local (object-specific) animation (start-end)
+                                  tlEyes.to(animationObject, .1, {
+                                          LeftEyeHeight: .1,
+                                          RightEyeHeight: .1
+                                      })
+                                      .to(animationObject, .1,{
+                                          LeftEyeHeight: 20,
+                                          RightEyeHeight: 20
+                                      })
+                                      .to(animationObject, .1, {
+                                          LeftEyeHeight: .1,
+                                          RightEyeHeight: .1
+                                      })
+                                      .to(animationObject, .1,{
+                                          LeftEyeHeight: 20,
+                                          RightEyeHeight: 20
+                                      })
+                                  
+                                   //ZDOG ANIMATION SECTION
+                                   //ZDOG 5. public variable declaration (eg. time)
+                                   let t = 0;
+                                                    
+                                  function render_zdog2(){
+                                  
+                                    
+                                    //GSAP
+                                    //GSAP 4. value assigned to object (!) 
+                                          left_eye.height = animationObject.LeftEyeHeight; 
+                                          right_eye.height = animationObject.RightEyeHeight;
+                                          
+                                    //GSAP 5. canvas update
+                                    left_eye.updatePath();
+                                    right_eye.updatePath();
+                                  
+                                  
+                                    //if set to spin...
+                                    if (isSpinning) {
+                                     //ZDOG 6. update time variable
+                                     t += 1/240;
+                                     
+                                     //ZDOG 7. estimate parameters based on time (in this case, rotation)
+                                     const theta = Zdog.easeInOut(t % 1) * TAU;
+                                     
+                                     //ZDOG 8. interpolation (trigonometric one)
+                                     illo.rotate.y = (Math.cos(theta) / -3);
+                                     //console.log(111);
+                                       }  
+                                      
+                                    
+                                    //ZDOG 9. re-rendering of the whole figure
+                                          illo.updateRenderGraph(); 
+                                  }
+                                                    
+                                  var tlMaster;
+                                  
+                                  
+                                  ////GSAP 6. Master instantiation for onUpdate
+                                  tlMaster = new TimelineMax({onUpdate: render_zdog2});
+                                
+                                  ////GSAP 7. add animation instance to Master instance
+                                  tlMaster.add(tlEyes);
+                                 
+                                  document.getElementById("scene4html").style.width = "100%";
+                                  opened_scene4html = true;                         
  
                       }
                       emitter.subscribe('event:greener', function(data){

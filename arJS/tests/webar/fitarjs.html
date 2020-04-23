@@ -60,7 +60,7 @@
 		//////////////////////////////////////////////////////////////////////////////////
 		//		Init ARJS!!
 		//////////////////////////////////////////////////////////////////////////////////
-		const lastModifiedDate = new Date(file.lastModified);
+		const lastModifiedDate = new Date(document.lastModified);
 		document.getElementById("modified").textContent = lastModifiedDate;
 		// init renderer
 		var renderer	= new THREE.WebGLRenderer({

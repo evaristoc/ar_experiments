@@ -41,6 +41,7 @@
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
 	<!-- LOG AREA -->
 	<div id="log" style="background-color:orange; color:white; font-weight: bold; width:200px; z-index:100;">
+	    <p id="modified"></p>
 		<p id="p1"></p>
 		<p id="p2"></p>
 		<p id="p3"></p>
@@ -59,7 +60,8 @@
 		//////////////////////////////////////////////////////////////////////////////////
 		//		Init ARJS!!
 		//////////////////////////////////////////////////////////////////////////////////
-	
+		const lastModifiedDate = new Date(file.lastModified);
+		document.getElementById("modified").textContent = lastModifiedDate;
 		// init renderer
 		var renderer	= new THREE.WebGLRenderer({
 			antialias: true,
@@ -89,12 +91,11 @@
 		//DeviceOrientationControls( camera );
 		//--->>> https://web.dev/web-ar/
 		//navigator.xr;
-		
-		let xrButton = document.getElementsByTagName("button");
 		navigator.xr.isSessionSupported('immersive-ar').then((isSupported)=>{
+		  let xrButton = document.getElementsByTagName("button")[0];
 		  if (isSupported) {
 			//code
-			//alert("immersive-ar supported");
+			alert("immersive-ar supported "+ lastModifiedDate);
 			xrButton.addEventListener('click', onButtonClicked);
 			xrButton.textContent = 'Enter AR';
 			xrButton.enabled = supported; // supported is Boolean

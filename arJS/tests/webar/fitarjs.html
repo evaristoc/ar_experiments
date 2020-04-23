@@ -146,7 +146,7 @@
 		xr.isSessionSupported('immersive-ar').then((isSupported)=>{
 		  if (isSupported) {
 			//code
-			xr.requestSession("immersive-ar").then(()=>{alert("session successfully opened")}).catch((err)=>{alert("error opening session")})
+			xr.requestSession("immersive-ar").then((session)=>{alert("session successfully opened")}).catch((err)=>{alert("error opening session")})
 		  }
 		});
 		

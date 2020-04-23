@@ -97,16 +97,20 @@
 		  if (isSupported) {
 			//code
 			alert("immersive-ar supported "+ lastModifiedDate);
+			let onButtonClicked = function(){
+			  navigator.xr.requestSession("immersive-ar")
+				  .then((session)=>{
+					//xrSession = session;
+					//xrSession.isImmersive = true;
+					xrButton.textContent = 'Exit AR';
+					//alert("session successfully opened");
+				  }).catch((err)=>{alert("error opening session")})			  
+			};
 			xrButton.addEventListener('click', onButtonClicked);
 			xrButton.textContent = 'Enter AR';
 			xrButton.enabled = supported; // supported is Boolean
-			navigator.xr.requestSession("immersive-ar")
-				.then((session)=>{
-				  //xrSession = session;
-				  //xrSession.isImmersive = true;
-				  xrButton.textContent = 'Exit AR';
-				  //alert("session successfully opened");
-				}).catch((err)=>{alert("error opening session")})
+
+
 		  }
 		}).catch((err)=>{alert("error ocurred when confirming ar")});
 		

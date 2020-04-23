@@ -50,7 +50,7 @@
 	<div id="arjs" style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
 		<a href="https://github.com/jeromeetienne/AR.js/" target="_blank">AR.js</a> - three.js camera transform
 		<br/>
-		<button></button>
+		<button id="btn"></button>
 		<!--Contact me any time at <a href='https://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>-->
 	</div>
 	
@@ -91,8 +91,9 @@
 		//DeviceOrientationControls( camera );
 		//--->>> https://web.dev/web-ar/
 		//navigator.xr;
+		var xrButton = document.getElementById("btn");
 		navigator.xr.isSessionSupported('immersive-ar').then((isSupported)=>{
-		  let xrButton = document.getElementsByTagName("button")[0];
+		  //let xrButton = document.getElementsByTagName("button")[0];
 		  if (isSupported) {
 			//code
 			alert("immersive-ar supported "+ lastModifiedDate);

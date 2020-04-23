@@ -139,7 +139,11 @@
 		// Create a camera
 		var camera = new THREE.Camera();
 		
-		var controls = new THREE.DeviceOrientationControls( camera );
+		//DeviceOrientationControls( camera );
+		
+		const xr = navigator.xr;
+		
+		xr.requestSession("immersive-ar").then(()=>{alert("session successfully opened")}).catch((err)=>{alert("error opening session")});
 		
 		scene.add(camera);
 		
@@ -170,7 +174,7 @@
 			}, 2000);
 		})
 		
-		console.log("arToolkitSource", arToolkitSource);
+		//console.log("arToolkitSource", arToolkitSource);
 	
 		// handle resize
 		window.addEventListener('resize', function(){
@@ -336,8 +340,6 @@
 			})
 		})
 		
-	</script>
-	<script>
 	  /**
 		* @author richt / http://richt.me
 		* @author WestLangley / http://github.com/WestLangley
@@ -347,19 +349,82 @@
 		*E: It somehow corresponds to the Example 12 of the W3C Device Orientation Control reference
 		*/
 	   
-	   THREE.DeviceOrientationControls = function( object ) {
+	   function DeviceOrientationControls ( object ) {
 		   
 		   //E: the author decided to assign THIS as SCOPE; in my case, THIS is WINDOW
 		   var scope = this;
+		   //console.log(scope);
+
+		   this.alpha = 0;
+		   this.alphaOffsetAngle = 0;		   
+		   this.enabled = true;
 	   
+		   this.deviceOrientation = {};
+		   this.screenOrientation = 0;		   
+
+		   this.object = object.clone();
+		   this.object.rotation.reorder( "YXZ" );
 		   
+		   console.log(this.object, object)
+		   
+		//   var setObjectQuaternion = function() {
+		//	   
+		//
+		//  
+		//	   var zee = new THREE.Vector3( 0, 0, 1 );
+		//  
+		//	   var euler = new THREE.Euler();
+		//  
+		//	   //E: https://en.wikipedia.org/wiki/Quaternion
+		//	   var q0 = new THREE.Quaternion();
+		//  
+		//	   var q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis; E: CAMERA
+		//  
+		//	   return function( quaternion, alpha, beta, gamma, orient ) { // a closure...
+		//  
+		//		   euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us (inverted) //<---- E: RELEVANT!!
+		//  
+		//		   quaternion.setFromEuler( euler ); // orient the device
+		//  
+		//		   quaternion.multiply( q1 ); // camera looks out the back of the device, not the top
+		//  
+		//		   quaternion.multiply( q0.setFromAxisAngle( zee, - orient ) ); // adjust for screen orientation
+		//  
+		//	   }
+		//  
+		//   }();
+		//  
+		//
+		//   updateData = function() {
+		//  
+		//	   if ( scope.enabled === false ) return;
+		//	   
+		//	   //E: why an offset angle for Z? probably to do with this: https://www.reddit.com/r/threejs/comments/6x5ub8/augmented_reality_controls/?
+		//	   //E: alphaOffsetAngle could be also the heading absolute?
+		//	   var alpha = scope.deviceOrientation.alpha ? THREE.Math.degToRad( scope.deviceOrientation.alpha ) + this.alphaOffsetAngle : 0; // Z
+		//	   var beta = scope.deviceOrientation.beta ? THREE.Math.degToRad( scope.deviceOrientation.beta ) : 0; // X'
+		//	   var gamma = scope.deviceOrientation.gamma ? THREE.Math.degToRad( scope.deviceOrientation.gamma ) : 0; // Y''
+		//	   var orient = scope.screenOrientation ? THREE.Math.degToRad( scope.screenOrientation ) : 0; // O
+		//  
+		//	   setObjectQuaternion( scope.object.quaternion, alpha, beta, gamma, orient );
+		//	   this.alpha = alpha;
+		//  
+		//   };
+			
+
+			/*			   
 		   //E: this is in this case CAMERA (can be ANY other object!); because is a VIEW
 		   this.object = object;
 		   //E: based on https://w3c.github.io/deviceorientation/, the matrix "YXZ" represents the rotational frame of those axes, IN THAT ORDER (relevant)
 		   // the rotational data is DEVICE COMPASS HEADING - preliminary information
+		   
+		   
 		   this.object.rotation.reorder( "YXZ" );
-	   
-		   this.enabled = true;
+		   
+		   
+		   
+   
+		   //this.enabled = true;
 	   
 		   this.deviceOrientation = {};
 		   this.screenOrientation = 0;
@@ -367,6 +432,7 @@
 		   //E: alpha == angles of Z-rotation (horizontal device, the axis perpendicular to the screen)
 		   //https://stackoverflow.com/questions/36314415/add-offset-to-deviceorientationcontrols-in-three-js
 		   //E: the rotation seems to be related to CHANGE OF VIEW (from landscape to portrait)
+		   
 		   this.alpha = 0;
 		   this.alphaOffsetAngle = 0;
 	   
@@ -476,6 +542,7 @@
 		   };
 	   
 		   this.connect();
+		   */
 	   
 	   };
 	</script>

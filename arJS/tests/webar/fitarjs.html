@@ -140,15 +140,19 @@
 		var camera = new THREE.Camera();
 		
 		//DeviceOrientationControls( camera );
-		
-		const xr = navigator.xr;
-		
-		xr.isSessionSupported('immersive-ar').then((isSupported)=>{
+		//https://web.dev/web-ar/
+		//navigator.xr;
+		navigator.xr.isSessionSupported('immersive-ar').then((isSupported)=>{
 		  if (isSupported) {
 			//code
 			alert("immersive-ar supported");
-			xr.requestSession("immersive-ar")
-				.then((session)=>{alert("session successfully opened")})
+			let xrSession = null;
+			navigator.xr.requestSession("immersive-ar")
+				.then((session)=>{
+				  xrSession = session;
+				  xrSession.isImmersive = true;  
+				  //alert("session successfully opened");
+				})
 				.catch((err)=>{alert("error opening session")})
 		  }
 		}).catch((err)=>{alert("not supported")});

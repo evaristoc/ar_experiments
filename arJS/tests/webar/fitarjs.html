@@ -106,15 +106,16 @@
 		let xrSession = null;
 		function onButtonClicked() {
 			if (!xrSession) {
-			navigator.xr.requestSession("immersive-ar")
-				.then((session)=>{
-				  xrSession = session;
-				  xrSession.isImmersive = true;
-				  xrButton.textContent = 'Exit AR';
-				  //alert("session successfully opened");
-				}).catch((err)=>{alert("error opening session")})
+				navigator.xr.requestSession("immersive-ar")
+								.then((session)=>{
+								  xrSession = session;
+								  xrSession.isImmersive = true;
+								  xrButton.textContent = 'Exit AR';
+								  //alert("session successfully opened");
+								}).catch((err)=>{alert("error opening session")})
 			}else{
-			  xrSession.end();
+			  //xrSession.end();
+			  return
 			}
 		}
 		

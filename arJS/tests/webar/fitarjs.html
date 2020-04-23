@@ -100,24 +100,31 @@
 			xrButton.addEventListener('click', onButtonClicked);
 			xrButton.textContent = 'Enter AR';
 			xrButton.enabled = supported; // supported is Boolean
+			navigator.xr.requestSession("immersive-ar")
+				.then((session)=>{
+				  //xrSession = session;
+				  //xrSession.isImmersive = true;
+				  xrButton.textContent = 'Exit AR';
+				  //alert("session successfully opened");
+				}).catch((err)=>{alert("error opening session")})
 		  }
 		}).catch((err)=>{alert("error ocurred when confirming ar")});
 		
-		let xrSession = null;
-		function onButtonClicked() {
-			if (!xrSession) {
-				navigator.xr.requestSession("immersive-ar")
-								.then((session)=>{
-								  xrSession = session;
-								  xrSession.isImmersive = true;
-								  xrButton.textContent = 'Exit AR';
-								  //alert("session successfully opened");
-								}).catch((err)=>{alert("error opening session")})
-			}else{
-			  //xrSession.end();
-			  return
-			}
-		}
+		//let xrSession = null;
+		//function onButtonClicked() {
+		//	if (!xrSession) {
+		//		navigator.xr.requestSession("immersive-ar")
+		//						.then((session)=>{
+		//						  xrSession = session;
+		//						  xrSession.isImmersive = true;
+		//						  xrButton.textContent = 'Exit AR';
+		//						  //alert("session successfully opened");
+		//						}).catch((err)=>{alert("error opening session")})
+		//	}else{
+		//	  //xrSession.end();
+		//	  return
+		//	}
+		//}
 		
 		scene.add(camera);
 		

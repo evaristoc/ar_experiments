@@ -23,61 +23,7 @@
         window.location = window.location.href.replace('http:', 'https:');        
       }
     </script>    
-    
-    <!-- import the webpage's javascript files -->
-    <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-extras@3.3.0/dist/aframe-extras.min.js"></script>
-    <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
 
-    <script>
-      // Define a few custom components useful for AR mode. While these are somewhat reusable,
-      // I recommend checking if there are officially supported alternatives before copying
-      // these into new projects.
-    
-      // See also https://github.com/aframevr/aframe/pull/4356
-      AFRAME.registerComponent('hide-in-ar-mode', {
-        // Set this object invisible while in AR mode.
-        init: function () {
-          this.el.sceneEl.addEventListener('enter-vr', (ev) => {
-            this.wasVisible = this.el.getAttribute('visible');
-            if (this.el.sceneEl.is('ar-mode')) {
-              this.el.setAttribute('visible', false);
-            }
-          });
-          this.el.sceneEl.addEventListener('exit-vr', (ev) => {
-            if (this.wasVisible) this.el.setAttribute('visible', true);
-          });
-        }
-      });
-      
-      AFRAME.registerComponent('ar-shadows', {
-        // Swap an object's material to a transparent shadows-only material while
-        // in AR mode. Intended for use with a ground plane. The object is also
-        // set visible while in AR mode, this is useful if it's hidden in other
-        // modes due to them using a 3D environment.
-        schema: {
-          opacity: {default: 0.3}
-        },
-        init: function () {
-          this.el.sceneEl.addEventListener('enter-vr', (ev) => {
-            this.wasVisible = this.el.getAttribute('visible');
-            if (this.el.sceneEl.is('ar-mode')) {
-              this.savedMaterial = this.el.object3D.children[0].material;
-              this.el.object3D.children[0].material = new THREE.ShadowMaterial();
-              this.el.object3D.children[0].material.opacity = this.data.opacity;
-              this.el.setAttribute('visible', true);
-            }
-          });
-          this.el.sceneEl.addEventListener('exit-vr', (ev) => {
-            if (this.savedMaterial) {
-              this.el.object3D.children[0].material = this.savedMaterial;
-              this.savedMaterial = null;
-            }
-            if (!this.wasVisible) this.el.setAttribute('visible', false);
-          });
-        }
-      });    
-  </script>
   <style>
 	video{
 		/*width: 320px !important;
@@ -103,6 +49,7 @@
 	<div id="arjs" style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
 		<a href="https://github.com/jeromeetienne/AR.js/" target="_blank">AR.js</a> - three.js camera transform
 		<br/>
+		<button></button>
 		<!--Contact me any time at <a href='https://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>-->
 	</div>
 	
@@ -140,22 +87,34 @@
 		var camera = new THREE.Camera();
 		
 		//DeviceOrientationControls( camera );
-		//https://web.dev/web-ar/
+		//--->>> https://web.dev/web-ar/
 		//navigator.xr;
+		
+		let xrButton = document.getElementsByTagName("button");
 		navigator.xr.isSessionSupported('immersive-ar').then((isSupported)=>{
 		  if (isSupported) {
 			//code
-			alert("immersive-ar supported");
-			let xrSession = null;
+			//alert("immersive-ar supported");
+			xrButton.addEventListener('click', onButtonClicked);
+			xrButton.textContent = 'Enter AR';
+			xrButton.enabled = supported; // supported is Boolean
+		  }
+		}).catch((err)=>{alert("error ocurred when confirming ar")});
+		
+		let xrSession = null;
+		function onButtonClicked() {
+			if (!xrSession) {
 			navigator.xr.requestSession("immersive-ar")
 				.then((session)=>{
 				  xrSession = session;
-				  xrSession.isImmersive = true;  
+				  xrSession.isImmersive = true;
+				  xrButton.textContent = 'Exit AR';
 				  //alert("session successfully opened");
-				})
-				.catch((err)=>{alert("error opening session")})
-		  }
-		}).catch((err)=>{alert("not supported")});
+				}).catch((err)=>{alert("error opening session")})
+			}else{
+			  xrSession.end();
+			}
+		}
 		
 		scene.add(camera);
 		

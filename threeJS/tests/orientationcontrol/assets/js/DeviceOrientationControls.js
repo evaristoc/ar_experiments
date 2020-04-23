@@ -22,6 +22,8 @@ THREE.DeviceOrientationControls = function( object ) {
 	this.screenOrientation = 0;
 
     //E: alpha == angles of Z-rotation (horizontal device, the axis perpendicular to the screen)
+    //https://stackoverflow.com/questions/36314415/add-offset-to-deviceorientationcontrols-in-three-js
+    //E: the rotation seems to be related to CHANGE OF VIEW (from landscape to portrait)
 	this.alpha = 0;
 	this.alphaOffsetAngle = 0;
 

@@ -30,6 +30,8 @@
 	  		const lastModifiedDate = new Date(document.lastModified);
 		    document.getElementById("modified").textContent = lastModifiedDate;
 	//--->>> https://web.dev/web-ar/
+	//--->>> https://developer.mozilla.org/en-US/docs/Web/API/XRReferenceSpace#Reference_space_types
+	//--->>> https://github.com/immersive-web/webxr/blob/master/spatial-tracking-explainer.md
 			//navigator.xr;
 			var xrButton = document.getElementById("btn");
 			navigator.xr.isSessionSupported('immersive-ar').then((isSupported)=>{
@@ -43,7 +45,7 @@
 						xrSession = session;
 						xrSession.isImmersive = true;
 						//document.getElementById("p1").textContent = Object.keys(window.XRSpace);
-						xrSession.requestReferenceSpace("local").then((refSpace)=>{document.getElementById("p1").textContent = refSpace});
+						xrSession.requestReferenceSpace("local-floor").then((refSpace)=>{document.getElementById("p1").textContent = refSpace});
 						
 						xrButton.textContent = 'Exit AR';
 						//alert("session successfully opened");

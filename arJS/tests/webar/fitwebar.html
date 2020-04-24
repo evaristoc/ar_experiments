@@ -30,9 +30,13 @@
 	  		const lastModifiedDate = new Date(document.lastModified);
 		    document.getElementById("modified").textContent = lastModifiedDate;
 	//--->>> https://web.dev/web-ar/
+	//--->>> https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API
+	//--->>> https://developer.mozilla.org/en-US/docs/Web/API/XRReferenceSpace
 	//--->>> https://developer.mozilla.org/en-US/docs/Web/API/XRReferenceSpace#Reference_space_types
 	//--->>> https://github.com/immersive-web/webxr/blob/master/spatial-tracking-explainer.md
 	//--->>> https://github.com/aframevr/aframe/blob/a52d7e77e1b9ff51240b80d4a6411e6f470e3523/src/systems/webxr.js#L11
+	//--->>> https://developer.mozilla.org/en-US/docs/Web/API/XRSpace
+	//--->>> https://arvrjourney.com/xr-tutorial-how-to-build-a-webxr-with-angular-js-ar-js-and-a-frame-js-4ca432038bc2
 			//navigator.xr;
 			let xrButton = document.getElementById("btn");
 			let xrSession = null;
@@ -47,7 +51,7 @@
 						xrSession = session;
 						xrSession.isImmersive = true;
 						//document.getElementById("p1").textContent = Object.keys(window.XRSpace);
-						xrSession.requestReferenceSpace("local-floor")
+						xrSession.requestReferenceSpace("viewer")
 							.then((refSpace)=>{
 								  alert("getting refSpace");
 								  document.getElementById("p1").textContent = refSpace

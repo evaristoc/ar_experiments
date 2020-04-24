@@ -54,7 +54,7 @@
 						xrSession.requestReferenceSpace("viewer")
 							.then((refSpace)=>{
 								  alert("getting refSpace");
-								  document.getElementById("p1").textContent = Object.keys(refSpace);
+								  document.getElementById("p1").textContent = typeof refSpace;
 								})
 							.catch((err)=>{alert("error getting refSpace")});
 						

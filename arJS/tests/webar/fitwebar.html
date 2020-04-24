@@ -32,8 +32,10 @@
 	//--->>> https://web.dev/web-ar/
 	//--->>> https://developer.mozilla.org/en-US/docs/Web/API/XRReferenceSpace#Reference_space_types
 	//--->>> https://github.com/immersive-web/webxr/blob/master/spatial-tracking-explainer.md
+	//--->>> https://github.com/aframevr/aframe/blob/a52d7e77e1b9ff51240b80d4a6411e6f470e3523/src/systems/webxr.js#L11
 			//navigator.xr;
-			var xrButton = document.getElementById("btn");
+			let xrButton = document.getElementById("btn");
+			let xrSession = null;
 			navigator.xr.isSessionSupported('immersive-ar').then((isSupported)=>{
 			  //let xrButton = document.getElementsByTagName("button")[0];
 			  if (isSupported) {
@@ -64,21 +66,21 @@
 			  }
 			}).catch((err)=>{alert("error ocurred when confirming ar")});
 			
-			let xrSession = null;
-			function onButtonClicked() {
-				if (!xrSession) {
-					navigator.xr.requestSession("immersive-ar")
-									.then((session)=>{
-									  xrSession = session;
-									  xrSession.isImmersive = true;
-									  xrButton.textContent = 'Exit AR';
-									  //alert("session successfully opened");
-									}).catch((err)=>{alert("error opening session")})
-				}else{
-				  //xrSession.end();
-				  return
-				}
-			}
+
+			//function onButtonClicked() {
+			//	if (!xrSession) {
+			//		navigator.xr.requestSession("immersive-ar")
+			//						.then((session)=>{
+			//						  xrSession = session;
+			//						  xrSession.isImmersive = true;
+			//						  xrButton.textContent = 'Exit AR';
+			//						  //alert("session successfully opened");
+			//						}).catch((err)=>{alert("error opening session")})
+			//	}else{
+			//	  //xrSession.end();
+			//	  return
+			//	}
+			//}
 	</script>
   </body>
 </html>

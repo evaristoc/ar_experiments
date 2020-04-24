@@ -375,8 +375,9 @@
 				   quaternion.multiply( q1 ); // camera looks out the back of the device, not the top
 		  
 				   quaternion.multiply( q0.setFromAxisAngle( zee, - orient ) ); // adjust for screen orientation; E: not in my case at the moment
-					
-				   document.getElementById("p5").textContent = "x_new: " + String(obj.position.x).slice(0,5);	
+				
+				  document.getElementById("p5").textContent = "x_new: "	
+				   //document.getElementById("p5").textContent = "x_new: " + String(obj.position.x).slice(0,5);	
 				  
 			   }
 		  
@@ -394,7 +395,7 @@
 			   var gamma = scope.deviceOrientation.gamma ? THREE.Math.degToRad( scope.deviceOrientation.gamma ) : 0; // Y''
 			   var orient = scope.screenOrientation ? THREE.Math.degToRad( scope.screenOrientation ) : 0; // O
 		  
-			   setObjectQuaternion( scope.object, scope.object.quaternion, alpha, beta, gamma, orient );
+			   setObjectQuaternion( scope.object.position, scope.object.quaternion, alpha, beta, gamma, orient );
 			   alpha = alpha;
 		  
 		   };

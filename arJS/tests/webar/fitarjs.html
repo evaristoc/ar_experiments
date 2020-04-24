@@ -349,7 +349,9 @@
 		  
 		  scope.object = object.clone();
 		  scope.object.rotation.reorder( "YXZ" );
-		   
+
+		  var doc = document;		   
+
 		   //console.log(this.object, object);
 		   
 		   var setObjectQuaternion = function() {
@@ -363,6 +365,8 @@
 		  
 			   var q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis; E: CAMERA
 		  
+
+		  
 			   return function( obj, quaternion, alpha, beta, gamma, orient ) { // a closure...
 		  
 				   euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us (inverted) //<---- E: RELEVANT!!
@@ -373,7 +377,7 @@
 		  
 				   quaternion.multiply( q0.setFromAxisAngle( zee, - orient ) ); // adjust for screen orientation; E: not in my case at the moment
 				
-				  document.getElementById("p5").textContent = "x_new: "	
+				  doc.getElementById("p5").textContent = "x_new: "	
 				   //document.getElementById("p5").textContent = "x_new: " + String(obj.position.x).slice(0,5);	
 				  
 			   }

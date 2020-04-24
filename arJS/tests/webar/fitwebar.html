@@ -27,6 +27,8 @@
 	</div>
 	<button id="btn" style="z-index:200; position:absolute;bottom:20px;left:100px;"></button>		
 	<script>
+	  		const lastModifiedDate = new Date(document.lastModified);
+		    document.getElementById("modified").textContent = lastModifiedDate;
 	//--->>> https://web.dev/web-ar/
 			//navigator.xr;
 			var xrButton = document.getElementById("btn");

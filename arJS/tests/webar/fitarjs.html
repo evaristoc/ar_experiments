@@ -377,15 +377,14 @@
 		  
 				   quaternion.multiply( q0.setFromAxisAngle( zee, - orient ) ); // adjust for screen orientation; E: not in my case at the moment
 				
-				   
-				   //document.getElementById("p5").textContent = "x_new: " + String(obj.position.x).slice(0,5);	
+				   document.getElementById("p5").textContent = "x_new: " + String(obj.x).slice(0,5);	
 				  
 			   }
 		  
 		   }();
 		  
 		
-		   updateCoordSystem = function() {
+		   function updateCoordSystem() {
 		  
 			   if ( scope.enabled === false ) return;
 			   
@@ -397,7 +396,7 @@
 			   var orient = scope.screenOrientation ? THREE.Math.degToRad( scope.screenOrientation ) : 0; // O
 		  
 			   setObjectQuaternion( scope.object.position, scope.object.quaternion, alpha, beta, gamma, orient );
-			   alpha = alpha;
+			   scope.alpha = alpha;
 		  
 		   };
 
@@ -420,6 +419,7 @@
 				var beta     = event.beta;
 				var gamma    = event.gamma;
 			   document.getElementById("p4").textContent = "alpha (around Zdev): " + String(alpha).slice(0,5) + "; beta (around Xdev): " + String(beta).slice(0,5) + "; gamma (around Ydev): " + String(gamma).slice(0,5) + "; absolute: " + String(absolute).slice(0,5);
+			   updateCoordSystem();
 		   };
 	   
 

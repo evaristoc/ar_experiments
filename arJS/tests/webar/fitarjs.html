@@ -42,7 +42,7 @@
 	<!-- LOG AREA -->
 	<div id="log" style="background-color:orange; color:white; font-weight: bold; width:200px; z-index:100;">
 	    <p id="modified"></p>
-		<!--<p id="p1"></p>-->
+		<p id="p1"></p>
 		<p id="p2"></p>
 		<p id="p3"></p>
 		<p id="p4"></p>
@@ -90,6 +90,8 @@
 		var camera = new THREE.Camera();
 		
 		DeviceOrientationControls( camera );
+		
+		
 		////--->>> https://web.dev/web-ar/
 		////navigator.xr;
 		//var xrButton = document.getElementById("btn");
@@ -204,7 +206,7 @@
 			
 			/*COLLECTING VALUES*/
 			//console.log("camera position: ", camera.position);
-			document.getElementById('p1').innerHTML = "x: "+String(camera.position.x).slice(0,4) + "; y: "+String(camera.position.y).slice(0,4) + "; z: "+String(camera.position.z).slice(0,4)
+			//document.getElementById('p1').innerHTML = "x: "+String(camera.position.x).slice(0,4) + "; y: "+String(camera.position.y).slice(0,4) + "; z: "+String(camera.position.z).slice(0,4)
 			if (Math.abs(camera.position.x) <= 20 & Math.abs(camera.position.y) <= 20  & Math.abs(camera.position.z) <= 20 ) {
 			  //code
 			  averaging.x.push(camera.position.x);
@@ -369,6 +371,8 @@
 			   doc.getElementById("p5").textContent = "x_new: ";
 		  
 			   return function( obj, quaternion, alpha, beta, gamma, orient ) { // a closure...
+
+				   document.getElementById("p5").textContent = "x_new: " + String(obj.x).slice(0,5) + "; y_new: " + String(obj.y).slice(0,5) + "; z_new: " + String(obj.z).slice(0,5);	
 		  
 				   euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us (inverted) //<---- E: RELEVANT!!
 		  
@@ -378,7 +382,7 @@
 		  
 				   quaternion.multiply( q0.setFromAxisAngle( zee, - orient ) ); // adjust for screen orientation; E: not in my case at the moment
 				
-				   document.getElementById("p5").textContent = "x_new: " + String(obj.x).slice(0,5) + "; y_new: " + String(obj.y).slice(0,5) + "; z_new: " + String(obj.z).slice(0,5);	
+				   //document.getElementById("p5").textContent = "x_new: " + String(obj.x).slice(0,5) + "; y_new: " + String(obj.y).slice(0,5) + "; z_new: " + String(obj.z).slice(0,5);	
 				  
 			   }
 		  

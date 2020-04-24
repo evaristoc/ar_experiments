@@ -17,7 +17,7 @@
 	</meta>
   </head>
   <body>
-	<div id="log" style="background-color:orange; color:white; font-weight: bold; font-size: large; width:400px; height: 500px; z-index:100;">
+	<div id="log" style="background-color:orange; color:white; font-weight: bold; font-size: 11px; width:400px; height: 500px; z-index:100;">
 	    <p id="modified"></p>
 		<p id="p1"></p>
 		<p id="p2"></p>
@@ -45,7 +45,12 @@
 						xrSession = session;
 						xrSession.isImmersive = true;
 						//document.getElementById("p1").textContent = Object.keys(window.XRSpace);
-						xrSession.requestReferenceSpace("local-floor").then((refSpace)=>{document.getElementById("p1").textContent = refSpace});
+						xrSession.requestReferenceSpace("local-floor")
+							.then((refSpace)=>{
+								  alert("getting refSpace");
+								  document.getElementById("p1").textContent = refSpace
+								})
+							.catch((err)=>{alert("error getting refSpace")});
 						
 						xrButton.textContent = 'Exit AR';
 						//alert("session successfully opened");

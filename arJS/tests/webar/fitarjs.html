@@ -365,7 +365,7 @@
 		  
 			   var q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis; E: CAMERA
 		  
-
+			   doc.getElementById("p5").textContent = "x_new: ";
 		  
 			   return function( obj, quaternion, alpha, beta, gamma, orient ) { // a closure...
 		  
@@ -377,7 +377,7 @@
 		  
 				   quaternion.multiply( q0.setFromAxisAngle( zee, - orient ) ); // adjust for screen orientation; E: not in my case at the moment
 				
-				  doc.getElementById("p5").textContent = "x_new: "	
+				   
 				   //document.getElementById("p5").textContent = "x_new: " + String(obj.position.x).slice(0,5);	
 				  
 			   }

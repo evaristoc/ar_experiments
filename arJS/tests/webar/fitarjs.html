@@ -50,6 +50,7 @@
 	</div>
 	<!-- AR.JS SECTION -->
 	<div id="arjs" style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
+	  </br>
 	</div>
 
 	<button id="btn" style="z-index:200; position:absolute;bottom:20px;left:100px;"></button>
@@ -377,7 +378,7 @@
 		  
 				   quaternion.multiply( q0.setFromAxisAngle( zee, - orient ) ); // adjust for screen orientation; E: not in my case at the moment
 				
-				   document.getElementById("p5").textContent = "x_new: " + String(obj.x).slice(0,5);	
+				   document.getElementById("p5").textContent = "x_new: " + String(obj.x).slice(0,5) + "; y_new: " + String(obj.y).slice(0,5) + "; z_new: " + String(obj.z).slice(0,5);	
 				  
 			   }
 		  

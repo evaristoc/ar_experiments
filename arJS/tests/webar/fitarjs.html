@@ -46,6 +46,7 @@
 		<p id="p2"></p>
 		<p id="p3"></p>
 		<p id="p4"></p>
+		<p id="p5"></p>
 	</div>
 	<!-- AR.JS SECTION -->
 	<div id="arjs" style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
@@ -365,7 +366,7 @@
 		  
 			   var q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) ); // - PI/2 around the x-axis; E: CAMERA
 		  
-			   return function( quaternion, alpha, beta, gamma, orient ) { // a closure...
+			   return function( obj, quaternion, alpha, beta, gamma, orient ) { // a closure...
 		  
 				   euler.set( beta, alpha, - gamma, 'YXZ' ); // 'ZXY' for the device, but 'YXZ' for us (inverted) //<---- E: RELEVANT!!
 		  
@@ -374,7 +375,9 @@
 				   quaternion.multiply( q1 ); // camera looks out the back of the device, not the top
 		  
 				   quaternion.multiply( q0.setFromAxisAngle( zee, - orient ) ); // adjust for screen orientation; E: not in my case at the moment
-		  
+					
+				   document.getElementById("p5").textContent = "x_new: " + String(obj.position.x).slice(0,5);	
+				  
 			   }
 		  
 		   }();
@@ -391,7 +394,7 @@
 			   var gamma = scope.deviceOrientation.gamma ? THREE.Math.degToRad( scope.deviceOrientation.gamma ) : 0; // Y''
 			   var orient = scope.screenOrientation ? THREE.Math.degToRad( scope.screenOrientation ) : 0; // O
 		  
-			   setObjectQuaternion( scope.object.quaternion, alpha, beta, gamma, orient );
+			   setObjectQuaternion( scope.object, scope.object.quaternion, alpha, beta, gamma, orient );
 			   alpha = alpha;
 		  
 		   };
@@ -414,7 +417,7 @@
 				var alpha    = event.alpha;
 				var beta     = event.beta;
 				var gamma    = event.gamma;
-			   document.getElementById("p4").textContent = "alpha: " + String(alpha).slice(0,5) + "; beta: " + String(beta).slice(0,5) + "; gamma: " + String(gamma).slice(0,5) + "; absolute: " + String(absolute).slice(0,5);
+			   document.getElementById("p4").textContent = "alpha (around Zdev): " + String(alpha).slice(0,5) + "; beta (around Xdev): " + String(beta).slice(0,5) + "; gamma (around Ydev): " + String(gamma).slice(0,5) + "; absolute: " + String(absolute).slice(0,5);
 		   };
 	   
 

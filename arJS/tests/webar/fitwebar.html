@@ -54,6 +54,7 @@
 						xrSession = session;
 						xrSession.isImmersive = true;
 						refSpaceType = xrSession.isImmersive ? 'local' : 'viewer';
+						//refSpaceType = 'inline';
 						//document.getElementById("p1").textContent = Object.keys(window.XRSpace);
 						xrSession.requestReferenceSpace(refSpaceType) //local-floor not working in my case, but default in a-frame?
 							.then((refSpace)=>{

@@ -51,10 +51,10 @@
 						xrSession = session;
 						xrSession.isImmersive = true;
 						//document.getElementById("p1").textContent = Object.keys(window.XRSpace);
-						xrSession.requestReferenceSpace("viewer")
+						xrSession.requestReferenceSpace("local-floor")
 							.then((refSpace)=>{
 								  alert("getting refSpace");
-								  document.getElementById("p1").textContent = typeof refSpace + " " + Object.keys(refSpace);
+								  document.getElementById("p1").textContent = typeof refSpace + " " + String(refSpace);
 								})
 							.catch((err)=>{alert("error getting refSpace")});
 						

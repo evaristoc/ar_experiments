@@ -51,10 +51,11 @@
 						xrSession = session;
 						xrSession.isImmersive = true;
 						//document.getElementById("p1").textContent = Object.keys(window.XRSpace);
-						xrSession.requestReferenceSpace("local-floor")
+						xrSession.requestReferenceSpace("viewer")
 							.then((refSpace)=>{
 								  alert("getting refSpace");
 								  document.getElementById("p1").textContent = typeof refSpace + " " + String(refSpace);
+								  xrSession.requestAnimationFrame(onXRFrame);
 								})
 							.catch((err)=>{alert("error getting refSpace")});
 						
@@ -70,7 +71,17 @@
 			  }
 			}).catch((err)=>{alert("error ocurred when confirming ar")});
 			
-
+			function onXRFrame(hrTime, xrFrame) {
+			  let xrSession = xrFrame.session;
+			  xrSession.requestAnimationFrame(onXRFrame);
+			  let xrViewerPose = xrFrame.getViewerPose(refSpaceType);
+			  if (xrViewerPose) {
+				// Render based on the pose.
+				document.getElementById("p2").textContent = xrViewerPose
+			  }
+			}
+			
+			
 			//function onButtonClicked() {
 			//	if (!xrSession) {
 			//		navigator.xr.requestSession("immersive-ar")

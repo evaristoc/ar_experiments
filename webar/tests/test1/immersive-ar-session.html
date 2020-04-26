@@ -183,9 +183,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                          inlineViewerHelper.referenceSpace;
         let pose = frame.getViewerPose(refSpace);
         document.getElementById("p1").textContent = pose;
-        //console.log(pose, Object.keys(pose));
-        //console.log("pose", pose);
-        //console.log("pose", pose.views);
+        //console.log("pose", refSpace) // null object
+        //console.log(pose, Object.keys(pose)); //null array
+        //console.log("pose", pose); //object of ViewerPose
+        //console.log("pose", pose.views); //object XRView
+        console.log("pose1", pose.views[0].transform)
+        console.log("pose2", pose.views.transform)
          
         //scene.startFrame();
 

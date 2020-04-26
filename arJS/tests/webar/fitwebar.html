@@ -40,6 +40,9 @@
 			//navigator.xr;
 			let xrButton = document.getElementById("btn");
 			let xrSession = null;
+			let inLoop = true;
+			let refSpaceType; 
+
 			navigator.xr.isSessionSupported('immersive-ar').then((isSupported)=>{
 			  //let xrButton = document.getElementsByTagName("button")[0];
 			  if (isSupported) {
@@ -50,8 +53,9 @@
 					  .then((session)=>{
 						xrSession = session;
 						xrSession.isImmersive = true;
+						refSpaceType = xrSession.isImmersive ? 'local' : 'viewer';
 						//document.getElementById("p1").textContent = Object.keys(window.XRSpace);
-						xrSession.requestReferenceSpace("viewer")
+						xrSession.requestReferenceSpace("viewer") //local-floor not working in my case, but default in a-frame?
 							.then((refSpace)=>{
 								  alert("getting refSpace");
 								  document.getElementById("p1").textContent = typeof refSpace + " " + String(refSpace);
@@ -72,12 +76,17 @@
 			}).catch((err)=>{alert("error ocurred when confirming ar")});
 			
 			function onXRFrame(hrTime, xrFrame) {
+			  if (inLoop) {
+				//code
+				alert("entered animation loop");
+				inLoop = false;
+			  }
 			  let xrSession = xrFrame.session;
-			  xrSession.requestAnimationFrame(onXRFrame);
+			  //xrSession.requestAnimationFrame(onXRFrame);
 			  let xrViewerPose = xrFrame.getViewerPose(refSpaceType);
 			  if (xrViewerPose) {
 				// Render based on the pose.
-				document.getElementById("p2").textContent = xrViewerPose
+				document.getElementById("p2").textContent = xrViewerPose;
 			  }
 			}
 			

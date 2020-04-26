@@ -48,6 +48,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       </details>
     </header>
     <script type="module">
+      
       import {WebXRButton} from './js/util/webxr-button.js';
       import {Scene} from './js/render/scenes/scene.js';
       import {Renderer, createWebGLContext} from './js/render/core/renderer.js';
@@ -180,7 +181,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                          inlineViewerHelper.referenceSpace;
         let pose = frame.getViewerPose(refSpace);
         document.getElementById("p1").textContent = pose;
-        console.log(pose, Object.keys(pose));
+        //console.log(pose, Object.keys(pose));
+        console.log("pose", pose.XRView.transform.position);
          
         //scene.startFrame();
 

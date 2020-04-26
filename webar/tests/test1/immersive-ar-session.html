@@ -190,7 +190,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         //console.log("pose", pose.views.view); //NULL
         console.log("pose1", pose.views[0].transform)
         console.log("pose1", pose.views[0].transform.position)
-        document.getElementById("p1").textContent = pose.views[0].transform.position;
+        document.getElementById("p1").textContent = "xView: "pose.views[0].transform.position.x + "; yView: "pose.views[0].transform.position.y + "zView: "; pose.views[0].transform.position.z + "; wView: "pose.views[0].transform.position.w;
         //console.log("pose2", pose.views.transform) //NULL
          
         //scene.startFrame();

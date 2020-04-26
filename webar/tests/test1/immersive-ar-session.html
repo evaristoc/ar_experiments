@@ -33,6 +33,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     <title>Immersive AR Session</title>
   </head>
   <body>
+    <p id="modified"></p>
     <p id="p1"></p>
     <header>
       <details open>
@@ -48,7 +49,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       </details>
     </header>
     <script type="module">
-      
+ 	  const lastModifiedDate = new Date(document.lastModified);
+	  document.getElementById("modified").textContent = lastModifiedDate;     
       import {WebXRButton} from './js/util/webxr-button.js';
       import {Scene} from './js/render/scenes/scene.js';
       import {Renderer, createWebGLContext} from './js/render/core/renderer.js';

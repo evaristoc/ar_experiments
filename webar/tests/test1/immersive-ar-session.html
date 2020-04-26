@@ -193,13 +193,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         document.getElementById("p1").textContent = "xView: " + pose.views[0].transform.position.x + "; yView: " + pose.views[0].transform.position.y + "; zView: " + pose.views[0].transform.position.z + "; wView: " + pose.views[0].transform.position.w;
         //console.log("pose2", pose.views.transform) //NULL
          
-        //scene.startFrame();
+        scene.startFrame();
 
         session.requestAnimationFrame(onXRFrame);
 
         //scene.drawXRFrame(frame, pose);
 
-        //scene.endFrame();
+        scene.endFrame();
       }
 
       // Start the XR application.

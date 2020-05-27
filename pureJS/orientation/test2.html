@@ -19,7 +19,7 @@
       //Check if absolute values have been sent
       if (typeof event.webkitCompassHeading !== "undefined") {
         alpha = event.webkitCompassHeading; //iOS non-standard
-        var heading = alpha
+        var heading = alpha;
         document.getElementById("heading").innerHTML = heading.toFixed([0]);
       }
       else {
@@ -57,7 +57,7 @@
     </script>
   </head>
   <body>
-    <p id="log"></p>
+    <p id="log" style="16px"></p>
     <br><br>
     <p id="heading" style="text-align:center"></p>
   </body>

@@ -95,11 +95,11 @@
     const url = 'http://router.project-osrm.org/nearest/v1/driving/'; // CORS ISSUE!! Not available anymore through a simple request
     
     function showPosition(myPosition) {
-          if (originCoords.latitute == null) {
+          if (myLoc.originCoords.latitute == null) {
             //code
             myLoc.originCoords.latitute = myPosition.coords.latitude
           }
-          if (originCoords.longitude == null) {
+          if (myLoc.originCoords.longitude == null) {
             //code
             myLoc.originCoords.longitude = myPposition.coords.longitude
           }

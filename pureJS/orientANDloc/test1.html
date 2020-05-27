@@ -72,17 +72,18 @@
     };
     
     var targetLoc = {
+        //groen
         targetCoords: {
             latitude: 52.3541381,
             longitude: 4.89454245,
         },
     }
     
-
+    var poswID;
     
     function getLocation() {
       if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(
+        poswID = navigator.geolocation.watchPosition(
                                             showPosition,
                                             (err)=>{document.getElementById('result').innerHTML = "watchPosition Error"},
                                             {enableHighAccuracy: true,
@@ -97,6 +98,7 @@
     
    
     function showPosition(myPosition) {
+          console.log(111);
           if (myLoc.originCoords.latitute == null) {
             //code
             myLoc.originCoords.latitute = myPosition.coords.latitude
@@ -110,6 +112,7 @@
         var distancetotarget;
         distancetotarget = computePosVectorParams(myLoc.originCoords, targetLoc.targetCoords); //module of distance, ONLY!!
         x.innerHTML += "distance to target: "+ distancetotarget;
+        console.log(222);
     }
     
     //based on https://hackernoon.com/building-a-compass-web-app-c79fec31e080  
@@ -127,7 +130,7 @@
       else {
         //alert("Your device is reporting relative alpha values, so this compass won't point north :(");
         document.getElementById("log").innerHTML = "relative alpha values";
-	var heading = 360 - alpha; //heading [0, 360)
+        var heading = 360 - alpha; //heading [0, 360)
         document.getElementById("heading").innerHTML = heading.toFixed([0]);
       }
       

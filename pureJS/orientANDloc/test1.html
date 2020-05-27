@@ -2,10 +2,13 @@
 <html>
   <head>
     <style>
+    p {
+        color: #FFFFFF;
+        font-size: 30px;
+    }
     p #heading {
       font-family: verdana;
       font-size: 400px;
-      color: #FFFFFF;
     }
     </style>
     <title>Compass</title>
@@ -112,6 +115,8 @@
   </head>
   <body>
     <p id="log"></p>
+    <p>Click the button to get your coordinates.</p>
+    <button onclick="getLocation()">Try It</button>
     <p id="demo"></p>
     <p id='result'></p>
     <br><br>

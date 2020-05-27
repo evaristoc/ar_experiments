@@ -26,7 +26,7 @@
     document.querySelector('#modified').innerHTML = document.lastModified;
     var x = document.getElementById("demo");
     
-    const url = '//router.project-osrm.org/nearest/v1/driving/';
+    //const url = '//router.project-osrm.org/nearest/v1/driving/';
     //const coord = {
     //	lon: 4.9004,
     //  lat: 52.3531
@@ -59,6 +59,8 @@
       setInterval(getLocation,4000)
     }
     
+    const url = 'http://router.project-osrm.org/nearest/v1/driving/';
+    
     function showPosition(position) {
           x.innerHTML = "Latitude: " + position.coords.latitude.toFixed(4) + 
          "<br>Longitude: " + position.coords.longitude.toFixed(4);
@@ -73,7 +75,7 @@
             console.log(json);
             document.getElementById('result').innerHTML = "We couldn't get any result back from the API";
             }
-          });
+          }).catch((err)=>{console.error(err.code, err.message)});
     }
     
     //based on https://hackernoon.com/building-a-compass-web-app-c79fec31e080  

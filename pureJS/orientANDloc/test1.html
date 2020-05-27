@@ -26,6 +26,37 @@
     document.querySelector('#modified').innerHTML = document.lastModified;
     var x = document.getElementById("demo");
     
+    var osrm = new OSRM('network.osrm');
+    var options = {
+      coordinates: [
+        [13.36761474609375, 52.51663871100423],
+        [13.374481201171875, 52.506191342034576]
+      ]
+    };
+    
+    var myLoc = {
+        originCoords: {
+            latitude: null,
+            longitud: null,
+        },
+        currentCoords: {
+            latitude: null,
+            longitud: null,
+        }, 
+    };
+    
+    var targetLoc = {
+        targetCoords: {
+            latitude: 52.3541381,
+            longitud: 4.89454245,
+        },
+    }
+    
+    osrm.route(options, { format: "json_buffer" }, function(err, response) {
+      if (err) throw err;
+      console.log(response.toString("utf-8"));
+    });
+    
     //const url = '//router.project-osrm.org/nearest/v1/driving/';
     //const coord = {
     //	lon: 4.9004,
@@ -59,23 +90,22 @@
       setInterval(getLocation,4000)
     }
     
-    const url = 'http://router.project-osrm.org/nearest/v1/driving/';
+    const url = 'http://router.project-osrm.org/nearest/v1/driving/'; // CORS ISSUE!! Not available anymore through a simple request
     
-    function showPosition(position) {
-          x.innerHTML = "Latitude: " + position.coords.latitude.toFixed(4) + 
-         "<br>Longitude: " + position.coords.longitude.toFixed(4);
-        fetch(url + position.coords.longitude + ',' + position.coords.latitude+'?number=1').then(function(response) { 
-            return response.json();
-          }).then(function(json) {
-            if (json.code === 'Ok') {
-              console.info(json);
-              document.getElementById('result').innerHTML =
-                  'Is this your current location? ' + json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
-            }else{
-            console.log(json);
-            document.getElementById('result').innerHTML = "We couldn't get any result back from the API";
-            }
-          }).catch((err)=>{console.error(err.code, err.message)});
+    function showPosition(myPosition) {
+          if (originCoords.latitute == null) {
+            //code
+            myLoc.originCoords.latitute = myPosition.coords.latitude
+          }
+          if (originCoords.longitude == null) {
+            //code
+            myLoc.originCoords.longitude = myPposition.coords.longitude
+          }
+          x.innerHTML = "my Latitude: " + myPosition.coords.latitude.toFixed(4) + 
+         "; my Longitude: " + myPosition.coords.longitude.toFixed(4) +"</br>";
+        
+        var distancetotarget, angleagainstme = computePosVectorParams(myLoc.originCoords, targetLoc.targetCoords); //module of distance, ONLY!!
+        x.innerHTML += "distance to target: "+ distancetotarget + "; angle (degrees): "+ angleagainstme.toFixed(5);
     }
     
     //based on https://hackernoon.com/building-a-compass-web-app-c79fec31e080  
@@ -110,6 +140,40 @@
       else { // Otherwise, use near black
         document.body.style.backgroundColor = "#161616";
       }
+    }
+    
+    
+    /**
+     * Returns distance in meters between source and destination inputs.
+     *
+     *  Calculate distance, bearing and more between Latitude/Longitude points
+     *  Details: https://www.movable-type.co.uk/scripts/latlong.html
+     *
+     * @param {Position} src
+     * @param {Position} dest
+     * @param {Boolean} isPlace
+     *
+     * @returns {number} distance
+     *
+     *--------------------------------------------------
+     * E: the haversine distance calculation...
+     * -------------------------------------------------
+     */
+    function computePosVectorParams(src, dest, isPlace) {
+        var dlongitude = THREE.Math.degToRad(dest.longitude - src.longitude);
+        var dlatitude = THREE.Math.degToRad(dest.latitude - src.latitude);
+
+        var a = (Math.sin(dlatitude / 2) * Math.sin(dlatitude / 2)) + Math.cos(THREE.Math.degToRad(src.latitude)) * Math.cos(THREE.Math.degToRad(dest.latitude)) * (Math.sin(dlongitude / 2) * Math.sin(dlongitude / 2));
+        var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var distance = angle * 6378160;
+
+        // if function has been called for a place, and if it's too near and a min distance has been set,
+        // set a very high distance to hide the object
+        if (isPlace && this.data.minDistance && this.data.minDistance > 0 && distance < this.data.minDistance) {
+            return Number.MAX_SAFE_INTEGER;
+        }
+
+        return distance, angle;
     }
     
     

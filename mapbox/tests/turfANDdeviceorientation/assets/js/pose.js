@@ -85,7 +85,7 @@ navigator.geolocation.getCurrentPosition(function(position) {
                         //    }
                         //}
                         
-                        window.addEventListener(eventName, onDeviceOrientation.bind(navigator), false);
+                        window.addEventListener(eventName, onDeviceOrientation, false);
                        
                         
                     });

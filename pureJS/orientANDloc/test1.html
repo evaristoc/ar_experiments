@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    p #heading {
+      font-family: verdana;
+      font-size: 400px;
+      color: #FFFFFF;
+    }
+    </style>
+    <title>Compass</title>
+    <script>
+    
+    var x = document.getElementById("demo");
+    
+    const url = '//router.project-osrm.org/nearest/v1/driving/';
+    //const coord = {
+    //	lon: 4.9004,
+    //  lat: 52.3531
+    //};
+    
+    //fetch(url + coord.lon + ',' + coord.lat).then(function(response) { 
+    //  return response.json();
+    //}).then(function(json) {
+    //  if (json.code === 'Ok') {
+    //  	console.info(json);
+    //    document.getElementById('result').innerHTML =
+    //    	json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
+    //  }else{
+    //  console.log(json);
+    //  }
+    //});
+    
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+                                            showPosition,
+                                            (err)=>{document.getElementById('result').innerHTML = err},
+                                            {enableHighAccuracy: true,
+                                            timeout: 1000,
+                                            maximumAge:4000}
+                                          );
+      } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+      setInterval(getLocation,4000)
+    }
+    
+    function showPosition(position) {
+          x.innerHTML = "Latitude: " + position.coords.latitude.toFixed(4) + 
+         "<br>Longitude: " + position.coords.longitude.toFixed(4);
+        fetch(url + position.coords.longitude + ',' + position.coords.latitude+'?number=1').then(function(response) { 
+            return response.json();
+          }).then(function(json) {
+            if (json.code === 'Ok') {
+              console.info(json);
+              document.getElementById('result').innerHTML =
+                  'Is this your current location? ' + json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
+            }else{
+            console.log(json);
+            document.getElementById('result').innerHTML = "We couldn't get any result back from the API";
+            }
+          });
+    }
+    
+    //based on https://hackernoon.com/building-a-compass-web-app-c79fec31e080  
+  // Get event data
+    function deviceOrientationListener(event) {
+      var alpha    = event.alpha; //z axis rotation [0,360)
+      var beta     = event.beta; //x axis rotation [-180, 180]
+      var gamma    = event.gamma; //y axis rotation [-90, 90]
+      //Check if absolute values have been sent
+      if (typeof event.webkitCompassHeading !== "undefined") {
+        alpha = event.webkitCompassHeading; //iOS non-standard
+        var heading = alpha;
+        document.getElementById("heading").innerHTML = heading.toFixed([0]);
+      }
+      else {
+        //alert("Your device is reporting relative alpha values, so this compass won't point north :(");
+        document.getElementById("log").innerHTML = "relative alpha values";
+	var heading = 360 - alpha; //heading [0, 360)
+        document.getElementById("heading").innerHTML = heading.toFixed([0]);
+      }
+      
+      // Change backgroud colour based on heading
+      // Green for North and South, black otherwise
+      if (heading > 359 || heading < 1) { //Allow +- 1 degree
+        document.body.style.backgroundColor = "green";
+        document.getElementById("heading").innerHTML = "N"; // North
+      }
+      else if (heading > 179 && heading < 181){ //Allow +- 1 degree
+        document.body.style.backgroundColor = "green";
+        document.getElementById("heading").innerHTML = "S"; // South
+      } 
+      else { // Otherwise, use near black
+        document.body.style.backgroundColor = "#161616";
+      }
+    }
+    
+    
+    // Check if device can provide absolute orientation data
+    if (window.DeviceOrientationAbsoluteEvent) {
+      window.addEventListener("DeviceOrientationAbsoluteEvent", deviceOrientationListener);
+    } // If not, check if the device sends any orientation data
+    else if(window.DeviceOrientationEvent){
+      window.addEventListener("deviceorientation", deviceOrientationListener);
+    } // Send an alert if the device isn't compatible
+    else {
+      alert("Sorry, try again on a compatible mobile device!");
+    }
+    </script>
+  </head>
+  <body>
+    <p id="log"></p>
+    <p id="demo"></p>
+    <p id='result'></p>
+    <br><br>
+    <p id="heading" style="text-align:center"></p>
+  </body>
+</html>

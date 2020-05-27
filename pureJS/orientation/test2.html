@@ -23,8 +23,9 @@
         document.getElementById("heading").innerHTML = heading.toFixed([0]);
       }
       else {
-        alert("Your device is reporting relative alpha values, so this compass won't point north :(");
-        var heading = 360 - alpha; //heading [0, 360)
+        //alert("Your device is reporting relative alpha values, so this compass won't point north :(");
+        document.getElementById("log").innerHTML = "relative alpha values";
+	var heading = 360 - alpha; //heading [0, 360)
         document.getElementById("heading").innerHTML = heading.toFixed([0]);
       }
       
@@ -56,6 +57,7 @@
     </script>
   </head>
   <body>
+    <p id="log"></p>
     <br><br>
     <p id="heading" style="text-align:center"></p>
   </body>

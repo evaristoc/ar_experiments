@@ -33,6 +33,29 @@
     //    [13.374481201171875, 52.506191342034576]
     //  ]
     //};
+
+   //osrm.route(options, { format: "json_buffer" }, function(err, response) {
+   //   if (err) throw err;
+   //   console.log(response.toString("utf-8"));
+   // });
+    
+    //const url = '//router.project-osrm.org/nearest/v1/driving/';
+    //const coord = {
+    //	lon: 4.9004,
+    //  lat: 52.3531
+    //};
+    
+    //fetch(url + coord.lon + ',' + coord.lat).then(function(response) { 
+    //  return response.json();
+    //}).then(function(json) {
+    //  if (json.code === 'Ok') {
+    //  	console.info(json);
+    //    document.getElementById('result').innerHTML =
+    //    	json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
+    //  }else{
+    //  console.log(json);
+    //  }
+    //});
     
     var myLoc = {
         originCoords: {
@@ -52,28 +75,7 @@
         },
     }
     
-    osrm.route(options, { format: "json_buffer" }, function(err, response) {
-      if (err) throw err;
-      console.log(response.toString("utf-8"));
-    });
-    
-    //const url = '//router.project-osrm.org/nearest/v1/driving/';
-    //const coord = {
-    //	lon: 4.9004,
-    //  lat: 52.3531
-    //};
-    
-    //fetch(url + coord.lon + ',' + coord.lat).then(function(response) { 
-    //  return response.json();
-    //}).then(function(json) {
-    //  if (json.code === 'Ok') {
-    //  	console.info(json);
-    //    document.getElementById('result').innerHTML =
-    //    	json.waypoints[0].name + '<hr>' + json.waypoints[0].location.join();
-    //  }else{
-    //  console.log(json);
-    //  }
-    //});
+
     
     function getLocation() {
       if (navigator.geolocation) {

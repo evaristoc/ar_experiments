@@ -1,0 +1,62 @@
+Possible solutions for height mapping?
+-- https://github.com/rattletone/heightmap.js
+
+Why it is not possible to create a depth math just from a 2d image, and what can be done instead:
+-- https://answers.opencv.org/question/8113/ist-possible-to-find-depth-of-a-2d-image-with-opencv/?sort=votes
+
+Other last resource alternatives:
+-- https://redstapler.co/3d-photo-from-image-javascript-tutorial/
+-- https://tympanus.net/codrops/2019/02/20/how-to-create-a-fake-3d-image-effect-with-webgl/
+
+CORS, again...:
+-- https://developer.mozilla.org/nl/docs/Web/HTTP/CORS
+-- https://blog.container-solutions.com/a-guide-to-solving-those-mystifying-cors-issues
+
+OSRM project (not useful so far for my project, CORS):
+-- http://map.project-osrm.org/?z=13&center=38.899249%2C-77.026949&hl=en&alt=0
+-- https://github.com/Project-OSRM/osrm-backend/blob/master/docs/nodejs/api.md
+
+HTML Location/Geocoord API:
+-- https://developer.mozilla.org/en-US/docs/Web/API/GeolocationCoordinates
+
+A former useful library:
+-- https://github.com/dorukeker/gyronorm.js
+
+HTML Orientation/Motion API:
+-- https://developers.google.com/web/fundamentals/native-hardware/device-orientation
+-- https://developer.mozilla.org/en-US/docs/Web/API/Detecting_device_orientation
+
+Example Orientation for making a Compass:
+-- https://hackernoon.com/building-a-compass-web-app-c79fec31e080
+
+THREE device orientation control:
+-- https://threejs.org/docs/#examples/en/controls/DeviceOrientationControls
+
+GeoAR research:
+-- https://ntnuopen.ntnu.no/ntnu-xmlui/handle/11250/2622385
+
+Mozilla a-terrain:
+-- https://blog.mozvr.com/introducing-a-terrain/
+
+Mapbox in a-frame:
+-- https://www.npmjs.com/package/aframe-mapbox-component
+-- https://blog.mapbox.com/mapbox-gl-js-ar-js-a-frame-vr-mapbox-ar-vr-93c09be08742
+
+Mapbox AR experiments and SDK:
+-- https://blog.mapbox.com/build-ar-experiences-with-places-data-48a4856c482f
+-- https://blog.mapbox.com/tagged/augmented-reality
+-- https://blog.mapbox.com/snapchats-2019-egg-hunt-is-on-4472a8d84e3d
+
+arpersist project:
+-- https://hacks.mozilla.org/2019/01/augmented-reality-and-the-browser%E2%80%8A-%E2%80%8Aan-app-experiment/
+-- https://github.com/anselm/arpersist/blob/master/src/entity_persist.js
+-- https://www.youtube.com/watch?v=X-z0PY_U-Xo
+
+location-based AR company:
+-- https://locatify.com/
+
+AR company: examples of uses:
+-- https://www.dukeandgrace.com/en/insights/articles/webar-augmented-reality-for-the-people
+
+Example of project for geolocation with the use of AI chat:
+-- https://geoffmomin.com/2018/10/01/visualize-employee-locations-with-augmented-reality/ 

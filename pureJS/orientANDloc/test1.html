@@ -88,7 +88,8 @@
                                             (err)=>{document.getElementById('result').innerHTML = "watchPosition Error"},
                                             {enableHighAccuracy: true,
                                             timeout: 1000,
-                                            maximumAge:4000}
+                                            maximumAge:4000
+                                            }
                                           );
       } else { 
         x.innerHTML = "Geolocation is not supported by this browser.";
@@ -98,7 +99,7 @@
     
    
     function showPosition(myPosition) {
-          console.log(111);
+          //console.log(111);
           if (myLoc.originCoords.latitute == null) {
             //code
             myLoc.originCoords.latitute = myPosition.coords.latitude
@@ -112,7 +113,7 @@
         var distancetotarget;
         distancetotarget = computePosVectorParams(myLoc.originCoords, targetLoc.targetCoords); //module of distance, ONLY!!
         x.innerHTML += "distance to target: "+ distancetotarget;
-        console.log(222);
+        //console.log(222);
     }
     
     //based on https://hackernoon.com/building-a-compass-web-app-c79fec31e080  

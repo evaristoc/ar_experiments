@@ -160,7 +160,12 @@
                         var THIS = this;
                         //console.error('in detect_keypoints_YAPE06', THIS);
                         //detect features
-                        var count = jsfeat.yape06.detect(img, corners, 17);
+                        var border = 17;
+                        var laplacian_threshold = 30; //default value
+                        var min_eigen_value_threshold = 25; //default value
+                        jsfeat.yape06.laplacian_threshold = laplacian_threshold;
+                        jsfeat.yape06.min_eigen_value_threshold = min_eigen_value_threshold;
+                        var count = jsfeat.yape06.detect(img, corners, border);
                         // sort by score and reduce the count if needed
                         if(count > max_allowed) {
                             jsfeat.math.qsort(corners, 0, count-1, function(a,b){return (b.score<a.score);});

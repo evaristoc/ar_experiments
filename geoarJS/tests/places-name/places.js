@@ -22,6 +22,9 @@ const loadPlaces = function(coords) {
         { name: 'Fontain West', location: { lng: 4.89449809, lat: 52.35385470 } },
         { name: 'Groen Gemaal', location: { lng: 4.89454245, lat: 52.3541381 } },
         { name: 'Fontain Oost', location: { lng: 4.89521298, lat: 52.3540528 } },
+	{ name: 'TEST 1', location: { lng: 4.901282, lat: 52.352216 } },
+	{ name: 'TEST 2', location: { lng: 4.8973946, lat: 52.3525223 } },
+	{ name: 'TEST 3', location: { lng: 4.890723, lat: 52.3527649 } },
     ];
 
     if (method === 'api') {

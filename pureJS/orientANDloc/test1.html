@@ -163,11 +163,12 @@
      * E: the haversine distance calculation...
      * -------------------------------------------------
      */
+    const deg2rad = Math.PI/180.;
     function computePosVectorParams(src, dest, isPlace) {
-        var dlongitude = THREE.Math.degToRad(dest.longitude - src.longitude);
-        var dlatitude = THREE.Math.degToRad(dest.latitude - src.latitude);
+        var dlongitude = deg2rad*(dest.longitude - src.longitude);
+        var dlatitude = deg2rad*(dest.latitude - src.latitude);
 
-        var a = (Math.sin(dlatitude / 2) * Math.sin(dlatitude / 2)) + Math.cos(THREE.Math.degToRad(src.latitude)) * Math.cos(THREE.Math.degToRad(dest.latitude)) * (Math.sin(dlongitude / 2) * Math.sin(dlongitude / 2));
+        var a = (Math.sin(dlatitude / 2) * Math.sin(dlatitude / 2)) + Math.cos(deg2rad*(src.latitude)) * Math.cos((deg2rad*dest.latitude)) * (Math.sin(dlongitude / 2) * Math.sin(dlongitude / 2));
         var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         var distance = angle * 6378160;
 

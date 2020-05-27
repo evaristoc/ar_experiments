@@ -11,9 +11,19 @@
       font-size: 400px;
     }
     </style>
-    <title>Compass</title>
+    <title>Compass 2</title>
+  </head>
+  <body>
+    <p id="modified"></p>
+    <p id="log"></p>
+    <p>Click the button to get your coordinates.</p>
+    <button onclick="getLocation()">Try It</button>
+    <p id="demo"></p>
+    <p id='result'></p>
+    <br><br>
+    <p id="heading" style="text-align:center"></p>
     <script>
-    
+    document.querySelector('#modified').innerHTML = document.lastModified;
     var x = document.getElementById("demo");
     
     const url = '//router.project-osrm.org/nearest/v1/driving/';
@@ -111,15 +121,6 @@
     else {
       alert("Sorry, try again on a compatible mobile device!");
     }
-    </script>
-  </head>
-  <body>
-    <p id="log"></p>
-    <p>Click the button to get your coordinates.</p>
-    <button onclick="getLocation()">Try It</button>
-    <p id="demo"></p>
-    <p id='result'></p>
-    <br><br>
-    <p id="heading" style="text-align:center"></p>
+    </script>  
   </body>
 </html>

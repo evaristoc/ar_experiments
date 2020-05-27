@@ -44,6 +44,9 @@
     //	lon: 4.9004,
     //  lat: 52.3531
     //};
+    //const url = 'http://router.project-osrm.org/nearest/v1/driving/'; // CORS ISSUE!! Not available anymore through a simple request
+
+
     
     //fetch(url + coord.lon + ',' + coord.lat).then(function(response) { 
     //  return response.json();
@@ -92,8 +95,7 @@
       setInterval(getLocation,4000)
     }
     
-    const url = 'http://router.project-osrm.org/nearest/v1/driving/'; // CORS ISSUE!! Not available anymore through a simple request
-    
+   
     function showPosition(myPosition) {
           if (myLoc.originCoords.latitute == null) {
             //code

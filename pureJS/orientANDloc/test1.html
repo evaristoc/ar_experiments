@@ -63,18 +63,18 @@
     var myLoc = {
         originCoords: {
             latitude: null,
-            longitud: null,
+            longitude: null,
         },
         currentCoords: {
             latitude: null,
-            longitud: null,
+            longitude: null,
         }, 
     };
     
     var targetLoc = {
         targetCoords: {
             latitude: 52.3541381,
-            longitud: 4.89454245,
+            longitude: 4.89454245,
         },
     }
     
@@ -84,7 +84,7 @@
       if (navigator.geolocation) {
         navigator.geolocation.watchPosition(
                                             showPosition,
-                                            (err)=>{document.getElementById('result').innerHTML = err},
+                                            (err)=>{document.getElementById('result').innerHTML = "watchPosition Error"},
                                             {enableHighAccuracy: true,
                                             timeout: 1000,
                                             maximumAge:4000}
@@ -107,9 +107,9 @@
           }
           x.innerHTML = "my Latitude: " + myPosition.coords.latitude.toFixed(4) + 
          "; my Longitude: " + myPosition.coords.longitude.toFixed(4) +"</br>";
-        
-        var distancetotarget, angleagainstme = computePosVectorParams(myLoc.originCoords, targetLoc.targetCoords); //module of distance, ONLY!!
-        x.innerHTML += "distance to target: "+ distancetotarget + "; angle (degrees): "+ angleagainstme.toFixed(5);
+        var distancetotarget;
+        distancetotarget = computePosVectorParams(myLoc.originCoords, targetLoc.targetCoords); //module of distance, ONLY!!
+        x.innerHTML += "distance to target: "+ distancetotarget;
     }
     
     //based on https://hackernoon.com/building-a-compass-web-app-c79fec31e080  
@@ -167,18 +167,21 @@
     function computePosVectorParams(src, dest, isPlace) {
         var dlongitude = deg2rad*(dest.longitude - src.longitude);
         var dlatitude = deg2rad*(dest.latitude - src.latitude);
-
+        
+        //E: This formula seems to be evaluating the sphere UNDER the coord-angles
+        //E: a is the square of half the chord length between the points, in unitarian sphere
+        //E: Math.sin(dlatitude / 2) * Math.sin(dlatitude / 2) is the halversed sine
         var a = (Math.sin(dlatitude / 2) * Math.sin(dlatitude / 2)) + Math.cos(deg2rad*(src.latitude)) * Math.cos((deg2rad*dest.latitude)) * (Math.sin(dlongitude / 2) * Math.sin(dlongitude / 2));
-        var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        var distance = angle * 6378160;
+        var angulardistRad = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); //E: https://en.wikipedia.org/wiki/Atan2
+        var distMeters = angulardistRad * 6378160;
 
         // if function has been called for a place, and if it's too near and a min distance has been set,
         // set a very high distance to hide the object
-        if (isPlace && this.data.minDistance && this.data.minDistance > 0 && distance < this.data.minDistance) {
+        if (isPlace && this.data.minDistance && this.data.minDistance > 0 && distMeters < this.data.minDistance) {
             return Number.MAX_SAFE_INTEGER;
         }
 
-        return distance, angle;
+        return distMeters;
     }
     
     

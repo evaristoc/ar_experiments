@@ -74,10 +74,10 @@
     var targetLoc = {
         //groen
         targetCoords: {
-            //latitude: 52.3541381,
-            latitude: 52.3535972,
-            //longitude: 4.89454245,
-            longitude: 4.9005937,
+            latitude: 52.3541381,
+            //latitude: 52.3535972,
+            longitude: 4.89454245,
+            //longitude: 4.9005937,
         },
     }
     
@@ -169,9 +169,9 @@
      * E: the haversine distance calculation...
      * -------------------------------------------------
      */
-    const deg2rad = Math.PI/180.;
     function computePosVectorParams(src, dest, isPlace) {
-        const R = 6378160; //Earth radius in meters
+        const deg2rad = Math.PI/180.;
+        const R = 6.378160; //E: Earth radius in meters - OJO it was not giving right readings! So I divided by 1mill
         var dlongitude = deg2rad*(dest.longitude - src.longitude);
         var dlatitude = deg2rad*(dest.latitude - src.latitude);
         

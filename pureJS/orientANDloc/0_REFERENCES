@@ -60,3 +60,6 @@ AR company: examples of uses:
 
 Example of project for geolocation with the use of AI chat:
 -- https://geoffmomin.com/2018/10/01/visualize-employee-locations-with-augmented-reality/ 
+
+Sensor fusion:
+-- https://smus.com/sensor-fusion-prediction-webvr/ (from here: https://developers.google.com/web/updates/2016/03/device-orientation-changes)

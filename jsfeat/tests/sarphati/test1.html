@@ -15,9 +15,10 @@
     </head>
     <body>
             <video id="webcam" width="640" height="480" style="display:none;"></video>
-            <div style=" width:640px;height:480px;margin: 10px auto;">
-                <canvas id="canvas" width="640" height="480"></canvas>
-                <canvas id="canvas2" width="640" height="480"></canvas>
+            <div style="position:relative;width:640px;height:480px;margin: 10px auto;">
+                <canvas id="canvas" width="640" height="480" style="position:relative;"></canvas>
+                <!--<canvas id="canvas2" width="100" style="display:block; position: absolute; top: 0; left: 0; z-index: 100;"></canvas>-->
+                <canvas id="canvas2" width="100" style="display:block; position: absolute; top: 0; left: 0; z-index: 100;"></canvas>
                 <div id="no_rtc" class="alert alert-error" style="display:none;"></div>
                 <div id="log" class="alert alert-info"></div>
             </div>
@@ -147,7 +148,7 @@
             //--- also gui is set here
             var gui,options,ctx,ctx2, canvasWidth,canvasHeight;
             var img_u8, img_u8_smooth, screen_corners, num_corners, screen_descriptors;
-            var pattern_corners, pattern_descriptors, pattern_preview;
+            var pattern_corners, pattern_descriptors, pattern_preview, num_pattern_corners;
             var matches, homo3x3, match_mask;
             var num_train_levels = 4;
             
@@ -182,7 +183,9 @@
                     ctx2 = canvas2.getContext('2d');
                     ctx2.fillStyle = "rgb(0,255,0)";
                     ctx2.strokeStyle = "rgb(0,255,0)";
-                    ctx2.drawImage(foto, 0, 0, 640, 480);
+                    //ctx2.drawImage(foto, 0, 0, 640, 480);
+                    ctx2.drawImage(foto, 0, 0, 100, 100);
+                    //ctx2.drawImage(foto, 100, "auto");
                     var patternData = ctx2.getImageData(0, 0, 640, 480);
                     var img_u8_pattern = new jsfeat.matrix_t(640, 480, jsfeat.U8_t | jsfeat.C1_t);
                     jsfeat.imgproc.grayscale(patternData.data, 640, 480, img_u8_pattern);
@@ -217,8 +220,18 @@
                     lev_corners = pattern_corners[0];
                     lev_descr = pattern_descriptors[0];
                     jsfeat.imgproc.gaussian_blur(lev0_img, lev_img, options.blur_size|0); // this is more robust
-                    corners_num = detect_keypoints(lev_img, lev_corners, max_per_level);
+                    num_pattern_corners = corners_num = detect_keypoints(lev_img, lev_corners, max_per_level);
                     jsfeat.orb.describe(lev_img, lev_corners, corners_num, lev_descr);
+                    for (let i = 0; i < num_pattern_corners; i++) {
+                        //code
+                        var x = lev_corners[i].x;
+                        var y = lev_corners[i].y;
+                        //adjust for size of figure
+                        x = x*Math.floor(100/canvasHeight);
+                        y = y*Math.floor(100/canvasWidth);
+                        //draw (https://stackoverflow.com/questions/7812514/drawing-a-dot-on-html5-canvas)
+                        ctx2.fillRect(x,y*100,1,1);
+                    }
                     console.log("train " + lev_img.cols + "x" + lev_img.rows + " points: " + corners_num);
                     sc /= sc_inc;
                     // lets do multiple scale levels
@@ -301,7 +314,6 @@
                 compatibility.requestAnimationFrame(tick);
                 if (video.readyState === video.HAVE_ENOUGH_DATA) {
                     ctx.drawImage(video, 0, 0, 640, 480);
-                    //ctx.drawImage(foto, 100,100);
                     var imageData = ctx.getImageData(0, 0, 640, 480);
                     jsfeat.imgproc.grayscale(imageData.data, 640, 480, img_u8);
                     jsfeat.imgproc.gaussian_blur(img_u8, img_u8_smooth, options.blur_size|0);
@@ -315,7 +327,8 @@
                     var num_matches = 0;
                     var good_matches = 0;
                     if(pattern_preview) {
-                        render_mono_image(pattern_preview.data, data_u32, pattern_preview.cols, pattern_preview.rows, 640);
+                        //render_mono_image(pattern_preview.data, data_u32, pattern_preview.cols, pattern_preview.rows, 640);
+                        //render_mono_image_and_corners(pattern_preview.data, data_u32, pattern_preview.cols, pattern_preview.rows, 640, pattern_corners[0], num_pattern_corners);
                         num_matches = match_pattern();
                         good_matches = find_transform(matches, num_matches);
                     };
@@ -749,8 +762,11 @@
             }
             
             
-            function render_mono_image(src, dst, sw, sh, dw) {
-                var alpha = (0xff << 24);
+            function render_mono_image(src, dst, sw, sh, dw) { //E: above in the tick function: render_mono_image(pattern_preview.data, data_u32, pattern_preview.cols, pattern_preview.rows, 640);
+                 /*
+                  *this  renderer is drawing right on the video; jumping some pixels
+                 */
+                var alpha = (0xff << 24); //transparency? or colour?
                 for(var i = 0; i < sh; ++i) {
                     for(var j = 0; j < sw; ++j) {
                         var pix = src[i*sw+j];
@@ -758,6 +774,36 @@
                     }
                 }
             }
+            
+            function render_mono_image_and_corners(src, dst, sw, sh, dw, corners, count) {
+                 /*
+                  *this  renderer is drawing right on the video; jumping some pixels
+                  *sw == columns
+                  *sh == rows
+                 */
+                var alpha = (0xff << 24); //transparency? or colour?
+                for(var i = 0; i < sh; ++i) {
+                    for(var j = 0; j < sw; ++j) {
+                        var pix = src[i*sw+j];
+                        dst[i*dw+j] = alpha | (pix << 16) | (pix << 8) | pix;
+                    }
+                };
+ 
+                var pix = (0xff << 24) | (0x00 << 16) | (0xff << 8) | 0x00;               
+                for(var i=0; i < count; ++i)
+                {
+                    var x = corners[i].x;
+                    var y = corners[i].y;
+                    var off = Math.floor(x/dw)*sw+y;
+                    dst[off] = pix;
+                    dst[off-1] = pix;
+                    dst[off+1] = pix;
+                    dst[off-dw] = pix;
+                    dst[off+dw] = pix;
+                }
+            }
+
+            
             $(window).unload(function() {
                 video.pause();
                 video.src=null;

@@ -18,7 +18,8 @@
             <div style="position:relative;width:640px;height:480px;margin: 10px auto;">
                 <canvas id="canvas" width="640" height="480" style="position:relative;"></canvas>
                 <!--<canvas id="canvas2" width="100" style="display:block; position: absolute; top: 0; left: 0; z-index: 100;"></canvas>-->
-                <canvas id="canvas2" width="100" style="display:block; position: absolute; top: 0; left: 0; z-index: 100;"></canvas>
+                <!--<canvas id="canvas2" width="300" style="display:block; position: absolute; top: 0; left: 0; z-index: 100;"></canvas>-->
+                <canvas id="canvas2" width="640" height="480" style="display:block;"></canvas>
                 <div id="no_rtc" class="alert alert-error" style="display:none;"></div>
                 <div id="log" class="alert alert-info"></div>
             </div>
@@ -183,8 +184,8 @@
                     ctx2 = canvas2.getContext('2d');
                     ctx2.fillStyle = "rgb(0,255,0)";
                     ctx2.strokeStyle = "rgb(0,255,0)";
-                    //ctx2.drawImage(foto, 0, 0, 640, 480);
-                    ctx2.drawImage(foto, 0, 0, 100, 100);
+                    ctx2.drawImage(foto, 0, 0, 640, 480);
+                    //ctx2.drawImage(foto, 0, 0, 300, 200);
                     //ctx2.drawImage(foto, 100, "auto");
                     var patternData = ctx2.getImageData(0, 0, 640, 480);
                     var img_u8_pattern = new jsfeat.matrix_t(640, 480, jsfeat.U8_t | jsfeat.C1_t);
@@ -227,10 +228,10 @@
                         var x = lev_corners[i].x;
                         var y = lev_corners[i].y;
                         //adjust for size of figure
-                        x = x*Math.floor(100/canvasHeight);
-                        y = y*Math.floor(100/canvasWidth);
+                        //x = x*Math.floor(100/canvasHeight);
+                        //y = y*Math.floor(100/canvasWidth);
                         //draw (https://stackoverflow.com/questions/7812514/drawing-a-dot-on-html5-canvas)
-                        ctx2.fillRect(x,y*100,1,1);
+                        ctx2.fillRect(x,y,2,2);
                     }
                     console.log("train " + lev_img.cols + "x" + lev_img.rows + " points: " + corners_num);
                     sc /= sc_inc;

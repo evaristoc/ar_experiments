@@ -16,10 +16,10 @@
     <body>
             <video id="webcam" width="640" height="480" style="display:none;"></video>
             <div style="position:relative;width:640px;height:480px;margin: 10px auto;">
-                <canvas id="canvas" width="640" height="480" style="position:relative;"></canvas>
+                <canvas id="canvas" width="640" height="480"></canvas>
                 <!--<canvas id="canvas2" width="100" style="display:block; position: absolute; top: 0; left: 0; z-index: 100;"></canvas>-->
                 <!--<canvas id="canvas2" width="300" style="display:block; position: absolute; top: 0; left: 0; z-index: 100;"></canvas>-->
-                <canvas id="canvas2" width="640" height="480" style="display:block;"></canvas>
+                <canvas id="canvas2" width="640" height="480"></canvas>
                 <div id="no_rtc" class="alert alert-error" style="display:none;"></div>
                 <div id="log" class="alert alert-info"></div>
             </div>
@@ -323,7 +323,7 @@
                     jsfeat.orb.describe(img_u8_smooth, screen_corners, num_corners, screen_descriptors);
                     // render result back to canvas
                     var data_u32 = new Uint32Array(imageData.data.buffer);
-                    render_corners(screen_corners, num_corners, data_u32, 640);
+                    //render_corners(screen_corners, num_corners, data_u32, 640);
                     // render pattern and matches
                     var num_matches = 0;
                     var good_matches = 0;
@@ -334,10 +334,10 @@
                         good_matches = find_transform(matches, num_matches);
                     };
                     
-                    ctx.putImageData(imageData, 0, 0);
+                    //ctx.putImageData(imageData, 0, 0);
                     
                     if(num_matches) {
-                        render_matches(ctx2, matches, num_matches);
+                        render_matches(ctx, matches, num_matches);
                         //if(good_matches > 8)
                         //    render_pattern_shape(ctx);
                         if (good_matches_num.length > 20) {
@@ -349,7 +349,14 @@
                           good_matches_num.push(0);
                         };
                         if (good_matches_num && good_matches_num.reduce((a,b)=>{return a+b},0)/good_matches_num.length > .5) {
+                            render_corners(screen_corners, num_corners, data_u32, 640);
+                            ctx.putImageData(imageData, 0, 0);
                             render_pattern_shape(ctx);
+                            //ctx.drawImage(video, 0, 0, 640, 480);
+                          }else{
+                            render_corners(screen_corners, num_corners, data_u32, 640);
+                            ctx.putImageData(imageData, 0, 0);
+                            ctx.drawImage(video, 0, 0, 640, 480);
                           }
                         }
                  }

@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-07-28" content="ArFv1ZeTwzkhjNE00uAE+XtiQB41fwqG/TqlFMLrepd9sforQSvQE/tgfIbUMYNuNre4QR1k4/z8xp2mV3dbhwwAAABeeyJvcmlnaW4iOiJodHRwczovL2FmcmFtZS5pbzo0NDMiLCJmZWF0dXJlIjoiV2ViVlIxLjEiLCJleHBpcnkiOjE1MDEyMTcwMDIsImlzU3ViZG9tYWluIjp0cnVlfQ==">
+<meta charset="utf-8">
+<title>Models (glTF, OBJ)</title>
+<meta name="description" content="Models (glTF, OBJ) — A-Frame">
+<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+</head>
+<body>
+<a-scene renderer="colorManagement: true;">
+<a-assets>
+<a-asset-item id="tree1" src="assets/models/Windmill.gltf"></a-asset-item>
+</a-assets>
+<a-entity position="0 0 4">
+<a-camera></a-camera>
+</a-entity>
+<a-gltf-model src="#tree1" position="-50 0 1" rotation="0 45 0" scale="4 4 4"></a-gltf-model>
+</a-scene>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Lecture 3.10</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <!--favicon -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+        <!-- end favicon -->
+        <style>
+            body{
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+	</head>
+	<body>
+        <div class="containerV">
+            <video video autoplay playsinline class="hidden">
+            </video>
+            <div class="red-square">
+                <div class="overlay">
+					<div id="cssfilters">
+						<video class="videostream" autoplay></video>
+						<p><button class="capture-button">Capture video</button>
+						<p><button id="cssfilters-apply">Apply CSS filter</button></p>
+					</div>
+                    <label for="videoSource">Choose your camera: </label><select id="videoSource"></select>
+                    <p>When in AR mode, create an hologram by looking at a person/face/photo and tap on the screen, it should appear gently. (Beware of camera framing, not too close)</p>
+                    <div class="linkG"><p><b><a href="https://github.com/nosy-b/holography">https://github.com/nosy-b/holography</a></b></p></div>
+                </div>
+            </div>
+           
+        </div>
+        <div id="container"></div>
+		<!--<script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/three.min.js"></script>
+		<script src="https://threejsfundamentals.org/threejs/resources/threejs/r105/js/controls/OrbitControls.js"></script>-->
+        <script src="../../../libs/hammer.min.js"></script>
+        <script type="module">
+            import { App } from './assets/js/app_videotest.js';
+
+			/*****************************/
+			/*  FROM HOLOGRAPHY PROJECT */
+			/*****************************/
+			document.addEventListener("DOMContentLoaded", function(){
+				
+				/*
+				// Photo
+				var constraints;
+				var imageCapture;
+				var mediaStream;
+				
+				var grabFrameButton = document.querySelector('button#grabFrame');
+				var videoSelect = document.querySelector('select#videoSource');
+				var video = document.querySelector('video');
+				//grabFrameButton.onclick = grabFrame;
+				videoSelect.onchange = getStream;
+				
+				// Get a list of available media input (and output) devices
+				  // then get a MediaStream for the currently selected input device
+				  navigator.mediaDevices.enumerateDevices()
+					  .then(gotDevices)
+					  .catch(error => {
+						  console.log('enumerateDevices() error: ', error);
+					  })
+					  .then(getStream);
+	  
+				  // From the list of media devices available, set up the camera source <select>,
+				  // then get a video stream from the default camera source.
+				  function gotDevices(deviceInfos) {
+					  for (var i = 0; i !== deviceInfos.length; ++i) {
+						  var deviceInfo = deviceInfos[i];
+						  console.log('Found media input or output device: ', deviceInfo);
+						  var option = document.createElement('option');
+						  option.value = deviceInfo.deviceId;
+						  if (deviceInfo.kind === 'videoinput') {
+							option.text = deviceInfo.label || 'Camera ' + (videoSelect.length + 1);
+							videoSelect.appendChild(option);
+						  }
+					  }
+				  }
+	  
+				  // Get a video stream from the currently selected camera source.
+				  function getStream() {
+					if (mediaStream) {
+						mediaStream.getTracks().forEach(track => {
+						  track.stop();
+						});
+					}
+					var videoSource = videoSelect.value;
+					constraints = {
+						//video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+						//E: small correction to test in my pc
+						video : true,
+					};
+					navigator.mediaDevices.getUserMedia(constraints)
+					  .then(gotStream)
+					  .catch(error => {
+					  console.log('getUserMedia error: ', error);
+					  });
+				  }
+	  
+				  // Display the stream from the currently selected camera source, and then
+				  // create an ImageCapture object, using the video from the stream.
+				  function gotStream(stream) {
+					  console.log('getUserMedia() got stream: ', stream);
+					  mediaStream = stream;
+					  video.srcObject = stream;
+					  video.classList.remove('hidden');
+					  imageCapture = new ImageCapture(stream.getVideoTracks()[0]);
+					  getCapabilities();
+				  }
+	  
+				  // Get the PhotoCapabilities for the currently selected camera source.
+				  function getCapabilities() {
+				  imageCapture.getPhotoCapabilities().then(function(capabilities) {
+					  console.log('Camera capabilities:', capabilities);
+					  if (capabilities.zoom.max > 0) {
+					  zoomInput.min = capabilities.zoom.min;
+					  zoomInput.max = capabilities.zoom.max;
+					  zoomInput.value = capabilities.zoom.current;
+					  zoomInput.classList.remove('hidden');
+					  }
+				  }).catch(function(error) {
+					  console.log('getCapabilities() error: ', error);
+				  });
+				  }
+
+				// Get an ImageBitmap from the currently selected camera source and
+				// display this with a canvas element.
+				function grabFrame() {
+	
+					imageCapture.grabFrame().then(function(imageBitmap) {
+						console.log('Grabbed frame:', imageBitmap);
+						var canvas = document.createElement('canvas');
+						var ctx = canvas.getContext('2d');
+						
+						canvas.width = imageBitmap.width;
+						canvas.height = imageBitmap.height;
+						canvas.getContext('2d').drawImage(imageBitmap, 0, 0);
+						textureOriginal = new THREE.Texture(canvas);
+						textureOriginal.needsUpdate = true;
+						
+						// particles.material.uniforms.originalImage.value = texture;
+	
+						// Then we create particles and launch the segmentation
+						video.hidden = true;
+						// createParticles(textureOriginal);
+						//loadAndPredict(textureOriginal.image);
+						
+					   
+					}).catch(function(error) {
+						console.log('grabFrame() error: ', error);
+					});
+				}
+				*/
+
+
+			/*****************************/
+			/*  FROM BASIC VIDEO PROJECT */
+			/*****************************/
+				var captureVideoButton = document.querySelector('#cssfilters .capture-button');
+				const cssFiltersButton = document.querySelector('#cssfilters-apply');
+				const video = document.querySelector('#cssfilters video');
+				
+				let filterIndex = 0;
+				const filters = [
+				  'grayscale',
+				  'sepia',
+				  'blur',
+				  'brightness',
+				  'contrast',
+				  'hue-rotate',
+				  'hue-rotate2',
+				  'hue-rotate3',
+				  'saturate',
+				  'invert',
+				  ''
+				];
+				
+				const constraints = {
+				  video: true
+				};
+				
+				captureVideoButton.onclick = function() {
+				  navigator.mediaDevices.getUserMedia(constraints).
+					then(handleSuccess).catch(handleError);
+				};
+				
+				cssFiltersButton.onclick = video.onclick = function() {
+					console.log(this);
+				  //video.className = filters[filterIndex++ % filters.length];
+				  //console.log(video.className, filters[filterIndex]);
+				};
+				
+				function handleSuccess(stream) {
+				  video.srcObject = stream;
+				}
+				
+				function handleError(error) {
+				  console.error('Error: ', error);
+}
+				
+				/*****************************/
+				/*  FROM WEBXR PROJECT */
+				/*****************************/				
+                const app = new App();
+                window.app = app;
+            });
+        </script>
+	</body>
+</html>

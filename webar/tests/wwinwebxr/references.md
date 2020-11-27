@@ -1,5 +1,9 @@
 ## Working a marker search within WebXR (webar)
 
+A potential problem: the camera opened by the Media api might not be the same as the one opened by WebXR api. It could be a problem when trying to open both at the same time.
+
+
+
 About webxr:
 * https://immersive-web.github.io/webxr-samples/
 * https://developers.google.com/web/updates/2018/06/ar-for-the-web
@@ -17,4 +21,7 @@ About webworkers:
 
 About three.js:
 * https://threejsfundamentals.org/threejs/lessons/threejs-offscreencanvas.html
+
+About using webxr + tf.js:
+* https://github.com/nosy-b/holography/
 

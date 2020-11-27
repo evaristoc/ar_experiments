@@ -22,6 +22,7 @@
             </video>
             <div class="red-square">
                 <div class="overlay">
+					<p id="modified"></p>
 					<div id="cssfilters" style="border-color: green; border:5px;">
 						<video class="videostream" autoplay></video>
 						<p><button class="capture-button">Capture video</button>
@@ -40,6 +41,7 @@
         <script src="../../../libs/hammer.min.js"></script>
         <script type="module">
             import { App } from './assets/js/app.js';
+			document.querySelector('#modified').innerHTML = document.lastModified;
 
 			/*****************************/
 			/*  FROM HOLOGRAPHY PROJECT */

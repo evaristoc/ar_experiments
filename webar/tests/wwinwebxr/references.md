@@ -7,6 +7,7 @@ A potential problem: the camera opened by the Media api might not be the same as
 About webxr:
 * https://immersive-web.github.io/webxr-samples/
 * https://developers.google.com/web/updates/2018/06/ar-for-the-web
+* https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API/Rendering
 
 About ar.js:
 * https://jeromeetienne.github.io/AR.js/three.js/

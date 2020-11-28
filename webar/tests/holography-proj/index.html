@@ -345,6 +345,7 @@
                 // grabFrame and show extracte silouhette
                 function onSelect() {
                     // time = 0;
+					console.log("A Frame selection was made")
                     grabFrame();
                     /*
                     var geometry = new THREE.CylinderBufferGeometry( 0, 0.05, 0.2, 32 ).rotateX( Math.PI / 2 );
@@ -360,6 +361,7 @@
 							
                 controller = renderer.xr.getController( 0 );
 				console.log(controller);
+				controller.visible = true;
 				controller.addEventListener( 'select', onSelect );
 				scene.add( controller );
                 

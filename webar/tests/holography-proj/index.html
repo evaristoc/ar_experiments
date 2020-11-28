@@ -237,7 +237,9 @@
                 video.srcObject = stream;
                 video.classList.remove('hidden');
                 imageCapture = new ImageCapture(stream.getVideoTracks()[0]);
-                getCapabilities();
+				//E:
+				console.log(imageCapture);
+                //getCapabilities();
             }
 
             // Get the PhotoCapabilities for the currently selected camera source.
@@ -249,11 +251,14 @@
 					zoomInput.max = capabilities.zoom.max;
 					zoomInput.value = capabilities.zoom.current;
 					zoomInput.classList.remove('hidden');
-                }else if (capabilities.zoom.max && capabilities.zoom.max > 0){
+                }else if (capabilities.max && capabilities.max > 0){
 					zoomInput.min = capabilities.min;
 					zoomInput.max = capabilities.max;
 					zoomInput.value = capabilities.current;
 					zoomInput.classList.remove('hidden');					
+				}else if ((capabilities.imageWidth && capabilities.imageHeight)) {
+					//code
+					console.log(capabilities);
 				}
             }).catch(function(error) {
                 console.log('getCapabilities() error: ', error);
@@ -265,23 +270,25 @@
             // display this with a canvas element.
             function grabFrame() {
 
-                imageCapture.grabFrame().then(function(imageBitmap) {
-                    console.log('Grabbed frame:', imageBitmap);
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
+                imageCapture.grabFrame()
+					.then(function(imageBitmap) {
+						console.log('Grabbed frame:', imageBitmap);
+						var canvas = document.createElement('canvas');
+						var ctx = canvas.getContext('2d');
                     
-                    canvas.width = imageBitmap.width;
-                    canvas.height = imageBitmap.height;
-                    canvas.getContext('2d').drawImage(imageBitmap, 0, 0);
-                    textureOriginal = new THREE.Texture(canvas);
-                    textureOriginal.needsUpdate = true;
+						canvas.width = imageBitmap.width;
+						canvas.height = imageBitmap.height;
+						canvas.getContext('2d').drawImage(imageBitmap, 0, 0);
+						textureOriginal = new THREE.Texture(canvas);
+						textureOriginal.needsUpdate = true;
                     
-                    // particles.material.uniforms.originalImage.value = texture;
-
-                    // Then we create particles and launch the segmentation
-                    //video.hidden = true;
-                    // createParticles(textureOriginal);
-                    //loadAndPredict(textureOriginal.image);
+						// particles.material.uniforms.originalImage.value = texture;
+	
+						// Then we create particles and launch the segmentation
+						//E: TEMPORARY!
+						//video.hidden = true;
+						// createParticles(textureOriginal);
+						//loadAndPredict(textureOriginal.image);
                     
                    
                 }).catch(function(error) {

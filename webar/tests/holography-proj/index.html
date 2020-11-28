@@ -126,7 +126,14 @@
         </script>
 
         <script type="module">
-
+			/*
+				E:
+				mediaDevices -> enumerateMediaDevices -> (gotDevices -> DATA -> EVENT -> getStream) -> navigator.mediaDevices.getUserMedia (update mediaStream glob) -> gotStream
+					-> UPDATE imageCapture (glob) and getCapabilities (currently not working)
+				
+				init -> [INITIALIZE 3D SCENE, SHADER UNIFORMS, renderer.xr] -> onSelect -> grabFrames (Get an ImageBitmap from the currently selected camera source and display this with a canvas element) ->
+						
+			*/
             import * as THREE from './three.module.js';
             import { ARButton } from './ARButton.js';
             //import { OrbitControls } from './controls/OrbitControls.js';
@@ -191,28 +198,32 @@
                     var option = document.createElement('option');
                     option.value = deviceInfo.deviceId;
                     if (deviceInfo.kind === 'videoinput') {
-                    option.text = deviceInfo.label || 'Camera ' + (videoSelect.length + 1);
-                    videoSelect.appendChild(option);
+						option.text = deviceInfo.label || 'Camera ' + (videoSelect.length + 1);
+						videoSelect.appendChild(option);
                     }
                 }
             }
 
             // Get a video stream from the currently selected camera source.
             function getStream() {
-            if (mediaStream) {
-                mediaStream.getTracks().forEach(track => {
-                track.stop();
-                });
-            }
-            var videoSource = videoSelect.value;
-            constraints = {
-                video: {deviceId: videoSource ? {exact: videoSource} : undefined}
-            };
-            navigator.mediaDevices.getUserMedia(constraints)
-                .then(gotStream)
-                .catch(error => {
-                console.log('getUserMedia error: ', error);
-                });
+				//E: stop all tracks of active media streams; mediaStream is public
+				if (mediaStream) {
+					mediaStream.getTracks().forEach(track => {
+						track.stop();
+					});
+				}
+				var videoSource = videoSelect.value;
+				constraints = {
+					//E: a quick hack to test easily
+					//video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+					video: true,
+					audio: false
+				};
+				navigator.mediaDevices.getUserMedia(constraints)
+					.then(gotStream)
+					.catch(error => {
+					console.log('getUserMedia error: ', error);
+					});
             }
 
             // Display the stream from the currently selected camera source, and then
@@ -265,9 +276,9 @@
                     // particles.material.uniforms.originalImage.value = texture;
 
                     // Then we create particles and launch the segmentation
-                    video.hidden = true;
+                    //video.hidden = true;
                     // createParticles(textureOriginal);
-                    loadAndPredict(textureOriginal.image);
+                    //loadAndPredict(textureOriginal.image);
                     
                    
                 }).catch(function(error) {
@@ -556,7 +567,6 @@
                 animate();
 
             }
-          
 
         </script>
 

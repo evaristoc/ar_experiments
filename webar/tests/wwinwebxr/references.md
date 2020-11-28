@@ -26,4 +26,4 @@ About three.js:
 About using webxr + tf.js:
 * https://github.com/nosy-b/holography/
 * https://twitter.com/AlexandreDevaux/status/1234540742053388289
-* https://developer.mozilla.org/en-US/docs/Web/API/ImageCapture
+* https://developer.mozilla.org/en-US/docs/Web/API/ImageCapture -> https://stackoverflow.com/questions/60693519/javascript-domexception-the-associated-track-is-in-an-invalid-state

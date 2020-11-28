@@ -23,6 +23,7 @@
             <video video autoplay playsinline class="hidden">
             </video>
             <div class="red-square">
+				<p id="modified"></p>
                 <div class="overlay">
                     <label for="videoSource">Choose your camera: </label><select id="videoSource"></select>
                     <p>When in AR mode, create an hologram by looking at a person/face/photo and tap on the screen, it should appear gently. (Beware of camera framing, not too close)</p>
@@ -137,7 +138,9 @@
             import * as THREE from './three.module.js';
             import { ARButton } from './ARButton.js';
             //import { OrbitControls } from './controls/OrbitControls.js';
-            var renderer, scene, camera, controls;
+            document.querySelector('#modified').innerHTML = document.lastModified;
+			
+			var renderer, scene, camera, controls;
             var time = 0;
             var particles;
             var texture;

@@ -12,6 +12,8 @@ var ARButton = {
 			var currentSession = null;
 
 			function onSessionStarted( session ) {
+                //E:
+                console.log("XR session started: ", session)
 
 				session.addEventListener( 'end', onSessionEnded );
 

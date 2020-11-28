@@ -286,7 +286,7 @@
 	
 						// Then we create particles and launch the segmentation
 						//E: TEMPORARY!
-						//video.hidden = true;
+						video.hidden = true;
 						// createParticles(textureOriginal);
 						//loadAndPredict(textureOriginal.image);
                     
@@ -356,7 +356,9 @@
                     */
                     
                 }
-
+				
+				console.log(controller);
+				
                 controller = renderer.xr.getController( 0 );
 				controller.addEventListener( 'select', onSelect );
 				scene.add( controller );

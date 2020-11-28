@@ -219,7 +219,8 @@
 				constraints = {
 					//E: a quick hack to test easily
 					//video: {deviceId: videoSource ? {exact: videoSource} : undefined}
-					video: true,
+					//video: true,
+					video: { facingMode: { exact: "environment" } },
 					audio: false
 				};
 				navigator.mediaDevices.getUserMedia(constraints)
